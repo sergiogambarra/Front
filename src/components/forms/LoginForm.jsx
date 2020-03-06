@@ -20,7 +20,12 @@ export default function LoginForm ({ history, setUserData }){
         setSenha('');       
     }
 
+const camposInvalidos = ()=>{
+    if(!login)setUsuarioInvalido(true);
+}
+
     const enviarLogin = () => {
+        
         postLogin({ usuario, senha })
             .then((response) => {
                 login(response.token);
@@ -29,6 +34,7 @@ export default function LoginForm ({ history, setUserData }){
             .then(() => history.push('/minhas-requisicoes'))
             .catch(error => console.log(error))
     }
+    
     
     return(
         <Form.Group className="container col-md-6" style={{position:"relative", top:"60px"}}>
