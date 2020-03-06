@@ -34,7 +34,7 @@ export default class DashBoard extends Component{
     viewRequisicoes() {
       this.setState({telaSelecionada: "requisicao" });
     }
-/*
+   /*
   <button style={btnRequisicao} onClick={this.viewRequisicoes.bind(this)}  >Requisicões</button> 
         <button onClick={this.viewCurso.bind(this)}  >Adicionar curso</button> 
         <button style={btnCurso} onClick={this.viewDisciplina.bind(this)}  >Adicionar disciplina</button> 
