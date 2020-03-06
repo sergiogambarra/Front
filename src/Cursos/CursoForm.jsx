@@ -12,10 +12,12 @@ export default function CursoForm({ onCadastrar, editar }) {
         }
         onCadastrar({ nome: nome });        
         limpar();
+      
     }
 const camposInvalidos = ()=>{
-if(!verifica){
-setVerifica=(true);
+if(!nome.length <3){
+setVerifica(true);
+alert(verifica)
 }
 
 }
@@ -26,8 +28,8 @@ setVerifica=(true);
                 placeholder={'Preencha com o nome do curso que você deseja cadastrar'}
                 value={nome}
                 onChange={({ target }) => setNome(target.value)}
-                onError={verifica}
-                onErrorMessage={'O campo disciplina anterior é obrigatório.'}
+             
+                onErrorMessage={'O nome curso é obrigatório.'}
             />
 
             <Form.Group className="d-flex justify-content-end">
