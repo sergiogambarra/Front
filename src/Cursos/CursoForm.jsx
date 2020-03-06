@@ -7,6 +7,9 @@ export default function CursoForm({ onCadastrar, editar }) {
     const limpar = () => setNome("");
     const [verifica, setVerifica] = useState(false);
     const confirmar = () => { 
+        if(nome.length < 3){
+            camposInvalidos()
+        }
         onCadastrar({ nome: nome });        
         limpar();
     }
@@ -40,7 +43,7 @@ setVerifica=(true);
                     variant="primary" 
                     className="btn btn-primary m-1" 
                     onClick={() => confirmar()}
-                    disabled={nome.length < 3}
+                  
                 >
                     Enviar
                 </Button>
