@@ -7,16 +7,25 @@ export default function CursoForm({ onCadastrar, editar }) {
 
     const limpar = () => setNome("");
     
+   
     const confirmar = () => { 
-        onCadastrar({ nome: nome });        
-        limpar();
+        console.log("ddwdwddw")
+        if(nome.length > 3){
+            onCadastrar({ nome: nome });        
+            limpar();
+        }else{
+            alert('O campo disciplina anterior é obrigatório.')
+        }
+        
     }
+   
 
     return(
         <fieldset>
             <SACEInput
                 label={'Nome do Curso'}
                 placeholder={'Preencha com o nome do curso que você deseja cadastrar'}
+                onErrorMessage={'O campo disciplina anterior é obrigatório.'}
                 value={nome}
                 onChange={({ target }) => setNome(target.value)}
             />
@@ -34,7 +43,8 @@ export default function CursoForm({ onCadastrar, editar }) {
                     variant="primary" 
                     className="btn btn-primary m-1" 
                     onClick={() => confirmar()}
-                    disabled={nome.length < 3}
+                    onErrorMessage={'O campo disciplina anterior é obrigatório.'}
+                                    
                 >
                     Enviar
                 </Button>
