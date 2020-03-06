@@ -60,6 +60,7 @@ export default function LoginForm({ history, setUserData }) {
                 <Link to="/cadastro-aluno">Aluno, não é Cadstrado?</Link>
                 <Link to="#" style={{ position: 'relative', left: '45%' }}>Esqueceu a sua senha?</Link>
             </div>
+            
             <Form.Group
                 className="d-flex justify-content-end"
                 style={{ position: 'relative', top: '50px', right: '30%' }}

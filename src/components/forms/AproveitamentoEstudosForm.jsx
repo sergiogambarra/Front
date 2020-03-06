@@ -47,10 +47,12 @@ export default function CertificacaoConhecimentosForm() {
         setDiscSolicitada('');
         setDisciplinasCursadasAnterior('');
         setAnexos([]);
+        
+
     }
    
     const fazerRequisicao = async () => {
-        if(camposInvalidos()) return;
+        if(camposInvalidos()) return;   
         
         setRequisicao({
             curso,
