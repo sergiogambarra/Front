@@ -6,46 +6,47 @@ export default function CursoForm({ onCadastrar, editar }) {
     const [nome, setNome] = useState("");
     const limpar = () => setNome("");
     const [verifica, setVerifica] = useState(false);
-    const confirmar = () => { 
-        if(nome.length < 3){
+    const confirmar = () => {
+        if (nome.length < 3) {
             camposInvalidos()
+        }else{
+            onCadastrar({ nome: nome });
+            limpar();
+            setVerifica(false);
         }
-        onCadastrar({ nome: nome });        
-        limpar();
-      
-    }
-const camposInvalidos = ()=>{
-if(!nome.length <3){
-setVerifica(true);
-alert(verifica)
-}
+        
 
-}
-    return(
+    }
+    const camposInvalidos = () => {
+        setVerifica(true);
+       console.log(verifica)
+         }
+       
+    return (
         <fieldset>
             <SACEInput
                 label={'Nome do Curso'}
                 placeholder={'Preencha com o nome do curso que você deseja cadastrar'}
                 value={nome}
                 onChange={({ target }) => setNome(target.value)}
-             
-                onErrorMessage={'O nome curso é obrigatório.'}
+                onError={verifica}
+                onErrorMessage={'O nome curso é obrigatório ter mais de 3 caracteres.'}
             />
 
             <Form.Group className="d-flex justify-content-end">
-                <Button 
-                    variant="link" 
-                    className="btn btn-link m-1" 
+                <Button
+                    variant="link"
+                    className="btn btn-link m-1"
                     onClick={() => limpar()}
                 >
                     {editar ? "Cancelar" : "Limpar"}
                 </Button>
-                
-                <Button 
-                    variant="primary" 
-                    className="btn btn-primary m-1" 
+
+                <Button
+                    variant="primary"
+                    className="btn btn-primary m-1"
                     onClick={() => confirmar()}
-                  
+
                 >
                     Enviar
                 </Button>
