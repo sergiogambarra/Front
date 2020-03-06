@@ -9,19 +9,18 @@ export default function CursoForm({ onCadastrar, editar }) {
     const confirmar = () => {
         if (nome.length < 3) {
             camposInvalidos()
-        }else{
+        } else {
             onCadastrar({ nome: nome });
             limpar();
             setVerifica(false);
         }
-        
+
 
     }
     const camposInvalidos = () => {
         setVerifica(true);
-       console.log(verifica)
-         }
-       
+    }
+
     return (
         <fieldset>
             <SACEInput
