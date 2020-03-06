@@ -1,0 +1,18 @@
+-------------------- Auto-Git Log --------------------
+		Fri Mar 06 2020 12:41:13 GMT-0300 (Horário Padrão de Brasília)
+------------------------------------------------------
+
+Modified files:
+* src/MenuInicial/Dashboard.js
+* src/components/forms/AproveitamentoEstudosForm.jsx
+* src/components/forms/LoginForm.jsx
+
+
+Created files:
+* .autogit/logs/log-6-2-2020-11-41-45.txt
+
+
+Deleted files:
+
+
+Renamed files:
