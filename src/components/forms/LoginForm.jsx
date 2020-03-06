@@ -19,15 +19,22 @@ export default function LoginForm ({ history, setUserData }){
         setUsuario('');
         setSenha('');       
     }
-
+   
     const enviarLogin = () => {
+  console.log()
         postLogin({ usuario, senha })
             .then((response) => {
+                if( typeof response ==="undefined"){
+alert("fddf")
+                }
+                console.log(response,"cdc")
                 login(response.token);
                 setUserData(response);
+               
             })
             .then(() => history.push('/minhas-requisicoes'))
             .catch(error => console.log(error))
+            
     }
     
     return(
