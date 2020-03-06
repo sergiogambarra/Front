@@ -4,30 +4,27 @@ import { Form, Button, } from 'react-bootstrap';
 
 export default function CursoForm({ onCadastrar, editar }) {
     const [nome, setNome] = useState("");
-
     const limpar = () => setNome("");
-    
-   
+    const [verifica, setVerifica] = useState(false);
     const confirmar = () => { 
-        console.log("ddwdwddw")
-        if(nome.length > 3){
-            onCadastrar({ nome: nome });        
-            limpar();
-        }else{
-            alert('O campo disciplina anterior é obrigatório.')
-        }
-        
+        onCadastrar({ nome: nome });        
+        limpar();
     }
-   
+const camposInvalidos = ()=>{
+if(!verifica){
+setVerifica=(true);
+}
 
+}
     return(
         <fieldset>
             <SACEInput
                 label={'Nome do Curso'}
                 placeholder={'Preencha com o nome do curso que você deseja cadastrar'}
-                onErrorMessage={'O campo disciplina anterior é obrigatório.'}
                 value={nome}
                 onChange={({ target }) => setNome(target.value)}
+                onError={verifica}
+                onErrorMessage={'O campo disciplina anterior é obrigatório.'}
             />
 
             <Form.Group className="d-flex justify-content-end">
@@ -43,8 +40,7 @@ export default function CursoForm({ onCadastrar, editar }) {
                     variant="primary" 
                     className="btn btn-primary m-1" 
                     onClick={() => confirmar()}
-                    onErrorMessage={'O campo disciplina anterior é obrigatório.'}
-                                    
+                    disabled={nome.length < 3}
                 >
                     Enviar
                 </Button>

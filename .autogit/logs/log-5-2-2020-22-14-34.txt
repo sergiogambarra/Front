@@ -1,0 +1,17 @@
+-------------------- Auto-Git Log --------------------
+		Thu Mar 05 2020 22:14:34 GMT-0300 (Horário Padrão de Brasília)
+------------------------------------------------------
+
+Modified files:
+* src/Cursos/CursoForm.jsx
+* src/components/forms/LoginForm.jsx
+
+
+Created files:
+* .autogit/logs/log-5-2-2020-21-36-38.txt
+
+
+Deleted files:
+
+
+Renamed files:
