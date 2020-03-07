@@ -3,6 +3,7 @@ import TituloPagina from '../components/TituloPagina';
 import TabelaAproveitamentos from '../components/TabelaAproveitamentos';
 import TabelaCertificacoes from '../components/TabelaCertificacoes';
 
+
 export default function MinhasRequisicoes() {
   return (
     <>

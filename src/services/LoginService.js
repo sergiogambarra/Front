@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { baseURL } from '../enviroment';
-import { token } from './axios';
 
 
 const postLogin = async (login) => {
