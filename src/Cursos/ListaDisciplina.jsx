@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Disciplinasview from '../Disciplinas/DisciplinaView';
 import axios from 'axios';
 
 
@@ -7,34 +6,48 @@ class ListaDiscipinas extends Component {
     constructor(props) {
         super();
         this.state = {
-            curso: "",
+            curso:[
+               this.state={
+                   idCurso:"",
+                   nome:""
+               }
+            ],
+          
             diciplinas: [
                 this.state = {
-                    id: ""
+                    id: "",
+                    nome:"",
+                    cargaHoraria:""
                 }
             ]
         }
     }
 
     listarDisciplina() {
-        axios.get(`/api/cursos/${this.state.id}/disciplinas`).then((retorno) => {
-            this.setState({
-                diciplinas: retorno.data
-            })
+                
+           axios.get(`/api/cursos/${this.state.curso.id}/disciplinas`).then((retorno) => {
+           this.setState({
+            diciplinas:retorno.data
+        })
+        console.log(retorno.data)
         });
     }
 
 
-    listarCurso() {
-        axios.get(`/api/cursos/${this.state.id}`).then((retorno) => {
-            this.setState({
-                curso: retorno.data
+    listarCursoNome() {
+      
+        axios.get(`/api/cursos/pesquisar/nome/${this.state.nome}`).then((retorno) => {
+          this.setState({
+            curso:retorno.data,
+             
             })
+           
+            this.listarDisciplina()
+              
         });
     }
     componentDidMount() {
-        this.listarDisciplina()
-        this.listarCurso()
+        this.listarCursoNome()
     }
     limpar(){
         this.setState({
@@ -65,11 +78,11 @@ class ListaDiscipinas extends Component {
             <div>
 
                 <b> <label style={label}>Digite o nome do curso que deseja ver as Diciplinas  </label></b>
-                <input value ={this.state.curso}style={inputStyle} 
-                onChange={(e)=>this.setState({curso:e.target.value})}
+                <input value ={this.state.nome}style={inputStyle} 
+                onChange={(e)=>this.setState({nome:e.target.value})}
                 />
                 <button style={btnCadastrar}
-                    onClick={() => this.limpar()}
+                    onClick={(e) => this.listarCursoNome()}
                 >{"Buscar"}</button>    
 
         <h1>Diciplinas</h1>
