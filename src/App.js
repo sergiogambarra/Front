@@ -10,6 +10,7 @@ import ListaCursos from './Cursos/ListaCursos';
 import CadastroCurso from './Cursos/CursoView';
 import CadastroDisciplina from './Disciplinas/DisciplinaView';
 import LoginForm from './components/forms/LoginForm'
+import ListaDiscipinas from './Cursos/ListaDisciplina';
 
 function App() {
   const [userData, setUserData] = useState(null);
@@ -41,7 +42,8 @@ function App() {
               <PrivateRoute path="/minhas-requisicoes" component={MinhasRequisicoes} />   
               <PrivateRoute path="/cadastro-aluno" component={Cadastro} />           
               <PrivateRoute path="/cadastro-curso" component={CadastroCurso} />           
-              <PrivateRoute path="/cadastro-disciplina" component={CadastroDisciplina} />           
+              <PrivateRoute path="/cadastro-disciplina" component={CadastroDisciplina} />          
+              <PrivateRoute path="/lista-disciplina" component={ListaDiscipinas} />           
             <Route path="*" component={() => <h1>Page not found</h1>} />
           </Switch>
         </div>

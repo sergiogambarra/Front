@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Form } from 'react-bootstrap';
-import InputGroup, { InputGroupText } from 'react-bootstrap/InputGroup';
 
 export default function SACEInput(props) {
     const {
