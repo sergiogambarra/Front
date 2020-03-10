@@ -40,7 +40,11 @@ class ListaDiscipinas extends Component {
         this.setState({
             nome: ""
         });
-        
+        if(this.state.nome === ""){
+            this.setState({
+                senhaInvalida:true
+            })
+        }
     }
 
     listarCursoNome() {
@@ -48,9 +52,8 @@ class ListaDiscipinas extends Component {
         axios.get(`/api/cursos/pesquisar/nome/${this.state.nome}`).then((retorno) => {
             this.setState({
                 curso: retorno.data,
-
+                senhaInvalida:false
             })
-           
             this.listarDisciplina()
             if (retorno.data === "") {
                this.limpar();
@@ -58,10 +61,7 @@ class ListaDiscipinas extends Component {
 
         });
     }
-    componentDidMount() {
-        this.listarCursoNome()
-    }
-
+    
     render() {
        
         const inputStyle = {
@@ -80,7 +80,7 @@ class ListaDiscipinas extends Component {
                     value={this.state.nome} style={inputStyle}
                     onChange={(e) => this.setState({ nome: e.target.value })}
                     onError={this.state.senhaInvalida}
-                    onErrorMessage={'Você não inseriu o sua senha corretamente!'}
+                    onErrorMessage={'Nome do curso não encontrado'}
                 />
                 <Button variant="primary" className="btn btn-primary m-1"  onClick={(e) => this.listarCursoNome()}>
                     Enviar
