@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import SACEInput from '../components/inputs/SACEInput';
+import { Button } from 'react-bootstrap';
 
 
 class ListaDiscipinas extends Component {
     constructor(props) {
+        const senhaInvalida = false;
         super();
         this.state = {
             curso: [
@@ -32,7 +35,13 @@ class ListaDiscipinas extends Component {
 
         });
     }
+    limpar() {
 
+        this.setState({
+            nome: ""
+        });
+        
+    }
 
     listarCursoNome() {
 
@@ -41,26 +50,20 @@ class ListaDiscipinas extends Component {
                 curso: retorno.data,
 
             })
-
+           
             this.listarDisciplina()
+            if (retorno.data === "") {
+               this.limpar();
+            }
 
         });
     }
     componentDidMount() {
         this.listarCursoNome()
     }
-    limpar() {
-        this.setState({
-            curso: ""
-        })
-    }
 
     render() {
-        const btnCadastrar = {
-
-            padding: "10px",
-            fontFamily: "Arial"
-        };
+       
         const inputStyle = {
             margin: "0px 0px 10px 30%",
             width: "400px",
@@ -68,29 +71,28 @@ class ListaDiscipinas extends Component {
             fontFamily: "Arial"
 
         };
-        const label = {
-            margin: "0px 0px 0px 30%",
-            width: "400px",
-            padding: "0px",
-            fontFamily: "Arial"
-        };
+
         return (
             <div>
 
-                <b> <label style={label}>Digite o nome do curso que deseja ver as Diciplinas  </label></b>
-                <input value={this.state.nome} style={inputStyle}
+                <SACEInput
+                    label={'Digite o nome do curso que deseja ver as Diciplinas'}
+                    value={this.state.nome} style={inputStyle}
                     onChange={(e) => this.setState({ nome: e.target.value })}
+                    onError={this.state.senhaInvalida}
+                    onErrorMessage={'Você não inseriu o sua senha corretamente!'}
                 />
-                <button style={btnCadastrar}
-                    onClick={(e) => this.listarCursoNome()}
-                >{"Buscar"}</button>
+                <Button variant="primary" className="btn btn-primary m-1"  onClick={(e) => this.listarCursoNome()}>
+                    Enviar
+                </Button>
+              
 
                 <h1>Diciplinas</h1>
 
                 <table class="table">
                     <thead class="p-3 mb-2 bg-primary text-white">
                         <tr>
-                        <th scope="col">Id</th>
+                            <th scope="col">Id</th>
                             <th scope="col">Nome</th>
                             <th scope="col">Carga Horária</th>
                         </tr>
@@ -107,7 +109,7 @@ class ListaDiscipinas extends Component {
                     </tbody>
                 </table>
 
-                
+
 
             </div>
         );

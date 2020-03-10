@@ -21,8 +21,7 @@ export default function LoginForm({ history, setUserData }) {
     }
 
     const enviarLogin = () => {
-        console.log()
-        postLogin({ usuario, senha })
+              postLogin({ usuario, senha })
             .then((response) => {
                 if (typeof response === "undefined") {
                     setUsuarioInvalido(true)
