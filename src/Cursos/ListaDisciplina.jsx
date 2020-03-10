@@ -6,52 +6,52 @@ class ListaDiscipinas extends Component {
     constructor(props) {
         super();
         this.state = {
-            curso:[
-               this.state={
-                   idCurso:"",
-                   nome:""
-               }
+            curso: [
+                this.state = {
+                    idCurso: "",
+                    nome: ""
+                }
             ],
-          
+
             diciplinas: [
                 this.state = {
                     id: "",
-                    nome:"",
-                    cargaHoraria:""
+                    nome: "",
+                    cargaHoraria: ""
                 }
             ]
         }
     }
 
     listarDisciplina() {
-                
-           axios.get(`/api/cursos/${this.state.curso.id}/disciplinas`).then((retorno) => {
-           this.setState({
-            diciplinas:retorno.data
-        })
-        console.log(retorno.data)
+
+        axios.get(`/api/cursos/${this.state.curso.id}/disciplinas`).then((retorno) => {
+            this.setState({
+                diciplinas: retorno.data
+            })
+
         });
     }
 
 
     listarCursoNome() {
-      
+
         axios.get(`/api/cursos/pesquisar/nome/${this.state.nome}`).then((retorno) => {
-          this.setState({
-            curso:retorno.data,
-             
+            this.setState({
+                curso: retorno.data,
+
             })
-           
+
             this.listarDisciplina()
-              
+
         });
     }
     componentDidMount() {
         this.listarCursoNome()
     }
-    limpar(){
+    limpar() {
         this.setState({
-            curso:""
+            curso: ""
         })
     }
 
@@ -78,32 +78,36 @@ class ListaDiscipinas extends Component {
             <div>
 
                 <b> <label style={label}>Digite o nome do curso que deseja ver as Diciplinas  </label></b>
-                <input value ={this.state.nome}style={inputStyle} 
-                onChange={(e)=>this.setState({nome:e.target.value})}
+                <input value={this.state.nome} style={inputStyle}
+                    onChange={(e) => this.setState({ nome: e.target.value })}
                 />
                 <button style={btnCadastrar}
                     onClick={(e) => this.listarCursoNome()}
-                >{"Buscar"}</button>    
+                >{"Buscar"}</button>
 
-        <h1>Diciplinas</h1>
-                
-                
-                                <table className="table table-striped">
-                    <th scope="col">Nome</th>
-                    <th scope="col">Carga Horária</th>
-                </table>
-                <tbody>
-                    {
-                        this.state.diciplinas.map((diciplina) =>
+                <h1>Diciplinas</h1>
+
+                <table class="table">
+                    <thead class="p-3 mb-2 bg-primary text-white">
+                        <tr>
+                        <th scope="col">Id</th>
+                            <th scope="col">Nome</th>
+                            <th scope="col">Carga Horária</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {this.state.diciplinas.map((disciplina) =>
+
                             <tr>
-
-                                <td>{diciplina.nome}</td>
-                                <td>{diciplina.cargaHoraria}</td>
+                                <td>{disciplina.id}</td>
+                                <td>{disciplina.nome}</td>
+                                <td>{disciplina.cargaHoraria}</td>
                             </tr>
-
                         )}
-                </tbody>
+                    </tbody>
+                </table>
 
+                
 
             </div>
         );
