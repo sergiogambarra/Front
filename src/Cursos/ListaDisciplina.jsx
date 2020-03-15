@@ -3,10 +3,10 @@ import axios from 'axios';
 import SACEInput from '../components/inputs/SACEInput';
 import { Button } from 'react-bootstrap';
 
-
 class ListaDiscipinas extends Component {
     constructor(props) {
-        const senhaInvalida = false;
+
+
         super();
         this.state = {
             curso: [
@@ -38,11 +38,11 @@ class ListaDiscipinas extends Component {
     limpar() {
 
         this.setState({
-            nome: ""
+            nome: "",
         });
-        if(this.state.nome === ""){
+        if (this.state.nome === "") {
             this.setState({
-                senhaInvalida:true
+                texto: true
             })
         }
     }
@@ -52,18 +52,27 @@ class ListaDiscipinas extends Component {
         axios.get(`/api/cursos/pesquisar/nome/${this.state.nome}`).then((retorno) => {
             this.setState({
                 curso: retorno.data,
-                senhaInvalida:false
+                texto: false
             })
             this.listarDisciplina()
             if (retorno.data === "") {
-               this.limpar();
+                this.limpar();
             }
 
         });
     }
-    
-    render() {
+    apagar() {
+        console.log(this.state.curso.id)
+        console.log(this.state.diciplinas.id)
        
+
+        axios.delete(`/api/cursos/${this.state.curso.id}/disciplina/${this.state.diciplinas.id}`)
+        this.listarCursoNome()
+
+    }
+
+    render() {
+
         const inputStyle = {
             margin: "0px 0px 10px 30%",
             width: "400px",
@@ -76,18 +85,20 @@ class ListaDiscipinas extends Component {
             <div>
 
                 <SACEInput
-                    label={'Digite o nome do curso que deseja ver as Diciplinas'}
+                    placeholder={'Digite o nome do curso que deseja ver as Diciplinas'}
+                    label={'Curso'}
                     value={this.state.nome} style={inputStyle}
                     onChange={(e) => this.setState({ nome: e.target.value })}
-                    onError={this.state.senhaInvalida}
+                    onError={this.state.texto}
                     onErrorMessage={'Nome do curso não encontrado'}
                 />
-                <Button variant="primary" className="btn btn-primary m-1"  onClick={(e) => this.listarCursoNome()}>
+                <Button variant="primary" className="btn btn-primary m-1" onClick={() => this.listarCursoNome()}>
                     Enviar
                 </Button>
-              
 
-                <h1>Diciplinas</h1>
+
+
+                <h3>Diciplinas </h3>
 
                 <table class="table">
                     <thead class="p-3 mb-2 bg-primary text-white">
@@ -95,15 +106,28 @@ class ListaDiscipinas extends Component {
                             <th scope="col">Id</th>
                             <th scope="col">Nome</th>
                             <th scope="col">Carga Horária</th>
+                            <th scope="col">Apagar</th>
+
                         </tr>
                     </thead>
                     <tbody>
-                        {this.state.diciplinas.map((disciplina) =>
+                        {this.state.diciplinas &&
+                        this.state.diciplinas.map((disciplina) =>
 
                             <tr>
                                 <td>{disciplina.id}</td>
                                 <td>{disciplina.nome}</td>
                                 <td>{disciplina.cargaHoraria}</td>
+                                <td><Button
+                                
+                                    key={disciplina.id}
+                                    value={disciplina.id}
+                                    id={disciplina.id}
+                                    variant="primary"
+                                    className="btn btn-danger m-1"
+                                    onClick={() => this.apagar()}
+                                > Deletar </Button>
+                                </td>
                             </tr>
                         )}
                     </tbody>
