@@ -37,10 +37,10 @@ function App() {
         <Switch>
           <Route exact path="/" component={Inicio} />
           <Route path="/login" render={({ history }) => <LoginForm history={history} setUserData={setUserData} />} />
+          <Route path="/cadastro-aluno" component={Cadastro} />
           <PrivateRoute path="/minhas-requisicoes" component={MinhasRequisicoes} />
           <PrivateRoute path="/nova-requisicao" component={NovaRequisicao} />
           <PrivateRoute path="/cadastro-curso" component={CadastroCurso} />
-          <PrivateRoute path="/cadastro-aluno" component={Cadastro} />
           <PrivateRoute path="/lista-disciplina" component={ListaDiscipinas} />
           <PrivateRoute path="/cadastrar-disciplina" component={CadastrarDisciplinas} />
           <Route path="*" component={() => <h1>Page not found</h1>} />

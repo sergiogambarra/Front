@@ -56,7 +56,7 @@ export default function LoginForm({ history, setUserData }) {
                 tipo="password"
             />
             <div className="row">
-                <Link to="/cadastro-aluno">Aluno, não é Cadstrado?</Link>
+                <Link to="/cadastro-aluno">Aluno, não é Cadastrado?</Link>
                 <Link to="#" style={{ position: 'relative', left: '45%' }}>Esqueceu a sua senha?</Link>
             </div>
             
@@ -67,7 +67,7 @@ export default function LoginForm({ history, setUserData }) {
                 <Button variant="primary" className="btn btn-primary m-1" onClick={enviarLogin}>
                     Enviar
                 </Button>
-                <Button variant="link" className="btn btn-link m-1" onClick={limparCampos}>
+                <Button variant="btn btn-danger" className="btn btn-primary m-1" onClick={limparCampos}>
                     Cancelar
                 </Button>
             </Form.Group>
