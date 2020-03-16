@@ -7,7 +7,7 @@ import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import SACENavbar from './components/SACENavbar';
 import CadastroAluno from '../src/pages/cadastros/CadastroAluno';
 
-import CadastroCurso from './Cursos/CursoView';
+import CadastroCursos from './pages/cadastros/CadastroCursos';
 import LoginForm from './components/forms/LoginForm'
 import ListaDiscipinas from './Cursos/ListaDisciplina';
 import CadastrarDisciplinas from './Cursos/CadastrarDisciplinas';
@@ -20,11 +20,7 @@ function App() {
   const PrivateRoute = ({ component: Component, ...rest }) => (
     <Route
       {...rest}
-      render={props =>
-        userData ? (
-          <Component {...props} />
-        ) : (
-            <Redirect to={{ pathname: "/login", state: { from: props.location } }} />
+      render={props =>userData ? (<Component {...props} /> ): ( <Redirect to={{ pathname: "/login", state: { from: props.location } }} />
           )
       }
     />
@@ -38,11 +34,11 @@ function App() {
           <Route exact path="/" component={Inicio} />
           <Route path="/login" render={({ history }) => <LoginForm history={history} setUserData={setUserData} />} />
           <Route path="/cadastro-aluno" component={CadastroAluno} />
-          <PrivateRoute path="/minhas-requisicoes" component={MinhasRequisicoes} />
-          <PrivateRoute path="/nova-requisicao" component={NovaRequisicao} />
-          <PrivateRoute path="/cadastro-curso" component={CadastroCurso} />
-          <PrivateRoute path="/lista-disciplina" component={ListaDiscipinas} />
-          <PrivateRoute path="/cadastrar-disciplina" component={CadastrarDisciplinas} />
+          <PrivateRoute exact path="/minhas-requisicoes" component={MinhasRequisicoes} />
+          <PrivateRoute exact path="/nova-requisicao" component={NovaRequisicao} />
+          <PrivateRoute exact path="/cadastro-curso" component={CadastroCursos} />
+          <PrivateRoute exact path="/lista-disciplina" component={ListaDiscipinas} />
+          <PrivateRoute exact path="/cadastrar-disciplina" component={CadastrarDisciplinas} />
           <Route path="*" component={() => <h1>Page not found</h1>} />
         </Switch>
       </div>

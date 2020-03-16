@@ -61,14 +61,10 @@ class ListaDiscipinas extends Component {
 
         });
     }
-    apagar() {
-        console.log(this.state.curso.id)
-        console.log(this.state.diciplinas.id)
-       
-
-        axios.delete(`/api/cursos/${this.state.curso.id}/disciplina/${this.state.diciplinas.id}`)
-        this.listarCursoNome()
-
+    apagar(e) {
+            axios.delete(`/api/cursos/${this.state.curso.id}/disciplina/${e}`).then(()=>{
+            this.listarCursoNome()
+             })
     }
 
     render() {
@@ -119,13 +115,9 @@ class ListaDiscipinas extends Component {
                                 <td>{disciplina.nome}</td>
                                 <td>{disciplina.cargaHoraria}</td>
                                 <td> { disciplina.nome == "" ? "":<Button
-                                
-                                    key={disciplina.id}
-                                    value={disciplina.id}
-                                    id={disciplina.id}
                                     variant="primary"
                                     className="btn btn-danger m-1"
-                                    onClick={() => this.apagar()}
+                                    onClick={(e) => this.apagar(disciplina.id)}
                                 > Deletar </Button> }
                                 </td>
                             </tr>
