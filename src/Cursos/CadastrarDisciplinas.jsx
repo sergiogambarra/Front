@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { Button } from 'react-bootstrap';
 import SACEInput from '../components/inputs/SACEInput';
+import CursoSelect from '../components/inputs/CursoSelect';
+
 class CadastrarDisciplinas extends Component {
     constructor(props) {
         super(props);
@@ -10,7 +12,7 @@ class CadastrarDisciplinas extends Component {
             idcurso: "",
             textodisciplina: false,
             textocargahoraria: false,
-            textooption: false,
+            textooption: "erro",
 
 
         }
@@ -23,10 +25,11 @@ class CadastrarDisciplinas extends Component {
         });
     }
     cadastrarDisciplinas() {
-
+        console.log(this.state.idcurso
+            , this.state.nome, this.state.idcurso, this.state.cargaHoraria
+        )
 
         if (this.state.idcurso === "") {
-            alert("Selecione o curso")
             this.setState({
                 textooption: true
             })
@@ -37,7 +40,6 @@ class CadastrarDisciplinas extends Component {
             })
         }
         if (typeof this.state.cargaHoraria === "undefined") {
-            alert("Campo carga horária é obrigatório")
             this.setState({
                 textocargahoraria: true
             })
@@ -48,22 +50,24 @@ class CadastrarDisciplinas extends Component {
             axios.post(`/api/cursos/${this.state.idcurso}/disciplinas`, {
                 nome: this.state.nome,
                 cargaHoraria: this.state.cargaHoraria
-            }) 
+            })
         }
     }
- 
+
 
     componentDidMount() {
         this.listarCurso();
 
     }
+
+
     render() {
-        return (<div>
-            <h1>Selecione o curso para cadastrar disciplinas</h1>
+        return (<div >
 
-            <label for="cars">Cursos</label>
-
-            <select id={this.state.idcurso}
+            <h2>Selecione o curso para cadastrar disciplinas</h2>
+            <strong >curso</strong>
+            <select class="browser-default custom-select"
+                id={this.state.idcurso}
                 onChange={(e) =>
                     this.setState({
                         idcurso: e.target.value
@@ -82,7 +86,7 @@ class CadastrarDisciplinas extends Component {
                 onErrorMessage={'Campo da disciplina obrigatório'}
             />
 
-            <label>Carga Horária</label>
+            <strong>Carga Horária</strong>
             <b />
             <input type="number" id="quantity" name="cargaHoraria" min="15" max=""
                 onChange={(e) => this.setState({ cargaHoraria: e.target.value })}

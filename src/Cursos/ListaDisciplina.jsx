@@ -118,7 +118,7 @@ class ListaDiscipinas extends Component {
                                 <td>{disciplina.id}</td>
                                 <td>{disciplina.nome}</td>
                                 <td>{disciplina.cargaHoraria}</td>
-                                <td><Button
+                                <td> { disciplina.nome == "" ? "":<Button
                                 
                                     key={disciplina.id}
                                     value={disciplina.id}
@@ -126,7 +126,7 @@ class ListaDiscipinas extends Component {
                                     variant="primary"
                                     className="btn btn-danger m-1"
                                     onClick={() => this.apagar()}
-                                > Deletar </Button>
+                                > Deletar </Button> }
                                 </td>
                             </tr>
                         )}

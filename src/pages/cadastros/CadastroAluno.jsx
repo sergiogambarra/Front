@@ -70,7 +70,6 @@ class CadastroAluno extends Component {
             senha: this.state.senha,
             confirmaSenha: this.state.confirmaSenha,
         })
-
     }
 
     render() {
