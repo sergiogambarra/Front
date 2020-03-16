@@ -5,7 +5,7 @@ import NovaRequisicao from './pages/NovaRequisicao';
 import MinhasRequisicoes from './pages/MinhasRequisicoes';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import SACENavbar from './components/SACENavbar';
-import Cadastro from './pages/cadastros/Cadastro';
+import CadastroAluno from '../src/pages/cadastros/CadastroAluno';
 
 import CadastroCurso from './Cursos/CursoView';
 import LoginForm from './components/forms/LoginForm'
@@ -37,7 +37,7 @@ function App() {
         <Switch>
           <Route exact path="/" component={Inicio} />
           <Route path="/login" render={({ history }) => <LoginForm history={history} setUserData={setUserData} />} />
-          <Route path="/cadastro-aluno" component={Cadastro} />
+          <Route path="/cadastro-aluno" component={CadastroAluno} />
           <PrivateRoute path="/minhas-requisicoes" component={MinhasRequisicoes} />
           <PrivateRoute path="/nova-requisicao" component={NovaRequisicao} />
           <PrivateRoute path="/cadastro-curso" component={CadastroCurso} />

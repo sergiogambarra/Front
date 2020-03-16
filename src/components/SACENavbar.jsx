@@ -22,7 +22,7 @@ export default function SACENavbar({ setUserData }) {
     return (
         <Navbar bg="light" expand="lg">
             <Link to={'/'}>
-                <Navbar.Brand>{'SACE'}</Navbar.Brand>
+                <Navbar.Brand>{'Início'}</Navbar.Brand>
             </Link>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
