@@ -32,7 +32,6 @@ class ListaDiscipinas extends Component {
             this.setState({
                 diciplinas: retorno.data
             })
-
         });
     }
     limpar() {
@@ -58,13 +57,12 @@ class ListaDiscipinas extends Component {
             if (retorno.data === "") {
                 this.limpar();
             }
-
         });
     }
     apagar(e) {
-            axios.delete(`/api/cursos/${this.state.curso.id}/disciplina/${e}`).then(()=>{
+        axios.delete(`/api/cursos/${this.state.curso.id}/disciplina/${e}`).then(() => {
             this.listarCursoNome()
-             })
+        })
     }
 
     render() {
@@ -78,7 +76,7 @@ class ListaDiscipinas extends Component {
         };
 
         return (
-            <div>
+            <div >
 
                 <SACEInput
                     placeholder={'Digite o nome do curso que deseja ver as Diciplinas'}
@@ -91,7 +89,13 @@ class ListaDiscipinas extends Component {
                 <Button variant="primary" className="btn btn-primary m-1" onClick={() => this.listarCursoNome()}>
                     Enviar
                 </Button>
-
+                <Button
+                    variant="danger"
+                    className="btn btn-primary m-1"
+                    onClick={() => this.limpar()}
+                >
+                    Limpar
+                </Button>
 
 
                 <h3>Diciplinas </h3>
@@ -108,20 +112,20 @@ class ListaDiscipinas extends Component {
                     </thead>
                     <tbody>
                         {this.state.diciplinas &&
-                        this.state.diciplinas.map((disciplina) =>
+                            this.state.diciplinas.map((disciplina) =>
 
-                            <tr>
-                                <td>{disciplina.id}</td>
-                                <td>{disciplina.nome}</td>
-                                <td>{disciplina.cargaHoraria}</td>
-                                <td> { disciplina.nome == "" ? "":<Button
-                                    variant="primary"
-                                    className="btn btn-danger m-1"
-                                    onClick={(e) => this.apagar(disciplina.id)}
-                                > Deletar </Button> }
-                                </td>
-                            </tr>
-                        )}
+                                <tr>
+                                    <td>{disciplina.id}</td>
+                                    <td>{disciplina.nome}</td>
+                                    <td>{disciplina.cargaHoraria}</td>
+                                    <td> {disciplina.nome == "" ? "" : <Button
+                                        variant="primary"
+                                        className="btn btn-danger m-1"
+                                        onClick={(e) => this.apagar(disciplina.id)}
+                                    > Deletar </Button>}
+                                    </td>
+                                </tr>
+                            )}
                     </tbody>
                 </table>
 

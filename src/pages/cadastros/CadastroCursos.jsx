@@ -12,7 +12,8 @@ export default class CadastroCursos extends Component {
                 this.state = {
                     nome: "",
                     cargaHoraria: "",
-                    id:""
+                    id: "",
+                    guardaNome: ""
                 }
             ]
 
@@ -23,6 +24,8 @@ export default class CadastroCursos extends Component {
             this.setState({
                 cursos: retorno.data
             })
+            this.limpar()
+
         });
     }
     inserirCursos() {
@@ -38,15 +41,35 @@ export default class CadastroCursos extends Component {
             this.listarCursos()
         })
     }
+    editarCurso(e) {
 
+        axios.put(`/api/cursos/${e}`, {
+            nome: this.state.nome
+        }).then(() => {
+            this.listarCursos()
+        })
+    }
+    pegaNome() {
+
+    }
     componentDidMount() {
         this.listarCursos()
     }
+    limpar() {
+        this.setState({
+            nome: ""
+        })
+
+    }
+
+
     render() {
 
         return (
             <div>
+                <br />
                 <fieldset>
+
                     <SACEInput
                         label={'Nome do Curso'}
                         value={this.state.nome}
@@ -60,7 +83,7 @@ export default class CadastroCursos extends Component {
                     />
 
                     <Form.Group className="d-flex justify-content-end">
-                       
+
                         <Button
                             variant="primary"
                             className="btn btn-primary m-1"
@@ -68,14 +91,26 @@ export default class CadastroCursos extends Component {
                         >
                             Enviar
                 </Button>
+                        <Button
+                            variant="danger"
+                            className="btn btn-primary m-1"
+                            onClick={() => this.limpar()}
+                        >
+                            Limpar
+                </Button>
                     </Form.Group>
-                </fieldset>
+                </fieldset >
+                <br />
+                <br />
+
+                <h2>Lista de Cursos cadastrados</h2>
                 <table class="table">
                     <thead class="p-3 mb-2 bg-primary text-white">
                         <tr>
                             <th scope="col">Id</th>
                             <th scope="col">Nome</th>
                             <th scope="col">Apagar</th>
+                            <th scope="col">Editar</th>
 
                         </tr>
                     </thead>
@@ -88,17 +123,22 @@ export default class CadastroCursos extends Component {
                                     <td>{curso.nome}</td>
                                     <td> {curso.nome == "" ? "" : <Button
                                         variant="primary"
-                                        className="btn btn-danger m-1"
-                                        onClick={(e) => 
+                                        className="btn btn-danger m-2"
+                                        onClick={(e) =>
                                             this.deletarCurso(curso.id)
                                         }
                                     > Deletar </Button>}
+                                    </td>
+                                    <td>{this.state.nome == "" ? <Button type="button" class="btn btn-secondary btn-lg" disabled
+                                    > Editar </Button> : <Button type="button" class="btn btn-secondary btn-lg" 
+                                onClick={(e) => this.editarCurso(curso.id, curso.nome)
+                                        }
+                                    > Editar </Button>}
                                     </td>
                                 </tr>
                             )}
                     </tbody>
                 </table>
-
 
             </div>
         );
