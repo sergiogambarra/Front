@@ -6,8 +6,6 @@ import { Link } from "react-router-dom";
 import TituloPagina from '../../components/TituloPagina';
 import { Form } from 'react-bootstrap';
 
-
-
 class CadastroAluno extends Component {
     constructor(props) {
         super(props);
@@ -26,7 +24,8 @@ class CadastroAluno extends Component {
             senhaInvalida: false,
             confirmaSenha: "",
             confirmaSenhaInvalida: false,
-            tipo: ""
+            tipo: "",
+            novaSenha:""
         }
     }
     limpar() {
@@ -47,19 +46,8 @@ class CadastroAluno extends Component {
             this.state.dataIngresso,
             this.state.login,
             this.state.senha,
-            this.state.confirmaSenha)
-        if (this.state.nome === "" || this.state.email || this.state.matricula || this.state.dataIngresso || this.state.login ||
-            this.state.senha || this.state.confirmaSenha) {
-            this.setState({
-                nomeInvalido: true,
-                emailInvalido: true,
-                matriculaInvalida: true,
-                dataIngressoInvalido: true,
-                loginInvalido: true,
-                senhaInvalida: true,
-                confirmaSenhaInvalida: true,
-            })
-        }
+            this.state.novaSenha)
+        
         axios.post("/api/usuarios/aluno/", {
             tipo: "aluno",
             nome: this.state.nome,
@@ -67,8 +55,8 @@ class CadastroAluno extends Component {
             matricula: this.state.matricula,
             dataIngresso: this.state.dataIngresso,
             login: this.state.login,
+            novaSenha: this.state.novaSenha,
             senha: this.state.senha,
-            confirmaSenha: this.state.confirmaSenha,
         })
     }
 
@@ -127,7 +115,7 @@ class CadastroAluno extends Component {
                     <SACEInput
                         label={'Confirme a sua senha'}
                         placeholder={'Informe a mesma senha que a anterior. '}
-                        onChange={(e) => this.setState({ senha: e.target.value })}
+                        onChange={(e) => this.setState({ novaSenha: e.target.value })}
                         onError={this.state.confirmaSenhaInvalida}
                         onErrorMessage={'As senhas não conferem! Favor inserir a mesma senha!'}
                         tipo={"password"}
