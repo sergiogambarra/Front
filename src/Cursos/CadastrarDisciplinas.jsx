@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { Button } from 'react-bootstrap';
 import SACEInput from '../components/inputs/SACEInput';
-import CursoSelect from '../components/inputs/CursoSelect';
 
 class CadastrarDisciplinas extends Component {
     constructor(props) {
@@ -65,7 +64,7 @@ class CadastrarDisciplinas extends Component {
         return (<div >
 
             <h2>Selecione o curso para cadastrar disciplinas</h2>
-            <strong >curso</strong>
+            <label >curso</label>
             <select class="browser-default custom-select"
                 id={this.state.idcurso}
                 onChange={(e) =>
@@ -86,7 +85,7 @@ class CadastrarDisciplinas extends Component {
                 onErrorMessage={'Campo da disciplina obrigatório'}
             />
 
-            <strong>Carga Horária</strong>
+            <label>Carga Horária</label>
             <b />
             <input type="number" id="quantity" name="cargaHoraria" min="15" max=""
                 onChange={(e) => this.setState({ cargaHoraria: e.target.value })}

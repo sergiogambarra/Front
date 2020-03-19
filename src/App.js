@@ -11,6 +11,7 @@ import CadastroCursos from './pages/cadastros/CadastroCursos';
 import LoginForm from './components/forms/LoginForm'
 import ListaDiscipinas from './Cursos/ListaDisciplina';
 import CadastrarDisciplinas from './Cursos/CadastrarDisciplinas';
+import CadastroServidor from './pages/cadastros/CadastroServidor';
 
 function App() {
   const [userData, setUserData] = useState(null);
@@ -34,6 +35,7 @@ function App() {
           <Route exact path="/" component={Inicio} />
           <Route path="/login" render={({ history }) => <LoginForm history={history} setUserData={setUserData} />} />
           <Route path="/cadastro-aluno" component={CadastroAluno} />
+          <Route path="/cadastro-servidor" component={CadastroServidor} />
           <PrivateRoute exact path="/minhas-requisicoes" component={MinhasRequisicoes} />
           <PrivateRoute exact path="/nova-requisicao" component={NovaRequisicao} />
           <PrivateRoute exact path="/cadastro-curso" component={CadastroCursos} />

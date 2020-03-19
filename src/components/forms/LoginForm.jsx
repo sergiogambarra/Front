@@ -71,6 +71,8 @@ export default function LoginForm({ history, setUserData }) {
                     Cancelar
                 </Button>
             </Form.Group>
+       
+            <Link to="cadastro-servidor" style={{ position: 'relative', left: '80%' }}>Servidor, não é cadastrado?</Link>
         </Form.Group>
     );
 }

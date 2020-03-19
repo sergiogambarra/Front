@@ -131,7 +131,7 @@ export default class CadastroCursos extends Component {
                                     </td>
                                     <td>{this.state.nome == "" ? <Button type="button" class="btn btn-secondary btn-lg" disabled
                                     > Editar </Button> : <Button type="button" class="btn btn-secondary btn-lg" 
-                                onClick={(e) => this.editarCurso(curso.id, curso.nome)
+                                onClick={(e) => {this.editarCurso(curso.id, curso.nome)}
                                         }
                                     > Editar </Button>}
                                     </td>
