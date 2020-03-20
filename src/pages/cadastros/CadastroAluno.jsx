@@ -4,7 +4,7 @@ import SACEInput from '../../../src//components/inputs/SACEInput';
 import { Button } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import TituloPagina from '../../components/TituloPagina';
-import { Form } from 'react-bootstrap';
+import { Form,Modal } from 'react-bootstrap';
 
 class CadastroAluno extends Component {
     constructor(props) {
@@ -28,7 +28,7 @@ class CadastroAluno extends Component {
             novaSenha:""
         }
     }
-    limpar() {
+    mensagemUsuario(){
         this.setState({
             nomeInvalido: false,
             emailInvalido: false,
@@ -36,18 +36,48 @@ class CadastroAluno extends Component {
             dataIngressoInvalido: false,
             loginInvalido: false,
             senhaInvalida: false,
-            confirmaSenhaInvalida: false,
+            confirmaSenhaInvalida: false
+            
         })
     }
+    limpar() {
+        this.mensagemUsuario()
+    }
     enviarCadastro(e) {
-        console.log(this.state.nome,
-            this.state.email,
-            this.state.matricula,
-            this.state.dataIngresso,
-            this.state.login,
-            this.state.senha,
-            this.state.novaSenha)
-        
+             if(this.state.nome ===""){
+                this.setState({
+                    nomeInvalido:true
+                })
+             }
+             if(this.state.email ===""){
+                this.setState({
+                    emailInvalido:true
+                })
+             }
+             if(this.state.matricula ===""){
+                this.setState({
+                    matriculaInvalida:true
+                })
+             }
+             if(this.state.dataIngresso ===""){
+                this.setState({
+                    dataIngressoInvalido:true
+                })
+             }if(this.state.senha ===""){
+                this.setState({
+                    senhaInvalida:true
+                })
+             }
+             if(this.state.confirmaSenha ===""){
+                this.setState({
+                    confirmaSenhaInvalida:true
+                })
+             }
+             if(this.state.login ===""){
+                this.setState({
+                    loginInvalido:true
+                })
+             }
         axios.post("/api/usuarios/aluno/", {
             tipo: "aluno",
             nome: this.state.nome,
@@ -57,13 +87,16 @@ class CadastroAluno extends Component {
             login: this.state.login,
             novaSenha: this.state.novaSenha,
             senha: this.state.senha,
-        })
-    }
+        }).then(()=>this.mensagemUsuario()
 
+        )
+        
+
+    }
+    
     render() {
         return (
             <div>
-
                 <Form.Group className="col-md-6 container">
 
                     <TituloPagina titulo="Cadastro de Alunos" />
@@ -120,14 +153,14 @@ class CadastroAluno extends Component {
                         onErrorMessage={'As senhas não conferem! Favor inserir a mesma senha!'}
                         tipo={"password"}
                     />
-
+    
                     <div className="row container" style={{ position: 'relative', left: '32%' }}>
                         <Button onClick={(e) => this.enviarCadastro(e)} className="btn btn-dark" style={{ border: "5px solid white" }}>Enviar</Button>
                         <Button onClick={() => this.limpar()} className="btn btn-danger" style={{ border: "5px solid white" }}>Limpar</Button>
                         <Link to="/login"> <Button variant="primary" className="btn btn-primary m-1" >Voltar </Button></Link>
                     </div>
                 </Form.Group>
-
+          
             </div>
         );
     }

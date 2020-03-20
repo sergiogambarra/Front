@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import SACEInput from '../../components/inputs/SACEInput';
 import { Form, Button, } from 'react-bootstrap';
 import axios from 'axios';
+import { Link } from "react-router-dom";
 
 
 export default class CadastroCursos extends Component {
@@ -120,7 +121,7 @@ export default class CadastroCursos extends Component {
 
                                 <tr>
                                     <td>{curso.id}</td>
-                                    <td>{curso.nome}</td>
+                                    <Link to="/lista-disciplina"><td>{curso.nome}</td></Link>
                                     <td> {curso.nome == "" ? "" : <Button
                                         variant="primary"
                                         className="btn btn-danger m-2"

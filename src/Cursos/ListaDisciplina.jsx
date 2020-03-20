@@ -77,7 +77,7 @@ class ListaDiscipinas extends Component {
 
         return (
             <div >
-
+                <h2>Pesquisar disciplinas pelo nome do curso</h2>
                 <SACEInput
                     placeholder={'Digite o nome do curso que deseja ver as Diciplinas'}
                     label={'Curso'}
@@ -86,10 +86,10 @@ class ListaDiscipinas extends Component {
                     onError={this.state.texto}
                     onErrorMessage={'Nome do curso não encontrado'}
                 />
-                <Button variant="primary" className="btn btn-primary m-1" onClick={() => this.listarCursoNome()}>
+                <Button style={{ position: 'relative', left: '80%' }} variant="primary" className="btn btn-primary m-1" onClick={() => this.listarCursoNome()}>
                     Enviar
                 </Button>
-                <Button
+                <Button style={{ position: 'relative', left: '80%' }}
                     variant="danger"
                     className="btn btn-primary m-1"
                     onClick={() => this.limpar()}
