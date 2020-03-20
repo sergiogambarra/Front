@@ -30,9 +30,9 @@ export default function SACENavbar({ setUserData }) {
                     <SACELink to={'/minhas-requisicoes'} label={'Minhas requisições'}/>
                     <SACELink to={'/nova-requisicao'} label={'Nova requisição'}/>
                     <SACELink to={'/cadastro-curso'} label={'Cadastrar curso'}/>
-                    <SACELink to={'/cadastrar-disciplina'} label={'Cadastrar disciplinas'}/>
                     <SACELink to={'/lista-alunos'} label={'Lista Alunos'}/>
-                   </Nav>
+                    <SACELink to={'/lista-disciplina'} label={'Lista Disciplinas'}/>
+                    </Nav>
             </Navbar.Collapse>
             <Link to={'/'}>
                 <Button 

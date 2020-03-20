@@ -121,8 +121,8 @@ export default class CadastroCursos extends Component {
 
                                 <tr>
                                     <td>{curso.id}</td>
-                                    <Link to="/lista-disciplina"><td>{curso.nome}</td></Link>
-                                    <td> {curso.nome == "" ? "" : <Button
+                                    <Link to="/cadastrar-disciplina"><td>{curso.nome}</td></Link>
+                                    <td> {curso.nome === "" ? "" : <Button
                                         variant="primary"
                                         className="btn btn-danger m-2"
                                         onClick={(e) =>
@@ -130,8 +130,7 @@ export default class CadastroCursos extends Component {
                                         }
                                     > Deletar </Button>}
                                     </td>
-                                    <td>{this.state.nome == "" ? <Button type="button" class="btn btn-secondary btn-lg" disabled
-                                    > Editar </Button> : <Button type="button" class="btn btn-secondary btn-lg" 
+                                    <td>{ curso.nome === "" ? "": <Button type="button" class="btn btn-secondary btn-lg" 
                                 onClick={(e) => {this.editarCurso(curso.id, curso.nome)}
                                         }
                                     > Editar </Button>}

@@ -4,7 +4,7 @@ import SACEInput from '../../../src//components/inputs/SACEInput';
 import { Button } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import TituloPagina from '../../components/TituloPagina';
-import { Form,Modal } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 
 class CadastroAluno extends Component {
     constructor(props) {

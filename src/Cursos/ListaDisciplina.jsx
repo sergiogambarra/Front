@@ -16,7 +16,7 @@ class ListaDiscipinas extends Component {
                 }
             ],
 
-            diciplinas: [
+            disciplinas: [
                 this.state = {
                     id: "",
                     nome: "",
@@ -30,7 +30,7 @@ class ListaDiscipinas extends Component {
 
         axios.get(`/api/cursos/${this.state.curso.id}/disciplinas`).then((retorno) => {
             this.setState({
-                diciplinas: retorno.data
+                disciplinas: retorno.data
             })
         });
     }
@@ -111,14 +111,14 @@ class ListaDiscipinas extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {this.state.diciplinas &&
-                            this.state.diciplinas.map((disciplina) =>
+                        {this.state.disciplinas &&
+                            this.state.disciplinas.map((disciplina) =>
 
                                 <tr>
                                     <td>{disciplina.id}</td>
                                     <td>{disciplina.nome}</td>
                                     <td>{disciplina.cargaHoraria}</td>
-                                    <td> {disciplina.nome == "" ? "" : <Button
+                                    <td> {disciplina.nome === "" ? "" : <Button
                                         variant="primary"
                                         className="btn btn-danger m-1"
                                         onClick={(e) => this.apagar(disciplina.id)}

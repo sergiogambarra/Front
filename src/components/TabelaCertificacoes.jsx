@@ -24,7 +24,7 @@ export default function() {
 
     return (
       <>
-        <h6>Lista de requisições de certificação de estudos</h6>
+        <h6>Lista de requisições de certificação de conhecimentos</h6>
         {error && <Alert variant="danger">Não foi possível carregar suas requisições.</Alert>}
           {
             isLoading 
