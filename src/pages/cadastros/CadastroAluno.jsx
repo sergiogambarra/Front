@@ -49,36 +49,37 @@ class CadastroAluno extends Component {
             this.setState({
                 nomeInvalido: true
             })
-        }
+        }else
         if (this.state.email === "") {
             this.setState({
                 emailInvalido: true
             })
-        }
+        }else
         if (this.state.matricula === "") {
             this.setState({
                 matriculaInvalida: true
             })
-        }
+        }else
         if (this.state.dataIngresso === "") {
             this.setState({
                 dataIngressoInvalido: true
             })
-        } if (this.state.senha === "") {
+        }else 
+        if (this.state.senha === "") {
             this.setState({
                 senhaInvalida: true
             })
-        }
-        if ( this.state.senha) {
+        }else
+        if ( this.state.novaSenha ===""|| this.state.senha !==this.state.novaSenha) {
             this.setState({
                 confirmaSenhaInvalida: true
             })
-        }
+        }else
         if (this.state.login === "") {
             this.setState({
                 loginInvalido: true
             })
-        }
+        }else
             axios.post("/api/usuarios/aluno/", {
                 tipo: "aluno",
                 nome: this.state.nome,
