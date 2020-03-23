@@ -15,7 +15,8 @@ export default class CadastroCursos extends Component {
                     cargaHoraria: "",
                     id: "",
                     guarda: 0,
-                    guardaId: ""
+                    guardaId: "",
+                    texto: true
                 }
             ]
 
@@ -46,7 +47,6 @@ export default class CadastroCursos extends Component {
 
 
     editarCurso() {
-        console.log(this.state.nome)
         axios.put(`/api/cursos/${this.state.guardaId}`, {
             nome: this.state.nome
         }).then(() => {
@@ -69,30 +69,28 @@ export default class CadastroCursos extends Component {
     limpar() {
         this.setState({
             nome: "",
-            guarda:0
+            guarda: 0
         })
 
     }
 
 
     render() {
-
+      
         return (
             <div>
                 <br />
                 <fieldset>
 
                     <SACEInput
-                        idInput={this.state.nome}
+                       
                         label={'Nome do Curso'}
                         value={this.state.nome}
                         placeholder={'Preencha com o nome do curso que você deseja cadastrar'}
-                        onChange={(e) =>
-                            this.setState({
-                                nome: e.target.value
-                            })
-                        }
-                        onErrorMessage={'O nome curso é obrigatório ter mais de 3 caracteres.'}
+                        onChange={(e) =>this.setState({nome: e.target.value})}
+                        onError={this.state.texto}
+                        onErrorMessage={'Nome do curso não encontrado'}
+                       
                     />
 
                     <Form.Group className="d-flex justify-content-end">

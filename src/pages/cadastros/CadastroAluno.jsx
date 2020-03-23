@@ -25,10 +25,10 @@ class CadastroAluno extends Component {
             confirmaSenha: "",
             confirmaSenhaInvalida: false,
             tipo: "",
-            novaSenha:""
+            novaSenha: ""
         }
     }
-    mensagemUsuario(){
+    mensagemUsuario() {
         this.setState({
             nomeInvalido: false,
             emailInvalido: false,
@@ -36,64 +36,64 @@ class CadastroAluno extends Component {
             dataIngressoInvalido: false,
             loginInvalido: false,
             senhaInvalida: false,
-            confirmaSenhaInvalida: false
+            confirmaSenhaInvalida: false,
             
         })
     }
     limpar() {
         this.mensagemUsuario()
+        window.location.reload();
     }
     enviarCadastro(e) {
-             if(this.state.nome ===""){
-                this.setState({
-                    nomeInvalido:true
-                })
-             }
-             if(this.state.email ===""){
-                this.setState({
-                    emailInvalido:true
-                })
-             }
-             if(this.state.matricula ===""){
-                this.setState({
-                    matriculaInvalida:true
-                })
-             }
-             if(this.state.dataIngresso ===""){
-                this.setState({
-                    dataIngressoInvalido:true
-                })
-             }if(this.state.senha ===""){
-                this.setState({
-                    senhaInvalida:true
-                })
-             }
-             if(this.state.confirmaSenha ===""){
-                this.setState({
-                    confirmaSenhaInvalida:true
-                })
-             }
-             if(this.state.login ===""){
-                this.setState({
-                    loginInvalido:true
-                })
-             }
-        axios.post("/api/usuarios/aluno/", {
-            tipo: "aluno",
-            nome: this.state.nome,
-            email: this.state.email,
-            matricula: this.state.matricula,
-            dataIngresso: this.state.dataIngresso,
-            login: this.state.login,
-            novaSenha: this.state.novaSenha,
-            senha: this.state.senha,
-        }).then(()=>this.mensagemUsuario()
-
-        )
-        
-
-    }
+        if (this.state.nome === "") {
+            this.setState({
+                nomeInvalido: true
+            })
+        }
+        if (this.state.email === "") {
+            this.setState({
+                emailInvalido: true
+            })
+        }
+        if (this.state.matricula === "") {
+            this.setState({
+                matriculaInvalida: true
+            })
+        }
+        if (this.state.dataIngresso === "") {
+            this.setState({
+                dataIngressoInvalido: true
+            })
+        } if (this.state.senha === "") {
+            this.setState({
+                senhaInvalida: true
+            })
+        }
+        if ( this.state.senha) {
+            this.setState({
+                confirmaSenhaInvalida: true
+            })
+        }
+        if (this.state.login === "") {
+            this.setState({
+                loginInvalido: true
+            })
+        }
+            axios.post("/api/usuarios/aluno/", {
+                tipo: "aluno",
+                nome: this.state.nome,
+                email: this.state.email,
+                matricula: this.state.matricula,
+                dataIngresso: this.state.dataIngresso,
+                login: this.state.login,
+                novaSenha: this.state.novaSenha,
+                senha: this.state.senha,
+            }).then(() => this.limpar()
     
+            )
+
+        }    
+
     render() {
         return (
             <div>
@@ -150,17 +150,17 @@ class CadastroAluno extends Component {
                         placeholder={'Informe a mesma senha que a anterior. '}
                         onChange={(e) => this.setState({ novaSenha: e.target.value })}
                         onError={this.state.confirmaSenhaInvalida}
-                        onErrorMessage={'As senhas não conferem! Favor inserir a mesma senha!'}
+                        onErrorMessage={'As senhas não conferem! ou campo está vazio!'}
                         tipo={"password"}
                     />
-    
+
                     <div className="row container" style={{ position: 'relative', left: '32%' }}>
                         <Button onClick={(e) => this.enviarCadastro(e)} className="btn btn-dark" style={{ border: "5px solid white" }}>Enviar</Button>
                         <Button onClick={() => this.limpar()} className="btn btn-danger" style={{ border: "5px solid white" }}>Limpar</Button>
                         <Link to="/login"> <Button variant="primary" className="btn btn-primary m-1" >Voltar </Button></Link>
                     </div>
                 </Form.Group>
-          
+
             </div>
         );
     }

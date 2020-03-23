@@ -19,12 +19,13 @@ class CadastroServidor extends Component {
             loginInvalido: false,
             senha: "",
             senhaInvalida: false,
-            confirmaSenha: "",
             confirmaSenhaInvalida: false,
             tipo: "",
             novaSenha: "",
             siape: "",
+            siapeInvalido: false,
             cargo: "",
+            cargoInvalido: false,
             cordenador: ""
 
 
@@ -32,7 +33,34 @@ class CadastroServidor extends Component {
     }
 
     enviarCadastro(e) {
-       
+        if (this.state.nome === "") {
+            this.setState({
+                nomeInvalido: true
+            })
+        }
+        if (this.state.email === "") {
+            this.setState({
+                emailInvalido: true
+            })
+        } if (this.state.siape === "") {
+            this.setState({
+                siapeInvalido: true
+            })
+        } if (this.state.login === "") {
+            this.setState({
+                loginInvalido: true
+            })
+        }
+        if (this.state.senha === "") {
+            this.setState({
+                senhaInvalida: true
+            })
+        }
+        if (this.state.novaSenha === "") {
+            this.setState({
+                confirmaSenhaInvalida: true
+            })
+        }
         axios.post("/api/usuarios/", {
             tipo: "servidor",
             nome: this.state.nome,
@@ -42,10 +70,24 @@ class CadastroServidor extends Component {
             email: this.state.email,
             siape: this.state.siape,
             cargo: this.state.cargo,
-        })
+        }).then(() => {
+            this.limpar()
+        }
+        )
     }
 
-
+    limpar() {
+        this.setState({
+            confirmaSenha: "",
+            nomeInvalido: false,
+            emailInvalido: false,
+            siapeInvalido: false,
+            loginInvalido: false,
+            senhaInvalida: false,
+            confirmaSenhaInvalida: false
+        })
+        window.location.reload(); 
+    }
     render() {
         return (
             <Form.Group className="col-md-6 container">
@@ -69,15 +111,15 @@ class CadastroServidor extends Component {
                     label={'Siape'}
                     placeholder={'Informe a sua siape. '}
                     onChange={(e) => this.setState({ siape: e.target.value })}
-                    onError={this.state.matriculaInvalida}
+                    onError={this.state.siapeInvalido}
                     onErrorMessage={'Você não inseriu a seu siape corretamente!'}
                 />
                 <label >Cargo</label>
                 <select class="custom-select"
-                    onChange={(e) => 
-                    this.setState({
-                        cargo:e.target.value
-                    })
+                    onChange={(e) =>
+                        this.setState({
+                            cargo: e.target.value
+                        })
                     }
                 >
                     <option></option>
