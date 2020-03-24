@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import SACEInput from '../../../src//components/inputs/SACEInput';
-import { Button } from 'react-bootstrap';
+import { Button, Modal } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import TituloPagina from '../../components/TituloPagina';
 import { Form } from 'react-bootstrap';
@@ -28,25 +28,25 @@ class CadastroAluno extends Component {
             novaSenha: ""
         }
     }
-   
+
     limpar() {
-      this.setState({
-          nome:"",
-          email:"",
-          matricula:"",
-          dataIngresso:"",
-          login:"",
-          senha:"",
-          novaSenha:"",
-          nomeInvalido: false,
-          emailInvalido: false,
-          matriculaInvalida: false,
-          dataIngressoInvalido: false,
-          loginInvalido: false,
-          senhaInvalida: false,
-          confirmaSenhaInvalida: false,
-      })
-   
+        this.setState({
+            nome: "",
+            email: "",
+            matricula: "",
+            dataIngresso: "",
+            login: "",
+            senha: "",
+            novaSenha: "",
+            nomeInvalido: false,
+            emailInvalido: false,
+            matriculaInvalida: false,
+            dataIngressoInvalido: false,
+            loginInvalido: false,
+            senhaInvalida: false,
+            confirmaSenhaInvalida: false,
+        })
+
     }
     enviarCadastro(e) {
         if (this.state.nome === "") {
@@ -59,7 +59,7 @@ class CadastroAluno extends Component {
                     emailInvalido: true
                 })
             } else
-                if (this.state.matricula === ""|| this.state.matricula <=0) {
+                if (this.state.matricula === "" || this.state.matricula <= 0) {
                     this.setState({
                         matriculaInvalida: true
                     })
@@ -74,16 +74,16 @@ class CadastroAluno extends Component {
                                 loginInvalido: true
                             })
                         } else
-                        if (this.state.senha === "") {
-                            this.setState({
-                                senhaInvalida: true
-                            })
-                        } else
-                        if (this.state.novaSenha === "" || this.state.senha !== this.state.novaSenha) {
-                            this.setState({
-                                confirmaSenhaInvalida: true
-                            })
-                    } else
+                            if (this.state.senha === "") {
+                                this.setState({
+                                    senhaInvalida: true
+                                })
+                            } else
+                                if (this.state.novaSenha === "" || this.state.senha !== this.state.novaSenha) {
+                                    this.setState({
+                                        confirmaSenhaInvalida: true
+                                    })
+                                } else
                                     axios.post("/api/usuarios/aluno/", {
                                         tipo: "aluno",
                                         nome: this.state.nome,
@@ -99,7 +99,7 @@ class CadastroAluno extends Component {
 
     }
 
-    
+
     render() {
         return (
             <div>
@@ -170,12 +170,14 @@ class CadastroAluno extends Component {
                     />
 
                     <div className="row container" style={{ position: 'relative', left: '32%' }}>
-                        <Button onClick={(e) => this.enviarCadastro(e)} className="btn btn-dark" style={{ border: "5px solid white" }}>Enviar</Button>
+                        <Button onClick={(e) => this.enviarCadastro(e)} className="btn btn-dark" data-toggle="modal" data-target="#exampleModal" style={{ border: "5px solid white" }}>Enviar</Button>
                         <Button onClick={() => this.limpar()} className="btn btn-danger" style={{ border: "5px solid white" }}>Limpar</Button>
                         <Link to="/login"> <Button variant="primary" className="btn btn-primary m-1" >Voltar </Button></Link>
+                       
                     </div>
                 </Form.Group>
 
+                <Modal />
             </div>
         );
     }

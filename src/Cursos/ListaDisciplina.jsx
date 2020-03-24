@@ -77,6 +77,8 @@ class ListaDiscipinas extends Component {
 
         return (
             <div >
+
+                
                 <h2>Pesquisar disciplinas pelo nome do curso</h2>
                 <SACEInput
                     placeholder={'Digite o nome do curso que deseja ver as Diciplinas'}

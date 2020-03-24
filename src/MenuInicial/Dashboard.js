@@ -1,6 +1,3 @@
-import { Form } from 'react-bootstrap';
-import Curso from '../Cursos/CursoView'
-import Disciplina from '../Disciplinas/DisciplinaView'
 import React, { Component } from 'react';
 import axios from 'axios';
 

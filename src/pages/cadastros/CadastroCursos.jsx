@@ -23,6 +23,7 @@ export default class CadastroCursos extends Component {
         }
     }
     listarCursos() {
+        
         axios.get(`/api/cursos/`).then((retorno) => {
             this.setState({
                 cursos: retorno.data
@@ -32,6 +33,10 @@ export default class CadastroCursos extends Component {
         });
     }
     inserirCursos() {
+        if (this.state.nome === ""|| typeof this.state.nome === "undefined") {
+            this.setState({
+                texto: true
+            })}
         axios.post("/api/cursos/", {
             nome: this.state.nome
         }).then(() => {
@@ -69,7 +74,8 @@ export default class CadastroCursos extends Component {
     limpar() {
         this.setState({
             nome: "",
-            guarda: 0
+            guarda: 0,
+            texto:false
         })
 
     }
