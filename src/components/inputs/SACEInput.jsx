@@ -10,7 +10,8 @@ export default function SACEInput(props) {
         value,
         onError,
         onErrorMessage,
-        tipo
+        tipo,
+        min
     } = props;
 
     return (
@@ -19,6 +20,7 @@ export default function SACEInput(props) {
                 {label}
             </Form.Label>
             <Form.Control 
+                min={min}
                 type={tipo}  
                 placeholder={placeholder}
                 onChange={onChange}

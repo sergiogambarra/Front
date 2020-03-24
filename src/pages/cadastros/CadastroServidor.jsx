@@ -27,40 +27,42 @@ class CadastroServidor extends Component {
             cargo: "",
             cargoInvalido: false,
             cordenador: ""
-
-
+            
+            
         }
     }
-
+    
     enviarCadastro(e) {
         if (this.state.nome === "") {
             this.setState({
                 nomeInvalido: true
             })
-        }
-        if (this.state.email === "") {
-            this.setState({
-                emailInvalido: true
-            })
-        } if (this.state.siape === "") {
-            this.setState({
-                siapeInvalido: true
-            })
-        } if (this.state.login === "") {
-            this.setState({
-                loginInvalido: true
-            })
-        }
-        if (this.state.senha === "") {
-            this.setState({
-                senhaInvalida: true
-            })
-        }
-        if (this.state.novaSenha === "") {
-            this.setState({
-                confirmaSenhaInvalida: true
-            })
-        }
+        } else
+            if (this.state.email === "") {
+                this.setState({
+                    emailInvalido: true
+                })
+            } else
+                if (this.state.siape === "") {
+                    this.setState({
+                        siapeInvalido: true
+                    })
+                } else
+                    if (this.state.login === "") {
+                        this.setState({
+                            loginInvalido: true
+                        })
+                    } else
+                        if (this.state.senha === "") {
+                            this.setState({
+                                senhaInvalida: true
+                            })
+                        } else
+                            if (this.state.novaSenha === "") {
+                                this.setState({
+                                    confirmaSenhaInvalida: true
+                                })
+                            }
         axios.post("/api/usuarios/", {
             tipo: "servidor",
             nome: this.state.nome,
@@ -84,9 +86,15 @@ class CadastroServidor extends Component {
             siapeInvalido: false,
             loginInvalido: false,
             senhaInvalida: false,
-            confirmaSenhaInvalida: false
+            confirmaSenhaInvalida: false,
+            nome:"",
+            siape:"",
+            login:"",
+            senha:"",
+            email:"",
+            novaSenha:""
+
         })
-        window.location.reload(); 
     }
     render() {
         return (
@@ -95,12 +103,15 @@ class CadastroServidor extends Component {
                 <TituloPagina titulo="Cadastro Servidor" />
                 <SACEInput
                     label={'Nome'}
+                    value={this.state.nome}
                     placeholder={'Informe o seu nome. '}
                     onChange={(e) => this.setState({ nome: e.target.value })}
                     onError={this.state.nomeInvalido}
                     onErrorMessage={'Você não inseriu o seu nome corretamente!'}
                 />
                 <SACEInput
+                    tipo={"email"}
+                    value={this.state.email}
                     label={'Email'}
                     placeholder={'Informe o seu email. '}
                     onChange={(e) => this.setState({ email: e.target.value })}
@@ -108,7 +119,10 @@ class CadastroServidor extends Component {
                     onErrorMessage={'Você não inseriu o seu email corretamente!'}
                 />
                 <SACEInput
+                    tipo={"number"}
+                    min="0"
                     label={'Siape'}
+                    value={this.state.siape}
                     placeholder={'Informe a sua siape. '}
                     onChange={(e) => this.setState({ siape: e.target.value })}
                     onError={this.state.siapeInvalido}
@@ -129,6 +143,7 @@ class CadastroServidor extends Component {
                 </select>
                 <SACEInput
                     label={'Login'}
+                    value={this.state.login}
                     placeholder={'Informe um login. '}
                     onChange={(e) => this.setState({ login: e.target.value })}
                     onError={this.state.loginInvalido}
@@ -136,6 +151,7 @@ class CadastroServidor extends Component {
                 />
                 <SACEInput
                     label={'Senha'}
+                    value={this.state.senha}
                     placeholder={'Informe uma senha. '}
                     onChange={(e) => this.setState({ senha: e.target.value })}
                     onError={this.state.senhaInvalida}
@@ -144,6 +160,7 @@ class CadastroServidor extends Component {
                 />
                 <SACEInput
                     label={'Confirme a sua senha'}
+                    value={this.state.novaSenha}
                     placeholder={'Informe a mesma senha que a anterior. '}
                     onChange={(e) => this.setState({ novaSenha: e.target.value })}
                     onError={this.state.confirmaSenhaInvalida}

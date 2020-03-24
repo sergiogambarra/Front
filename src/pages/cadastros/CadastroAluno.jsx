@@ -28,73 +28,78 @@ class CadastroAluno extends Component {
             novaSenha: ""
         }
     }
-    mensagemUsuario() {
-        this.setState({
-            nomeInvalido: false,
-            emailInvalido: false,
-            matriculaInvalida: false,
-            dataIngressoInvalido: false,
-            loginInvalido: false,
-            senhaInvalida: false,
-            confirmaSenhaInvalida: false,
-            
-        })
-    }
+   
     limpar() {
-        this.mensagemUsuario()
-        window.location.reload();
+      this.setState({
+          nome:"",
+          email:"",
+          matricula:"",
+          dataIngresso:"",
+          login:"",
+          senha:"",
+          novaSenha:"",
+          nomeInvalido: false,
+          emailInvalido: false,
+          matriculaInvalida: false,
+          dataIngressoInvalido: false,
+          loginInvalido: false,
+          senhaInvalida: false,
+          confirmaSenhaInvalida: false,
+      })
+   
     }
     enviarCadastro(e) {
         if (this.state.nome === "") {
             this.setState({
                 nomeInvalido: true
             })
-        }else
-        if (this.state.email === "") {
-            this.setState({
-                emailInvalido: true
-            })
-        }else
-        if (this.state.matricula === "") {
-            this.setState({
-                matriculaInvalida: true
-            })
-        }else
-        if (this.state.dataIngresso === "") {
-            this.setState({
-                dataIngressoInvalido: true
-            })
-        }else 
-        if (this.state.senha === "") {
-            this.setState({
-                senhaInvalida: true
-            })
-        }else
-        if ( this.state.novaSenha ===""|| this.state.senha !==this.state.novaSenha) {
-            this.setState({
-                confirmaSenhaInvalida: true
-            })
-        }else
-        if (this.state.login === "") {
-            this.setState({
-                loginInvalido: true
-            })
-        }else
-            axios.post("/api/usuarios/aluno/", {
-                tipo: "aluno",
-                nome: this.state.nome,
-                email: this.state.email,
-                matricula: this.state.matricula,
-                dataIngresso: this.state.dataIngresso,
-                login: this.state.login,
-                novaSenha: this.state.novaSenha,
-                senha: this.state.senha,
-            }).then(() => this.limpar()
+        } else
+            if (this.state.email === "") {
+                this.setState({
+                    emailInvalido: true
+                })
+            } else
+                if (this.state.matricula === ""|| this.state.matricula <=0) {
+                    this.setState({
+                        matriculaInvalida: true
+                    })
+                } else
+                    if (this.state.dataIngresso === "") {
+                        this.setState({
+                            dataIngressoInvalido: true
+                        })
+                    } else
+                        if (this.state.login === "") {
+                            this.setState({
+                                loginInvalido: true
+                            })
+                        } else
+                        if (this.state.senha === "") {
+                            this.setState({
+                                senhaInvalida: true
+                            })
+                        } else
+                        if (this.state.novaSenha === "" || this.state.senha !== this.state.novaSenha) {
+                            this.setState({
+                                confirmaSenhaInvalida: true
+                            })
+                    } else
+                                    axios.post("/api/usuarios/aluno/", {
+                                        tipo: "aluno",
+                                        nome: this.state.nome,
+                                        email: this.state.email,
+                                        matricula: this.state.matricula,
+                                        dataIngresso: this.state.dataIngresso,
+                                        login: this.state.login,
+                                        novaSenha: this.state.novaSenha,
+                                        senha: this.state.senha,
+                                    }).then(() => this.limpar()
+
+                                    )
+
+    }
+
     
-            )
-
-        }    
-
     render() {
         return (
             <div>
@@ -103,6 +108,7 @@ class CadastroAluno extends Component {
                     <TituloPagina titulo="Cadastro de Alunos" />
                     <SACEInput
                         label={'Nome'}
+                        value={this.state.nome}
                         placeholder={'Informe o seu nome. '}
                         onChange={(e) => this.setState({ nome: e.target.value })}
                         onError={this.state.nomeInvalido}
@@ -110,6 +116,7 @@ class CadastroAluno extends Component {
                     />
                     <SACEInput
                         label={'Email'}
+                        value={this.state.email}
                         placeholder={'Informe o seu email. '}
                         onChange={(e) => this.setState({ email: e.target.value })}
                         onError={this.state.emailInvalido}
@@ -117,6 +124,9 @@ class CadastroAluno extends Component {
                     />
                     <SACEInput
                         label={'Matricula'}
+                        tipo="number"
+                        min="0"
+                        value={this.state.matricula}
                         placeholder={'Informe a sua matrícula. '}
                         onChange={(e) => this.setState({ matricula: e.target.value })}
                         onError={this.state.matriculaInvalida}
@@ -125,6 +135,7 @@ class CadastroAluno extends Component {
 
                     <SACEInput
                         label={'Data de Ingresso'}
+                        value={this.state.dataIngresso}
                         placeholder={'Informe a data de Ingresso. '}
                         onChange={(e) => this.setState({ dataIngresso: e.target.value })}
                         onError={this.state.dataIngressoInvalido}
@@ -133,6 +144,7 @@ class CadastroAluno extends Component {
                     />
                     <SACEInput
                         label={'Login'}
+                        value={this.state.login}
                         placeholder={'Informe um login. '}
                         onChange={(e) => this.setState({ login: e.target.value })}
                         onError={this.state.loginInvalido}
@@ -140,6 +152,7 @@ class CadastroAluno extends Component {
                     />
                     <SACEInput
                         label={'Senha'}
+                        value={this.state.senha}
                         placeholder={'Informe uma senha. '}
                         onChange={(e) => this.setState({ senha: e.target.value })}
                         onError={this.state.senhaInvalida}
@@ -148,6 +161,7 @@ class CadastroAluno extends Component {
                     />
                     <SACEInput
                         label={'Confirme a sua senha'}
+                        value={this.state.novaSenha}
                         placeholder={'Informe a mesma senha que a anterior. '}
                         onChange={(e) => this.setState({ novaSenha: e.target.value })}
                         onError={this.state.confirmaSenhaInvalida}

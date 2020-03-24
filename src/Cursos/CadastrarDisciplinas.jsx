@@ -9,6 +9,7 @@ class CadastrarDisciplinas extends Component {
         this.state = {
             cursos: [],
             idcurso: "",
+            option:"",
             textodisciplina: false,
             textocargahoraria: false,
             textooption: "erro",
@@ -33,17 +34,13 @@ class CadastrarDisciplinas extends Component {
     }
     cadastrarDisciplinas() {
 
-        if (this.state.idcurso === "") {
-            this.setState({
-                textooption: true
-            })
-        }
+        
         if (typeof this.state.nome === "undefined") {
             this.setState({
                 textodisciplina: true
             })
         }
-        if (typeof this.state.cargaHoraria === "undefined") {
+        if (typeof this.state.cargaHoraria === "undefined" || this.state.cargaHoraria < 15) {
             this.setState({
                 textocargahoraria: true
             })
@@ -58,6 +55,7 @@ class CadastrarDisciplinas extends Component {
                 this.listarDisciplinas();
             }
             )
+           
         }
     }
 
@@ -65,7 +63,14 @@ class CadastrarDisciplinas extends Component {
     componentDidMount() {
         this.listarCurso();
     }
-
+    limpar(){
+        this.setState({
+            textodisciplina:false,
+            textocargahoraria:false,
+            nome:"",cargaHoraria:""
+        })
+    }
+   
 
     render() {
         return (<div >
@@ -86,52 +91,58 @@ class CadastrarDisciplinas extends Component {
             </select>
             <SACEInput
                 placeholder={'Digite o nome Disciplina'}
+                value={this.state.nome}
                 label={'Nome Disciplina'}
                 onChange={(e) => this.setState({ nome: e.target.value })}
                 onError={this.state.textodisciplina}
                 onErrorMessage={'Campo da disciplina obrigatório'}
             />
 
-            <label>Carga Horária</label>
             <b />
-            <input type="number" id="quantity" name="cargaHoraria" min="15" max=""
+            <SACEInput tipo="number" id="quantity" name="cargaHoraria" min="15" max=""
+                placeholder={'Digite a carga horária da disciplina'}
+                label="Carga Horária"
                 onChange={(e) => this.setState({ cargaHoraria: e.target.value })}
                 onError={this.state.textocargahoraria}
-                onErrorMessage={'Nome do curso não encontrado'}
+                onErrorMessage={'Campo carga Horária é obrigatório e não pode ser menor que 15 horas'}
+                value={this.state.cargaHoraria}
             />
-            <Button variant="primary" className="btn btn-primary m-1" onClick={(e) => this.cadastrarDisciplinas()}>
+            <Button style={{ position: 'relative', left: '80%' }} variant="primary" className="btn btn-primary m-1" onClick={(e) => this.cadastrarDisciplinas()}>
                 Enviar
                 </Button>
-                <br /><br /><br />
-                <h3>Disciplinas </h3>
-                <table class="table">
-                    <thead class="p-3 mb-2 bg-primary text-white">
-                        <tr>
-                            <th scope="col">Id</th>
-                            <th scope="col">Nome</th>
-                            <th scope="col">Carga Horária</th>
-                            <th scope="col">Apagar</th>
+            <Button style={{ position: 'relative', left: '80%' }} variant="danger" className="btn btn-primary m-1"onClick={(e) => this.limpar()}>
+                Limpar
+                </Button>
+            <br /><br /><br />
+            <h3>Disciplinas </h3>
+            <table class="table">
+                <thead class="p-3 mb-2 bg-primary text-white">
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Nome</th>
+                        <th scope="col">Carga Horária</th>
+                        <th scope="col">Apagar</th>
 
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {this.state.disciplinas &&
-                            this.state.disciplinas.map((disciplinas) =>
+                    </tr>
+                </thead>
+                <tbody>
+                    {this.state.disciplinas &&
+                        this.state.disciplinas.map((disciplinas) =>
 
-                                <tr>
-                                    <td>{disciplinas.id}</td>
-                                    <td>{disciplinas.nome}</td>
-                                    <td>{disciplinas.cargaHoraria}</td>
-                                    <td> {disciplinas.nome === "" ? "" : <Button
-                                        variant="primary"
-                                        className="btn btn-danger m-1"
-                                        onClick={(e) => this.apagar(disciplinas.id)}
-                                    > Deletar </Button>}
-                                    </td>
-                                </tr>
-                            )}
-                    </tbody>
-                </table>
+                            <tr>
+                                <td>{disciplinas.id}</td>
+                                <td>{disciplinas.nome}</td>
+                                <td>{disciplinas.cargaHoraria}</td>
+                                <td> {disciplinas.nome === "" ? "" : <Button
+                                    variant="primary"
+                                    className="btn btn-danger m-1"
+                                    onClick={(e) => this.limpar()}
+                                > Deletar </Button>}
+                                </td>
+                            </tr>
+                        )}
+                </tbody>
+            </table>
 
         </div>);
 

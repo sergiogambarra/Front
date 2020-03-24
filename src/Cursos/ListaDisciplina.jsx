@@ -9,6 +9,7 @@ class ListaDiscipinas extends Component {
 
         super();
         this.state = {
+            texto:false,
             curso: [
                 this.state = {
                     idCurso: "",
@@ -38,25 +39,24 @@ class ListaDiscipinas extends Component {
 
         this.setState({
             nome: "",
+            texto:false
         });
-        if (this.state.nome === "") {
+       
+    }
+
+    listarCursoNome() {
+        console.log(this.state.nome)
+        if (this.state.nome === ""|| typeof this.state.nome === "undefined") {
             this.setState({
                 texto: true
             })
         }
-    }
-
-    listarCursoNome() {
-
         axios.get(`/api/cursos/pesquisar/nome/${this.state.nome}`).then((retorno) => {
             this.setState({
                 curso: retorno.data,
-                texto: false
             })
             this.listarDisciplina()
-            if (retorno.data === "") {
-                this.limpar();
-            }
+          
         });
     }
     apagar(e) {
@@ -86,7 +86,8 @@ class ListaDiscipinas extends Component {
                     onError={this.state.texto}
                     onErrorMessage={'Nome do curso não encontrado'}
                 />
-                <Button style={{ position: 'relative', left: '80%' }} variant="primary" className="btn btn-primary m-1" onClick={() => this.listarCursoNome()}>
+                <Button style={{ position: 'relative', left: '80%' }} variant="primary" className="btn btn-primary m-1"
+                 onClick={() => this.listarCursoNome()}>
                     Enviar
                 </Button>
                 <Button style={{ position: 'relative', left: '80%' }}
