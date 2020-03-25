@@ -11,7 +11,8 @@ export default function SACEInput(props) {
         onError,
         onErrorMessage,
         tipo,
-        min
+        min,
+        className,
     } = props;
 
     return (
@@ -25,6 +26,7 @@ export default function SACEInput(props) {
                 placeholder={placeholder}
                 onChange={onChange}
                 value={value}
+                className={className}
             />
             {onError && 
                 <Form.Text className="text-danger">
