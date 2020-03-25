@@ -57,7 +57,7 @@ export default function LoginForm({ history, setUserData }) {
             />
             <div className="row">
                 <Link to="/cadastro-aluno">Aluno, não é Cadastrado?</Link>
-                <Link to="#" style={{ position: 'relative', left: '45%' }}>Esqueceu a sua senha?</Link>
+                <Link to="#" style={{ position: 'relative', left: '35%' }}>Esqueceu a sua senha?</Link>
             </div>
             
             <Form.Group

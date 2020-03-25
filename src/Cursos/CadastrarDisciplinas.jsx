@@ -40,7 +40,7 @@ class CadastrarDisciplinas extends Component {
                 textodisciplina: true
             })
         }
-        if (typeof this.state.cargaHoraria === "undefined" || this.state.cargaHoraria < 15) {
+        if (typeof this.state.cargalisHoraria === "undefined" || this.state.cargaHoraria < 15) {
             this.setState({
                 textocargahoraria: true
             })
