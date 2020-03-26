@@ -24,7 +24,7 @@ export default function() {
 
   return (
     <>
-      <h6>Lista de requisições de aproveitamento de estudos</h6>
+      <h5>Todas requisições de aproveitamento de estudos</h5>
       {error && <Alert variant='danger'>Não foi possível carregar suas requisições.</Alert>}
       {
         isLoading 

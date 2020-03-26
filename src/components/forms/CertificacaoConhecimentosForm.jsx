@@ -10,6 +10,7 @@ import { postRequisicao } from '../../services/RequisicaoService';
 import SACEAlert from '../SACEAlert';
 
 export default function CertificacaoConhecimentosForm() {
+
     const [curso, setCurso] = useState('');
     const [cursoInvalido, setCursoInvalido] = useState(false);
 
@@ -121,13 +122,8 @@ export default function CertificacaoConhecimentosForm() {
             />
 
             <Form.Group className="d-flex justify-content-end">
-                <Button variant="link" className="btn btn-link m-1" onClick={limparCampos}>
-                    Cancelar
-                </Button>
-                
-                <Button variant="primary" className="btn btn-primary m-1" onClick={fazerRequisicao}>
-                    Enviar
-                </Button>
+                <Button variant="link" className="btn btn-link m-1" onClick={limparCampos}>Cancelar</Button>
+                <Button variant="primary" className="btn btn-primary m-1" onClick={fazerRequisicao}>Enviar</Button>
             </Form.Group>
 
             {(showModal && requisicao)

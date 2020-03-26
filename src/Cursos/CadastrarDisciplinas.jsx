@@ -33,8 +33,6 @@ class CadastrarDisciplinas extends Component {
         });
     }
     cadastrarDisciplinas() {
-
-        
         if (typeof this.state.nome === "undefined") {
             this.setState({
                 textodisciplina: true

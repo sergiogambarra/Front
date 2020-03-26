@@ -5,6 +5,7 @@ import TabelaCertificacoes from '../components/TabelaCertificacoes';
 import { Button } from 'react-bootstrap';
 import SACEInput from '../components/inputs/SACEInput';
 import axios from 'axios';
+import App from '../App'
 
 class MinhasRequisicoes extends Component {
   constructor(props) {
@@ -25,13 +26,13 @@ class MinhasRequisicoes extends Component {
       parecer: "",
       usuario: [
         this.state = {
+          momeUsuario:"",
           nomeAluno: ""
         }]
     }
   }
 
   listarRequisicoesNome() {
-    console.log(this.state.nomeDisciplina);
 
     if (typeof this.state.nomeDisciplina === "undefined" || this.state.nomeDisciplina.length === 0
     ) {
@@ -41,7 +42,6 @@ class MinhasRequisicoes extends Component {
       this.setState({
         pesquisaRequisicoes: retorno.data,
       })
-      /*if para mostrar lista pesquisa por nome disciplina apagar lista*/
       if (this.state.pesquisaRequisicoes.length === 0) {
         this.setState({ texto: true })
       }
@@ -50,7 +50,7 @@ class MinhasRequisicoes extends Component {
       }
       if (this.state.pesquisaRequisicoes.length !== 0) {
         this.setState({
-          cont: "1", requisições: ""
+          cont: "1",
         })
       } else { this.setState({ cont: "" }) }
     });
@@ -58,7 +58,7 @@ class MinhasRequisicoes extends Component {
 
   limpar() {
     this.setState({
-      requisições: "", cont: "", texto: false, nomeDisciplina: "",
+       cont: "", texto: false, nomeDisciplina: "",
       parecer: "", nomeAluno: ""
     })
   }
@@ -66,7 +66,7 @@ class MinhasRequisicoes extends Component {
 
     return (
       <div>
-        <TituloPagina titulo={'Visualizar Requisições'} />
+       <TituloPagina titulo={'Visualizar Requisições'} />
 
         <div class="custom-control custom-radio custom-control-inline">
           <input type="radio"
@@ -93,14 +93,11 @@ class MinhasRequisicoes extends Component {
           <label class="custom-control-label" for="pesquisas" >Outros tipos de pesquisas</label>
         </div>
         <br /><br />
-        <div class="form-group" >
+        
+       {this.state.requisições === "pesquisas" ? <div class="form-group" id="pesquisas">
           <label for="exampleFormControlSelect2">Escolha o tipo de pesquisa </label>
           <select multiple class="form-control" id={""}
-            onChange={(e) =>
-              this.setState({
-                id: e.target.value
-              })
-            }>
+            onChange={(e) =>this.setState({id: e.target.value})}>
             <option id={this.nomeDisciplina}>Nome disciplina</option>
             <option id={this.nomeAluno}>Nome Aluno</option>
             <option id={this.parecer}>Indeferido</option>
@@ -136,7 +133,8 @@ class MinhasRequisicoes extends Component {
           <Button style={{ position: 'relative' }} variant="danger" className="btn btn-primary m-1"
             onClick={(e) => this.limpar()}
           > Limpar </Button>
-        </div>{this.state.cont === "" ? "" : <div id="FormPesquisaNome" Style={{ display: "none" }}><br /><br /><br />
+        </div>:""}
+        {this.state.cont === "" ? "" : <div id="FormPesquisaNome" Style={{ display: "none" }}><br /><br /><br />
           <h3>Lista de Todas as Requisições por nome da disciplina </h3>
           <table class="table" >
             <thead class="p-3 mb-2 bg-primary text-white">

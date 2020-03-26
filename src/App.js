@@ -13,11 +13,11 @@ import ListaDiscipinas from './Cursos/ListaDisciplina';
 import CadastrarDisciplinas from './Cursos/CadastrarDisciplinas';
 import CadastroServidor from './pages/cadastros/CadastroServidor';
 import ListaAlunos from '../src/Cursos/ListaAlunos';
+
 function App() {
   const [userData, setUserData] = useState(null);
-
   useEffect(() => console.log(`userData`, userData));
-
+  
   const PrivateRoute = ({ component: Component, ...rest }) => (
     <Route
       {...rest}
@@ -26,7 +26,6 @@ function App() {
       }
     />
   );
-
   return (
     <BrowserRouter>
       {userData && <SACENavbar setUserData={setUserData} />}
