@@ -5,7 +5,6 @@ import TabelaCertificacoes from '../components/TabelaCertificacoes';
 import { Button } from 'react-bootstrap';
 import SACEInput from '../components/inputs/SACEInput';
 import axios from 'axios';
-import App from '../App'
 
 class MinhasRequisicoes extends Component {
   constructor(props) {

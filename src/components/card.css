@@ -1,6 +1,10 @@
 .card {
-    border: 1px solid #007BFF;
-    padding: 8px;
+    margin: 17px;
+    margin-left: 0px;
+    border: 2px solid #007BFF;
+    padding: 10px;
+    
+    
 }
 
 .card p {

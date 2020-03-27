@@ -27,7 +27,7 @@ export default function SACENavbar({ setUserData }) {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
-                    <SACELink to={'/minhas-requisicoes'} label={'Minhas requisições'}/>
+                    <SACELink to={'/minhas-requisicoes'} label={'Requisições'}/>
                     <SACELink to={'/nova-requisicao'} label={'Nova requisição'}/>
                     <SACELink to={'/cadastro-curso'} label={'Cadastrar curso'}/>
                     <SACELink to={'/lista-alunos'} label={'Lista Alunos'}/>

@@ -13,6 +13,7 @@ import ListaDiscipinas from './Cursos/ListaDisciplina';
 import CadastrarDisciplinas from './Cursos/CadastrarDisciplinas';
 import CadastroServidor from './pages/cadastros/CadastroServidor';
 import ListaAlunos from '../src/Cursos/ListaAlunos';
+import Parecer from '../src/components/inputs/Parecer';
 
 function App() {
   const [userData, setUserData] = useState(null);
@@ -41,6 +42,7 @@ function App() {
           <PrivateRoute exact path="/lista-disciplina" component={ListaDiscipinas} />
           <PrivateRoute exact path="/cadastrar-disciplina" component={CadastrarDisciplinas} />
           <PrivateRoute exact path="/lista-alunos" component={ListaAlunos} />
+          <PrivateRoute exact path="/parecer" component={Parecer} />
           <Route path="*" component={() => <h1>Page not found</h1>} />
         </Switch>
       </div>
