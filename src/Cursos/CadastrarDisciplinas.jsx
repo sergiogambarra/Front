@@ -33,18 +33,17 @@ class CadastrarDisciplinas extends Component {
         });
     }
     cadastrarDisciplinas() {
+        
         if (typeof this.state.nome === "undefined") {
             this.setState({
                 textodisciplina: true
             })
         }
-        if (typeof this.state.cargalisHoraria === "undefined" || this.state.cargaHoraria < 15) {
+        if (typeof this.state.cargaHoraria === "undefined" || this.state.cargaHoraria < 15) {
             this.setState({
                 textocargahoraria: true
-            })
-
-
-        } else {
+            })}
+         else {
 
             axios.post(`/api/cursos/${this.state.idcurso}/disciplinas`, {
                 nome: this.state.nome,

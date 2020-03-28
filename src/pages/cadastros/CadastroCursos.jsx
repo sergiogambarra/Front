@@ -3,6 +3,7 @@ import SACEInput from '../../components/inputs/SACEInput';
 import { Form, Button, } from 'react-bootstrap';
 import axios from 'axios';
 import { Link } from "react-router-dom";
+import Alert from 'react-bootstrap/Alert'
 
 
 export default class CadastroCursos extends Component {
@@ -18,12 +19,13 @@ export default class CadastroCursos extends Component {
                     guardaId: "",
                     texto: true
                 }
-            ]
+            ],
+            modal: false
 
         }
     }
     listarCursos() {
-        
+
         axios.get(`/api/cursos/`).then((retorno) => {
             this.setState({
                 cursos: retorno.data
@@ -33,13 +35,19 @@ export default class CadastroCursos extends Component {
         });
     }
     inserirCursos() {
-        if (this.state.nome === ""|| typeof this.state.nome === "undefined") {
+        if (this.state.nome === "" || typeof this.state.nome === "undefined") {
             this.setState({
                 texto: true
-            })}
+            })
+        }
         axios.post("/api/cursos/", {
             nome: this.state.nome
         }).then(() => {
+            this.setState({ modal: true })
+            setTimeout(() => {
+                this.setState({ modal: false })
+            }, 2000)
+
             this.listarCursos()
         })
     }
@@ -64,8 +72,6 @@ export default class CadastroCursos extends Component {
             guarda: 1,
             guardaId: e
         })
-
-
     }
 
     componentDidMount() {
@@ -75,52 +81,47 @@ export default class CadastroCursos extends Component {
         this.setState({
             nome: "",
             guarda: 0,
-            texto:false
+            texto: false
         })
-
+    }
+    apagarDisciplina() {
+        axios.delete(`/api/cursos/${this.state.guardaId}/disciplinas/${this.state.guardaId}`)
     }
 
-
     render() {
-      
+
         return (
             <div>
                 <br />
+                <Alert key={"idx"} variant={"success"} show={this.state.modal}>
+                    Cadastrado com sucesso</Alert>
                 <fieldset>
 
                     <SACEInput
-                       
+
                         label={'Nome do Curso'}
                         value={this.state.nome}
                         placeholder={'Preencha com o nome do curso que você deseja cadastrar'}
-                        onChange={(e) =>this.setState({nome: e.target.value})}
+                        onChange={(e) => this.setState({ nome: e.target.value })}
                         onError={this.state.texto}
                         onErrorMessage={'Nome do curso não encontrado'}
-                       
-                    />
 
+                    />
                     <Form.Group className="d-flex justify-content-end">
 
                         {this.state.guarda === 1 ? <Button
                             variant="primary"
                             className="btn btn-primary m-1"
                             onClick={() => this.editarCurso()}
-                        >
-                            ConfirmarEditar
-                </Button> : <Button
-                                variant="primary"
-                                className="btn btn-primary m-1"
-                                onClick={() => this.inserirCursos()}
-                            >
-                                Enviar
-                </Button>}
+                        > ConfirmarEditar</Button> : <Button variant="primary"
+                            className="btn btn-primary m-1"
+                            onClick={() => this.inserirCursos()}
+                        >Enviar</Button>}
                         <Button
                             variant="danger"
                             className="btn btn-primary m-1"
                             onClick={() => this.limpar()}
-                        >
-                            Limpar
-                </Button>
+                        > Limpar </Button>
                     </Form.Group>
                 </fieldset >
                 <br />
@@ -143,14 +144,12 @@ export default class CadastroCursos extends Component {
 
                                 <tr>
                                     <td>{curso.id}</td>
-                                    <Link to="/cadastrar-disciplina"><td>{curso.nome}</td></Link>
+                                    <td><Link to="/cadastrar-disciplina">{curso.nome}</Link></td>
                                     <td> {curso.nome === "" ? "" : <Button
                                         variant="primary"
                                         className="btn btn-danger m-2"
-                                        onClick={(e) =>
-                                            this.deletarCurso(curso.id)
-                                        }
-                                    > Deletar </Button>}
+                                        onClick={(e) => this.deletarCurso(curso.id)
+                                        }> Deletar </Button>}
                                     </td>
                                     <td>{curso.nome === "" ? "" : <Button type="button" class="btn btn-secondary btn-lg"
                                         onClick={(e, a) => { this.pegaNome(curso.id, curso.nome) }}
@@ -160,6 +159,7 @@ export default class CadastroCursos extends Component {
                             )}
                     </tbody>
                 </table>
+
 
             </div>
         );

@@ -33,6 +33,7 @@ export default function CertificacaoConhecimentosForm() {
     useEffect(() => setAnexosInvalidos(false), [anexos]);
     useEffect(() => setShowModal(true), [requisicao]);
 
+
     const camposInvalidos = () => {
         if(!curso) setCursoInvalido(true);
         if(!formacaoAtividadeAnterior) setFormacaoAtividadeAnteriorInvalida(true);
@@ -66,8 +67,12 @@ export default function CertificacaoConhecimentosForm() {
         setShowModal(true);
     }
 
+
+
     const enviarRequisicao = () => {
         setShowModal(false);
+
+        console.log(localStorage);
         
         if(postRequisicao(requisicao)){
             setAlert({

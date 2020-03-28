@@ -3,9 +3,12 @@ import axios from 'axios';
 import SACEInput from '../components/inputs/SACEInput';
 import { Button } from 'react-bootstrap';
 
+/*exemplo  style={{display:"none"}}
+*/
+
+
 class ListaDiscipinas extends Component {
     constructor(props) {
-
 
         super();
         this.state = {
@@ -60,7 +63,7 @@ class ListaDiscipinas extends Component {
         });
     }
     apagar(e) {
-        axios.delete(`/api/cursos/${this.state.curso.id}/disciplina/${e}`).then(() => {
+        axios.delete(`/api/cursos/${this.state.curso.id}/disciplinas/${e}`).then(() => {
             this.listarCursoNome()
         })
     }
@@ -76,9 +79,7 @@ class ListaDiscipinas extends Component {
         };
 
         return (
-            <div >
-
-                
+            <div > 
                 <h2>Pesquisar disciplinas pelo nome do curso</h2>
                 <SACEInput
                     placeholder={'Digite o nome do curso que deseja ver as Diciplinas'}
