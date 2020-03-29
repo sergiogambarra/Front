@@ -175,13 +175,7 @@ class CadastroAluno extends Component {
                         <Link to="/login"> <Button variant="primary" className="btn btn-primary m-1" >Voltar </Button></Link>
                        
                     </div>
-                </Form.Group>
-
-<<<<<<< HEAD
-=======
-            
->>>>>>> 60d85642e1f0e17c306234921669217e6215d261
-            </div>
+                </Form.Group> </div>
         );
     }
 }
