@@ -9,7 +9,7 @@ export default function CardAproveitamento(req) {
   } = req.requisicao;
   return (
     <div className="card"  > 
-    <Link to="/parecer" class="badge badge-warning">Processo ainda não está finalizado</Link>
+    <Link to={`/parecer/${id}`} class="badge badge-warning">Processo ainda não está finalizado</Link>
       <p>{`ID: ${id}`}</p>
       <p>{`Data: ${dataRequisicao}`}</p>
       <p>{`Aluno: ${usuario}`}</p>

@@ -177,6 +177,10 @@ class CadastroAluno extends Component {
                     </div>
                 </Form.Group>
 
+<<<<<<< HEAD
+=======
+            
+>>>>>>> 60d85642e1f0e17c306234921669217e6215d261
             </div>
         );
     }

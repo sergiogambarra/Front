@@ -6,7 +6,7 @@ function TituloPagina(props) {
     return (
         <div>
              <br />
-        <h3 className="text-left-2">{titulo}</h3>
+        <h3 className="text-left">{titulo}</h3>
         <br />
         </div>
     );
