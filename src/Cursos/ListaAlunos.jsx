@@ -21,6 +21,9 @@ class ListaAlunos extends Component {
     componentDidMount(){
         this.listarAlunos()
     }
+    delete(){
+        axios.delete("")
+    }
 
     render() {
         return (

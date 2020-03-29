@@ -18,21 +18,28 @@ function SACELink({ to, label }) {
     
 } 
 
-export default function SACENavbar({ setUserData }) {
+export default function SACENavbar({ setUserData, user }) {
     
     return (
-        <Navbar bg="light" expand="lg">
-            <Link to={'/'}>
-                <Navbar.Brand>{'Início'}</Navbar.Brand>
-            </Link>
+        <Navbar bg="light" expand="lg">            
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
+                {
+                    user.tipo === "aluno" ?
+                  <>
+                    <SACELink to={'/minhas-requisicoes'} label={'Requisições'}/>
+                    <SACELink to={'/nova-requisicao'} label={'Nova requisição'}/>
+                  </>
+                  :
+                  <>
                     <SACELink to={'/minhas-requisicoes'} label={'Requisições'}/>
                     <SACELink to={'/nova-requisicao'} label={'Nova requisição'}/>
                     <SACELink to={'/cadastro-curso'} label={'Cadastrar curso'}/>
                     <SACELink to={'/lista-alunos'} label={'Lista Alunos'}/>
                     <SACELink to={'/lista-disciplina'} label={'Lista Disciplinas'}/>
+                  </>
+                }
                     </Nav>
             </Navbar.Collapse>
             <Link to={'/'}>
@@ -40,7 +47,6 @@ export default function SACENavbar({ setUserData }) {
                     onClick={() => {
                         logout();
                         setUserData(null);
-
                     }}
 
 

@@ -26,7 +26,7 @@ function App() {
   );
   return (
     <BrowserRouter>
-      {userData && <SACENavbar setUserData={setUserData} />}
+      {userData && <SACENavbar setUserData={setUserData} user={userData} />}
       <div className="container">
         <Switch>
           <Route exact path="/" component={Inicio} />
