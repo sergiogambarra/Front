@@ -21,7 +21,7 @@ class Parecer extends Component {
                             nome: "",
                             cargaHoraria: ""
                         }
-                        
+
                     ],
                     usuario: "",
                     anexos: [
@@ -39,13 +39,13 @@ class Parecer extends Component {
         await axios.get(`/api/requisicoes/${this.props.match.params.id}`).then((retorno) =>
             this.setState({ requisicao: retorno.data })
         )
-        
+
     }
     render() {
         return (<div>
             <Form.Group className="col-md-6 container">
 
-                <TituloPagina titulo="Cadastro de Alunos" />
+                <TituloPagina titulo="Parecer do Aluno" />
                 <SACEInput
                     label={'Nome'}
                     value={this.state.requisicao.usuario + ""}
@@ -55,56 +55,26 @@ class Parecer extends Component {
                 <SACEInput
                     label={'Data Requisição'}
                     value={this.state.requisicao.dataRequisicao}
-                    disible={true}
+                    disabled={true}
 
-                />
-                {console.log(this.state.props)}
-                
-                <SACEInput
-                    label={'Matricula'}
-                    tipo="number"
-                    min="0"
-                    value={this.state.matricula}
-                    placeholder={'Informe a sua matrícula. '}
-                    onChange={(e) => this.setState({ matricula: e.target.value })}
-                    onError={this.state.matriculaInvalida}
-                    onErrorMessage={'Você não inseriu a sua matrícula corretamente!'}
                 />
 
                 <SACEInput
-                    label={'Data de Ingresso'}
-                    value={this.state.dataIngresso}
-                    placeholder={'Informe a data de Ingresso. '}
-                    onChange={(e) => this.setState({ dataIngresso: e.target.value })}
+                    label={'Deferido'}
+                    placeholder={'Informe situação da requisição '}
+                    value={this.state.deferido}
+                    onChange={(e) => this.setState({ deferido: e.target.value })}
                     onError={this.state.dataIngressoInvalido}
                     onErrorMessage={'Você não inseriu uma data válida!'}
-                    tipo={"date"}
+
                 />
                 <SACEInput
-                    label={'Login'}
-                    value={this.state.login}
-                    placeholder={'Informe um login. '}
-                    onChange={(e) => this.setState({ login: e.target.value })}
-                    onError={this.state.loginInvalido}
-                    onErrorMessage={'Você não inseriu um login válido!'}
-                />
-                <SACEInput
-                    label={'Senha'}
-                    value={this.state.senha}
-                    placeholder={'Informe uma senha. '}
-                    onChange={(e) => this.setState({ senha: e.target.value })}
-                    onError={this.state.senhaInvalida}
-                    onErrorMessage={'Você inseriu uma senha inválida!'}
-                    tipo={"password"}
-                />
-                <SACEInput
-                    label={'Confirme a sua senha'}
-                    value={this.state.novaSenha}
-                    placeholder={'Informe a mesma senha que a anterior. '}
-                    onChange={(e) => this.setState({ novaSenha: e.target.value })}
-                    onError={this.state.confirmaSenhaInvalida}
-                    onErrorMessage={'As senhas não conferem! ou campo está vazio!'}
-                    tipo={"password"}
+                    label={'Parecer'}
+                    placeholder={'Informe parecer do aluno '}
+                    value={this.state.deferido}
+                    onError={this.state.dataIngressoInvalido}
+                    onErrorMessage={'Você não inseriu uma data válida!'}
+
                 />
 
                 <div className="row container" style={{ position: 'relative', left: '32%' }}>
