@@ -42,7 +42,7 @@ function App() {
           <PrivateRoute exact path="/lista-disciplina" component={ListaDiscipinas} />
           <PrivateRoute exact path="/cadastrar-disciplina" component={CadastrarDisciplinas} />
           <PrivateRoute exact path="/lista-alunos" component={ListaAlunos} />
-          <PrivateRoute exact path="/parecer" component={Parecer} />
+          <PrivateRoute exact path="/parecer/:id" component={Parecer} />
           <Route path="*" component={() => <h1>Page not found</h1>} />
         </Switch>
       </div>

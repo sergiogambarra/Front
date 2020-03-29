@@ -177,7 +177,7 @@ class CadastroAluno extends Component {
                     </div>
                 </Form.Group>
 
-                <Modal />
+            
             </div>
         );
     }
