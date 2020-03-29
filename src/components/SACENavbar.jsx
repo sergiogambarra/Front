@@ -19,6 +19,7 @@ function SACELink({ to, label }) {
 } 
 
 export default function SACENavbar({ setUserData }) {
+    
     return (
         <Navbar bg="light" expand="lg">
             <Link to={'/'}>

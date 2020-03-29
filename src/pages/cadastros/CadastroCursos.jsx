@@ -63,6 +63,12 @@ export default class CadastroCursos extends Component {
         axios.put(`/api/cursos/${this.state.guardaId}`, {
             nome: this.state.nome
         }).then(() => {
+            this.setState({ modal: true })
+            setTimeout(() => {
+                this.setState({ modal: false })
+            }, 2000)
+
+
             this.listarCursos()
         })
     }

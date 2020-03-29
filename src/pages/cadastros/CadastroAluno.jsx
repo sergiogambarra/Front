@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import SACEInput from '../../../src//components/inputs/SACEInput';
-import { Button, Modal } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import TituloPagina from '../../components/TituloPagina';
 import { Form } from 'react-bootstrap';
@@ -177,7 +177,6 @@ class CadastroAluno extends Component {
                     </div>
                 </Form.Group>
 
-                <Modal />
             </div>
         );
     }

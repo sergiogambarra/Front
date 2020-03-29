@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { Button } from 'react-bootstrap';
 import SACEInput from '../components/inputs/SACEInput';
+import Alert from 'react-bootstrap/Alert'
 
 class CadastrarDisciplinas extends Component {
     constructor(props) {
@@ -9,11 +10,15 @@ class CadastrarDisciplinas extends Component {
         this.state = {
             cursos: [],
             idcurso: "",
-            option:"",
+            option: "",
             textodisciplina: false,
             textocargahoraria: false,
             textooption: "erro",
-            disciplinas: []
+            disciplinas: [],
+            modal: "",
+            nome: "",
+            mostraLista:false,
+            tituloCurso:""
 
 
         }
@@ -32,9 +37,19 @@ class CadastrarDisciplinas extends Component {
             })
         });
     }
+    async buscarCursoPeloId(){
+        console.log(this.state.idcurso);
+    
+        await axios.get(`/api/cursos/${this.state.idcurso}`).then((retorno)=>{
+            this.setState({
+                tituloCurso:retorno.data.nome
+            })
+         
+        })
+    }
     cadastrarDisciplinas() {
-        
-        if (typeof this.state.nome === "undefined") {
+
+        if (typeof this.state.nome === "undefined" || this.state.nome === "") {
             this.setState({
                 textodisciplina: true
             })
@@ -42,46 +57,54 @@ class CadastrarDisciplinas extends Component {
         if (typeof this.state.cargaHoraria === "undefined" || this.state.cargaHoraria < 15) {
             this.setState({
                 textocargahoraria: true
-            })}
-         else {
-
+            })
+        }
+        else {
             axios.post(`/api/cursos/${this.state.idcurso}/disciplinas`, {
                 nome: this.state.nome,
                 cargaHoraria: this.state.cargaHoraria
             }).then(() => {
+                this.setState({ modal: true ,mostraLista:true})
+                setTimeout(() => {
+                    this.setState({ modal: false })
+                }, 2000)
                 this.listarDisciplinas();
+                this.buscarCursoPeloId();
+                this.limpar();
             }
             )
-           
+
         }
     }
-
 
     componentDidMount() {
         this.listarCurso();
     }
-    limpar(){
+    limpar() {
         this.setState({
-            textodisciplina:false,
-            textocargahoraria:false,
-            nome:"",cargaHoraria:""
+            idcurso: "",
+            textodisciplina: "",
+            textocargahoraria: false,
+            nome: "", cargaHoraria: ""
         })
     }
-   
+
 
     render() {
         return (<div >
-
+            <Alert key={"idx"} variant={"success"} show={this.state.modal}>
+                Cadastrado com sucesso</Alert>
             <h2>Cadastrar disciplinas</h2>
             <label >curso</label>
             <select class="browser-default custom-select"
                 id={this.state.idcurso}
-                onChange={(e) =>
+                value={this.state.idcurso}
+                    onChange={(e) =>
                     this.setState({
                         idcurso: e.target.value
                     })
                 }>
-                <option></option>
+                <option id={""}></option>
                 {this.state.cursos.map((curso) =>
                     <option key={curso.id} value={curso.id}>{curso.nome}</option>
                 )}
@@ -107,11 +130,14 @@ class CadastrarDisciplinas extends Component {
             <Button style={{ position: 'relative', left: '80%' }} variant="primary" className="btn btn-primary m-1" onClick={(e) => this.cadastrarDisciplinas()}>
                 Enviar
                 </Button>
-            <Button style={{ position: 'relative', left: '80%' }} variant="danger" className="btn btn-primary m-1"onClick={(e) => this.limpar()}>
+            <Button style={{ position: 'relative', left: '80%' }} variant="danger" className="btn btn-primary m-1" onClick={(e) => this.limpar()}>
                 Limpar
                 </Button>
             <br /><br /><br />
-            <h3>Disciplinas </h3>
+           {
+           this.state.mostraLista ?<> <h3>Disciplinas do Curso :  {this.state.tituloCurso}</h3>
+           {console.log(this.state.tituloCurso)}
+           
             <table class="table">
                 <thead class="p-3 mb-2 bg-primary text-white">
                     <tr>
@@ -125,7 +151,6 @@ class CadastrarDisciplinas extends Component {
                 <tbody>
                     {this.state.disciplinas &&
                         this.state.disciplinas.map((disciplinas) =>
-
                             <tr>
                                 <td>{disciplinas.id}</td>
                                 <td>{disciplinas.nome}</td>
@@ -137,12 +162,12 @@ class CadastrarDisciplinas extends Component {
                                 > Deletar </Button>}
                                 </td>
                             </tr>
-                        )}
+                    )}
                 </tbody>
-            </table>
-
-        </div>);
-
+            </table> 
+            </>:""}
+        </div>
+        );
     }
 }
 

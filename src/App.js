@@ -19,12 +19,9 @@ function App() {
   const [userData, setUserData] = useState(null);
   useEffect(() => console.log(`userData`, userData));
   
+  
   const PrivateRoute = ({ component: Component, ...rest }) => (
-    <Route
-      {...rest}
-      render={props =>userData ? (<Component {...props} /> ): ( <Redirect to={{ pathname: "/login", state: { from: props.location } }} />
-          )
-      }
+    <Route {...rest} render={props =>userData ? (<Component {...props} /> ): ( <Redirect to={{ pathname: "/login", state: { from: props.location } }} />)}
     />
   );
   return (
