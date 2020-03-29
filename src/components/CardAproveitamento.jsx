@@ -2,7 +2,7 @@ import React from 'react';
 import './card.css';
 import { Link } from "react-router-dom";
 
-export default function CardAproveitamento(req) {
+export default function CardAproveitamento({req}) {
   const { 
     id,  dataRequisicao,usuario,disciplinaSolicitada, deferido,
     disciplinasCursadasAnterior, parecer,
