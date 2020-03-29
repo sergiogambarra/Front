@@ -24,7 +24,7 @@ export default function () {
 
   return (
     <>
-      <h5>Todas requisições de certificação de conhecimentos</h5>
+      <h5 class="row d-flex justify-content-center">Certificação de conhecimentos</h5>
       {error && <Alert variant="danger">Não foi possível carregar suas requisições.</Alert>}
       {isLoading ? <div style={{ minHeight: '300px' }} className="d-flex align-items-center justify-content-center text-primary">
         <div className="spinner-border" role="status">

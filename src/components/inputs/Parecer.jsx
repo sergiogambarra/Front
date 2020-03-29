@@ -16,18 +16,15 @@ class Parecer extends Component {
                     parecer: "",
                     deferido: "",
                     disciplinaSolicitada: [
-                        this.state = {
+                        {
                             id: "",
                             nome: "",
                             cargaHoraria: ""
-                        }
-
-                    ],
+                        }],
                     usuario: "",
-                    anexos: [
-                        this.state = {
-                            nome: ""
-                        }
+                    anexos: [{
+                        nome: ""
+                    }
                     ],
                     formacaoAtividadeAnterior: "",
                     criterioAvaliacao: ""
@@ -40,6 +37,11 @@ class Parecer extends Component {
             this.setState({ requisicao: retorno.data })
         )
 
+    }
+    limpar() {
+        this.setState({
+            parecer: ""
+        })
     }
     render() {
         return (<div>
@@ -55,32 +57,52 @@ class Parecer extends Component {
                 <SACEInput
                     label={'Data Requisição'}
                     value={this.state.requisicao.dataRequisicao}
-                    disabled={true}
-
-                />
-
+                    disabled={true} />
                 <SACEInput
-                    label={'Deferido'}
-                    placeholder={'Informe situação da requisição '}
-                    value={this.state.deferido}
-                    onChange={(e) => this.setState({ deferido: e.target.value })}
-                    onError={this.state.dataIngressoInvalido}
-                    onErrorMessage={'Você não inseriu uma data válida!'}
+                    label={'Nome da disciplina'}
+                    disabled={true} />
 
-                />
-                <SACEInput
-                    label={'Parecer'}
-                    placeholder={'Informe parecer do aluno '}
-                    value={this.state.deferido}
-                    onError={this.state.dataIngressoInvalido}
-                    onErrorMessage={'Você não inseriu uma data válida!'}
-
-                />
-
+                <div>Status </div>
+                <br />
+                <div class="custom-control custom-radio custom-control-inline">
+                    <input type="radio"
+                        id="deferido" name="customRadioInline1" class="custom-control-input"
+                    />
+                    <label class="custom-control-label" for="deferido">Deferido</label>
+                </div>
+                <div class="custom-control custom-radio custom-control-inline">
+                    <input type="radio" id="indeferido" name="customRadioInline1" class="custom-control-input"
+                        onChange={(e) => this.setState({ requisições: e.target.id, cont: "" })}
+                    />
+                    <label class="custom-control-label" for="indeferido">Indeferido</label><br /><br />
+                </div>
+                <div class="custom-control custom-radio custom-control-inline">
+                    <input type="radio" id="indeferido" name="customRadioInline1" class="custom-control-input"
+                        onChange={(e) => this.setState({ requisições: e.target.id, cont: "" })}
+                    />
+                    <label class="custom-control-label" for="indeferido">Analisando</label><br /><br />
+                </div>
+                <div class="custom-control custom-radio custom-control-inline">
+                    <input type="radio" id="indeferido" name="customRadioInline1" class="custom-control-input"
+                        onChange={(e) => this.setState({ requisições: e.target.id, cont: "" })}
+                    />
+                    <label class="custom-control-label" for="indeferido">Aguardando documento</label><br /><br />
+                </div>
+                <br />
+                <Form.Group controlId="exampleForm.ControlTextarea1">
+                    <Form.Label>Parecer</Form.Label>
+                    <Form.Control as="textarea" rows="3"
+                        id={this.state.parecer}
+                        value={this.state.parecer}
+                        onChange={(e) => this.setState({ parecer: e.target.value })}
+                    />
+                </Form.Group>
+                {console.log(this.state.requisicao.disciplinaSolicitada)
+                }
                 <div className="row container" style={{ position: 'relative', left: '32%' }}>
                     <Button onClick={(e) => this.enviarCadastro(e)} className="btn btn-dark" data-toggle="modal" data-target="#exampleModal" style={{ border: "5px solid white" }}>Enviar</Button>
                     <Button onClick={() => this.limpar()} className="btn btn-danger" style={{ border: "5px solid white" }}>Limpar</Button>
-                    <Link to="/login"> <Button variant="primary" className="btn btn-primary m-1" >Voltar </Button></Link>
+                    <Link to="/minhas-requisicoes"> <Button variant="primary" className="btn btn-primary m-1" >Voltar </Button></Link>
 
                 </div>
             </Form.Group>

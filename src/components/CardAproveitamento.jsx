@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 export default function CardAproveitamento(req) {
   const { 
-    id,  dataRequisicao,usuario,/*  curso, */ disciplinaSolicitada, deferido,
+    id,  dataRequisicao,usuario,disciplinaSolicitada, deferido,
     disciplinasCursadasAnterior, parecer,
   } = req.requisicao;
   return (
@@ -15,7 +15,6 @@ export default function CardAproveitamento(req) {
       <p>{`Aluno: ${usuario}`}</p>
       <p>{`Deferido: ${deferido}`}</p>
       <p>{`Parecer: ${parecer}`}</p>
-      {/* <p>{`Curso: ${curso.nome}`}</p> */}
       <p>{`Disciplina solicitada: ${disciplinaSolicitada.nome}`}</p>
       <p>{`Disciplina cursada anteriormente: ${disciplinasCursadasAnterior}`}</p>
     </div>

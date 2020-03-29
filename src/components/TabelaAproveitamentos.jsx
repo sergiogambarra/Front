@@ -24,7 +24,7 @@ export default function() {
 
   return (
     <>
-      <h5>Todas requisições de aproveitamento de estudos</h5>
+      <h5 class="row d-flex justify-content-center">Aproveitamento de estudos</h5>
       {error && <Alert variant='danger'>Não foi possível carregar suas requisições.</Alert>}
       {
         isLoading 

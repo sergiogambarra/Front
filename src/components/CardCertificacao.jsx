@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 export default function CardCertificacao(req) {
   const { 
-    id,  dataRequisicao,usuario,/*  curso, */ disciplinaSolicitada, deferido,
+    id,  dataRequisicao,usuario, disciplinaSolicitada, deferido,
     formacaoAtividadeAnterior, parecer,
   } = req.requisicao;
 
@@ -16,7 +16,6 @@ export default function CardCertificacao(req) {
       <p>{`Aluno: ${usuario}`}</p>
       <p>{`Deferido: ${deferido}`}</p>
       <p>{`Parecer: ${parecer}`}</p>
-      {/* <p>{`Curso: ${curso.nome}`}</p> */}
       <p>{`Disciplina solicitada: ${disciplinaSolicitada.nome}`}</p>
       <p>{`Formação/Atividade realizada anteriormente: ${formacaoAtividadeAnterior}`}</p>
     </div>
