@@ -50,7 +50,6 @@ export default function CertificacaoConhecimentosForm({user}) {
         
 
     }
-   
     const fazerRequisicao = async () => {
         if(camposInvalidos()) return;   
         

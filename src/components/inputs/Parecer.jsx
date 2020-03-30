@@ -3,7 +3,7 @@ import SACEInput from '../../../src//components/inputs/SACEInput';
 import { Button } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import TituloPagina from '../../components/TituloPagina';
-import { Form } from 'react-bootstrap';
+import { Form, InputGroup, FormControl } from 'react-bootstrap';
 import axios from 'axios';
 
 class Parecer extends Component {
@@ -26,16 +26,16 @@ class Parecer extends Component {
         await axios.get(`/api/requisicoes/${this.props.match.params.id}`).then((retorno) =>
             this.setState({ requisicao: retorno.data })
         )
-        console.log(this.state.requisicao.deferido);
+        console.log(this.state.requisicao.parecer);
     }
- 
+
     atualizar() {
         axios.put(`/api/requisicoes/${this.props.match.params.id}`, {
             tipo: "aproveitamento",
-            deferido:this.state.deferido,
-            parecer:this.state.parecer,
-            usuario:{
-                tipo:"servidor"
+            deferido: this.state.deferido,
+            parecer: this.state.parecer,
+            usuario: {
+                tipo: "servidor"
             }
 
         })
@@ -44,36 +44,54 @@ class Parecer extends Component {
         return (<div>
             <Form.Group className="col-md-6 container">
 
-                <TituloPagina titulo="Parecer do Aluno" />
+                <TituloPagina titulo="Parecer do Solicitante" />
                 <SACEInput
                     label={'Nome'}
                     value={this.state.requisicao.usuario.nome}
                     disabled={true}
 
                 />
-                <SACEInput
-                    label={'Data Requisição'}
-                    value={this.state.requisicao.dataRequisicao}
-                    disabled={true} />
+                {console.log(this.state.requisicao)}
+                <InputGroup className="mb-3">
+                    <label >Data :</label> &nbsp;
+                    <FormControl
+                        value={this.state.requisicao.dataRequisicao}
+                        disabled={true}
+                    />&nbsp;
+                    <label>Tipo :</label>&nbsp;
+                    <FormControl
+                        value={this.state.requisicao.tipo} disabled={true} />
+                </InputGroup>
                 <SACEInput
                     label={'Nome da disciplina'}
                     value={this.state.requisicao.disciplinaSolicitada.nome}
                     disabled={true} />
-
-                <div>Status </div>
+                <SACEInput
+                    label={'Status'}
+                    value={this.state.requisicao.deferido}
+                    disabled={true} />
+                <Form.Group controlId="exampleForm.ControlTextarea1">
+                    <Form.Label>Parecer</Form.Label>
+                    <Form.Control as="textarea" rows="3"
+                        id={this.state.requisicao.parecer}
+                        value={this.state.requisicao.parecer} 
+                        disabled={true}
+                         />
+                </Form.Group>
+                <div style={{fontSize:"200%"}}> Modificar Status </div>
                 <br />
                 <div class="custom-control custom-radio custom-control-inline">
                     <input type="radio"
                         id="DEFERIDO" name="customRadioInline1" class="custom-control-input"
                         onChange={(e) => this.setState({ deferido: e.target.id })}
                         defaultChecked={false}
-                        />
+                    />
                     <label class="custom-control-label" for="DEFERIDO">Deferido</label>
                 </div>
                 <div class="custom-control custom-radio custom-control-inline">
                     <input type="radio" id="INDEFERIDO" name="customRadioInline1" class="custom-control-input"
                         onChange={(e) => this.setState({ deferido: e.target.id })}
-                        defaultChecked={false}/>
+                        defaultChecked={false} />
                     <label class="custom-control-label" for="INDEFERIDO">Indeferido</label><br /><br />
                 </div>
                 <div class="custom-control custom-radio custom-control-inline">
@@ -85,15 +103,15 @@ class Parecer extends Component {
                 </div>
                 <div class="custom-control custom-radio custom-control-inline">
                     <input type="radio" id="EM ANÁLISE" name="customRadioInline1" class="custom-control-input"
-                        onChange={(e) => this.setState({ deferido: e.target.id})}
+                        onChange={(e) => this.setState({ deferido: e.target.id })}
                         defaultChecked={this.state.requisicao.deferido === "EM ANÁLISE" ? true : false}
                     />
                     <label class="custom-control-label" for="EM ANÁLISE">Em análise</label><br /><br />
                 </div>
                 <div class="custom-control custom-radio custom-control-inline">
                     <input type="radio" id="escolha" name="customRadioInline" class="custom-control-input"
-                     checked   />
-                     <label class="custom-control-label" for="escolha" style={{display:"none"}}></label><br /><br />
+                        checked />
+                    <label class="custom-control-label" for="escolha" style={{ display: "none" }}></label><br /><br />
                 </div>
                 <br />
                 <ol>
@@ -116,9 +134,9 @@ class Parecer extends Component {
                         onChange={(e) => this.setState({ parecer: e.target.value })}
                     />
                 </Form.Group>
-                
+
                 <div className="row container" style={{ position: 'relative', left: '32%' }}>
-                <Link to="/minhas-requisicoes"> <Button onClick={(e) => this.atualizar()} className="btn btn-dark" data-toggle="modal" data-target="#exampleModal" style={{ border: "5px solid white" }}>Enviar</Button></Link>
+                    <Link to="/minhas-requisicoes"> <Button onClick={(e) => this.atualizar()} className="btn btn-dark" data-toggle="modal" data-target="#exampleModal" style={{ border: "5px solid white" }}>Enviar</Button></Link>
                     <Link to="/minhas-requisicoes"> <Button variant="primary" className="btn btn-primary m-1" >Voltar </Button></Link>
                 </div>
 

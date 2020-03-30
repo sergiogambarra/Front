@@ -68,7 +68,7 @@ class MinhasRequisicoes extends Component {
       console.log(this.state.usuario.nome);
       console.log(this.state.cont);
       if(this.state.usuario.nome !== "undefined"){
-        this.setState({cont:"1"})
+        this.setState({cont:"1",texto:false})
       }
     });
   }
@@ -155,6 +155,7 @@ class MinhasRequisicoes extends Component {
                 <th scope="col">Data</th>
                 <th scope="col">Solicitante</th>
                 <th scope="col">Disciplina</th>
+                <th scope="col">Tipo</th>
                 <th scope="col">Deferido</th>
               </tr>
             </thead>
@@ -165,13 +166,14 @@ class MinhasRequisicoes extends Component {
                     <td>{requisicao.id}</td>
                     <td>{requisicao.dataRequisicao}</td>
                     <Link to={`/parecer/${requisicao.id}`}><td>{requisicao.usuario.nome + ""}</td></Link>
-                    <td>{requisicao.disciplinaSolicitada.nome}</td>
+                    <td>{requisicao.disciplinaSolicitada.nome+""}</td>
+                    <td>{requisicao.tipo}</td>
                     <td>{requisicao.deferido + ""}</td>
                   </tr>
                 )}
             </tbody>
           </table></div>:this.state.id === "Nome Aluno" ? <div id="FormPesquisaNome" ><br /><br /><br />
-          <h3>Requisições por nome da Solicitante </h3>
+          <h3>Requisições por nome do Solicitante </h3>
           <table class="table" >
             <thead class="p-3 mb-2 bg-primary text-white">
               <tr>
@@ -179,6 +181,7 @@ class MinhasRequisicoes extends Component {
                 <th scope="col">Data</th>
                 <th scope="col">Solicitante</th>
                 <th scope="col">Disciplina</th>
+                <th scope="col">Tipo</th>
                 <th scope="col">Deferido</th>
               </tr>
             </thead>
@@ -190,6 +193,7 @@ class MinhasRequisicoes extends Component {
                     <td>{requisicao.dataRequisicao}</td>
                     <Link to={`/parecer/${requisicao.id}`}><td>{requisicao.usuario.nome+ ""}</td></Link>
                     <td>{requisicao.disciplinaSolicitada.nome+""}</td>
+                    <td>{requisicao.tipo}</td>
                     <td>{requisicao.deferido + ""}</td>
                   </tr>
                 )}
