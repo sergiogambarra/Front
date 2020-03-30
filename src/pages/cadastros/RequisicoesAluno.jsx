@@ -24,19 +24,22 @@ class MinhasRequisicoes extends Component {
       deferido: "",
       cont: "",
       parecer: "",
-      usuario: [{
-        mome: "",
-      }],
-
+      usuario: [
+        this.state = {
+          momeUsuario: "",
+          nomeAluno: ""
+        }],
+       
     }
   }
 
-  listarRequisicoesNomeDisciplina() {
+  listarRequisicoesNome() {
 
-    if (typeof this.state.nomeDisciplina === "undefined" || this.state.nomeDisciplina.length === 0 ) {
+    if (typeof this.state.nomeDisciplina === "undefined" || this.state.nomeDisciplina.length === 0
+    ) {
       this.setState({ texto: true })
     }
-    axios.get(`/api/requisicoes/nomedisciplina/${this.state.nomeDisciplina}`).then((retorno) => {
+    axios.get(`/api/requisicoes/nome/${this.state.nomeDisciplina}`).then((retorno) => {
       this.setState({
         pesquisaRequisicoes: retorno.data,
       })
@@ -53,25 +56,7 @@ class MinhasRequisicoes extends Component {
       } else { this.setState({ cont: "" }) }
     });
   }
-   async pesquisarNomeSolicitante() {
-    if (typeof this.state.nomeAluno === "undefined"  ) {
-      this.setState({ texto: true })
-    }
-    if (this.state.nomeAluno=== "") {
-      this.setState({ texto: true })
-    }
-    await axios.get(`/api/requisicoes/solicitante/${this.state.nomeAluno}`).then((retorno) => {
-      this.setState({
-        usuario: retorno.data,
-      })
-      console.log(retorno.data);
-      console.log(this.state.usuario.nome);
-      console.log(this.state.cont);
-      if(this.state.usuario.nome !== "undefined"){
-        this.setState({cont:"1"})
-      }
-    });
-  }
+
   limpar() {
     this.setState({
       cont: "", texto: false, nomeDisciplina: "",
@@ -80,12 +65,14 @@ class MinhasRequisicoes extends Component {
   }
 
   render() {
+
     return (
       <div>
         <TituloPagina titulo={'Visualizar Requisições'} />
         <div class="custom-control custom-radio custom-control-inline">
           <input type="radio" id="aproveitamento" name="customRadioInline1" class="custom-control-input"
             onChange={(e) => this.setState({ requisições: e.target.id, cont: "" })}
+           
           />
           <label class="custom-control-label" for="aproveitamento">Aproveitamento de estudos</label>
         </div>
@@ -101,6 +88,8 @@ class MinhasRequisicoes extends Component {
           <label class="custom-control-label" for="pesquisas" >Outros tipos de pesquisas</label>
         </div>
         <br /><br />
+        {console.log(this.state.requisições)}
+        
 
         {this.state.requisições === "pesquisas" ? <div class="form-group" id="pesquisas">
           <label for="exampleFormControlSelect2">Escolha o tipo de pesquisa </label>
@@ -134,20 +123,16 @@ class MinhasRequisicoes extends Component {
                   onErrorMessage={'Não encontrado'}
                 />}
 
-          {this.state.id === "" ? <Button style={{ position: 'relative' }} variant="primary" className="btn btn-primary m-1"
-           > Enviar </Button> : this.state.id === "Nome Aluno"?<Button style={{ position: 'relative' }} variant="primary" className="btn btn-primary m-1"
-              onClick={(e) => this.pesquisarNomeSolicitante()}>
-              Pesquisar por nome do aluno</Button>: this.state.id === "Nome disciplina" ?<Button style={{ position: 'relative' }} variant="primary" className="btn btn-primary m-1"
-              onClick={(e) => this.listarRequisicoesNomeDisciplina()}>
-              Pesquisar por nome da Disciplina</Button>:<Button style={{ position: 'relative' }} variant="primary" className="btn btn-primary m-1"
-              onClick={(e) => this.pesquisarNomeSolicitante()}>
+          {this.state.id === "nomeDisciplina" ? <Button style={{ position: 'relative' }} variant="primary" className="btn btn-primary m-1" onClick={(e) => this.listarRequisicoesNome()}>
+            Enviar
+          </Button> : <Button style={{ position: 'relative' }} variant="primary" className="btn btn-primary m-1" onClick={(e) => this.listarRequisicoesNome()}>
               Enviar</Button>}
           <Button style={{ position: 'relative' }} variant="danger" className="btn btn-primary m-1"
             onClick={(e) => this.limpar()}
           > Limpar </Button>
         </div> : ""}
-        {this.state.cont === "" ? "":this.state.id === "Nome disciplina"? <div id="FormPesquisaNome" Style={{ display: "none" }}><br /><br /><br />
-          <h3>Requisições por nome da disciplina </h3>
+        {this.state.cont === "" ? "" : <div id="FormPesquisaNome" Style={{ display: "none" }}><br /><br /><br />
+          <h3>Lista de Todas as Requisições por nome da disciplina </h3>
           <table class="table" >
             <thead class="p-3 mb-2 bg-primary text-white">
               <tr>
@@ -164,37 +149,13 @@ class MinhasRequisicoes extends Component {
                   <tr>
                     <td>{requisicao.id}</td>
                     <td>{requisicao.dataRequisicao}</td>
-                    <Link to={`/parecer/${requisicao.id}`}><td>{requisicao.usuario.nome + ""}</td></Link>
+                     <Link to={`/parecer/${requisicao.id}`}><td>{requisicao.usuario.nome+""}</td></Link>
                     <td>{requisicao.disciplinaSolicitada.nome}</td>
-                    <td>{requisicao.deferido + ""}</td>
+                    <td>{requisicao.deferido+""}</td>
                   </tr>
                 )}
             </tbody>
-          </table></div>:this.state.id === "Nome Aluno" ? <div id="FormPesquisaNome" ><br /><br /><br />
-          <h3>Requisições por nome da Solicitante </h3>
-          <table class="table" >
-            <thead class="p-3 mb-2 bg-primary text-white">
-              <tr>
-                <th scope="col">Id</th>
-                <th scope="col">Data</th>
-                <th scope="col">Solicitante</th>
-                <th scope="col">Disciplina</th>
-                <th scope="col">Deferido</th>
-              </tr>
-            </thead>
-            <tbody>
-              {this.state.usuario &&
-                this.state.usuario.map((requisicao) =>
-                  <tr>
-                    <td>{requisicao.id}</td>
-                    <td>{requisicao.dataRequisicao}</td>
-                    <Link to={`/parecer/${requisicao.id}`}><td>{requisicao.usuario.nome+ ""}</td></Link>
-                    <td>{requisicao.disciplinaSolicitada.nome+""}</td>
-                    <td>{requisicao.deferido + ""}</td>
-                  </tr>
-                )}
-            </tbody>
-          </table></div>:"" }
+          </table></div>}
         {this.state.requisições === "aproveitamento" ? <div className="col-6"><br /> <br />
           <TabelaAproveitamentos /> </div> : this.state.requisições === "certificacao" ? <div className="col-6"><br /> <br />
             <TabelaCertificacoes /></div> : ""}</div>

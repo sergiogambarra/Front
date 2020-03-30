@@ -9,7 +9,7 @@ import ModalConfirmarRequisicao from '../ModalConfirmarRequisicao';
 import { postRequisicao } from '../../services/RequisicaoService';
 import SACEAlert from '../SACEAlert';
 
-export default function CertificacaoConhecimentosForm() {
+export default function CertificacaoConhecimentosForm({user}) {
 
     const [curso, setCurso] = useState('');
     const [cursoInvalido, setCursoInvalido] = useState(false);
@@ -62,7 +62,8 @@ export default function CertificacaoConhecimentosForm() {
                 id: discSolicitada.value,
                 nome: discSolicitada.label, 
                 cargaHoraria: discSolicitada.carga, 
-            }
+            },
+            usuario:user
         });
         setShowModal(true);
     }
@@ -70,9 +71,7 @@ export default function CertificacaoConhecimentosForm() {
 
 
     const enviarRequisicao = () => {
-        setShowModal(false);
-
-        console.log(localStorage);
+        setShowModal(false);       
         
         if(postRequisicao(requisicao)){
             setAlert({
@@ -86,6 +85,7 @@ export default function CertificacaoConhecimentosForm() {
             });
         }
 
+        
         /*setTimeout(() => setAlert(null), 3000);*/
         limparCampos();
     }

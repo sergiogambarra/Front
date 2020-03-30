@@ -4,21 +4,7 @@ import TituloPagina from '../components/TituloPagina';
 import CertificacaoConhecimentosForm from '../components/forms/CertificacaoConhecimentosForm';
 import AproveitamentoEstudosForm from '../components/forms/AproveitamentoEstudosForm';
 
-const CERTIFICACAO = 'CERTIFICACAO';
-const APROVEITAMENTO = 'APROVEITAMENTO';
-
-const getFormulario = (tipo) => {
-    switch(tipo){
-        case CERTIFICACAO:
-            return <CertificacaoConhecimentosForm />;
-        case APROVEITAMENTO:
-            return <AproveitamentoEstudosForm />;
-        default:
-            return null;
-    }
-}
-
-export default function NovaRequisicao(){
+export default function NovaRequisicao({user}){
     const [tipoRequisicao, setTipoRequisicao] = useState('');
 
     return(
@@ -33,14 +19,14 @@ export default function NovaRequisicao(){
                     onChange={({target}) => setTipoRequisicao(target.value)}
                 >
                     <option value=''>...</option>
-                    <option value={APROVEITAMENTO}>Aproveitamento de Estudos</option>
-                    <option value={CERTIFICACAO}>Certificação de Conhecimentos</option>
+                    <option value={'APROVEITAMENTO'}>Aproveitamento de Estudos</option>
+                    <option value={'CERTIFICACAO'}>Certificação de Conhecimentos</option>
                 </Form.Control>
             </Form.Group>
 
             {tipoRequisicao && 
                 <Form className="col-10 bg-light mx-auto rounded p-4">
-                    {getFormulario(tipoRequisicao)}
+                    {tipoRequisicao === 'CERTIFICACAO' ? <CertificacaoConhecimentosForm user={user}/> : <AproveitamentoEstudosForm user={user}/>}
                 </Form> 
             }
         </>

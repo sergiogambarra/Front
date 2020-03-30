@@ -34,7 +34,7 @@ function App() {
           <Route path="/cadastro-aluno" component={CadastroAluno} />
           <Route path="/cadastro-servidor" component={CadastroServidor} />
           <PrivateRoute exact path="/minhas-requisicoes" component={MinhasRequisicoes} />
-          <PrivateRoute exact path="/nova-requisicao" component={NovaRequisicao} />
+          <PrivateRoute exact path="/nova-requisicao" component={()=><NovaRequisicao user={userData}/>} />
           <PrivateRoute exact path="/cadastro-curso" component={CadastroCursos} />
           <PrivateRoute exact path="/lista-disciplina" component={ListaDiscipinas} />
           <PrivateRoute exact path="/cadastrar-disciplina" component={CadastrarDisciplinas} />

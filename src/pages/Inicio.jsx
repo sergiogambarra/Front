@@ -1,22 +1,33 @@
 import React from 'react';
-import TituloPagina from '../components/TituloPagina';
-import { relative } from 'path';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Card from 'react-bootstrap/Card'
+
+
 
 export default function Inicio() {
   const path = './images/APROVEITAMENTO-ESTUDOS.png'; 
 
   return (
-    <div style={{position:'relative', top:"10px", left :'13%'}}>
-      <div className="card" style={{width:"50rem", position:relative}}>
-        <img src={path} className="card-img-top" alt="..." />
-        <div className="card-body"style={{position:'relative'}}>
-          <TituloPagina titulo={'Portal de Requisição de Aproveitamento de Matrícula ou Certificação de Conhecimentos.'} />
-          
-          
-          <Link to="/login" className="btn btn-primary">Login </Link>
-        </div>
-      </div>
-    </div>
+    <Container>
+    <Row>
+    <Col></Col>
+    <Col xs={4} md={6} lg={8}>
+      <Card style={{ width: '50 rem' }}>
+          <Card.Img variant="top" src={path} />
+          <Card.Body>
+            <Card.Title>Portal de Requisição de Aproveitamento de Matrícula ou Certificação de Conhecimentos.</Card.Title>
+            <Card.Text>
+            <Link to="/login" className="btn btn-primary">Login </Link>
+            </Card.Text>
+          </Card.Body>
+        </Card>
+      </Col>
+    <Col></Col>
+      
+    </Row>
+  </Container>
   );
 }
