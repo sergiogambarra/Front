@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import axios from 'axios';
 import SACEInput from '../../../src//components/inputs/SACEInput';
-import { Button } from 'react-bootstrap';
+import { Button, Alert } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import TituloPagina from '../../components/TituloPagina';
 import { Form } from 'react-bootstrap';
@@ -26,7 +26,8 @@ class CadastroServidor extends Component {
             siapeInvalido: false,
             cargo: "",
             cargoInvalido: false,
-            cordenador: ""
+            cordenador: "",
+            modal:false
             
             
         }
@@ -73,9 +74,12 @@ class CadastroServidor extends Component {
             siape: this.state.siape,
             cargo: this.state.cargo,
         }).then(() => {
-            this.limpar()
-        }
-        )
+            this.setState({ modal: true })
+            setTimeout(()=>{
+                this.setState({modal:false})
+            },3000)
+            this.limpar() })
+
     }
 
     limpar() {
@@ -101,6 +105,7 @@ class CadastroServidor extends Component {
             <Form.Group className="col-md-6 container">
 
                 <TituloPagina titulo="Cadastro Servidor" />
+                <Alert key={"idx"}variant={"success"} show={this.state.modal}>Cadastrado com Sucesso</Alert>
                 <SACEInput
                     label={'Nome'}
                     value={this.state.nome}
@@ -139,6 +144,7 @@ class CadastroServidor extends Component {
                     <option></option>
                     <option value="servidor">Servidor</option>
                     <option value="professor">Professor</option>
+                    <option value="professor">Cordenador</option>
 
                 </select>
                 <SACEInput

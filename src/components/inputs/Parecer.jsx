@@ -3,7 +3,7 @@ import SACEInput from '../../../src//components/inputs/SACEInput';
 import { Button } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import TituloPagina from '../../components/TituloPagina';
-import { Form, InputGroup, FormControl } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import axios from 'axios';
 
 class Parecer extends Component {
@@ -24,9 +24,9 @@ class Parecer extends Component {
     }
     async componentDidMount() {
         await axios.get(`/api/requisicoes/${this.props.match.params.id}`).then((retorno) =>
-            this.setState({ requisicao: retorno.data })
+        this.setState({ requisicao: retorno.data })
         )
-        console.log(this.state.requisicao.parecer);
+        this.trocaNomeTipo();
     }
 
     atualizar() {
@@ -40,6 +40,14 @@ class Parecer extends Component {
 
         })
     }
+    trocaNomeTipo() {
+            if (this.state.requisicao.tipo === "certificacao") {
+                this.setState({ tipo: "Certificação de conhecimentos" })
+        }
+            if (this.state.requisicao.tipo === "aproveitamento") {
+                this.setState({ tipo: "Aproveitamentos de estudos" })
+        }
+    }
     render() {
         return (<div>
             <Form.Group className="col-md-6 container">
@@ -51,17 +59,18 @@ class Parecer extends Component {
                     disabled={true}
 
                 />
-                {console.log(this.state.requisicao)}
-                <InputGroup className="mb-3">
-                    <label >Data de cadastro da requiisição:</label> &nbsp;
-                    <FormControl
-                        value={this.state.requisicao.dataRequisicao}
-                        disabled={true}
-                    />&nbsp;
-                    <label>Tipo :</label>&nbsp;
-                    <FormControl
-                        value={this.state.requisicao.tipo} disabled={true} />
-                </InputGroup>
+                <SACEInput
+                    label={'Data de cadastro da requiisição'}
+                    value={this.state.requisicao.dataRequisicao}
+                    disabled={true}
+
+                />
+                <SACEInput
+                    label={'Tipo'}
+                    value={this.state.tipo}
+                    disabled={true}
+
+                />
                 <SACEInput
                     label={'Disciplina'}
                     value={this.state.requisicao.disciplinaSolicitada.nome}
@@ -74,11 +83,11 @@ class Parecer extends Component {
                     <Form.Label>Parecer</Form.Label>
                     <Form.Control as="textarea" rows="3"
                         id={this.state.requisicao.parecer}
-                        value={this.state.requisicao.parecer} 
+                        value={this.state.requisicao.parecer}
                         disabled={true}
-                         />
+                    />
                 </Form.Group>
-                <div style={{fontSize:"200%"}}> Modificar Status </div>
+                <div style={{ fontSize: "200%" }}> Modificar Status </div>
                 <br />
                 <div class="custom-control custom-radio custom-control-inline">
                     <input type="radio"

@@ -13,7 +13,7 @@ class MinhasRequisicoes extends Component {
     this.state = {
       id: "",
       dataRequisicao: "",
-      requisições: "", escolha: "",
+      requisicoes: "", escolha: "",
       pesquisaRequisicoes: [],
       texto: false,
       disciplinaSolicitada: [
@@ -27,48 +27,34 @@ class MinhasRequisicoes extends Component {
       usuario: [{
         mome: "",
       }],
+      guardaTipo:""
 
     }
   }
 
   listarRequisicoesNomeDisciplina() {
-
-    if (typeof this.state.nomeDisciplina === "undefined" || this.state.nomeDisciplina.length === 0 ) {
-      this.setState({ texto: true })
-    }
+    if (typeof this.state.nomeDisciplina === "undefined" || this.state.nomeDisciplina.length === 0) {
+      this.setState({ texto: true })}
     axios.get(`/api/requisicoes/nomedisciplina/${this.state.nomeDisciplina}`).then((retorno) => {
-      this.setState({
-        pesquisaRequisicoes: retorno.data,
-      })
+      this.setState({pesquisaRequisicoes: retorno.data})
       if (this.state.pesquisaRequisicoes.length === 0) {
-        this.setState({ texto: true })
-      }
+        this.setState({ texto: true }) }
       if (this.state.pesquisaRequisicoes.length !== 0) {
-        this.setState({ texto: false })
-      }
+        this.setState({ texto: false }) }
       if (this.state.pesquisaRequisicoes.length !== 0) {
-        this.setState({
-          cont: "1",
-        })
-      } else { this.setState({ cont: "" }) }
-    });
-  }
-   async pesquisarNomeSolicitante() {
-    if (typeof this.state.nomeAluno === "undefined"  ) {
-      this.setState({ texto: true })
-    }
-    if (this.state.nomeAluno=== "") {
-      this.setState({ texto: true })
-    }
+        this.setState({cont: "1" })} else { this.setState({ cont: "" }) }});
+      }
+
+  async pesquisarNomeSolicitante() {
+    if (typeof this.state.nomeAluno === "undefined") {
+      this.setState({ texto: true }) }
+    if (this.state.nomeAluno === "") {
+      this.setState({ texto: true }) }
+
     await axios.get(`/api/requisicoes/solicitante/${this.state.nomeAluno}`).then((retorno) => {
-      this.setState({
-        usuario: retorno.data,
-      })
-      console.log(retorno.data);
-      console.log(this.state.usuario.nome);
-      console.log(this.state.cont);
-      if(this.state.usuario.nome !== "undefined"){
-        this.setState({cont:"1",texto:false})
+      this.setState({ usuario: retorno.data })
+      if (this.state.usuario.nome !== "undefined") {
+        this.setState({ cont: "1", texto: false })
       }
     });
   }
@@ -78,31 +64,30 @@ class MinhasRequisicoes extends Component {
       parecer: "", nomeAluno: ""
     })
   }
-
   render() {
     return (
       <div>
         <TituloPagina titulo={'Visualizar Requisições'} />
         <div class="custom-control custom-radio custom-control-inline">
           <input type="radio" id="aproveitamento" name="customRadioInline1" class="custom-control-input"
-            onChange={(e) => this.setState({ requisições: e.target.id, cont: "" })}
+            onChange={(e) => this.setState({ requisicoes: e.target.id, cont: "" })}
           />
           <label class="custom-control-label" for="aproveitamento">Aproveitamento de estudos</label>
         </div>
         <div class="custom-control custom-radio custom-control-inline">
           <input type="radio" id="certificacao" name="customRadioInline1" class="custom-control-input"
-            onChange={(e) => this.setState({ requisições: e.target.id, cont: "" })} />
+            onChange={(e) => this.setState({ requisicoes: e.target.id, cont: "" })} />
           <label id="mudarCor" class="custom-control-label" for="certificacao">Certificação de conhecimentos</label>
         </div>
 
         <div class="custom-control custom-radio custom-control-inline">
           <input type="radio" id="pesquisas" name="customRadioInline1" class="custom-control-input"
-            onChange={(e) => this.setState({ requisições: e.target.id, cont: "" })} />
+            onChange={(e) => this.setState({ requisicoes: e.target.id, cont: "" })} />
           <label class="custom-control-label" for="pesquisas" >Outros tipos de pesquisas</label>
         </div>
         <br /><br />
 
-        {this.state.requisições === "pesquisas" ? <div class="form-group" id="pesquisas">
+        {this.state.requisicoes === "pesquisas" ? <div class="form-group" id="pesquisas">
           <label for="exampleFormControlSelect2">Escolha o tipo de pesquisa </label>
           <select multiple class="form-control" id={""}
             onChange={(e) => this.setState({ id: e.target.value })}>
@@ -135,18 +120,18 @@ class MinhasRequisicoes extends Component {
                 />}
 
           {this.state.id === "" ? <Button style={{ position: 'relative' }} variant="primary" className="btn btn-primary m-1"
-           > Enviar </Button> : this.state.id === "Nome Aluno"?<Button style={{ position: 'relative' }} variant="primary" className="btn btn-primary m-1"
-              onClick={(e) => this.pesquisarNomeSolicitante()}>
-              Pesquisar por nome do aluno</Button>: this.state.id === "Nome disciplina" ?<Button style={{ position: 'relative' }} variant="primary" className="btn btn-primary m-1"
+          > Enviar </Button> : this.state.id === "Nome Aluno" ? <Button style={{ position: 'relative' }} variant="primary" className="btn btn-primary m-1"
+            onClick={(e) => this.pesquisarNomeSolicitante()}>
+            Pesquisar por nome do aluno</Button> : this.state.id === "Nome disciplina" ? <Button style={{ position: 'relative' }} variant="primary" className="btn btn-primary m-1"
               onClick={(e) => this.listarRequisicoesNomeDisciplina()}>
-              Pesquisar por nome da Disciplina</Button>:<Button style={{ position: 'relative' }} variant="primary" className="btn btn-primary m-1"
-              onClick={(e) => this.pesquisarNomeSolicitante()}>
-              Enviar</Button>}
+              Pesquisar por nome da Disciplina</Button> : <Button style={{ position: 'relative' }} variant="primary" className="btn btn-primary m-1"
+                onClick={(e) => this.pesquisarNomeSolicitante()}>
+                  Enviar</Button>}
           <Button style={{ position: 'relative' }} variant="danger" className="btn btn-primary m-1"
             onClick={(e) => this.limpar()}
           > Limpar </Button>
         </div> : ""}
-        {this.state.cont === "" ? "":this.state.id === "Nome disciplina"? <div id="FormPesquisaNome" Style={{ display: "none" }}><br /><br /><br />
+        {this.state.cont === "" ? "" : this.state.id === "Nome disciplina" ? <div id="FormPesquisaNome" Style={{ display: "none" }}><br /><br /><br />
           <h3>Requisições por nome da disciplina </h3>
           <table class="table" >
             <thead class="p-3 mb-2 bg-primary text-white">
@@ -166,42 +151,43 @@ class MinhasRequisicoes extends Component {
                     <td>{requisicao.id}</td>
                     <td>{requisicao.dataRequisicao}</td>
                     <Link to={`/parecer/${requisicao.id}`}><td>{requisicao.usuario.nome + ""}</td></Link>
-                    <td>{requisicao.disciplinaSolicitada.nome+""}</td>
-                    <td>{requisicao.tipo}</td>
+                    <td>{requisicao.disciplinaSolicitada.nome + ""}</td>
+                    <td>{requisicao.tipo === "certificacao"?"Certificação por conhecimentos":"Aproveitamento de estudos"}</td>
                     <td>{requisicao.deferido + ""}</td>
                   </tr>
                 )}
             </tbody>
-          </table></div>:this.state.id === "Nome Aluno" ? <div id="FormPesquisaNome" ><br /><br /><br />
-          <h3>Requisições por nome do Solicitante </h3>
-          <table class="table" >
-            <thead class="p-3 mb-2 bg-primary text-white">
-              <tr>
-                <th scope="col">Id</th>
-                <th scope="col">Data</th>
-                <th scope="col">Aluno</th>
-                <th scope="col">Disciplina</th>
-                <th scope="col">Tipo</th>
-                <th scope="col">Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {this.state.usuario &&
-                this.state.usuario.map((requisicao) =>
-                  <tr>
-                    <td>{requisicao.id}</td>
-                    <td>{requisicao.dataRequisicao}</td>
-                    <Link to={`/parecer/${requisicao.id}`}><td>{requisicao.usuario.nome+ ""}</td></Link>
-                    <td>{requisicao.disciplinaSolicitada.nome+""}</td>
-                    <td>{requisicao.tipo}</td>
-                    <td>{requisicao.deferido + ""}</td>
-                  </tr>
-                )}
-            </tbody>
-          </table></div>:"" }
-        {this.state.requisições === "aproveitamento" ? <div className="col-6"><br /> <br />
-          <TabelaAproveitamentos /> </div> : this.state.requisições === "certificacao" ? <div className="col-6"><br /> <br />
-            <TabelaCertificacoes /></div> : ""}</div>
+          </table></div> : this.state.id === "Nome Aluno" ? <div id="FormPesquisaNome" ><br /><br /><br />
+            <h3>Requisições por nome do Solicitante </h3>
+            <table class="table" >
+              <thead class="p-3 mb-2 bg-primary text-white">
+                <tr>
+                  <th scope="col">Id</th>
+                  <th scope="col">Data</th>
+                  <th scope="col">Aluno</th>
+                  <th scope="col">Disciplina</th>
+                  <th scope="col">Tipo</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {this.state.usuario &&
+                  this.state.usuario.map((requisicao) =>
+                    <tr>
+                      <td>{requisicao.id}</td>
+                      <td>{requisicao.dataRequisicao}</td>
+                      <Link to={`/parecer/${requisicao.id}`}><td>{requisicao.usuario.nome + ""}</td></Link>
+                      <td>{requisicao.disciplinaSolicitada.nome + ""}</td>
+                      <td>{requisicao.tipo === "certificacao"?"Certificação por conhecimentos":"Aproveitamento de estudos"}</td>
+                      <td>{requisicao.deferido + ""}</td>
+                    </tr>
+                  )}
+              </tbody>
+            </table></div> : ""}
+        {this.state.requisicoes === "aproveitamento" ? <div className="col-6"><br /> <br />
+          <TabelaAproveitamentos /> </div> : this.state.requisicoes === "certificacao" ? <div className="col-6"><br /> <br />
+            <TabelaCertificacoes /></div> : ""}</div>    
+          
     );
   }
 }

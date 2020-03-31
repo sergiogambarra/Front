@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import SACEInput from '../../../src//components/inputs/SACEInput';
-import { Button } from 'react-bootstrap';
+import { Button, Alert } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import TituloPagina from '../../components/TituloPagina';
 import { Form } from 'react-bootstrap';
@@ -25,7 +25,8 @@ class CadastroAluno extends Component {
             confirmaSenha: "",
             confirmaSenhaInvalida: false,
             tipo: "",
-            novaSenha: ""
+            novaSenha: "",
+            modal: false
         }
     }
 
@@ -93,9 +94,12 @@ class CadastroAluno extends Component {
                                         login: this.state.login,
                                         novaSenha: this.state.novaSenha,
                                         senha: this.state.senha,
-                                    }).then(() => this.limpar()
-
-                                    )
+                                    }).then(() => {
+                                        this.setState({ modal: true })
+                                        setTimeout(()=>{
+                                            this.setState({modal:false})
+                                        },3000)
+                                        this.limpar() })
 
     }
 
@@ -106,6 +110,8 @@ class CadastroAluno extends Component {
                 <Form.Group className="col-md-6 container">
 
                     <TituloPagina titulo="Cadastro de Alunos" />
+                    <Alert key={"idx"} variant={"success"} show={this.state.modal}>
+                        Cadastrado com sucesso</Alert>
                     <SACEInput
                         label={'Nome'}
                         value={this.state.nome}
@@ -173,7 +179,7 @@ class CadastroAluno extends Component {
                         <Button onClick={(e) => this.enviarCadastro(e)} className="btn btn-dark" data-toggle="modal" data-target="#exampleModal" style={{ border: "5px solid white" }}>Enviar</Button>
                         <Button onClick={() => this.limpar()} className="btn btn-danger" style={{ border: "5px solid white" }}>Limpar</Button>
                         <Link to="/login"> <Button variant="primary" className="btn btn-primary m-1" >Voltar </Button></Link>
-                       
+
                     </div>
                 </Form.Group> </div>
         );
