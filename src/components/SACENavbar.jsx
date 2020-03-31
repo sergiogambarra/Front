@@ -21,24 +21,29 @@ function SACELink({ to, label }) {
 export default function SACENavbar({ setUserData, user }) {
     
     return (
+        
         <Navbar bg="light" expand="lg">            
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
+                    {console.log(user)}
                 {
                     user.tipo === "aluno" ?
                   <>
-                    <SACELink to={'/minhas-requisicoes'} label={'Requisições'}/>
+                    <SACELink to={'/aluno-requisicoes'} label={'Requisições'}/>
                     <SACELink to={'/nova-requisicao'} label={'Nova requisição'}/>
                   </>
                   :
+                  user.tipo === "servidor" ?
                   <>
                     <SACELink to={'/minhas-requisicoes'} label={'Listar Requisições'}/>
-                    <SACELink to={'/nova-requisicao'} label={'Cadastrar requisição'}/>
                     <SACELink to={'/cadastro-curso'} label={'Cadastrar curso'}/>
                     <SACELink to={'/lista-alunos'} label={'Listar Alunos'}/>
                     <SACELink to={'/lista-disciplina'} label={'Listar Disciplinas'}/>
                   </>
+                :  <>
+                <SACELink to={'/minhas-requisicoes'} label={'Listar Requisições'}/>
+                </>
                 }
                     </Nav>
             </Navbar.Collapse>

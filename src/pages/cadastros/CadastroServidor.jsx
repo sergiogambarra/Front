@@ -64,8 +64,10 @@ class CadastroServidor extends Component {
                                     confirmaSenhaInvalida: true
                                 })
                             }
+
+                    
         axios.post("/api/usuarios/", {
-            tipo: "servidor",
+            tipo: this.state.cargo,
             nome: this.state.nome,
             login: this.state.login,
             senha: this.state.senha,
@@ -97,7 +99,6 @@ class CadastroServidor extends Component {
             senha:"",
             email:"",
             novaSenha:""
-
         })
     }
     render() {
@@ -144,7 +145,6 @@ class CadastroServidor extends Component {
                     <option></option>
                     <option value="servidor">Servidor</option>
                     <option value="professor">Professor</option>
-                    <option value="professor">Cordenador</option>
 
                 </select>
                 <SACEInput
