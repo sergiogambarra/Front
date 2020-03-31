@@ -12,7 +12,7 @@ export default function CardAproveitamento(req) {
     <Link to={`/parecer/${id}`} class={`badge badge-${mudaCor(deferido)}`}>{`Status do processo : ${deferido}`}</Link>
       <p>{`ID: ${id}`}</p>
       <p>{`Data: ${dataRequisicao}`}</p>
-      <p>{`Solicitante: ${usuario && usuario.nome}`}</p>
+      <p>{`Aluno: ${usuario && usuario.nome}`}</p>
       <p>{`Parecer: ${parecer}`}</p>
       <p>{`Disciplina solicitada: ${disciplinaSolicitada.nome}`}</p>
       <p>{`Disciplina cursada anteriormente: ${disciplinasCursadasAnterior}`}</p>

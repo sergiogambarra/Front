@@ -33,11 +33,11 @@ export default function SACENavbar({ setUserData, user }) {
                   </>
                   :
                   <>
-                    <SACELink to={'/minhas-requisicoes'} label={'Requisições'}/>
-                    <SACELink to={'/nova-requisicao'} label={'Nova requisição'}/>
+                    <SACELink to={'/minhas-requisicoes'} label={'Listar Requisições'}/>
+                    <SACELink to={'/nova-requisicao'} label={'Cadastrar requisição'}/>
                     <SACELink to={'/cadastro-curso'} label={'Cadastrar curso'}/>
-                    <SACELink to={'/lista-alunos'} label={'Lista Alunos'}/>
-                    <SACELink to={'/lista-disciplina'} label={'Lista Disciplinas'}/>
+                    <SACELink to={'/lista-alunos'} label={'Listar Alunos'}/>
+                    <SACELink to={'/lista-disciplina'} label={'Listar Disciplinas'}/>
                   </>
                 }
                     </Nav>

@@ -19,8 +19,8 @@ class CadastrarDisciplinas extends Component {
             nome: "",
             mostraLista:false,
             tituloCurso:""
-
-
+            
+            
         }
     }
     listarCurso() {
@@ -39,16 +39,15 @@ class CadastrarDisciplinas extends Component {
     }
     async buscarCursoPeloId(){
         console.log(this.state.idcurso);
-    
         await axios.get(`/api/cursos/${this.state.idcurso}`).then((retorno)=>{
             this.setState({
                 tituloCurso:retorno.data.nome
             })
-         
+            
         })
     }
     cadastrarDisciplinas() {
-
+        
         if (typeof this.state.nome === "undefined" || this.state.nome === "") {
             this.setState({
                 textodisciplina: true
@@ -73,23 +72,28 @@ class CadastrarDisciplinas extends Component {
                 this.limpar();
             }
             )
-
+            
         }
     }
-
+    apagar(e) {
+        console.log(this.state.idcurso);
+        axios.delete(`/api/cursos/${this.state.idcurso}/disciplinas/${e}`).then(() => {
+            this.listarDisciplinas()
+        })
+    }
     componentDidMount() {
         this.listarCurso();
     }
     limpar() {
         this.setState({
-            idcurso: "",
+            
             textodisciplina: "",
             textocargahoraria: false,
             nome: "", cargaHoraria: ""
         })
     }
-
-
+    
+    
     render() {
         return (<div >
             <Alert key={"idx"} variant={"success"} show={this.state.modal}>
@@ -136,8 +140,6 @@ class CadastrarDisciplinas extends Component {
             <br /><br /><br />
            {
            this.state.mostraLista ?<> <h3>Disciplinas do Curso :  {this.state.tituloCurso}</h3>
-           {console.log(this.state.tituloCurso)}
-           
             <table class="table">
                 <thead class="p-3 mb-2 bg-primary text-white">
                     <tr>
@@ -158,7 +160,7 @@ class CadastrarDisciplinas extends Component {
                                 <td> {disciplinas.nome === "" ? "" : <Button
                                     variant="primary"
                                     className="btn btn-danger m-1"
-                                    onClick={(e) => this.limpar()}
+                                    onClick={(e) => this.apagar(disciplinas.id)}
                                 > Deletar </Button>}
                                 </td>
                             </tr>

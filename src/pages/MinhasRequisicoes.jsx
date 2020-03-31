@@ -153,10 +153,10 @@ class MinhasRequisicoes extends Component {
               <tr>
                 <th scope="col">Id</th>
                 <th scope="col">Data</th>
-                <th scope="col">Solicitante</th>
+                <th scope="col">Aluno</th>
                 <th scope="col">Disciplina</th>
                 <th scope="col">Tipo</th>
-                <th scope="col">Deferido</th>
+                <th scope="col">Status</th>
               </tr>
             </thead>
             <tbody>
@@ -179,10 +179,10 @@ class MinhasRequisicoes extends Component {
               <tr>
                 <th scope="col">Id</th>
                 <th scope="col">Data</th>
-                <th scope="col">Solicitante</th>
+                <th scope="col">Aluno</th>
                 <th scope="col">Disciplina</th>
                 <th scope="col">Tipo</th>
-                <th scope="col">Deferido</th>
+                <th scope="col">Status</th>
               </tr>
             </thead>
             <tbody>

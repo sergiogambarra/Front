@@ -44,16 +44,16 @@ class Parecer extends Component {
         return (<div>
             <Form.Group className="col-md-6 container">
 
-                <TituloPagina titulo="Parecer do Solicitante" />
+                <TituloPagina titulo="Parecer da Requisisão" />
                 <SACEInput
-                    label={'Nome'}
+                    label={'Aluno'}
                     value={this.state.requisicao.usuario.nome}
                     disabled={true}
 
                 />
                 {console.log(this.state.requisicao)}
                 <InputGroup className="mb-3">
-                    <label >Data :</label> &nbsp;
+                    <label >Data de cadastro da requiisição:</label> &nbsp;
                     <FormControl
                         value={this.state.requisicao.dataRequisicao}
                         disabled={true}
@@ -63,7 +63,7 @@ class Parecer extends Component {
                         value={this.state.requisicao.tipo} disabled={true} />
                 </InputGroup>
                 <SACEInput
-                    label={'Nome da disciplina'}
+                    label={'Disciplina'}
                     value={this.state.requisicao.disciplinaSolicitada.nome}
                     disabled={true} />
                 <SACEInput
@@ -127,7 +127,7 @@ class Parecer extends Component {
 
 
                 <Form.Group controlId="exampleForm.ControlTextarea1">
-                    <Form.Label>Parecer</Form.Label>
+                    <Form.Label>Novo Parecer</Form.Label>
                     <Form.Control as="textarea" rows="3"
                         id={this.state.parecer}
                         value={this.state.parecer}
