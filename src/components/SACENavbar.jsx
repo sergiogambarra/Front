@@ -8,8 +8,13 @@ function SACELink({ to, label }) {
         <Link 
             to={to} 
             style={{ 
-                marginRight:'10px',
+                marginRight:'20px',
                 whiteSpace:'nowrap',
+                fontSize:"18px",
+                color:"black",
+                fontFamily:"verdana",
+                
+            
             }}
         >
             {label}
@@ -22,16 +27,15 @@ export default function SACENavbar({ setUserData, user }) {
     
     return (
         
-        <Navbar bg="light" expand="lg">            
+        <Navbar bg="primary" variant="dark">
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
-                    {console.log(user)}
                 {
                     user.tipo === "aluno" ?
                   <>
-                    <SACELink to={'/aluno-requisicoes'} label={'Requisições'}/>
                     <SACELink to={'/nova-requisicao'} label={'Nova requisição'}/>
+                    <SACELink to={`/aluno-requisicoes/${user.nome}`} label={'Requisições'}/>
                   </>
                   :
                   user.tipo === "servidor" ?

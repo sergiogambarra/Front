@@ -30,8 +30,7 @@ export default function LoginForm({ history, setUserData }) {
                 login(response.token);
                 setUserData(response);
 
-            })
-            .then(() => history.push('/minhas-requisicoes'))
+            }).then(() => history.push('/tela-transicao'))
             .catch(error => console.log(error))
 
     }

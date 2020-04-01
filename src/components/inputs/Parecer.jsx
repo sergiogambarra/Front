@@ -23,6 +23,7 @@ class Parecer extends Component {
         }
     }
     async componentDidMount() {
+        console.log(this.props.match.params.id);
         await axios.get(`/api/requisicoes/${this.props.match.params.id}`).then((retorno) =>
         this.setState({ requisicao: retorno.data })
         )

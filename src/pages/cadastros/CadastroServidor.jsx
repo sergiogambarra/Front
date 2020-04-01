@@ -64,8 +64,6 @@ class CadastroServidor extends Component {
                                     confirmaSenhaInvalida: true
                                 })
                             }
-
-                    
         axios.post("/api/usuarios/", {
             tipo: this.state.cargo,
             nome: this.state.nome,

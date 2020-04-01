@@ -17,7 +17,6 @@ export default function DisciplinaSolicitadaSelect({ curso, disabled, onChange, 
         
         curso && fetchData();
     }, [curso, onChange]);
-    console.log(disciplinas)
     
     return (
         <SACESelect 

@@ -15,6 +15,7 @@ import CadastroServidor from './pages/cadastros/CadastroServidor';
 import ListaAlunos from '../src/Cursos/ListaAlunos';
 import Parecer from '../src/components/inputs/Parecer';
 import RequisicaoAluno from './pages/Aluno/RequisicaoAluno';
+import TelaTransicao from './pages/TelaTransicao';
 
 function App() {
   const [userData, setUserData] = useState(null);
@@ -34,7 +35,8 @@ function App() {
           <Route path="/login" render={({ history }) => <LoginForm history={history} setUserData={setUserData} />} />
           <Route path="/cadastro-aluno" component={CadastroAluno} />
           <Route path="/cadastro-servidor" component={CadastroServidor} />
-          <PrivateRoute exact path="/aluno-requisicoes" component={RequisicaoAluno} />
+          <PrivateRoute exact path="/tela-transicao/" component={TelaTransicao} />
+          <PrivateRoute exact path="/aluno-requisicoes/:id" component={RequisicaoAluno} />
           <PrivateRoute exact path="/minhas-requisicoes" component={MinhasRequisicoes} />
           <PrivateRoute exact path="/nova-requisicao" component={()=><NovaRequisicao user={userData}/>} />
           <PrivateRoute exact path="/cadastro-curso" component={CadastroCursos} />
