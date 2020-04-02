@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { Link } from "react-router-dom";
 
 class RequisicaoAluno extends Component {
     constructor(props) {
@@ -7,19 +8,14 @@ class RequisicaoAluno extends Component {
         this.state = {
             id: "",
             dataRequisicao: "",
-            requisicoes: "", escolha: "",
-            pesquisaRequisicoes: [],
-            texto: false,
+            requisicoes: "",
             disciplinaSolicitada: [
                 this.state = {
                     nome: ""
-                }
-            ],
+                } ],
             deferido: "",
-            cont: "",
             parecer: "",
-            usuario: [],
-            guardaTipo: ""
+            usuario: []
 
         }
     }
@@ -27,19 +23,8 @@ class RequisicaoAluno extends Component {
 
 
     pesquisarNomeSolicitante() {
-        if (typeof this.state.nomeAluno === "undefined") {
-            this.setState({ texto: true })
-        }
-        if (this.state.nomeAluno === "") {
-            this.setState({ texto: true })
-        }
-
         axios.get(`/api/requisicoes/solicitante/${this.props.match.params.id}`).then((retorno) => {
             this.setState({ usuario: retorno.data })
-
-            if (this.state.usuario.nome !== "undefined") {
-                this.setState({ cont: "1", texto: false })
-            }
         });
     }
     componentDidMount() {
@@ -48,7 +33,7 @@ class RequisicaoAluno extends Component {
     render() {
         return (
             <div>
-                <div id="FormPesquisaNome" ><br /><br /><br />
+                 {this.state.usuario.length === 0 ? <><br /><br /><br /><h2 align={"center"}>"Você não possui requisições"</h2></>: <div id="FormPesquisaNome" ><br /><br /><br />
                     <h3>Requisições do Aluno: {this.props.match.params.id} </h3>
                     <table class="table" >
                         <thead class="p-3 mb-2 bg-primary text-white">
@@ -56,7 +41,7 @@ class RequisicaoAluno extends Component {
                                 <th scope="col">Id</th>
                                 <th scope="col">Data</th>
                                 <th scope="col">Aluno</th>
-                                <th scope="col">Tipo requisição</th>
+                                <th scope="col">Tipo de requisição</th>
                                 <th scope="col">Disciplina</th>
                                 <th scope="col">Status</th>
                             </tr>
@@ -67,8 +52,8 @@ class RequisicaoAluno extends Component {
                                     <tr>
                                         <td>{u.id}</td>
                                         <td>{u.dataRequisicao}</td>
-                                        <td>{u.usuario.nome}</td>
-                                        <td>{u.tipo}</td>
+                                        <Link to={`/editar-aluno/${this.props.match.params.id}`}><td>{u.usuario.nome}</td></Link>
+                                        <td>{u.tipo === "aproveitamento" ? "Aproveitamentos de estudos" : "Certificação de conhecimentos "}</td>
                                         <td>{u.disciplinaSolicitada.nome}</td>
                                         <td>{u.deferido}</td>
 
@@ -78,7 +63,7 @@ class RequisicaoAluno extends Component {
                         </tbody>
                     </table></div>
 
-
+                            }
             </div>
 
         );

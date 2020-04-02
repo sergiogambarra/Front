@@ -27,35 +27,43 @@ class MinhasRequisicoes extends Component {
       usuario: [{
         mome: "",
       }],
-      guardaTipo:""
+      guardaTipo: ""
 
     }
   }
 
   listarRequisicoesNomeDisciplina() {
     if (typeof this.state.nomeDisciplina === "undefined" || this.state.nomeDisciplina.length === 0) {
-      this.setState({ texto: true })}
+      this.setState({ texto: true })
+    }
     axios.get(`/api/requisicoes/nomedisciplina/${this.state.nomeDisciplina}`).then((retorno) => {
-      this.setState({pesquisaRequisicoes: retorno.data})
+      this.setState({ pesquisaRequisicoes: retorno.data })
       if (this.state.pesquisaRequisicoes.length === 0) {
-        this.setState({ texto: true }) }
-      if (this.state.pesquisaRequisicoes.length !== 0) {
-        this.setState({ texto: false }) }
-      if (this.state.pesquisaRequisicoes.length !== 0) {
-        this.setState({cont: "1" })} else { this.setState({ cont: "" }) }});
+        this.setState({ texto: true })
       }
+      if (this.state.pesquisaRequisicoes.length !== 0) {
+        this.setState({ texto: false })
+      }
+      if (this.state.pesquisaRequisicoes.length !== 0) {
+        this.setState({ cont: "1" })
+      } else { this.setState({ cont: "" }) }
+    });
+  }
 
   async pesquisarNomeSolicitante() {
+    console.log(this.state.usuario.nome)
     if (typeof this.state.nomeAluno === "undefined") {
-      this.setState({ texto: true }) }
+      this.setState({ texto: true })
+    }
     if (this.state.nomeAluno === "") {
-      this.setState({ texto: true }) }
+      this.setState({ texto: true })
+    }
 
     await axios.get(`/api/requisicoes/solicitante/${this.state.nomeAluno}`).then((retorno) => {
       this.setState({ usuario: retorno.data })
-      if (this.state.usuario.nome !== "undefined") {
-        this.setState({ cont: "1", texto: false })
-      }
+      if (this.state.usuario.length === 0) {
+        this.setState({texto:true})
+      }else{this.setState({cont:"1",texto:false})}
     });
   }
   limpar() {
@@ -152,7 +160,7 @@ class MinhasRequisicoes extends Component {
                     <td>{requisicao.dataRequisicao}</td>
                     <Link to={`/parecer/${requisicao.id}`}><td>{requisicao.usuario.nome + ""}</td></Link>
                     <td>{requisicao.disciplinaSolicitada.nome + ""}</td>
-                    <td>{requisicao.tipo === "certificacao"?"Certificação por conhecimentos":"Aproveitamento de estudos"}</td>
+                    <td>{requisicao.tipo === "certificacao" ? "Certificação por conhecimentos" : "Aproveitamento de estudos"}</td>
                     <td>{requisicao.deferido + ""}</td>
                   </tr>
                 )}
@@ -178,7 +186,7 @@ class MinhasRequisicoes extends Component {
                       <td>{requisicao.dataRequisicao}</td>
                       <Link to={`/parecer/${requisicao.id}`}><td>{requisicao.usuario.nome + ""}</td></Link>
                       <td>{requisicao.disciplinaSolicitada.nome + ""}</td>
-                      <td>{requisicao.tipo === "certificacao"?"Certificação por conhecimentos":"Aproveitamento de estudos"}</td>
+                      <td>{requisicao.tipo === "certificacao" ? "Certificação por conhecimentos" : "Aproveitamento de estudos"}</td>
                       <td>{requisicao.deferido + ""}</td>
                     </tr>
                   )}
@@ -186,8 +194,8 @@ class MinhasRequisicoes extends Component {
             </table></div> : ""}
         {this.state.requisicoes === "aproveitamento" ? <div className="col-6"><br /> <br />
           <TabelaAproveitamentos /> </div> : this.state.requisicoes === "certificacao" ? <div className="col-6"><br /> <br />
-            <TabelaCertificacoes /></div> : ""}</div>    
-          
+            <TabelaCertificacoes /></div> : ""}</div>
+
     );
   }
 }

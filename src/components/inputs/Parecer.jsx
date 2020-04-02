@@ -82,7 +82,7 @@ class Parecer extends Component {
                     disabled={true} />
                 <Form.Group controlId="exampleForm.ControlTextarea1">
                     <Form.Label>Parecer</Form.Label>
-                    <Form.Control as="textarea" rows="3"
+                    <Form.Control as="textarea" rows="2"
                         id={this.state.requisicao.parecer}
                         value={this.state.requisicao.parecer}
                         disabled={true}
@@ -138,7 +138,7 @@ class Parecer extends Component {
 
                 <Form.Group controlId="exampleForm.ControlTextarea1">
                     <Form.Label>Novo Parecer</Form.Label>
-                    <Form.Control as="textarea" rows="3"
+                    <Form.Control as="textarea" rows="2"
                         id={this.state.parecer}
                         value={this.state.parecer}
                         onChange={(e) => this.setState({ parecer: e.target.value })}

@@ -4,7 +4,7 @@ import SACEInput from '../../../src//components/inputs/SACEInput';
 import { Button, Alert } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import TituloPagina from '../../components/TituloPagina';
-import { Form } from 'react-bootstrap';
+import { Form, Modal } from 'react-bootstrap';
 
 class CadastroAluno extends Component {
     constructor(props) {
@@ -26,10 +26,12 @@ class CadastroAluno extends Component {
             confirmaSenhaInvalida: false,
             tipo: "",
             novaSenha: "",
-            modal: false
+            modal: false,
+            modalShow: false,
+            modalhandleClose: false,
+            modalhandleShow: true
         }
     }
-
     limpar() {
         this.setState({
             nome: "",
@@ -47,63 +49,67 @@ class CadastroAluno extends Component {
             senhaInvalida: false,
             confirmaSenhaInvalida: false,
         })
-
+        
     }
+    
     enviarCadastro(e) {
+        this.setState({modalShow:false})
         if (this.state.nome === "") {
             this.setState({
                 nomeInvalido: true
             })
         } else
-            if (this.state.email === "") {
-                this.setState({
-                    emailInvalido: true
-                })
-            } else
-                if (this.state.matricula === "" || this.state.matricula <= 0) {
-                    this.setState({
-                        matriculaInvalida: true
-                    })
-                } else
-                    if (this.state.dataIngresso === "") {
-                        this.setState({
-                            dataIngressoInvalido: true
-                        })
-                    } else
-                        if (this.state.login === "") {
-                            this.setState({
-                                loginInvalido: true
-                            })
-                        } else
-                            if (this.state.senha === "") {
-                                this.setState({
-                                    senhaInvalida: true
-                                })
-                            } else
-                                if (this.state.novaSenha === "" || this.state.senha !== this.state.novaSenha) {
-                                    this.setState({
-                                        confirmaSenhaInvalida: true
-                                    })
-                                } else
-                                    axios.post("/api/usuarios/aluno/", {
-                                        tipo: "aluno",
-                                        nome: this.state.nome,
-                                        email: this.state.email,
-                                        matricula: this.state.matricula,
-                                        dataIngresso: this.state.dataIngresso,
-                                        login: this.state.login,
-                                        novaSenha: this.state.novaSenha,
-                                        senha: this.state.senha,
-                                    }).then(() => {
-                                        this.setState({ modal: true })
-                                        setTimeout(()=>{
-                                            this.setState({modal:false})
-                                        },3000)
-                                        this.limpar() })
-
+        if (this.state.email === "") {
+            this.setState({
+                emailInvalido: true
+            })
+        } else
+        if (this.state.matricula === "" || this.state.matricula <= 0) {
+            this.setState({
+                matriculaInvalida: true
+            })
+        } else
+        if (this.state.dataIngresso === "") {
+            this.setState({
+                dataIngressoInvalido: true
+            })
+        } else
+        if (this.state.login === "") {
+            this.setState({
+                loginInvalido: true
+            })
+        } else
+        if (this.state.senha === "") {
+            this.setState({
+                senhaInvalida: true
+            })
+        } else
+        if (this.state.novaSenha === "" || this.state.senha !== this.state.novaSenha) {
+            this.setState({
+                confirmaSenhaInvalida: true
+            })
+        } else
+        this.setState({modalShow:true})
+        axios.post("/api/usuarios/aluno/", {
+            tipo: "aluno",
+            nome: this.state.nome,
+            email: this.state.email,
+            matricula: this.state.matricula,
+            dataIngresso: this.state.dataIngresso,
+            login: this.state.login,
+            novaSenha: this.state.novaSenha,
+            senha: this.state.senha,
+        }).then(() => {
+            this.setState({ modal: true,modalShow:false })
+            setTimeout(() => {
+                this.setState({ modal: false })
+            }, 2500)
+            this.limpar()
+        })
+        
     }
-
-
+   
+  
     render() {
         return (
             <div>
@@ -176,12 +182,26 @@ class CadastroAluno extends Component {
                     />
 
                     <div className="row container" style={{ position: 'relative', left: '32%' }}>
-                        <Button onClick={(e) => this.enviarCadastro(e)} className="btn btn-dark" data-toggle="modal" data-target="#exampleModal" style={{ border: "5px solid white" }}>Enviar</Button>
-                        <Button onClick={() => this.limpar()} className="btn btn-danger" style={{ border: "5px solid white" }}>Limpar</Button>
-                        <Link to="/login"> <Button variant="primary" className="btn btn-primary m-1" >Voltar </Button></Link>
 
+
+                <Button variant="primary"  className="btn btn-primary m-1" onClick={()=>this.setState({modalShow:true})}> Enviar </Button>
+                <Modal show={this.state.modalShow} onHide={()=>this.setState({modalShow:false})} animation={false}>
+                    <Modal.Header closeButton>
+                        <Modal.Title > Confirmar</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>Confira seus dados você não podera alteralos depois de salvar</Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="danger" onClick={()=>this.setState({modalShow:false})}>  Fechar </Button>
+                        <Button onClick={(e) => this.enviarCadastro(e)} className="btn btn-primary m-1"data-toggle="modal" data-target="#exampleModal" style={{ border: "5px solid white" }}>Salvar</Button>
+                    </Modal.Footer>
+                </Modal>
+                        <Link to="/login"> <Button variant="primary" className="btn btn-primary m-1" >Voltar </Button></Link>
+                        <Button onClick={() => this.limpar()} className="btn btn-danger" style={{ border: "5px solid white" }}>Limpar</Button>
                     </div>
-                </Form.Group> </div>
+                </Form.Group>
+
+
+            </div>
         );
     }
 }
