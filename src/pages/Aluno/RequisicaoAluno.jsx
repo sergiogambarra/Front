@@ -33,7 +33,7 @@ class RequisicaoAluno extends Component {
     render() {
         return (
             <div>
-                 {this.state.usuario.length === 0 ? <><br /><br /><br /><h2 align={"center"}>"Você não possui requisições"</h2></>: <div id="FormPesquisaNome" ><br /><br /><br />
+                 {this.state.usuario.length === 0 ? /*<><br /><br /><br /><h2 align={"center"}>"Você não possui requisições"</h2></>*/"": <div id="FormPesquisaNome" ><br /><br /><br />
                     <h3>Requisições do Aluno: {this.props.match.params.id} </h3>
                     <table class="table" >
                         <thead class="p-3 mb-2 bg-primary text-white">
@@ -52,7 +52,7 @@ class RequisicaoAluno extends Component {
                                     <tr>
                                         <td>{u.id}</td>
                                         <td>{u.dataRequisicao}</td>
-                                        <Link to={`/editar-aluno/${this.props.match.params.id}`}><td>{u.usuario.nome}</td></Link>
+                                        <Link to={`/editar-aluno/${u.id}`}><td>{u.usuario.nome}</td></Link>
                                         <td>{u.tipo === "aproveitamento" ? "Aproveitamentos de estudos" : "Certificação de conhecimentos "}</td>
                                         <td>{u.disciplinaSolicitada.nome}</td>
                                         <td>{u.deferido}</td>
