@@ -1,49 +1,65 @@
 import React, { Component } from 'react'
 import axios from 'axios';
-import SACEInput from '../../components/inputs/SACEInput';
+import { Button } from 'react-bootstrap';
 
 class EditarCadastroAluno extends Component {
     constructor(props) {
         super(props);
         this.state = {
             usuario: {
-                nome:"",
-                email:"",
-                matricula:"",
-                login:""
+                nome: "",
+                email: "",
+                matricula: "",
+                login: ""
             },
             requisicao: {
-                anexos: []
-            },
-            disciplinaSolicitada:{
-                nome:"",
-                tipo:""
-            } }
-                  console.log(this.props.match.params.id)
+                anexos: [],
+
+                id: "",
+                dataRequisicao: "",
+                requisicoes: "",
+                disciplinaSolicitada: [
+                    this.state = {
+                        nome: ""
+                    }],
+                deferido: "",
+                parecer: "",
+                usuario: []
+            }
+        }
+        console.log(this.props.match.params.id)
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         console.log(this.props.match.params.id);
-        axios.get(`/api/requisicoes/${this.props.match.params.id}`).then((retorno) =>
+        await axios.get(`/api/requisicoes/${this.props.match.params.id}`).then((retorno) =>
             this.setState({ requisicao: retorno.data })
         )
     }
 
     render() {
         return (<div>
-{console.log(this.state.requisicao)}
-
-            <SACEInput
-            label={"Disciplina"}
-            value={this.state.requisicao}
-            disabled={true}
-            />
-            <ol>
+            <br /><br />
+            <label>Aluno</label><br />
+            <input type="text" size="30" disabled
+                value={"  " + this.state.requisicao.usuario.nome}></input>
+            <br /><br />
+            <label>Disciplina solicitada</label><br />
+            <input type="text" size="30" disabled
+                value={"  " + this.state.requisicao.disciplinaSolicitada.nome}></input>
+            <br /><br />
+            <label>Número da solicitação</label><br />
+            <input type="text" size="30" disabled
+                value={"  " + this.state.requisicao.id}></input>
+            <br /><br />
+            <label>Arquivos enviados</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <Button>Adicionar arquivos</Button>
+            <br /><br />
+            <ol style={{textAlign:"left"}}>
                 {
                     this.state.requisicao.anexos.map((a) => {
-                        return <li>
-                            {a.nome}
-                        </li>
+                        return <li> <strong>{a.nome}</strong> </li>
+                       
                     })
                 }
             </ol>
