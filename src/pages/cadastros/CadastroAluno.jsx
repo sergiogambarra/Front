@@ -53,7 +53,6 @@ class CadastroAluno extends Component {
     }
     
     enviarCadastro(e) {
-        this.setState({modalShow:false})
         if (this.state.nome === "") {
             this.setState({
                 nomeInvalido: true
@@ -88,8 +87,9 @@ class CadastroAluno extends Component {
             this.setState({
                 confirmaSenhaInvalida: true
             })
-        } else
-        this.setState({modalShow:true})
+        } if(this.state.Modal){
+            this.setState({modalShow:true})
+        }
         axios.post("/api/usuarios/aluno/", {
             tipo: "aluno",
             nome: this.state.nome,
@@ -184,7 +184,7 @@ class CadastroAluno extends Component {
                     <div className="row container" style={{ position: 'relative', left: '32%' }}>
 
 
-                <Button variant="primary"  className="btn btn-primary m-1" onClick={()=>this.setState({modalShow:true})}> Enviar </Button>
+                <Button variant="primary"  className="btn btn-primary m-1" onClick={()=>this.enviarCadastro()}> Enviar </Button>
                 <Modal show={this.state.modalShow} onHide={()=>this.setState({modalShow:false})} animation={false}>
                     <Modal.Header closeButton>
                         <Modal.Title > Confirmar</Modal.Title>

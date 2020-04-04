@@ -27,58 +27,46 @@ class CadastroServidor extends Component {
             cargo: "",
             cargoInvalido: false,
             cordenador: "",
-            modal:false
-            
-            
+            modal: false,
+            loginPesquisa: "",
+            msgLogin: false
+
         }
     }
-    
+
     enviarCadastro(e) {
-        if (this.state.nome === "") {
-            this.setState({
-                nomeInvalido: true
+this.pesquisarNomeSolicitante()
+        console.log(this.state.login);
+        console.log(this.state.loginPesquisa.login);
+
+        if (this.state.nome === "" ? this.setState({ nomeInvalido: true }) : this.setState({ nomeInvalido: false })) { }
+        if (this.state.email === "" ? this.setState({ emailInvalido: true }) : this.setState({ emailInvalido: false })) { }
+        if (this.state.siape === "" ? this.setState({ siapeInvalido: true }) : this.setState({ siapeInvalido: false })) { }
+        if (this.state.senha === "" ? this.setState({ senhaInvalida: true }) : this.setState({ senhaInvalida: false })) { }
+        if (this.state.novaSenha === "" ? this.setState({ confirmaSenhaInvalida: true }) : this.setState({ confirmaSenhaInvalida: false })) { }
+        if (this.state.login === "") { this.setState({ loginInvalido: true }) }
+        if (this.state.loginPesquisa.login !== null) { this.setState({ loginInvalido: true }) }
+        if(this.state.senha !== this.state.novaSenha){this.setState({confirmaSenhaInvalida:true})} 
+        if (this.state.nome !== "" && this.state.email !== "" && this.state.siape !== "" && this.state.senha !== "" &&
+            this.state.novaSenha !== "" && this.state.login !== ""&& this.state.senha === this.state.novaSenha) {
+
+            axios.post("/api/usuarios/", {
+                tipo: this.state.cargo,
+                nome: this.state.nome,
+                login: this.state.login,
+                senha: this.state.senha,
+                novaSenha: this.state.novaSenha,
+                email: this.state.email,
+                siape: this.state.siape,
+                cargo: this.state.cargo,
+            }).then(() => {
+                this.setState({ modal: true })
+                setTimeout(() => {
+                    this.setState({ modal: false })
+                }, 3000)
+                this.limpar()
             })
-        } else
-            if (this.state.email === "") {
-                this.setState({
-                    emailInvalido: true
-                })
-            } else
-                if (this.state.siape === "") {
-                    this.setState({
-                        siapeInvalido: true
-                    })
-                } else
-                    if (this.state.login === "") {
-                        this.setState({
-                            loginInvalido: true
-                        })
-                    } else
-                        if (this.state.senha === "") {
-                            this.setState({
-                                senhaInvalida: true
-                            })
-                        } else
-                            if (this.state.novaSenha === "") {
-                                this.setState({
-                                    confirmaSenhaInvalida: true
-                                })
-                            }
-        axios.post("/api/usuarios/", {
-            tipo: this.state.cargo,
-            nome: this.state.nome,
-            login: this.state.login,
-            senha: this.state.senha,
-            novaSenha: this.state.novaSenha,
-            email: this.state.email,
-            siape: this.state.siape,
-            cargo: this.state.cargo,
-        }).then(() => {
-            this.setState({ modal: true })
-            setTimeout(()=>{
-                this.setState({modal:false})
-            },3000)
-            this.limpar() })
+        }
 
     }
 
@@ -91,20 +79,27 @@ class CadastroServidor extends Component {
             loginInvalido: false,
             senhaInvalida: false,
             confirmaSenhaInvalida: false,
-            nome:"",
-            siape:"",
-            login:"",
-            senha:"",
-            email:"",
-            novaSenha:""
+            nome: "",
+            siape: "",
+            login: "",
+            senha: "",
+            email: "",
+            novaSenha: ""
         })
+    }
+    
+    async pesquisarNomeSolicitante() {
+        await axios.get(`/api/usuarios/pesquisar/login/${this.state.login}`).then((retorno) => {
+            this.setState({loginPesquisa:retorno.data})
+            
+        });
     }
     render() {
         return (
             <Form.Group className="col-md-6 container">
 
                 <TituloPagina titulo="Cadastro Servidor" />
-                <Alert key={"idx"}variant={"success"} show={this.state.modal}>Cadastrado com Sucesso</Alert>
+                <Alert key={"idx"} variant={"success"} show={this.state.modal}>Cadastrado com Sucesso</Alert>
                 <SACEInput
                     label={'Nome'}
                     value={this.state.nome}
@@ -151,7 +146,7 @@ class CadastroServidor extends Component {
                     placeholder={'Informe um login. '}
                     onChange={(e) => this.setState({ login: e.target.value })}
                     onError={this.state.loginInvalido}
-                    onErrorMessage={'Você não inseriu um login válido!'}
+                    onErrorMessage={'Campo obrigatório ou nome de login já existe!'}
                 />
                 <SACEInput
                     label={'Senha'}
@@ -176,7 +171,7 @@ class CadastroServidor extends Component {
                 <div className="row container" style={{ position: 'relative', left: '32%' }}>
                     <Button onClick={(e) => this.enviarCadastro(e)} className="btn btn-dark" style={{ border: "5px solid white" }}>Enviar</Button>
                     <Button onClick={() => this.limpar()} className="btn btn-danger" style={{ border: "5px solid white" }}>Limpar</Button>
-                    <Link to="/login"> <Button variant="primary" className="btn btn-primary m-1" >Voltar </Button></Link>
+                    <Link to="/minhas-requisicoes"> <Button variant="primary" className="btn btn-primary m-1" >Voltar </Button></Link>
                 </div>
             </Form.Group>
 

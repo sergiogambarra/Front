@@ -6,7 +6,6 @@ import MinhasRequisicoes from './pages/MinhasRequisicoes';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import SACENavbar from './components/SACENavbar';
 import CadastroAluno from '../src/pages/cadastros/CadastroAluno';
-
 import CadastroCursos from './pages/cadastros/CadastroCursos';
 import LoginForm from './components/forms/LoginForm'
 import ListaDiscipinas from './Cursos/ListaDisciplina';
@@ -45,6 +44,7 @@ function App() {
           <PrivateRoute exact path="/cadastrar-disciplina" component={CadastrarDisciplinas} />
           <PrivateRoute exact path="/lista-alunos" component={ListaAlunos} />
           <PrivateRoute exact path="/editar-aluno/:id" component={EditarCadastroAluno} />
+          <PrivateRoute exact path="/cadastrar-servidor/:id" component={CadastroServidor} />
           <PrivateRoute exact path="/parecer/:id" component={Parecer} />
           <Route path="*" component={() => <h1>Page not found</h1>} />
         </Switch>

@@ -24,6 +24,7 @@ function SACELink({ to, label }) {
 } 
 
 export default function SACENavbar({ setUserData, user }) {
+    console.log(user);
     
     return (
         
@@ -44,6 +45,7 @@ export default function SACENavbar({ setUserData, user }) {
                     <SACELink to={'/cadastro-curso'} label={'Cadastrar curso'}/>
                     <SACELink to={'/lista-alunos'} label={'Listar Alunos'}/>
                     <SACELink to={'/lista-disciplina'} label={'Listar Disciplinas'}/>
+                    <SACELink to={`/cadastrar-servidor/${user.login}`} label={'Cadastrar servidor'}/>
                   </>
                 :  <>
                 <SACELink to={'/minhas-requisicoes'} label={'Listar Requisições'}/>
