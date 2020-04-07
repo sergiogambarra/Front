@@ -56,7 +56,6 @@ class RequisicaoAluno extends Component {
                                         <td>{u.tipo === "aproveitamento" ? "Aproveitamentos de estudos" : "Certificação de conhecimentos "}</td>
                                         <td>{u.disciplinaSolicitada.nome}</td>
                                         <td>{u.deferido}</td>
-
                                     </tr>
 
                                 )}

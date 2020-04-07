@@ -6,28 +6,28 @@ import { Link } from "react-router-dom";
 import { login } from '../../services/TokenService';
 
 export default function LoginForm({ history, setUserData }) {
-    const [usuario, setUsuario] = useState('');
+    const [userName, setUserName] = useState('');
     const [usuarioInvalido, setUsuarioInvalido] = useState(false);
 
-    const [senha, setSenha] = useState("");
+    const [password, setPassword] = useState("");
     const [senhaInvalida, setSenhaInvalida] = useState(false);
 
-    useEffect(() => setUsuarioInvalido(false), [usuario]);
-    useEffect(() => setSenhaInvalida(false), [senha]);
+    useEffect(() => setUsuarioInvalido(false), [userName]);
+    useEffect(() => setSenhaInvalida(false), [password]);
 
     const limparCampos = () => {
-        setUsuario('');
-        setSenha('');
+        setUserName('');
+        setPassword('');
     }
 
     const enviarLogin = () => {
-              postLogin({ usuario, senha })
+              postLogin({ userName, password })
             .then((response) => {
                 if (typeof response === "undefined") {
                     setUsuarioInvalido(true)
                     setSenhaInvalida(true)
                 }
-                login(response.token);
+                login(response);
                 setUserData(response);
 
             }).then(() => history.push('/tela-transicao'))
@@ -40,16 +40,16 @@ export default function LoginForm({ history, setUserData }) {
             <SACEInput
                 label={'Login'}
                 placeholder={'Informe o seu Login. '}
-                onChange={({ target }) => setUsuario(target.value)}
-                value={usuario}
+                onChange={({ target }) => setUserName(target.value)}
+                value={userName}
                 onError={usuarioInvalido}
                 onErrorMessage={'Você não inseriu o seu login corretamente!'}
             />
             <SACEInput
                 label={'Senha'}
                 placeholder={'Informe o sua senha. '}
-                onChange={({ target }) => setSenha(target.value)}
-                value={senha}
+                onChange={({ target }) => setPassword(target.value)}
+                value={password}
                 onError={senhaInvalida}
                 onErrorMessage={'Você não inseriu o sua senha corretamente!'}
                 tipo="password"
@@ -70,7 +70,6 @@ export default function LoginForm({ history, setUserData }) {
                     Cancelar
                 </Button>
             </Form.Group>
-       
         </Form.Group>
     );
 }

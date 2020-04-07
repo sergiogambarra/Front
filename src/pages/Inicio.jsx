@@ -25,8 +25,7 @@ export default function Inicio() {
           </Card.Body>
         </Card>
       </Col>
-    <Col></Col>
-      
+      <Col></Col>
     </Row>
   </Container>
   );

@@ -1,31 +1,22 @@
 import axios from 'axios';
 import { baseURL } from '../enviroment';
+import {retornaPerfil} from '../auxiliares/retornaPerfil';
 
-const postCadastroAluno = async (aluno) => {
-    
-    debugger; 
-    if(!aluno) return;
-
-    const URL = `${baseURL}/usuarios/aluno/`;
-    //tipo matricula dataIngresso senha nome login novaSenha email permissoes permissoes
-    const alunoToPost = {
-        tipo:aluno.tipo,
-        nome: aluno.nome,
-        senha: aluno.senha,
-        login: aluno.login,
-        novaSenha:aluno.senha,
-        email:aluno.email,
-        permissoes: aluno.permissoes, 
-        id: aluno.id,
-    };
-
+const postCadastroUsuario = async (usuario) => {
+    if (!usuario) return;
+    console.log(retornaPerfil(usuario));
     try {
-        const alunoCriado = await axios.post(URL, alunoToPost);
-        
-        return alunoCriado;
+        const usuarioCriado = await axios.post(`${baseURL}/usuarios/`, 
+        {
+            password: usuario.password,
+            userName: usuario.userName,
+            permissao:usuario.permissao,
+            perfil :retornaPerfil(usuario)
+        });
+        return usuarioCriado;
     } catch (error) {
-        console.log('AlunoService/postAluno::', error);
+        console.log('usuarioService/postusuario::', error);
     }
 }
+export  { postCadastroUsuario };
 
-export { postCadastroAluno };

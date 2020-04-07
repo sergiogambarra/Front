@@ -3,30 +3,17 @@ import axios from 'axios';
 import SACEInput from '../components/inputs/SACEInput';
 import { Button } from 'react-bootstrap';
 
-/*exemplo  style={{display:"none"}}
-*/
-
-
 class ListaDiscipinas extends Component {
     constructor(props) {
 
         super();
         this.state = {
             texto: false,
-            curso: [
-                this.state = {
+            curso: {
                     idCurso: "",
                     nome: ""
-                }
-            ],
-
-            disciplinas: [
-                this.state = {
-                    id: "",
-                    nome: "",
-                    cargaHoraria: ""
-                }
-            ],
+                },
+            disciplinas: [],
             mostraLista: false,
         }
     }

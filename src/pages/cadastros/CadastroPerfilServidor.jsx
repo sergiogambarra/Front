@@ -1,92 +1,87 @@
 import React, { Component } from "react";
 import axios from 'axios';
-import SACEInput from '../../../src//components/inputs/SACEInput';
+import SACEInput from '../../components/inputs/SACEInput';
 import { Button, Alert } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import TituloPagina from '../../components/TituloPagina';
 import { Form } from 'react-bootstrap';
+import { postCadastroUsuario } from '../../services/AlunoService';
 
 
-class CadastroServidor extends Component {
+class CadastroPerfilServidor extends Component {
     constructor(props) {
         super(props);
         this.state = {
             nome: "",
-            nomeInvalido: false,
-            email: "",
-            emailInvalido: false,
-            login: "",
-            loginInvalido: false,
-            senha: "",
-            senhaInvalida: false,
-            confirmaSenhaInvalida: false,
-            tipo: "",
+            userName: "",
+            password: "",
             novaSenha: "",
             siape: "",
-            siapeInvalido: false,
-            cargo: "",
-            cargoInvalido: false,
-            cordenador: "",
-            modal: false,
+            cargo: "SERVIDOR",
+            permissao: "SERVIDOR",
+            isCordenador:false,
+            loginInvalido: false,
+            confirmaSenhaInvalida: false,
             loginPesquisa: "",
+            senhaInvalida: false,
+            siapeInvalido: false,
+            cargoInvalido: false,
+            nomeInvalido: false,
+            modal: false,
             msgLogin: false
 
         }
     }
 
-    enviarCadastro(e) {
+    verifica() {
 this.pesquisarNomeSolicitante()
-        console.log(this.state.login);
-        console.log(this.state.loginPesquisa.login);
-
+       
         if (this.state.nome === "" ? this.setState({ nomeInvalido: true }) : this.setState({ nomeInvalido: false })) { }
-        if (this.state.email === "" ? this.setState({ emailInvalido: true }) : this.setState({ emailInvalido: false })) { }
+        if (this.state.cargo === "" ? this.setState({ cargoInvalido: true }) : this.setState({ cargoInvalido: false })) { }
         if (this.state.siape === "" ? this.setState({ siapeInvalido: true }) : this.setState({ siapeInvalido: false })) { }
-        if (this.state.senha === "" ? this.setState({ senhaInvalida: true }) : this.setState({ senhaInvalida: false })) { }
+        if (this.state.password === "" ? this.setState({ senhaInvalida: true }) : this.setState({ senhaInvalida: false })) { }
         if (this.state.novaSenha === "" ? this.setState({ confirmaSenhaInvalida: true }) : this.setState({ confirmaSenhaInvalida: false })) { }
-        if (this.state.login === "") { this.setState({ loginInvalido: true }) }
-        if (this.state.loginPesquisa.login !== null) { this.setState({ loginInvalido: true }) }
-        if(this.state.senha !== this.state.novaSenha){this.setState({confirmaSenhaInvalida:true})} 
-        if (this.state.nome !== "" && this.state.email !== "" && this.state.siape !== "" && this.state.senha !== "" &&
-            this.state.novaSenha !== "" && this.state.login !== ""&& this.state.senha === this.state.novaSenha) {
+        if (this.state.userName === "" ? this.setState({ loginInvalido: true }) : this.setState({ loginInvalido: false })) { }
+        if(this.state.password !== this.state.novaSenha){this.setState({confirmaSenhaInvalida:true})} 
+        if (this.state.userName !== "" && this.state.email !== "" && this.state.siape !== "" && this.state.password !== "" 
+             && this.state.login !== ""&& this.state.password === this.state.novaSenha) { return }}
 
-            axios.post("/api/usuarios/", {
-                tipo: this.state.cargo,
-                nome: this.state.nome,
-                login: this.state.login,
-                senha: this.state.senha,
-                novaSenha: this.state.novaSenha,
-                email: this.state.email,
-                siape: this.state.siape,
-                cargo: this.state.cargo,
-            }).then(() => {
-                this.setState({ modal: true })
-                setTimeout(() => {
-                    this.setState({ modal: false })
-                }, 3000)
-                this.limpar()
-            })
-        }
-
-    }
+             async  enviarCadastro(e) {
+                postCadastroUsuario({
+                    password:this.state.password,
+                    userName:this.state.userName,
+                    isCordenador:this.state.isCordenador,
+                    nome:this.state.nome,
+                    permissao:this.state.permissao,
+                    siape:this.state.siape,
+                    cargo:this.state.cargo
+                }).then(() => {
+                    this.setState({ modalShow:false,alert: true })
+                    setTimeout(() => {
+                        this.setState({ alert: false })
+                    }, 3000)
+                    this.limpar()
+                })               
+            }
 
     limpar() {
         this.setState({
             confirmaSenha: "",
             nomeInvalido: false,
-            emailInvalido: false,
             siapeInvalido: false,
             loginInvalido: false,
             senhaInvalida: false,
+            isCordenador:false,
             confirmaSenhaInvalida: false,
             nome: "",
             siape: "",
-            login: "",
-            senha: "",
-            email: "",
-            novaSenha: ""
+            userName: "",
+            password: "",
+            novaSenha: "",
+            cargo:""
         })
     }
+
     
     async pesquisarNomeSolicitante() {
         await axios.get(`/api/usuarios/pesquisar/login/${this.state.login}`).then((retorno) => {
@@ -97,7 +92,6 @@ this.pesquisarNomeSolicitante()
     render() {
         return (
             <Form.Group className="col-md-6 container">
-
                 <TituloPagina titulo="Cadastro Servidor" />
                 <Alert key={"idx"} variant={"success"} show={this.state.modal}>Cadastrado com Sucesso</Alert>
                 <SACEInput
@@ -107,15 +101,6 @@ this.pesquisarNomeSolicitante()
                     onChange={(e) => this.setState({ nome: e.target.value })}
                     onError={this.state.nomeInvalido}
                     onErrorMessage={'Você não inseriu o seu nome corretamente!'}
-                />
-                <SACEInput
-                    tipo={"email"}
-                    value={this.state.email}
-                    label={'Email'}
-                    placeholder={'Informe o seu email. '}
-                    onChange={(e) => this.setState({ email: e.target.value })}
-                    onError={this.state.emailInvalido}
-                    onErrorMessage={'Você não inseriu o seu email corretamente!'}
                 />
                 <SACEInput
                     tipo={"number"}
@@ -128,31 +113,37 @@ this.pesquisarNomeSolicitante()
                     onErrorMessage={'Você não inseriu a seu siape corretamente!'}
                 />
                 <label >Cargo</label>
-                <select class="custom-select"
-                    onChange={(e) =>
+                <select class="custom-select" value={this.state.cargo}
+                    onChange={(e) => {
                         this.setState({
-                            cargo: e.target.value
-                        })
+                            cargo: e.target.value,
+                            permissao:e.target.value
+                            })
+                        }
                     }
                 >
-                    <option></option>
-                    <option value="servidor">Servidor</option>
-                    <option value="professor">Professor</option>
+                    <option value="SERVIDOR" selected={true}>Servidor</option>
+                    <option value="PROFESSOR">Professor</option>
 
                 </select>
+                <br/>
+                <br/>
+                { this.state.cargo === "PROFESSOR" &&  
+                        <Form.Check type="switch" id="custom-switch" label="Cordenador" value={this.state.isCordenador}
+                         onChange={()=>this.setState({isCordenador:!this.state.isCordenador})}/> }
                 <SACEInput
                     label={'Login'}
-                    value={this.state.login}
+                    value={this.state.userName}
                     placeholder={'Informe um login. '}
-                    onChange={(e) => this.setState({ login: e.target.value })}
+                    onChange={(e) => this.setState({ userName: e.target.value })}
                     onError={this.state.loginInvalido}
                     onErrorMessage={'Campo obrigatório ou nome de login já existe!'}
                 />
                 <SACEInput
                     label={'Senha'}
-                    value={this.state.senha}
+                    value={this.state.password}
                     placeholder={'Informe uma senha. '}
-                    onChange={(e) => this.setState({ senha: e.target.value })}
+                    onChange={(e) => this.setState({ password: e.target.value })}
                     onError={this.state.senhaInvalida}
                     onErrorMessage={'Você inseriu uma senha inválida!'}
                     tipo={"password"}
@@ -179,4 +170,4 @@ this.pesquisarNomeSolicitante()
     }
 }
 
-export default CadastroServidor;
+export default CadastroPerfilServidor;

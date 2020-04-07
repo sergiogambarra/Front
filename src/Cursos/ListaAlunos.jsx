@@ -12,7 +12,7 @@ class ListaAlunos extends Component {
     }
 
     listarAlunos() {
-        axios.get("/api/usuarios/alunos/").then((retorno)=>{
+        axios.get("/api/usuarios/").then((retorno)=>{
             this.setState({
                 alunos:retorno.data
             })
@@ -30,8 +30,8 @@ class ListaAlunos extends Component {
             <div>
                 <h3>Alunos </h3>
 
-                <table class="table">
-                    <thead class="p-3 mb-2 bg-primary text-white">
+                <table className="table">
+                    <thead className="p-3 mb-2 bg-primary text-white">
                         <tr>
                             <th scope="col">Id</th>
                             <th scope="col">Nome</th>

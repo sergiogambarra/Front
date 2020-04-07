@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import SACESelect from './SACESelect';
-import { getCursos } from '../../services/CursoService';
+import { get } from '../../services/ServicoCrud';
 
 const defaultSelect = {label: 'Selecione o seu curso', value: ''};
 
@@ -9,7 +9,7 @@ export default function CursoSelect({ onChange, onError, value }) {
 
     useEffect(() => {
         const fetchData = async () => {
-            const result = await getCursos();
+            const result = await get("cursos");
             setCursos(result);
         }
                 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import SACESelect from './SACESelect';
-import { getDisciplinas } from '../../services/DisciplinaService';
+import { get } from '../../services/ServicoCrud';
 
 const defaultSelect = {label: 'Selecione a disciplina que deseja aproveitar', value: ''};
 
@@ -9,7 +9,7 @@ export default function DisciplinaSolicitadaSelect({ curso, disabled, onChange, 
     
     useEffect(() => {
         const fetchData = async () => {
-            const result = await getDisciplinas(curso);
+            const result = await get("cursos");
             setDisciplinas(result);
         }
         onChange('');
