@@ -3,76 +3,83 @@ import SACEInput from '../../components/inputs/SACEInput';
 import { Form, Button, } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import Alert from 'react-bootstrap/Alert'
-import { post, get, del, put, getId } from '../../services/ServicoCrud';
+import { post, del, put, getId, get } from '../../services/ServicoCrud';
 
 
 export default class CadastroCursos extends Component {
     constructor(props) {
         super(props);
         this.state = {
-                    cursos:[],
-                    nome: "",
-                    id:"",
-                    editar:false,
-                    texto: false,
-                    modal: false,
-                    cor :"primary"
+            cursos: [],
+            nome: "",
+            id: "",
+            editar: false,
+            texto: false,
+            modal: false,
         }
     }
-    async listarCursos(id) {
+    async listarCursos() {
         const cursos = await get("cursos");
-        this.setState({cursos});
+        this.setState({ cursos });
     }
 
     async listarCursosId(id) {
-        const curso = await getId("cursos",id);
-        this.setState({nome:curso.nome,cor:"warning",id:id});
+        const curso = await getId("cursos", id);
+        this.setState({ nome: curso.nome, id: id, editar: true });
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.listarCursos();
     }
 
     enviar() {
-        if (this.state.cor === "primary") {
-            post("cursos",{nome:this.state.nome}).then(()=>{
-                this.setState({ modal: true })
-                setTimeout(() => {
-                    this.setState({ modal: false })
-                }, 2000)
-                this.listarCursos();
-                this.limpar();
-            })
-        }else{
-            put("cursos",this.state.id,{nome : this.state.nome}).then(()=>{
-                this.setState({ modal: true })
-                setTimeout(() => {
-                    this.setState({ modal: false })
-                }, 2000)
-                this.listarCursos()
+        if (this.state.nome === "") {
+            this.setState({
+                texto: true
             })
         }
-    }
-
-     limpar() {
-        this.setState({
-            nome: "",
-            texto: false
+        post("cursos", { nome: this.state.nome }).then((r) => {
+            if (this.state.nome === "") { return }
+            this.setState({ modal: true })
+            setTimeout(() => {
+                this.setState({ modal: false })
+            }, 2000)
+            this.listarCursos();
+            this.limpar();
         })
     }
-  
+        atualizar() {
+         
+        put("cursos", this.state.id, { nome: this.state.nome }).then(() => {
+            if (this.listarCursosId(this.state.id) !== this.state.nome) { return}
+            this.setState({ modal: true })
+            setTimeout(() => {
+                this.setState({ modal: false })
+            }, 2000)
+            this.listarCursos()
+        })
+    }
+
+
+    limpar() {
+        this.setState({
+            nome: "",
+            texto: false,
+            editar: false
+        })
+    }
+
     render() {
         return (
             <div>
                 <br />
-        <Alert key={"idx"} variant={"success"} show={this.state.modal}>{this.state.cor === "primary" ? "Cadastrado" : "Editado"} com sucesso</Alert>
+                <Alert key={"idx"} variant={"success"} show={this.state.modal}>{this.state.cor === "primary" ? "Cadastrado" : "Editado"} com sucesso</Alert>
                 <fieldset>
                     <SACEInput label={'Nome do Curso'} value={this.state.nome} placeholder={'Preencha com o nome do curso que você deseja cadastrar'}
-                        onChange={(e) => this.setState({ nome: e.target.value })} onError={this.state.texto} onErrorMessage={'Nome do curso não encontrado'}/>  
+                        onChange={(e) => this.setState({ nome: e.target.value })} onError={this.state.texto} onErrorMessage={'Nome do curso não encontrado'} />
                     <Form.Group className="d-flex justify-content-end">
-                        <Button variant={this.state.cor} className="btn btn-primary m-1" onClick={() => this.enviar() }>
-                            {this.state.cor === "primary" ? "Cadastrar" : "Editar"}
-                        </Button>
+                        {this.state.editar === false ? <Button className="btn btn-primary m-1" onClick={() => this.enviar()}>
+                            Enviar  </Button> : <Button className="btn btn-primary m-1" onClick={(e) => this.atualizar()} >Confirmar editar</Button>}
                         <Button variant="danger" className="btn btn-primary m-1" onClick={() => this.limpar()}> Limpar </Button>
                     </Form.Group>
                 </fieldset >
@@ -90,20 +97,20 @@ export default class CadastroCursos extends Component {
                     </thead>
                     <tbody>
                         {this.state.cursos && this.state.cursos.map((curso) =>
-                                <tr key={curso.id+curso.nome}>
-                                    <td>{curso.id}</td>
-                                    <td><Link to="/cadastrar-disciplina">{curso.nome}</Link></td>
-                                    <td> <Button variant="primary" className="btn btn-danger m-2" 
-                                        onClick={() => { del("cursos",curso.id).then(()=>{ this.listarCursos() })}}>
-                                        Deletar
+                            <tr key={curso.id + curso.nome}>
+                                <td>{curso.id}</td>
+                                <td><Link to="/cadastrar-disciplina">{curso.nome}</Link></td>
+                                <td> <Button variant="primary" className="btn btn-danger m-1"
+                                    onClick={() => { del("cursos", curso.id).then(() => { this.listarCursos() }) }}>
+                                    Deletar
                                         </Button>
-                                    </td>
-                                    <td>                                    
-                                     <Button id={curso.id} type="button" className="btn btn-secondary btn-lg"
-                                        onClick={(e)=> this.listarCursosId(e.target.id) }> Editar </Button>
-                                    </td>
-                                </tr>
-                            )}
+                                </td>
+                                <td>
+                                    <Button id={curso.id} type="button" className="btn btn-success m-1"
+                                        onClick={(e) => this.listarCursosId(e.target.id)}> Editar </Button>
+                                </td>
+                            </tr>
+                        )}
                     </tbody>
                 </table>
             </div>

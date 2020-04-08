@@ -39,6 +39,8 @@ const post = async (end, data) => {
 }
 
 const put = async (end,id, data) => {
+    console.log(data);
+    
     try {        
         const entidade = await axios.put(`${baseURL}/${end}/${id}`, data, config);
         return (entidade);        

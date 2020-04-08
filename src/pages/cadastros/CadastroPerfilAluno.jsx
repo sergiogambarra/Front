@@ -74,10 +74,11 @@ verifica(){
                 email:this.state.email,
                 dataIngresso:this.state.dataIngresso                
             }).then(() => {
+                
                 this.setState({ modalShow:false,alert: true })
                 setTimeout(() => {
                     this.setState({ alert: false })
-                }, 3000)
+                }, 2000)
                 this.limpar()
             })
     }

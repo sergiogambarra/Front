@@ -34,8 +34,7 @@ class CadastroPerfilServidor extends Component {
     }
 
     verifica() {
-this.pesquisarNomeSolicitante()
-       
+        this.pesquisarNomeSolicitante()
         if (this.state.nome === "" ? this.setState({ nomeInvalido: true }) : this.setState({ nomeInvalido: false })) { }
         if (this.state.cargo === "" ? this.setState({ cargoInvalido: true }) : this.setState({ cargoInvalido: false })) { }
         if (this.state.siape === "" ? this.setState({ siapeInvalido: true }) : this.setState({ siapeInvalido: false })) { }
@@ -45,8 +44,10 @@ this.pesquisarNomeSolicitante()
         if(this.state.password !== this.state.novaSenha){this.setState({confirmaSenhaInvalida:true})} 
         if (this.state.userName !== "" && this.state.email !== "" && this.state.siape !== "" && this.state.password !== "" 
              && this.state.login !== ""&& this.state.password === this.state.novaSenha) { return }}
+       
 
              async  enviarCadastro(e) {
+                 
                 postCadastroUsuario({
                     password:this.state.password,
                     userName:this.state.userName,
@@ -160,7 +161,7 @@ this.pesquisarNomeSolicitante()
 
 
                 <div className="row container" style={{ position: 'relative', left: '32%' }}>
-                    <Button onClick={(e) => this.enviarCadastro(e)} className="btn btn-dark" style={{ border: "5px solid white" }}>Enviar</Button>
+                    <Button onClick={(e) => this.verifica(e)} className="btn btn-dark" style={{ border: "5px solid white" }}>Enviar</Button>
                     <Button onClick={() => this.limpar()} className="btn btn-danger" style={{ border: "5px solid white" }}>Limpar</Button>
                     <Link to="/minhas-requisicoes"> <Button variant="primary" className="btn btn-primary m-1" >Voltar </Button></Link>
                 </div>

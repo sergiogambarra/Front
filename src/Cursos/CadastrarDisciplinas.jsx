@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Button } from 'react-bootstrap';
 import SACEInput from '../components/inputs/SACEInput';
 import Alert from 'react-bootstrap/Alert'
+import { post, del, put, getId, get } from '../services/ServicoCrud';
 
 class CadastrarDisciplinas extends Component {
     constructor(props) {
@@ -23,12 +24,9 @@ class CadastrarDisciplinas extends Component {
             
         }
     }
-    listarCurso() {
-        axios.get(`/api/cursos/`).then((retorno) => {
-            this.setState({
-                cursos: retorno.data,
-            })
-        });
+    async listarCurso() {
+        const cursos = await get("cursos");
+        this.setState({ cursos });
     }
     listarDisciplinas() {
         axios.get(`/api/cursos/${this.state.idcurso}/disciplinas`).then((retorno) => {
@@ -37,14 +35,10 @@ class CadastrarDisciplinas extends Component {
             })
         });
     }
-    async buscarCursoPeloId(){
-        console.log(this.state.idcurso);
-        await axios.get(`/api/cursos/${this.state.idcurso}`).then((retorno)=>{
-            this.setState({
-                tituloCurso:retorno.data.nome
-            })
-            
-        })
+
+    async buscarCursoPeloId(id) {
+        const curso = await getId("cursos", this.state.idcurso);
+        this.setState({ tituloCurso:"" });
     }
     cadastrarDisciplinas() {
         
@@ -59,7 +53,7 @@ class CadastrarDisciplinas extends Component {
             })
         }
         else {
-            axios.post(`/api/cursos/${this.state.idcurso}/disciplinas`, {
+            post(`cursos/${this.state.idcurso}/disciplinas`, {
                 nome: this.state.nome,
                 cargaHoraria: this.state.cargaHoraria
             }).then(() => {

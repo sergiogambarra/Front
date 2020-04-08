@@ -6,7 +6,7 @@ const postCadastroUsuario = async (usuario) => {
     if (!usuario) return;
     console.log(retornaPerfil(usuario));
     try {
-        const usuarioCriado = await axios.post(`${baseURL}/usuarios/`, 
+        const usuarioCriado = await axios.post(`${baseURL}/usuarios/aluno/`, 
         {
             password: usuario.password,
             userName: usuario.userName,
