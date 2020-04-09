@@ -1,9 +1,8 @@
 import React, { Component } from "react";
 import SACEInput from '../../components/inputs/SACEInput';
 import { Button, Alert } from 'react-bootstrap';
-import { Link } from "react-router-dom";
 import TituloPagina from '../../components/TituloPagina';
-import { Form } from 'react-bootstrap';
+import { Form,Modal } from 'react-bootstrap';
 import { postCadastroUsuario } from '../../services/AlunoService';
 import { get } from "../../services/ServicoCrud";
 
@@ -27,21 +26,25 @@ class CadastroPerfilServidor extends Component {
             cargoInvalido: false,
             nomeInvalido: false,
             alert: false,
-            msgLogin: false
+            msgLogin: false,
+            modalShow:false,
+            loginPesquisa:""
 
         }
     }
 
     async pesquisarNomeSolicitante() {
-
-        const loginPesquisa = await get(`usuarios/pesquisa/${this.state.userName}`)
-        this.setState({ loginPesquisa })
-
-        console.log(loginPesquisa);
-        console.log(this.state.userName);
+      await get(`usuarios/pesquisa/${this.state.userName}`).then((r)=>{
+          console.log(r);
+          
+        this.setState({ loginPesquisa:r})})
     }
     
-    async  enviarCadastro() {
+    verifica() {
+        this.pesquisarNomeSolicitante()
+        console.log(this.state.loginPesquisa);
+        console.log(this.state.userName);
+        
         if (this.state.nome === "" ? this.setState({ nomeInvalido: true }) : this.setState({ nomeInvalido: false })) { }
         if (this.state.cargo === "" ? this.setState({ cargoInvalido: true }) : this.setState({ cargoInvalido: false })) { }
         if (this.state.siape === "" ? this.setState({ siapeInvalido: true }) : this.setState({ siapeInvalido: false })) { }
@@ -49,8 +52,12 @@ class CadastroPerfilServidor extends Component {
         if (this.state.novaSenha === "" ? this.setState({ confirmaSenhaInvalida: true }) : this.setState({ confirmaSenhaInvalida: false })) { }
         if (this.state.userName === "" ? this.setState({ loginInvalido: true }) : this.setState({ loginInvalido: false })) { }
         if (this.state.password !== this.state.novaSenha) { this.setState({ confirmaSenhaInvalida: true }) }
-        if (this.state.loginPesquisa === this.state.userName) { this.setState({ loginInvalido: true })
-        }
+        if (this.state.loginPesquisa === this.state.userName) { this.setState({ loginInvalido: true })}
+        if(this.state.nome !== "" && this.state.cargo !== "" && this.state.siape !== "" && this.state.password !== "" && this.state.userName !== "" &&
+          this.state.novaSenha !== ""){this.setState({modalShow:true})}
+          
+    }
+    async enviarCadastro() {
         postCadastroUsuario({
             password: this.state.password,
             userName: this.state.userName,
@@ -60,12 +67,11 @@ class CadastroPerfilServidor extends Component {
             siape: this.state.siape,
             cargo: this.state.cargo
         }).then(() => {
-            this.setState({ alert: true })
+            this.setState({ alert: true,modalShow:false })
             setTimeout(() => {
                 this.setState({ alert: false })
-            }, 3000)
+            }, 2000)
             this.limpar()
-
         })
     }
 
@@ -158,11 +164,19 @@ class CadastroPerfilServidor extends Component {
                     tipo={"password"}
                 />
 
-
                 <div className="row container" style={{ position: 'relative', left: '32%' }}>
-                    <Button onClick={(e) => this.pesquisarNomeSolicitante()} className="btn btn-dark" style={{ border: "5px solid white" }}>Enviar</Button>
+                    <Button variant="primary" className="btn btn-primary m-1" onClick={() => this.verifica()}> Enviar </Button>
+                    <Modal show={this.state.modalShow} onHide={() => this.setState({ modalShow: false })} animation={false}>
+                        <Modal.Header closeButton>
+                            <Modal.Title > Confirmar</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>Confira seus dados você antes de salvar</Modal.Body>
+                        <Modal.Footer>
+                            <Button variant="danger" onClick={() => this.setState({ modalShow: false })}>  Fechar </Button>
+                            <Button onClick={() => this.enviarCadastro()} className="btn btn-primary m-1" data-toggle="modal" data-target="#exampleModal" style={{ border: "5px solid white" }}>Salvar</Button>
+                        </Modal.Footer>
+                    </Modal>
                     <Button onClick={() => this.limpar()} className="btn btn-danger" style={{ border: "5px solid white" }}>Limpar</Button>
-                    <Link to="/minhas-requisicoes"> <Button variant="primary" className="btn btn-primary m-1" >Voltar </Button></Link>
                 </div>
             </Form.Group>
 
