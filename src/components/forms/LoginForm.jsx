@@ -18,6 +18,8 @@ export default function LoginForm({ history, setUserData }) {
     const limparCampos = () => {
         setUserName('');
         setPassword('');
+        setSenhaInvalida("");
+        setUsuarioInvalido("");
     }
 
     const enviarLogin = () => {
@@ -27,8 +29,9 @@ export default function LoginForm({ history, setUserData }) {
                     setUsuarioInvalido(true)
                     setSenhaInvalida(true)
                 }
-                login(response);
-                setUserData(response);
+                login(response.data);
+                setUserData(response.data);
+               
 
             }).then(() => history.push('/tela-transicao'))
             .catch(error => console.log(error))

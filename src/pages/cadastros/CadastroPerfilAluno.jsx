@@ -73,8 +73,8 @@ verifica(){
                 matricula:this.state.matricula,
                 email:this.state.email,
                 dataIngresso:this.state.dataIngresso                
-            }).then(() => {
-                
+            }).then((e) => {
+                console.log(e);
                 this.setState({ modalShow:false,alert: true })
                 setTimeout(() => {
                     this.setState({ alert: false })

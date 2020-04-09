@@ -24,6 +24,7 @@ function SACELink({ to, label }) {
 
 }
 function retornaLinks(user){
+    console.log(user.permissao);
     if(user.permissao === "ADMIN"){
        return  <>
                 <SACELink to={'/minhas-requisicoes'} label={'Listar Requisições'} />
@@ -36,15 +37,15 @@ function retornaLinks(user){
     }else if(user.permissao === "ALUNO"){
         return <>
                 <SACELink to={'/nova-requisicao'} label={'Nova requisição'} />
-                <SACELink to={`/aluno-requisicoes/${user.nome}`} label={'Requisições'} />
+                <SACELink to={`/aluno-requisicoes/${user.login}`} label={'Requisições'} />
                </>
     }else if(user.permissao === "SERVIDOR"){
         return <>
                 <SACELink to={'/minhas-requisicoes'} label={'Listar Requisições'} />
+                <SACELink to={`/cadastrar-servidor/${user.login}`} label={'Cadastrar servidor'} />
                 <SACELink to={'/cadastro-curso'} label={'Cadastrar curso'} />
                 <SACELink to={'/lista-alunos'} label={'Listar Alunos'} />
                 <SACELink to={'/lista-disciplina'} label={'Listar Disciplinas'} />
-                <SACELink to={`/cadastrar-servidor/${user.login}`} label={'Cadastrar servidor'} />
               </>
     }else{
        return <SACELink to={'/minhas-requisicoes'} label={'Listar Requisições'} />

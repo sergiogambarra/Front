@@ -1,4 +1,4 @@
-import React, {Component, useState, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import DisciplinaForm from './DisciplinaForm'
 import API from '../base';
 import DisciplinaTabela from "./DisciplinaTabela";
@@ -12,10 +12,6 @@ export default function DisciplinaView() {
 
     const listarCursos = () => {
         API.get("/cursos").then((retorno)=>this.setState({carregar:false,cursos:retorno.data})  );
-    }
-
-    const listarDisciplinas = () => {
-        API.get("/cursos").then((retorno)=>this.setState({carregardisciplinas:false,disciplinas:retorno.data})  );
     }
 
     const cadastrar = (disciplina) => {

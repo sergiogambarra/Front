@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Button } from 'react-bootstrap';
 import SACEInput from '../components/inputs/SACEInput';
 import Alert from 'react-bootstrap/Alert'
-import { post, del, put, getId, get } from '../services/ServicoCrud';
+import { post, getId, get } from '../services/ServicoCrud';
 
 class CadastrarDisciplinas extends Component {
     constructor(props) {
@@ -38,7 +38,7 @@ class CadastrarDisciplinas extends Component {
 
     async buscarCursoPeloId(id) {
         const curso = await getId("cursos", this.state.idcurso);
-        this.setState({ tituloCurso:"" });
+        console.log(curso);
     }
     cadastrarDisciplinas() {
         

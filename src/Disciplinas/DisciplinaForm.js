@@ -1,6 +1,4 @@
 import React from 'react';
-import { Form } from 'react-bootstrap';
-import MenuItem  from '@material-ui/core/MenuItem';
 
 export default class DisciplinaForm extends React.Component {
 

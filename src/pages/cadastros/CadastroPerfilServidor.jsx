@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import axios from 'axios';
 import SACEInput from '../../components/inputs/SACEInput';
 import { Button, Alert } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import TituloPagina from '../../components/TituloPagina';
 import { Form } from 'react-bootstrap';
 import { postCadastroUsuario } from '../../services/AlunoService';
+import { get } from "../../services/ServicoCrud";
 
 
 class CadastroPerfilServidor extends Component {
@@ -17,53 +17,58 @@ class CadastroPerfilServidor extends Component {
             password: "",
             novaSenha: "",
             siape: "",
-            cargo: "SERVIDOR",
+            cargo: "",
             permissao: "SERVIDOR",
-            isCordenador:false,
-            loginInvalido: false,
+            isCordenador: false,
+            loginInvalido: "",
             confirmaSenhaInvalida: false,
-            loginPesquisa: "",
             senhaInvalida: false,
             siapeInvalido: false,
             cargoInvalido: false,
             nomeInvalido: false,
-            modal: false,
+            alert: false,
             msgLogin: false
 
         }
     }
 
-    verifica() {
-        this.pesquisarNomeSolicitante()
+    async pesquisarNomeSolicitante() {
+
+        const loginPesquisa = await get(`usuarios/pesquisa/${this.state.userName}`)
+        this.setState({ loginPesquisa })
+
+        console.log(loginPesquisa);
+        console.log(this.state.userName);
+    }
+    
+    async  enviarCadastro() {
         if (this.state.nome === "" ? this.setState({ nomeInvalido: true }) : this.setState({ nomeInvalido: false })) { }
         if (this.state.cargo === "" ? this.setState({ cargoInvalido: true }) : this.setState({ cargoInvalido: false })) { }
         if (this.state.siape === "" ? this.setState({ siapeInvalido: true }) : this.setState({ siapeInvalido: false })) { }
         if (this.state.password === "" ? this.setState({ senhaInvalida: true }) : this.setState({ senhaInvalida: false })) { }
         if (this.state.novaSenha === "" ? this.setState({ confirmaSenhaInvalida: true }) : this.setState({ confirmaSenhaInvalida: false })) { }
         if (this.state.userName === "" ? this.setState({ loginInvalido: true }) : this.setState({ loginInvalido: false })) { }
-        if(this.state.password !== this.state.novaSenha){this.setState({confirmaSenhaInvalida:true})} 
-        if (this.state.userName !== "" && this.state.email !== "" && this.state.siape !== "" && this.state.password !== "" 
-             && this.state.login !== ""&& this.state.password === this.state.novaSenha) { return }}
-       
+        if (this.state.password !== this.state.novaSenha) { this.setState({ confirmaSenhaInvalida: true }) }
+        if (this.state.loginPesquisa === this.state.userName) { this.setState({ loginInvalido: true })
+        }
+        postCadastroUsuario({
+            password: this.state.password,
+            userName: this.state.userName,
+            isCordenador: this.state.isCordenador,
+            nome: this.state.nome,
+            permissao: this.state.permissao,
+            siape: this.state.siape,
+            cargo: this.state.cargo
+        }).then(() => {
+            this.setState({ alert: true })
+            setTimeout(() => {
+                this.setState({ alert: false })
+            }, 3000)
+            this.limpar()
 
-             async  enviarCadastro(e) {
-                 
-                postCadastroUsuario({
-                    password:this.state.password,
-                    userName:this.state.userName,
-                    isCordenador:this.state.isCordenador,
-                    nome:this.state.nome,
-                    permissao:this.state.permissao,
-                    siape:this.state.siape,
-                    cargo:this.state.cargo
-                }).then(() => {
-                    this.setState({ modalShow:false,alert: true })
-                    setTimeout(() => {
-                        this.setState({ alert: false })
-                    }, 3000)
-                    this.limpar()
-                })               
-            }
+        })
+    }
+
 
     limpar() {
         this.setState({
@@ -72,29 +77,22 @@ class CadastroPerfilServidor extends Component {
             siapeInvalido: false,
             loginInvalido: false,
             senhaInvalida: false,
-            isCordenador:false,
+            isCordenador: false,
             confirmaSenhaInvalida: false,
             nome: "",
             siape: "",
             userName: "",
             password: "",
             novaSenha: "",
-            cargo:""
+            cargo: ""
         })
     }
 
-    
-    async pesquisarNomeSolicitante() {
-        await axios.get(`/api/usuarios/pesquisar/login/${this.state.login}`).then((retorno) => {
-            this.setState({loginPesquisa:retorno.data})
-            
-        });
-    }
     render() {
         return (
             <Form.Group className="col-md-6 container">
                 <TituloPagina titulo="Cadastro Servidor" />
-                <Alert key={"idx"} variant={"success"} show={this.state.modal}>Cadastrado com Sucesso</Alert>
+                <Alert key={"idx"} variant={"success"} show={this.state.alert}>Cadastrado com Sucesso</Alert>
                 <SACEInput
                     label={'Nome'}
                     value={this.state.nome}
@@ -118,20 +116,21 @@ class CadastroPerfilServidor extends Component {
                     onChange={(e) => {
                         this.setState({
                             cargo: e.target.value,
-                            permissao:e.target.value
-                            })
-                        }
+                            permissao: e.target.value
+                        })
+                    }
                     }
                 >
-                    <option value="SERVIDOR" selected={true}>Servidor</option>
+                    <option ></option>
+                    <option value="SERVIDOR" >Servidor</option>
                     <option value="PROFESSOR">Professor</option>
 
                 </select>
-                <br/>
-                <br/>
-                { this.state.cargo === "PROFESSOR" &&  
-                        <Form.Check type="switch" id="custom-switch" label="Cordenador" value={this.state.isCordenador}
-                         onChange={()=>this.setState({isCordenador:!this.state.isCordenador})}/> }
+                <br />
+                <br />
+                {this.state.cargo === "PROFESSOR" &&
+                    <Form.Check type="switch" id="custom-switch" label="Cordenador" value={this.state.isCordenador}
+                        onChange={() => this.setState({ isCordenador: !this.state.isCordenador })} />}
                 <SACEInput
                     label={'Login'}
                     value={this.state.userName}
@@ -161,7 +160,7 @@ class CadastroPerfilServidor extends Component {
 
 
                 <div className="row container" style={{ position: 'relative', left: '32%' }}>
-                    <Button onClick={(e) => this.verifica(e)} className="btn btn-dark" style={{ border: "5px solid white" }}>Enviar</Button>
+                    <Button onClick={(e) => this.pesquisarNomeSolicitante()} className="btn btn-dark" style={{ border: "5px solid white" }}>Enviar</Button>
                     <Button onClick={() => this.limpar()} className="btn btn-danger" style={{ border: "5px solid white" }}>Limpar</Button>
                     <Link to="/minhas-requisicoes"> <Button variant="primary" className="btn btn-primary m-1" >Voltar </Button></Link>
                 </div>

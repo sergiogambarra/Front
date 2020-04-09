@@ -46,11 +46,11 @@ class EditarCadastroAluno extends Component {
             <br /><br />
             <label>Aluno</label><br />
             <input type="text" size="30" disabled
-                value={"  " + this.state.requisicao.usuario.nome}></input>
+                value={"  " + this.state.requisicao.usuario.perfil.nome}></input>
             <br /><br />
             <label>Disciplina solicitada</label><br />
             <input type="text" size="30" disabled
-                value={"  " + this.state.requisicao.disciplinaSolicitada.nome}></input>
+                value={"  " + this.state.requisicao.disciplinaSolicitada}></input>
             <br /><br />
             <label>Número da solicitação</label><br />
             <input type="text" size="30" disabled

@@ -9,8 +9,8 @@ export default function DisciplinaSolicitadaSelect({ curso, disabled, onChange, 
     
     useEffect(() => {
         const fetchData = async () => {
-            const result = await get("cursos");
-            setDisciplinas(result);
+            const result = await get("cursos/");
+            setDisciplinas(result.disciplinas);
         }
         onChange('');
         setDisciplinas([]);

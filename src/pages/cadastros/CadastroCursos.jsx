@@ -19,12 +19,12 @@ export default class CadastroCursos extends Component {
         }
     }
     async listarCursos() {
-        const cursos = await get("cursos");
+        const cursos = await get("cursos/");
         this.setState({ cursos });
     }
 
-    async listarCursosId(id) {
-        const curso = await getId("cursos", id);
+    async listarCursosId(id) {    
+        const curso = await getId("cursos/", id);
         this.setState({ nome: curso.nome, id: id, editar: true });
     }
 
@@ -39,6 +39,7 @@ export default class CadastroCursos extends Component {
             })
         }
         post("cursos", { nome: this.state.nome }).then((r) => {
+            
             if (this.state.nome === "") { return }
             this.setState({ modal: true })
             setTimeout(() => {

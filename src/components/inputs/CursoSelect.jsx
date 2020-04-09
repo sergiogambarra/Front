@@ -9,10 +9,9 @@ export default function CursoSelect({ onChange, onError, value }) {
 
     useEffect(() => {
         const fetchData = async () => {
-            const result = await get("cursos");
+            const result = await get("cursos/");
             setCursos(result);
-        }
-                
+        } 
         fetchData();
     }, []);
 

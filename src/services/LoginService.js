@@ -1,14 +1,6 @@
-import axios from 'axios';
-import { baseURL } from '../enviroment';
-
+import {post} from './ServicoCrud';
 const postLogin = async (login) => {
     if(!login) return;
-    try {
-        const response = await axios.post(`${baseURL}/login/`, login);    
-         return (response.data);
-    } catch (error) {
-        console.log('LoginService/postLogin::', error);
-    }
+     return  post("login/",login);
 }
-
 export{postLogin};
