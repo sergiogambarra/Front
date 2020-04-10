@@ -33,18 +33,10 @@ class CadastroPerfilServidor extends Component {
         }
     }
 
-    async pesquisarNomeSolicitante() {
-      await get(`usuarios/pesquisa/${this.state.userName}`).then((r)=>{
-          console.log(r);
-          
-        this.setState({ loginPesquisa:r})})
-    }
     
-    verifica() {
-        this.pesquisarNomeSolicitante()
-        console.log(this.state.loginPesquisa);
-        console.log(this.state.userName);
-        
+    async verifica() {
+              await get(`usuarios/pesquisa/${this.state.userName}`).then((r)=>{
+                this.setState({ loginPesquisa:r})})
         if (this.state.nome === "" ? this.setState({ nomeInvalido: true }) : this.setState({ nomeInvalido: false })) { }
         if (this.state.cargo === "" ? this.setState({ cargoInvalido: true }) : this.setState({ cargoInvalido: false })) { }
         if (this.state.siape === "" ? this.setState({ siapeInvalido: true }) : this.setState({ siapeInvalido: false })) { }
@@ -52,7 +44,7 @@ class CadastroPerfilServidor extends Component {
         if (this.state.novaSenha === "" ? this.setState({ confirmaSenhaInvalida: true }) : this.setState({ confirmaSenhaInvalida: false })) { }
         if (this.state.userName === "" ? this.setState({ loginInvalido: true }) : this.setState({ loginInvalido: false })) { }
         if (this.state.password !== this.state.novaSenha) { this.setState({ confirmaSenhaInvalida: true }) }
-        if (this.state.loginPesquisa === this.state.userName) { this.setState({ loginInvalido: true })}
+        if ( this.state.loginPesquisa ===  this.state.userName.toUpperCase()) { this.setState({ loginInvalido: true })}
         if(this.state.nome !== "" && this.state.cargo !== "" && this.state.siape !== "" && this.state.password !== "" && this.state.userName !== "" &&
           this.state.novaSenha !== ""){this.setState({modalShow:true})}
           

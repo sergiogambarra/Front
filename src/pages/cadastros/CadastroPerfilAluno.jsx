@@ -59,8 +59,7 @@ verifica(){
     if(this.state.password===""?this.setState({passwordInvalido:true}):this.setState({passwordInvalido:false})){}
     if(this.state.verificaSenha===""?this.setState({verificaSenhaInvalido:true}):this.setState({verificaSenhaInvalido:false})){}
     if(this.state.nome !== "" && this.state.email !== "" &&this.state.matricula !== "" && this.state.dataIngresso !== "" &&
-    this.state.userName !== "" && this.state.password !== ""&&this.state.verificaSenha !== ""){
-        this.setState({modalShow:true})
+    this.state.userName !== "" && this.state.password !== ""&&this.state.verificaSenha !== ""){ this.setState({modalShow:true})
     }
     if(this.state.verificaSenha !== this.state.password){this.setState({verificaSenhaInvalido:true,modalShow:false}); return }
 }

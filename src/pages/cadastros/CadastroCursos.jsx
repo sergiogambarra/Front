@@ -19,8 +19,8 @@ export default class CadastroCursos extends Component {
         }
     }
     async listarCursos() {
-        const cursos = await get("cursos/");
-        this.setState({ cursos });
+        const cursosLista = await get("cursos/");
+        this.setState({ cursosLista });
     }
 
     async listarCursosId(id) {    
@@ -38,7 +38,7 @@ export default class CadastroCursos extends Component {
                 texto: true
             })
         }
-        post("cursos", { nome: this.state.nome }).then((r) => {
+        post("cursos/", { nome: this.state.nome }).then((r) => {
             
             if (this.state.nome === "") { return }
             this.setState({ modal: true })
@@ -51,7 +51,7 @@ export default class CadastroCursos extends Component {
     }
         atualizar() {
          
-        put("cursos", this.state.id, { nome: this.state.nome }).then(() => {
+        put("cursos/", this.state.id, { nome: this.state.nome }).then(() => {
             if (this.listarCursosId(this.state.id) !== this.state.nome) { return}
             this.setState({ modal: true })
             setTimeout(() => {
@@ -97,7 +97,7 @@ export default class CadastroCursos extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {this.state.cursos && this.state.cursos.map((curso) =>
+                        {this.state.cursosLista && this.state.cursosLista.map((curso) =>
                             <tr key={curso.id + curso.nome}>
                                 <td>{curso.id}</td>
                                 <td><Link to="/cadastrar-disciplina">{curso.nome}</Link></td>
