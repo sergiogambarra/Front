@@ -7,6 +7,7 @@ export default function CardAproveitamento(req) {
     id,  dataRequisicao,usuario,disciplinaSolicitada, deferido,
     disciplinasCursadasAnterior, parecer,
   } = req.requisicao;
+
   return (
     <div className="card"  > 
     <Link to={`/parecer/${id}`} class={`badge badge-${mudaCor(deferido)}`}>{`Status do processo : ${deferido}`}</Link>

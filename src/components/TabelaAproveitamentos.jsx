@@ -22,6 +22,7 @@ export default function() {
       });
   }, []);
 
+
   return (
     <>
       <h5 class="row d-flex justify-content-center">Aproveitamento de estudos</h5>
@@ -35,6 +36,7 @@ export default function() {
             </div>
           </div>
         :
+        
           requisicoes && 
           requisicoes.map(requisicao => <CardAproveitamento requisicao={requisicao} />)
       }    
