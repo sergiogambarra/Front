@@ -4,7 +4,6 @@ import { baseURL } from '../enviroment';
 const get = async (end) => {
     try {
         const entidade = await axios.get(`${baseURL}/${end}`);
-
         return entidade.data;
     } catch (error) {
         console.log(`${end.toUpperCase()}Service/get${end}:`, error);

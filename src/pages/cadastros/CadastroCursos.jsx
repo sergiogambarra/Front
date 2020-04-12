@@ -51,7 +51,7 @@ export default class CadastroCursos extends Component {
     }
         atualizar() {
          
-        put("cursos/", this.state.id, { nome: this.state.nome }).then(() => {
+        put("cursos/",this.state.id, { nome: this.state.nome }).then(() => {
             if (this.listarCursosId(this.state.id) !== this.state.nome) { return}
             this.setState({ modal: true })
             setTimeout(() => {

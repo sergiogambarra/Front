@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import axios from 'axios';
-import { Button } from 'react-bootstrap';
+import { get } from './../services/ServicoCrud'
+import { Button } from 'react-bootstrap'
 
 
 class ListaAlunos extends Component {
@@ -12,18 +12,16 @@ class ListaAlunos extends Component {
     }
 
     listarAlunos() {
-        axios.get("/api/usuarios/").then((retorno)=>{
+        get("usuarios/").then((retorno)=>{
             this.setState({
-                alunos:retorno.data
+                alunos:retorno
             })
         })
     }
     componentDidMount(){
         this.listarAlunos()
     }
-    delete(){
-        axios.delete("")
-    }
+   
 
     render() {
         return (
@@ -42,7 +40,7 @@ class ListaAlunos extends Component {
                         {this.state.alunos &&
                             this.state.alunos.map((aluno) =>
 
-                                <tr>
+                                <tr key={aluno.id}>
                                     <td>{aluno.id}</td>
                                     <td>{aluno.perfil.nome}</td>
                                     <td> {aluno.perfil.nome === "" ? "" : <Button

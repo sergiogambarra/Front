@@ -18,7 +18,7 @@ export default function Inicio() {
       <Card style={{ width: '50 rem' }}>
           <Card.Img variant="top" src={path} />
           <Card.Body>
-            <Card.Title>Portal de Requisição de Aproveitamento de Matrícula ou Certificação de Conhecimentos.</Card.Title>
+            <Card.Title>Portal de Requisição de Aproveitamento de Estudos ou Certificação de Conhecimentos.</Card.Title>
             <Card.Text>
             <Link to="/login" className="btn btn-primary">Login </Link>
             </Card.Text>

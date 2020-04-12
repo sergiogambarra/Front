@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import SACEInput from '../components/inputs/SACEInput';
 import { Button } from 'react-bootstrap';
-import { get,del } from '../services/ServicoCrud';
-/*exemplo  style={{display:"none"}}
-*/
+import { get, del } from '../services/ServicoCrud';
+
 
 
 class ListaDiscipinas extends Component {
@@ -12,42 +11,30 @@ class ListaDiscipinas extends Component {
         super();
         this.state = {
             texto: false,
-            curso: {
-                id : "",
-                nome: ""
-            }
-            ,
-            disciplinas: {
-                    id: "",
-                    nome: "",
-                    cargaHoraria: ""
-                }
+            nomeCurso: "",
+            disciplinas: []
         }
     }
 
     listarDisciplina() {
-        
         get(`/cursos/${this.state.curso}/disciplinas`).then((retorno) => {
             this.setState({ disciplinas: retorno.data })
         });
     }
     limpar() {
-
         this.setState({
-            nome: "",
+            nomeCurso: "",
             texto: false
         });
-
     }
-    
+
     listarCursoNome() {
-        if (this.state.nome === "" || typeof this.state.nome === "undefined") {
+        if (this.state.nomeCurso === "" || typeof this.state.nomeCurso === "undefined") {
             this.setState({ texto: true })
         }
-        
-        get(`cursos/pesquisar/nome/${this.state.nome}`).then((retorno) => {
-            this.setState({ curso: retorno })
-            console.log(this.state.curso);
+
+        get(`cursos/pesquisar/nome/${this.state.nomeCurso}`).then((retorno) => {
+            this.setState({ disciplinas: retorno})
         });
     }
     apagar(e) {
@@ -72,8 +59,8 @@ class ListaDiscipinas extends Component {
                 <SACEInput
                     placeholder={'Digite o nome do curso que deseja ver as Diciplinas'}
                     label={'Curso'}
-                    value={this.state.nome} style={inputStyle}
-                    onChange={(e) => this.setState({ nome: e.target.value })}
+                    value={this.state.nomeCurso} style={inputStyle}
+                    onChange={(e) => this.setState({ nomeCurso: e.target.value })}
                     onError={this.state.texto}
                     onErrorMessage={'Nome do curso não encontrado'}
                 />
@@ -98,17 +85,16 @@ class ListaDiscipinas extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {this.state.curso.body&&this.state.curso.body.map((c)=>
-                        <tr>
-                        <td >{c.id}</td>
-                        <td >{c.nome}</td>
-                        <td >{c.cargaHoraria}</td>
-                        <td ><Button 
-                        variant="primary"
-                        className="btn btn-danger m-1">apagar</Button></td>
-
-                    </tr>
-                        )}
+                      {this.state.disciplinas&&this.state.disciplinas.map((d)=>
+                      <tr>
+                          <td>{d.id}</td>
+                          <td>{d.nome}</td>
+                          <td>{d.carhaHoraria}</td>
+                          <td><Button variant="danger"
+                    className="btn btn-primary m-1"
+                    >Apagar</Button></td>
+                      </tr>
+                      )}
                     </tbody>
                 </table>
 

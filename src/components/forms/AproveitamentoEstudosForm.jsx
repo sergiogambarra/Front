@@ -6,7 +6,7 @@ import DisciplinaSolicitadaSelect from '../inputs/DisciplinaSolicitadaSelect';
 import AnexarArquivosInput from '../inputs/anexarArquivosInput/AnexarArquivosInput';
 import CursoSelect from '../inputs/CursoSelect';
 import ModalConfirmarRequisicao from '../ModalConfirmarRequisicao';
-import { postRequisicao } from '../../services/RequisicaoService';
+import { postRequisicao } from '../../services/RequisicaoService';  
 import SACEAlert from '../SACEAlert';
 
 export default function CertificacaoConhecimentosForm({user}) {
@@ -18,7 +18,6 @@ export default function CertificacaoConhecimentosForm({user}) {
 
     const [discSolicitada, setDiscSolicitada] = useState('');
     const [discSolicitadaInvalida, setDiscSolicitadaInvalida] = useState(false);
-
     const [anexos, setAnexos] = useState([]);
     const [anexosInvalidos, setAnexosInvalidos] = useState(false);
     
@@ -63,8 +62,10 @@ export default function CertificacaoConhecimentosForm({user}) {
                 nome: discSolicitada.label, 
                 cargaHoraria: discSolicitada.carga, 
             },
-            usuario:user
-        });
+            usuario:{
+                id:user.id
+            }
+        });  
         setShowModal(true);
     }
 

@@ -63,7 +63,9 @@ export default function CertificacaoConhecimentosForm({user}) {
                 nome: discSolicitada.label, 
                 cargaHoraria: discSolicitada.carga, 
             },
-            usuario:user
+            usuario:{
+                id:user.id
+            }
         });
         setShowModal(true);
     }
