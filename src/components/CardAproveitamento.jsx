@@ -3,14 +3,14 @@ import './card.css';
 import { Link } from "react-router-dom";
 
 export default function CardAproveitamento(req) {
-  const { 
-    id,  dataRequisicao,usuario,disciplinaSolicitada, deferido,
+  const {
+    id, dataRequisicao, usuario, disciplinaSolicitada, deferido,
     disciplinasCursadasAnterior, parecer,
   } = req.requisicao;
 
   return (
-    <div className="card"  > 
-    <Link to={`/parecer/${id}`} class={`badge badge-${mudaCor(deferido)}`}>{`Status do processo : ${deferido}`}</Link>
+    <div className="card"  >
+      <Link to={`/parecer/${id}`} class={`badge badge-${mudaCor(deferido)}`}>{`Status do processo : ${deferido}`}</Link>
       <p>{`ID: ${id}`}</p>
       <p>{`Data: ${dataRequisicao}`}</p>
       <p>{`Aluno: ${usuario && usuario.perfil.nome}`}</p>
@@ -20,18 +20,16 @@ export default function CardAproveitamento(req) {
     </div>
   );
 
-  
+
 }
 
 const mudaCor = (deferido) => {
-   switch(deferido){
-      case 'DEFERIDO' :
-        return "success";
-        case 'INDEFERIDO':
-          return "danger"
-          case "AGUARDANDO DOCUMENTOS" :
-            return "info"
-        default :
-         return "warning"
-   }
+  switch (deferido) {
+    case 'DEFERIDO':
+      return "success";
+    case 'INDEFERIDO':
+      return "danger"
+    default:
+      return "warning"
+  }
 }

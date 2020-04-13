@@ -5,28 +5,28 @@ import { Link } from "react-router-dom";
 import TituloPagina from '../../components/TituloPagina';
 import { Form } from 'react-bootstrap';
 import { getRequisicaoId } from '../../services/RequisicaoService';
+import axios from 'axios';
 
 
 class Parecer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            
-                dataRequisicao: "",
-                parecer: "",
-                deferido: "escolha",
-                disciplinaSolicitada: "",
-                usuario: "",
-                anexos: [],
-                formacaoAtividadeAnterior: "",
-                criterioAvaliacao: "", tipo: ""
-            
+
+            dataRequisicao: "",
+            parecer: "",
+            deferido: "escolha",
+            disciplinaSolicitada: "",
+            usuario: "",
+            anexos: [],
+            formacaoAtividadeAnterior: "",
+            criterioAvaliacao: "", tipo: ""
+
         }
     }
     async componentDidMount() {
-        console.log(this.props.match.params.id);
-            const c = await getRequisicaoId(this.props.match.params.id);
-           this.setState({
+        const c = await getRequisicaoId(this.props.match.params.id);
+        this.setState({
             dataRequisicao: c.dataRequisicao,
             parecer: c.parecer,
             deferido: c.deferido,
@@ -34,27 +34,34 @@ class Parecer extends Component {
             usuario: c.usuario.perfil.nome,
             anexos: [],
             formacaoAtividadeAnterior: c.formacaoAtividadeAnterior,
-            criterioAvaliacao: c.criterioAvaliacao, 
+            criterioAvaliacao: c.criterioAvaliacao,
             tipo: c.tipo
 
-           });
+        });
         this.trocaNomeTipo();
     }
 
     atualizar() {
-      
+        axios.put(`/api/requisicoes/${this.props.match.params.id}`, {
+            tipo: "aproveitamento",
+            deferido: this.state.deferido,
+            parecer: this.state.parecer,
+            usuario: {
+                tipo: "servidor"
+            }
+
+        })
     }
     trocaNomeTipo() {
-            if (this.state.tipo === "certificacao") {
-                this.setState({ tipo: "Certificação de conhecimentos" })
+        if (this.state.tipo === "certificacao") {
+            this.setState({ tipo: "Certificação de conhecimentos" })
         }
-            if (this.state.tipo === "aproveitamento") {
-                this.setState({ tipo: "Aproveitamentos de estudos" })
+        if (this.state.tipo === "aproveitamento") {
+            this.setState({ tipo: "Aproveitamentos de estudos" })
         }
     }
-    
+
     render() {
-        console.log(this.state);
         return (<div>
             <Form.Group className="col-md-6 container">
 
@@ -109,13 +116,7 @@ class Parecer extends Component {
                         defaultChecked={false} />
                     <label class="custom-control-label" for="INDEFERIDO">Indeferido</label><br /><br />
                 </div>
-                <div class="custom-control custom-radio custom-control-inline">
-                    <input type="radio" id="AGUARDANDO DOCUMENTOS" name="customRadioInline1" class="custom-control-input"
-                        onChange={(e) => this.setState({ deferido: e.target.id })}
-                        defaultChecked={false}
-                    />
-                    <label class="custom-control-label" for="AGUARDANDO DOCUMENTOS">Aguardando documentos</label><br /><br />
-                </div>
+
                 <div class="custom-control custom-radio custom-control-inline">
                     <input type="radio" id="EM ANÁLISE" name="customRadioInline1" class="custom-control-input"
                         onChange={(e) => this.setState({ deferido: e.target.id })}
@@ -151,7 +152,7 @@ class Parecer extends Component {
                 </Form.Group>
 
                 <div className="row container" style={{ position: 'relative', left: '32%' }}>
-                    <Link to="/minhas-requisicoes"> <Button onClick={(e) => this.atualizar()} className="btn btn-dark" data-toggle="modal" data-target="#exampleModal" style={{ border: "5px solid white" }}>Enviar</Button></Link>
+                     <Button onClick={(e) => this.atualizar()} className="btn btn-dark" data-toggle="modal" data-target="#exampleModal" style={{ border: "5px solid white" }}>Enviar</Button>
                     <Link to="/minhas-requisicoes"> <Button variant="primary" className="btn btn-primary m-1" >Voltar </Button></Link>
                 </div>
 

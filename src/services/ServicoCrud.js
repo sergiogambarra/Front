@@ -32,7 +32,9 @@ const put = async (end, id, data) => {
     console.log(data);
 
     try {
-        const entidade = await axios.put(`${baseURL}/${end}/${id}`, data);
+        const entidade = await axios.put(`/${baseURL}${end}/${id}`, data);
+        console.log(entidade);
+        
         return (entidade);
     } catch (error) {
         console.log(`${end.toUpperCase()}Service/put${end}:`, error);
@@ -58,6 +60,8 @@ const delDisciplinaCurso = async (end, id) => {
     }
 }
 
+
+
 export {
     get,
     getId,
@@ -65,4 +69,5 @@ export {
     put,
     del,
     delDisciplinaCurso
+   
 };

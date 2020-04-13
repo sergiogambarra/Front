@@ -15,7 +15,7 @@ export default function CardCertificacao(req) {
       <p>{`Data: ${dataRequisicao}`}</p>
       <p>{`Aluno: ${usuario && usuario.perfil.nome}`}</p>
       <p>{`Parecer: ${parecer}`}</p>
-      <p>{`Disciplina solicitada: ${disciplinaSolicitada}`}</p>
+      <p>{`Disciplina solicitada: ${disciplinaSolicitada.nome}`}</p>
       <p>{`Formação/Atividade realizada anteriormente: ${formacaoAtividadeAnterior}`}</p>
     </div>
   );
@@ -26,8 +26,6 @@ const mudaCor = (deferido) => {
       return "success";
     case 'INDEFERIDO':
       return "danger"
-    case "AGUARDANDO DOCUMENTOS":
-      return "info"
     default:
       return "warning"
   }

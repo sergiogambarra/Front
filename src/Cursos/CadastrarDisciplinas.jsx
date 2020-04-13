@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Button } from 'react-bootstrap';
 import SACEInput from '../components/inputs/SACEInput';
 import Alert from 'react-bootstrap/Alert'
-import {delDisciplinaCurso, post, get } from '../services/ServicoCrud';
+import { delDisciplinaCurso, post, get } from '../services/ServicoCrud';
 
 class CadastrarDisciplinas extends Component {
     constructor(props) {
@@ -19,7 +19,7 @@ class CadastrarDisciplinas extends Component {
             nome: "",
             mostraLista: false,
             tituloCurso: "",
-            disabled: false
+            disabled: false,
         }
     }
     async listarCurso() {
@@ -27,26 +27,15 @@ class CadastrarDisciplinas extends Component {
         this.setState({ cursos });
     }
 
-
     async  listarDisciplinas() {
         await get(`cursos/${this.state.idcurso}/disciplinas/`).then((retorno) => {
-            this.setState({ disciplinas: retorno.body })
+            this.setState({ disciplinas: retorno })
         });
     }
 
-
     cadastrarDisciplinas() {
-
-        if (typeof this.state.nome === "undefined" || this.state.nome === "") {
-            this.setState({
-                textodisciplina: true
-            })
-        }
-        if (typeof this.state.cargaHoraria === "undefined" || this.state.cargaHoraria < 15) {
-            this.setState({
-                textocargahoraria: true
-            })
-        }
+        if (typeof this.state.nome === "undefined" || this.state.nome === "") { this.setState({ textodisciplina: true }) }
+        if (typeof this.state.cargaHoraria === "undefined" || this.state.cargaHoraria < 15) { this.setState({ textocargahoraria: true }) }
         else {
             post(`cursos/${this.state.idcurso}/disciplinas/`, {
                 nome: this.state.nome,
@@ -63,7 +52,7 @@ class CadastrarDisciplinas extends Component {
 
         }
     }
-   async apagar(e) {
+    async apagar(e) {
         await delDisciplinaCurso(`cursos/${this.state.idcurso}/disciplinas/${e}`).then(() => {
             this.listarDisciplinas()
         })
@@ -94,8 +83,9 @@ class CadastrarDisciplinas extends Component {
         return (<div >
             <Alert key={"idx"} variant={"success"} show={this.state.modal}>
                 Cadastrado com sucesso</Alert>
-            <h2>Cadastrar disciplinas</h2>
-            <label >curso</label>
+            <br /><br />
+            <h2>Cadastrar disciplinas</h2><br />
+            <label >Selecione o curso</label>
             <select className="browser-default custom-select" disabled={this.state.disabled}
                 id={this.state.idcurso}
                 value={this.state.idcurso}
@@ -134,10 +124,9 @@ class CadastrarDisciplinas extends Component {
             <Button style={{ position: 'relative', left: '80%' }} variant="danger" className="btn btn-primary m-1" onClick={(e) => this.limpar()}>
                 Limpar
                 </Button>
-            <br /><br /><br />
+            <br />
             {
                 this.state.mostraLista ? <> <h3>Disciplinas do Curso </h3>
-                    {console.log(this.state)}
 
                     <table class="table">
                         <thead class="p-3 mb-2 bg-primary text-white">
