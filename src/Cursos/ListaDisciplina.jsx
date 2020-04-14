@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import SACEInput from '../components/inputs/SACEInput';
 import { Button } from 'react-bootstrap';
-import { get, del } from '../services/ServicoCrud';
+import { get, delDisciplinaCurso, getNomeCurso } from '../services/ServicoCrud';
 
 
 
@@ -11,20 +11,17 @@ class ListaDiscipinas extends Component {
         super();
         this.state = {
             texto: false,
+            curso: "",
             nomeCurso: "",
-            disciplinas: []
+            disciplinas: [],
+            mostraLista:false
         }
     }
 
-    listarDisciplina() {
-        get(`/cursos/${this.state.curso}/disciplinas`).then((retorno) => {
-            this.setState({ disciplinas: retorno.data })
-        });
-    }
     limpar() {
         this.setState({
             nomeCurso: "",
-            texto: false
+            texto: false,
         });
     }
 
@@ -35,12 +32,22 @@ class ListaDiscipinas extends Component {
 
         get(`cursos/pesquisar/nome/${this.state.nomeCurso}`).then((retorno) => {
             this.setState({ disciplinas: retorno})
+                this.pesquisaNomeCurso()
+
         });
     }
-    apagar(e) {
-        del(`/api/cursos/${this.state.curso.id}/disciplinas/${e}`).then(() => {
+    async apagar(e) {
+        console.log(this.state.id);
+        
+        await delDisciplinaCurso(`cursos/${this.state.curso.id}/disciplinas/${e}`).then(() => {
             this.listarCursoNome()
         })
+    }
+    pesquisaNomeCurso() {
+        getNomeCurso(`cursos/pesquisar/${this.state.nomeCurso}`).then((retorno) => {
+            this.setState({ curso: retorno})
+         
+        });
     }
 
     render() {
@@ -54,8 +61,8 @@ class ListaDiscipinas extends Component {
         };
 
         return (
-            <div >
-                <h2>Pesquisar disciplinas pelo nome do curso</h2>
+            <div ><br /><br />
+                <h2>Pesquisar disciplinas pelo nome do curso </h2>
                 <SACEInput
                     placeholder={'Digite o nome do curso que deseja ver as Diciplinas'}
                     label={'Curso'}
@@ -72,6 +79,7 @@ class ListaDiscipinas extends Component {
                     variant="danger"
                     className="btn btn-primary m-1"
                     onClick={() => this.limpar()}> Limpar </Button>
+                    {<div >
                 <h3>Diciplinas </h3>
 
                 <table class="table">
@@ -85,21 +93,22 @@ class ListaDiscipinas extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                      {this.state.disciplinas&&this.state.disciplinas.map((d)=>
-                      <tr>
-                          <td>{d.id}</td>
-                          <td>{d.nome}</td>
-                          <td>{d.carhaHoraria}</td>
-                          <td><Button variant="danger"
-                    className="btn btn-primary m-1"
-                    >Apagar</Button></td>
-                      </tr>
-                      )}
+                        {this.state.disciplinas && this.state.disciplinas.map((d) =>
+                            <tr>
+                                <td>{d.id}</td>
+                                <td>{d.nome}</td>
+                                <td>{d.cargaHoraria}</td>
+                                <td><Button variant="primary"
+                                    className="btn btn-danger m-1"
+                                    onClick={(e) => this.apagar(d.id)}
+                                > Deletar </Button></td>
+                            </tr>
+                        )}
                     </tbody>
                 </table>
+                </div>
 
-
-
+}
             </div>
         );
     }

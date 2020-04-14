@@ -32,7 +32,7 @@ const put = async (end, id, data) => {
     console.log(data);
 
     try {
-        const entidade = await axios.put(`/${baseURL}${end}/${id}`, data);
+        const entidade = await axios.put(`${baseURL}/${end}/${id}`, data);
         console.log(entidade);
         
         return (entidade);
@@ -59,6 +59,14 @@ const delDisciplinaCurso = async (end, id) => {
         console.log(`${end.toUpperCase()}Service/delete${end}:`, error);
     }
 }
+const getNomeCurso = async (end) => {
+    try {
+        const entidade = await axios.get(`${baseURL}/${end}`);
+        return entidade.data;
+    } catch (error) {
+        console.log(`${end.toUpperCase()}Service/get${end}:`, error);
+    }
+}
 
 
 
@@ -68,6 +76,7 @@ export {
     post,
     put,
     del,
-    delDisciplinaCurso
+    delDisciplinaCurso,
+    getNomeCurso
    
 };

@@ -79,6 +79,7 @@ verifica(){
                     this.setState({ alert: false })
                 }, 2000)
                 this.limpar()
+                window.location.href=("/login")
             })
     }
         

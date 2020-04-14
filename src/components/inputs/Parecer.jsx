@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import TituloPagina from '../../components/TituloPagina';
 import { Form } from 'react-bootstrap';
 import { getRequisicaoId } from '../../services/RequisicaoService';
-import axios from 'axios';
+import { put } from '../../services/ServicoCrud';
 
 
 class Parecer extends Component {
@@ -35,33 +35,23 @@ class Parecer extends Component {
             anexos: [],
             formacaoAtividadeAnterior: c.formacaoAtividadeAnterior,
             criterioAvaliacao: c.criterioAvaliacao,
-            tipo: c.tipo
+            tipo: c.tipo,
+            titulo:""
 
         });
-        this.trocaNomeTipo();
     }
-
+    
     atualizar() {
-        axios.put(`/api/requisicoes/${this.props.match.params.id}`, {
-            tipo: "aproveitamento",
+        put("requisicoes",this.props.match.params.id, {
+            tipo: this.state.tipo,
             deferido: this.state.deferido,
-            parecer: this.state.parecer,
-            usuario: {
-                tipo: "servidor"
-            }
-
-        })
+            parecer: this.state.parecer
+            
+        });
     }
-    trocaNomeTipo() {
-        if (this.state.tipo === "certificacao") {
-            this.setState({ tipo: "Certificação de conhecimentos" })
-        }
-        if (this.state.tipo === "aproveitamento") {
-            this.setState({ tipo: "Aproveitamentos de estudos" })
-        }
-    }
-
+    
     render() {
+                console.log(this.state.parecer);
         return (<div>
             <Form.Group className="col-md-6 container">
 
@@ -94,11 +84,12 @@ class Parecer extends Component {
                     disabled={true} />
                 <Form.Group controlId="exampleForm.ControlTextarea1">
                     <Form.Label>Parecer</Form.Label>
+                    
                     <Form.Control as="textarea" rows="2"
                         id={this.state.parecer}
-                        value={this.stateparecer}
+                        value={this.state.parecer}
                         disabled={true}
-                    />
+                        />
                 </Form.Group>
                 <div style={{ fontSize: "200%" }}> Modificar Status </div>
                 <br />
@@ -152,7 +143,7 @@ class Parecer extends Component {
                 </Form.Group>
 
                 <div className="row container" style={{ position: 'relative', left: '32%' }}>
-                     <Button onClick={(e) => this.atualizar()} className="btn btn-dark" data-toggle="modal" data-target="#exampleModal" style={{ border: "5px solid white" }}>Enviar</Button>
+                <Link to="/minhas-requisicoes">        <Button onClick={(e) => this.atualizar()} className="btn btn-dark" data-toggle="modal" data-target="#exampleModal" style={{ border: "5px solid white" }}>Enviar</Button></Link>
                     <Link to="/minhas-requisicoes"> <Button variant="primary" className="btn btn-primary m-1" >Voltar </Button></Link>
                 </div>
 
