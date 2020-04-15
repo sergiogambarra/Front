@@ -28,7 +28,7 @@ export default class CadastroCursos extends Component {
         this.setState({ nome: curso.nome, id: id, editar: true });
     }
 
-    componentDidMount() {
+ async componentDidMount() {
         this.listarCursos();
     }
 
@@ -50,15 +50,16 @@ export default class CadastroCursos extends Component {
         })
     }
         atualizar() {
-         console.log(this.state.nome);
-         
         put("cursos",this.state.id, { nome: this.state.nome }).then(() => {
-            if (this.listarCursosId(this.state.id) !== this.state.nome) { return}
+        
             this.setState({ modal: true })
             setTimeout(() => {
                 this.setState({ modal: false })
             }, 2000)
             this.listarCursos()
+            this.limpar();
+            console.log("nhjiuohj");
+            
         })
     }
 
@@ -75,7 +76,7 @@ export default class CadastroCursos extends Component {
         return (
             <div>
                 <br />
-                <Alert key={"idx"} variant={"success"} show={this.state.modal}>{this.state.cor === "primary" ? "Cadastrado" : "Editado"} com sucesso</Alert>
+                <Alert key={"idx"} variant={"success"} show={this.state.modal}>Cadastrado com sucesso</Alert>
                 <fieldset>
                     <SACEInput label={'Nome do Curso'} value={this.state.nome} placeholder={'Preencha com o nome do curso que você deseja cadastrar'}
                         onChange={(e) => this.setState({ nome: e.target.value })} onError={this.state.texto} onErrorMessage={'Nome do curso não encontrado'} />
