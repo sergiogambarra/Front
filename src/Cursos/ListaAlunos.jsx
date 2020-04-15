@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { get } from './../services/ServicoCrud'
 import { Button } from 'react-bootstrap'
+import { delAluno } from '../services/AlunoService';
 
 
 class ListaAlunos extends Component {
@@ -12,20 +13,18 @@ class ListaAlunos extends Component {
     }
 
     listarAlunos() {
-        get("usuarios/").then((retorno)=>{
-            this.setState({
-                alunos:retorno
-            })
-        })
+        get("usuarios/alunos/").then((retorno)=>{
+            this.setState({  alunos:retorno }) })
     }
+   
     componentDidMount(){
         this.listarAlunos()
     }
-   
-
+  
     render() {
         return (
             <div>
+                <br />
                 <h3>Alunos </h3>
 
                 <table className="table">
@@ -46,7 +45,7 @@ class ListaAlunos extends Component {
                                     <td> {aluno.perfil.nome === "" ? "" : <Button
                                         variant="primary"
                                         className="btn btn-danger m-1"
-                                        onClick={(e) => this.apagar(aluno.id)}
+                                        onClick={(e) => delAluno("usuarios",aluno.id).then(()=>{ this.listarAlunos()})}
                                     > Deletar </Button>}
                                     </td>
                                 </tr>

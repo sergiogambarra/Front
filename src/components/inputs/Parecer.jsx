@@ -20,7 +20,7 @@ class Parecer extends Component {
             usuario: "",
             anexos: [],
             formacaoAtividadeAnterior: "",
-            criterioAvaliacao: "", tipo: ""
+            criterioAvaliacao: "", tipo: "",atualizarParecer:""
 
         }
     }
@@ -32,16 +32,16 @@ class Parecer extends Component {
             deferido: c.deferido,
             disciplinaSolicitada: c.disciplinaSolicitada,
             usuario: c.usuario.perfil.nome,
-            anexos: [],
+            anexos:c.anexos,
             formacaoAtividadeAnterior: c.formacaoAtividadeAnterior,
             criterioAvaliacao: c.criterioAvaliacao,
             tipo: c.tipo,
             titulo:""
-
         });
     }
     
     atualizar() {
+        
         put("requisicoes",this.props.match.params.id, {
             tipo: this.state.tipo,
             deferido: this.state.deferido,
@@ -51,7 +51,6 @@ class Parecer extends Component {
     }
     
     render() {
-                console.log(this.state.parecer);
         return (<div>
             <Form.Group className="col-md-6 container">
 
@@ -70,7 +69,7 @@ class Parecer extends Component {
                 />
                 <SACEInput
                     label={'Tipo'}
-                    value={this.state.tipo}
+                    value={this.state.tipo==="aproveitamento"?"APROVEITAMENTO DE ESTUDOS":"CERTIFICAÇÃO DE CONHECIMENTOS"}
                     disabled={true}
 
                 />
@@ -131,20 +130,17 @@ class Parecer extends Component {
                     }
                 </ol>
 
-
-
                 <Form.Group controlId="exampleForm.ControlTextarea1">
                     <Form.Label>Novo Parecer</Form.Label>
                     <Form.Control as="textarea" rows="2"
                         id={this.state.parecer}
-                        value={this.state.parecer}
                         onChange={(e) => this.setState({ parecer: e.target.value })}
                     />
                 </Form.Group>
 
                 <div className="row container" style={{ position: 'relative', left: '32%' }}>
-                <Link to="/minhas-requisicoes">        <Button onClick={(e) => this.atualizar()} className="btn btn-dark" data-toggle="modal" data-target="#exampleModal" style={{ border: "5px solid white" }}>Enviar</Button></Link>
-                    <Link to="/minhas-requisicoes"> <Button variant="primary" className="btn btn-primary m-1" >Voltar </Button></Link>
+                <Link to="/minhas-requisicoes">        <Button onClick={(e) => this.atualizar()} variant="primary" className="btn btn-primary m-1" data-toggle="modal" data-target="#exampleModal" style={{ border: "5px solid white" }}>Enviar</Button></Link>
+                    <Link to="/minhas-requisicoes"> <Button variant="danger" className="btn btn-primary m-2" >Voltar </Button></Link>
                 </div>
 
             </Form.Group>
