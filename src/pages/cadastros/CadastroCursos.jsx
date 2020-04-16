@@ -51,7 +51,6 @@ export default class CadastroCursos extends Component {
     }
         atualizar() {
         put("cursos",this.state.id, { nome: this.state.nome }).then(() => {
-        
             this.setState({ modal: true })
             setTimeout(() => {
                 this.setState({ modal: false })

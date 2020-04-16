@@ -15,7 +15,6 @@ import ListaAlunos from '../src/Cursos/ListaAlunos';
 import Parecer from '../src/components/inputs/Parecer';
 import RequisicaoAluno from './pages/Aluno/RequisicaoAluno';
 import TelaTransicao from './pages/TelaTransicao';
-import EditarCadastroAluno from './pages/Aluno/EditarCadastroAluno';
 
 function App() {
   const [userData, setUserData] = useState(null);
@@ -41,7 +40,6 @@ function App() {
           <PrivateRoute exact path="/lista-disciplina" component={ListaDiscipinas} />
           <PrivateRoute exact path="/cadastrar-disciplina" component={CadastrarDisciplinas} />
           <PrivateRoute exact path="/lista-alunos" component={ListaAlunos} />
-          <PrivateRoute exact path="/editar-aluno/:id" component={EditarCadastroAluno} />
           <PrivateRoute exact path="/cadastrar-servidor/:id" component={CadastroPerfilServidor} />
           <PrivateRoute exact path="/parecer/:id" component={Parecer} />
           <Route path="*" component={() => <h1>Page not found</h1>} />

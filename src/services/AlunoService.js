@@ -21,5 +21,15 @@ const postCadastroUsuario = async (usuario) => {
                 console.log(`${end.toUpperCase()}Service/delete${end}:`, error);
             }
         }
-export  { postCadastroUsuario,delAluno };
+
+        const putAluno = async (end, id) => {
+            try {
+                await axios.put(`${baseURL}/${end}/${id}`).then((resp) => {
+                    return resp;
+                })
+            } catch (error) {
+                console.log(`${end.toUpperCase()}Service/atualizar${end}:`, error);
+            }
+        }
+export  { postCadastroUsuario,delAluno ,putAluno};
 
