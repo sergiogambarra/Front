@@ -1,13 +1,20 @@
-.card {
-    margin: 17px;
-    margin-left: 0px;
+.requisicao {
     border: 2px solid #007BFF;
-    padding: 10px;
-    
-    
+    padding: 1.5%;
 }
-
-.card p {
+.requisicao:hover{
+    cursor: pointer;
+    border: 2px solid red;
+    opacity: 0.8;
+}
+.requisicao p {
     margin: 0px !important;
     padding: 0;
+    display: block;
+}
+.titulo{
+    margin:2% 0;
+}
+.box-card{
+    margin-bottom: 2.5%;
 }

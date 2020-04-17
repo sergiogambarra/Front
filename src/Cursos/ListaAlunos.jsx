@@ -1,37 +1,35 @@
 import React, { Component } from 'react'
-import { get } from './../services/ServicoCrud'
+import { get,getId } from './../services/ServicoCrud'
 import { Button } from 'react-bootstrap'
-import { delAluno, putAluno } from '../services/AlunoService';
+import { delAluno } from '../services/AlunoService';
 
 class ListaAlunos extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            alunos: []
-        }
+            alunos: [],
+        
     }
-
+    }
     listarAlunos() {
         get("usuarios/alunos/").then((retorno) => {
             this.setState({ alunos: retorno })
         })
     }
 
-    editar(e) {
-        putAluno("usuarios",e,{
-            nome:this.state.nome,
-            matricula:this.state.matricula,
-            email:this.state.email,
-        })
-
-    }
+   async editar(e) {
+      const r = await getId("usuarios/",e)
+      this.setState({r})    
+    }  
 
     componentDidMount() {
         this.listarAlunos()
     }
 
     render() {
-        console.log(this.props)
+        
+        
+        
         return (
             <div>
              <br /><br />

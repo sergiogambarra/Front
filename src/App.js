@@ -6,7 +6,7 @@ import MinhasRequisicoes from './pages/MinhasRequisicoes';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import SACENavbar from './components/SACENavbar';
 import CadastroPerfilAluno from './pages/cadastros/CadastroPerfilAluno';
-import CadastroCursos from './pages/cadastros/CadastroCursos';
+import ListaCursos from './pages/Curso/ListaCurso';
 import LoginForm from './components/forms/LoginForm'
 import ListaDiscipinas from './Cursos/ListaDisciplina';
 import CadastrarDisciplinas from './Cursos/CadastrarDisciplinas';
@@ -15,6 +15,9 @@ import ListaAlunos from '../src/Cursos/ListaAlunos';
 import Parecer from '../src/components/inputs/Parecer';
 import RequisicaoAluno from './pages/Aluno/RequisicaoAluno';
 import TelaTransicao from './pages/TelaTransicao';
+import ListaProfessor from './pages/Professor/ListaProfessor';
+import ListaServidor from './../src/pages/Servidor/ListaServidor';
+import CadastroCurso from './pages/cadastros/CadastroCurso';
 
 function App() {
   const [userData, setUserData] = useState(null);
@@ -36,12 +39,15 @@ function App() {
           <PrivateRoute exact path="/aluno-requisicoes/:id" component={RequisicaoAluno} />
           <PrivateRoute exact path="/minhas-requisicoes" component={MinhasRequisicoes} />
           <PrivateRoute exact path="/nova-requisicao" component={()=><NovaRequisicao user={userData}/>} />
-          <PrivateRoute exact path="/cadastro-curso" component={CadastroCursos} />
-          <PrivateRoute exact path="/lista-disciplina" component={ListaDiscipinas} />
           <PrivateRoute exact path="/cadastrar-disciplina" component={CadastrarDisciplinas} />
-          <PrivateRoute exact path="/lista-alunos" component={ListaAlunos} />
           <PrivateRoute exact path="/cadastrar-servidor/:id" component={CadastroPerfilServidor} />
+          <PrivateRoute exact path="/cadastrar-curso" component={CadastroCurso} />
           <PrivateRoute exact path="/parecer/:id" component={Parecer} />
+          <PrivateRoute exact path="/listar-curso" component={ListaCursos} />
+          <PrivateRoute exact path="/lista-disciplina" component={ListaDiscipinas} />
+          <PrivateRoute exact path="/lista-alunos" component={ListaAlunos} />
+          <PrivateRoute exact path="/lista-professor" component={ListaProfessor} />
+          <PrivateRoute exact path="/lista-servidor" component={ListaServidor} />
           <Route path="*" component={() => <h1>Page not found</h1>} />
         </Switch>
       </div>

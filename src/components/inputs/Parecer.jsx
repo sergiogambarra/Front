@@ -41,12 +41,10 @@ class Parecer extends Component {
     }
     
     atualizar() {
-        
         put("requisicoes",this.props.match.params.id, {
             tipo: this.state.tipo,
             deferido: this.state.deferido,
-            parecer: this.state.parecer
-            
+            parecer: this.state.atualizarParecer ? this.state.atualizarParecer : this.state.parecer
         });
     }
     
@@ -133,8 +131,9 @@ class Parecer extends Component {
                 <Form.Group controlId="exampleForm.ControlTextarea1">
                     <Form.Label>Novo Parecer</Form.Label>
                     <Form.Control as="textarea" rows="2"
-                        id={this.state.parecer}
-                        onChange={(e) => this.setState({ parecer: e.target.value })}
+                        id={this.state.atualizarParecer}
+                        value={this.state.atualizarParecer}
+                        onChange={(e) => this.setState({ atualizarParecer: e.target.value })}
                     />
                 </Form.Group>
 

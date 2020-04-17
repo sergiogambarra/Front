@@ -1,28 +1,33 @@
 import React from 'react';
 import './card.css';
-import { Link } from "react-router-dom";
+import {useHistory} from 'react-router-dom'
+import Col from 'react-bootstrap/Col'
 
-export default function CardAproveitamento(req) {
+
+export default function  CardAproveitamento ({requisicao}){
+  let history = useHistory();
+  console.log(requisicao);
   const {
     id, dataRequisicao, usuario, disciplinaSolicitada, deferido,
     disciplinasCursadasAnterior, parecer,
-  } = req.requisicao;
+  } = requisicao;
+     return (
+      <Col className="box-card" sm={4}>
+        <div className='requisicao' onClick={()=>history.push(`/parecer/${id}`)}>
+        <p class={`badge badge-${mudaCor(deferido)}`}>{`Status do processo : ${deferido}`}</p>
+        <p>{`ID: ${id}`}</p>
+        <p>{`Data: ${dataRequisicao}`}</p>
+        <p>{`Aluno: ${usuario && usuario.perfil.nome}`}</p>
+        <p>{`Parecer: ${parecer}`}</p>
+        <p>{`Disciplina solicitada: ${disciplinaSolicitada.nome}`}</p>
+        <p>{`Disciplina cursada anteriormente: ${disciplinasCursadasAnterior}`}</p>
+        </div>
+      </Col>
+    );
+  }
+ 
 
-  return (
-    <div className="card"  >
-      <Link to={`/parecer/${id}`} class={`badge badge-${mudaCor(deferido)}`}>{`Status do processo : ${deferido}`}</Link>
-      <p>{`ID: ${id}`}</p>
-      <p>{`Data: ${dataRequisicao}`}</p>
-      <p>{`Aluno: ${usuario && usuario.perfil.nome}`}</p>
-      <p>{`Parecer: ${parecer}`}</p>
-      <p>{`Disciplina solicitada: ${disciplinaSolicitada.nome}`}</p>
-      <p>{`Disciplina cursada anteriormente: ${disciplinasCursadasAnterior}`}</p>
-    </div>
-  );
-
-
-}
-
+ 
 const mudaCor = (deferido) => {
   switch (deferido) {
     case 'DEFERIDO':

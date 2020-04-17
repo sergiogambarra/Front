@@ -27,12 +27,7 @@ function retornaLinks(user) {
     console.log(user.permissao);
     if (user.permissao === "ADMIN") {
         return <>
-            <SACELink to={'/minhas-requisicoes'} label={'Listar Requisições'} />
-            <SACELink to={`/cadastrar-servidor/${user.login}`} label={'Cadastrar servidor'} />
-            <SACELink to={'/cadastro-curso'} label={'Cadastrar curso'} />
-            <SACELink to={'/lista-alunos'} label={'Listar Alunos'} />
-            <SACELink to={'/lista-disciplina'} label={'Listar Disciplinas'} />
-            <SACELink to={'/nova-requisicao'} label={'Nova requisição'} />
+
         </>
     } else if (user.permissao === "ALUNO") {
         return <>
@@ -42,13 +37,17 @@ function retornaLinks(user) {
     } else if (user.permissao === "SERVIDOR") {
         return <>
             <SACELink to={'/minhas-requisicoes'} label={'Listar Requisições'} />
-            <SACELink to={'/lista-disciplina'} label={'Listar Disciplinas'} />
                 <DropdownButton id="dropdown-basic-button" title="CADASTRAR" >
-                <Dropdown.Item><Link to="/cadastro-curso">Curso</Link></Dropdown.Item>
+                <Dropdown.Item><Link to="/cadastrar-curso">Curso</Link></Dropdown.Item>
                 <Dropdown.Item ><Link to="/cadastro-servidor">Servidor</Link></Dropdown.Item>
+                <Dropdown.Item ><Link to="/cadastrar-disciplina">Disciplina</Link></Dropdown.Item>
                 </DropdownButton>
                 <DropdownButton id="dropdown-basic-button" title="LISTAR" style={{}}>
                 <Dropdown.Item ><Link to="/lista-alunos">Alunos</Link></Dropdown.Item>
+                <Dropdown.Item ><Link to="/lista-professor">Professor</Link></Dropdown.Item>
+                <Dropdown.Item ><Link to="/lista-servidor">Servidor</Link></Dropdown.Item>
+                <Dropdown.Item ><Link to="/listar-curso">Cursos</Link></Dropdown.Item>
+                <Dropdown.Item ><Link to="/lista-disciplina">Disciplinas</Link></Dropdown.Item>
                 </DropdownButton>
         </>
     } else {

@@ -6,7 +6,7 @@ import { Button } from 'react-bootstrap';
 import SACEInput from '../components/inputs/SACEInput';
 import axios from 'axios';
 import { Link } from "react-router-dom";
-
+import Container from 'react-bootstrap/Container'
 
 class MinhasRequisicoes extends Component {
   constructor(props) {
@@ -75,7 +75,7 @@ class MinhasRequisicoes extends Component {
   }
   render() {
     return (
-      <div>
+      <Container>
         <TituloPagina titulo={'Visualizar Requisições'} />
         <div class="custom-control custom-radio custom-control-inline">
           <input type="radio" id="aproveitamento" name="customRadioInline1" class="custom-control-input"
@@ -193,9 +193,9 @@ class MinhasRequisicoes extends Component {
                   )}
               </tbody>
             </table></div> : ""}
-        {this.state.requisicoes === "aproveitamento" ? <div className="col-6"><br /> <br />
-          <TabelaAproveitamentos /> </div> : this.state.requisicoes === "certificacao" ? <div className="col-6"><br /> <br />
-            <TabelaCertificacoes /></div> : ""}</div>
+        {this.state.requisicoes === "aproveitamento" ? 
+          <TabelaAproveitamentos />  : this.state.requisicoes === "certificacao" ? 
+            <TabelaCertificacoes /> : ""}</Container>
 
     );
   }
