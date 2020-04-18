@@ -10,15 +10,13 @@ class ListaDiscipinas extends Component {
         super();
         this.state = {
             disciplinas: [],
-            cursos:[]           
+            cursos:[],
+            nome:""
         }
     }
 
  
     async apagar(e) {
-        console.log(this.state.curso);
-        console.log(this.state);
-        
         await delDisciplinaCurso(`cursos/${this.state}/disciplinas/${e}`).then(() => {
         })
     }
@@ -28,6 +26,7 @@ class ListaDiscipinas extends Component {
     }
 
     async  listarDisciplinas() {
+        console.log(this.state.idcurso);
         await get(`cursos/${this.state.idcurso}/disciplinas/`).then((retorno) => {
             this.setState({ disciplinas: retorno })
         });
@@ -35,6 +34,7 @@ class ListaDiscipinas extends Component {
     componentDidMount() {
         this.listarCurso();
         this.listarDisciplinas();
+        
     }
     render() {
 
@@ -44,25 +44,19 @@ class ListaDiscipinas extends Component {
                 <select className="browser-default custom-select" disabled={this.state.disabled}
                     id={this.state.idcurso}
                     value={this.state.idcurso}
+                    onClick={() => this.listarDisciplinas(this.state.idcurso)}
                     onChange={(e) =>
                         this.setState({
                             idcurso: e.target.value,
                         })
                     }>
-                    <option id={""}></option>
+                    <option idcurso={"undefined"}></option>
                     {this.state.cursos && this.state.cursos.map((curso) =>
                         <option key={curso.id} value={curso.id}>{curso.nome}</option>
                     )}
                 </select>
-
-                <Button style={{ position: 'relative', left: '85%' }} variant="primary" className="btn btn-primary m-1"
-                    onClick={() => this.listarDisciplinas()}>
-                    Enviar
-                </Button>
-            
-                {<div >
-                <h3>Diciplinas </h3>
-
+                <br /><br /><br />
+                { typeof this.state.idcurso === "undefined"?"":<div><h3>Diciplinas </h3>
                     <table class="table">
                         <thead class="p-3 mb-2 bg-primary text-white">
                             <tr>

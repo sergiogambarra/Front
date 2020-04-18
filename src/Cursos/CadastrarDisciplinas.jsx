@@ -81,9 +81,9 @@ class CadastrarDisciplinas extends Component {
 
     render() {
         return (<div >
+            <br /><br />
             <Alert key={"idx"} variant={"success"} show={this.state.modal}>
                 Cadastrado com sucesso</Alert>
-            <br /><br />
             <h2>Cadastrar disciplinas</h2><br />
             <label >Selecione o curso</label>
             <select className="browser-default custom-select" disabled={this.state.disabled}
@@ -125,37 +125,7 @@ class CadastrarDisciplinas extends Component {
                 Limpar
                 </Button>
             <br />
-            {
-                this.state.mostraLista ? <> <h3>Disciplinas do Curso </h3>
 
-                    <table class="table">
-                        <thead class="p-3 mb-2 bg-primary text-white">
-                            <tr>
-                                <th scope="col">Id</th>
-                                <th scope="col">Nome</th>
-                                <th scope="col">Carga Horária</th>
-                                <th scope="col">Apagar</th>
-
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {this.state.disciplinas &&
-                                this.state.disciplinas.map((disciplinas) =>
-                                    <tr>
-                                        <td>{disciplinas.id}</td>
-                                        <td>{disciplinas.nome}</td>
-                                        <td>{disciplinas.cargaHoraria}</td>
-                                        <td> {disciplinas.nome === "" ? "" : <Button
-                                            variant="primary"
-                                            className="btn btn-danger m-1"
-                                            onClick={(e) => this.apagar(disciplinas.id)}
-                                        > Deletar </Button>}
-                                        </td>
-                                    </tr>
-                                )}
-                        </tbody>
-                    </table>
-                </> : ""}
         </div>
         );
     }

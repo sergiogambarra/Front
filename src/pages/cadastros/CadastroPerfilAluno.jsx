@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import TituloPagina from '../../components/TituloPagina';
 import { Form, Modal } from 'react-bootstrap';
 import { postCadastroUsuario } from '../../services/AlunoService';
+import {getPesquisaLogin} from '../../services/UsuarioService'
 
 class CadastroPerfilAluno extends Component {
     constructor(props) {
@@ -29,6 +30,8 @@ class CadastroPerfilAluno extends Component {
             msgSenhaNaoConfere:false
         }
     }
+
+    
     limpar() {
         this.setState({
             userName: "",
@@ -49,8 +52,11 @@ class CadastroPerfilAluno extends Component {
 
     }
 
-verifica(){
-
+async verifica(){
+    await getPesquisaLogin(`usuarios/pesquisa/aluno/${this.state.userName}`).then((retorno) => {
+        this.setState({ loginPesquisa: retorno })
+    });
+    if (this.state.loginPesquisa === this.state.userName.toUpperCase()) { this.setState({ userNameInvalido: true }) }
     if(this.state.nome===""?this.setState({nomeInvalido:true}):this.setState({nomeInvalido:false})){}
     if(this.state.email===""?this.setState({emailInvalido:true}):this.setState({emailInvalido:false})){}
     if(this.state.matricula===""?this.setState({matriculaInvalida:true}):this.setState({matriculaInvalida:false})){}
