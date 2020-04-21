@@ -8,8 +8,9 @@ import CursoSelect from '../inputs/CursoSelect';
 import ModalConfirmarRequisicao from '../ModalConfirmarRequisicao';
 import { postRequisicao } from '../../services/RequisicaoService';  
 import SACEAlert from '../SACEAlert';
+import { get } from '../../services/ServicoCrud';
 
-export default function CertificacaoConhecimentosForm({user}) {
+export default function CertificacaoConhecimentosForm() {
     const [curso, setCurso] = useState('');
     const [cursoInvalido, setCursoInvalido] = useState(false);
 
@@ -22,6 +23,7 @@ export default function CertificacaoConhecimentosForm({user}) {
     const [anexosInvalidos, setAnexosInvalidos] = useState(false);
     
     const [showModal, setShowModal] = useState(false);
+    const [id, setId] = useState("");
     const [alert, setAlert] = useState(null);    
     const [requisicao, setRequisicao] = useState(null);
 
@@ -30,7 +32,14 @@ export default function CertificacaoConhecimentosForm({user}) {
     useEffect(() => setDisciplinasCursadasAnteriorInvalida(false), [disciplinasCursadasAnterior]);
     useEffect(() => setAnexosInvalidos(false), [anexos]);
     useEffect(() => setShowModal(true), [requisicao]);
-
+    useEffect(()=>{
+        const fetchData = async () => {
+            const aluno =  await get(`usuarios/auth/`); 
+            setId(aluno.id);
+        } 
+        fetchData();
+    })
+    
     const camposInvalidos = () => {
         if(!curso) setCursoInvalido(true);
         if(!disciplinasCursadasAnterior) setDisciplinasCursadasAnteriorInvalida(true);
@@ -49,6 +58,7 @@ export default function CertificacaoConhecimentosForm({user}) {
         
 
     }
+
     const fazerRequisicao = async () => {
         if(camposInvalidos()) return;   
         
@@ -63,7 +73,7 @@ export default function CertificacaoConhecimentosForm({user}) {
                 cargaHoraria: discSolicitada.carga, 
             },
             usuario:{
-                id:user.id
+                id
             }
         });  
         setShowModal(true);

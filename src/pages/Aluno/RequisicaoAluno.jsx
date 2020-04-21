@@ -5,16 +5,16 @@ class RequisicaoAluno extends Component {
     constructor(props) {
         super(props);
         this.state = {
+           aluno:{},
            requisicoes:[],
            mostraTable:false
         }
     }
 
    async pesquisarNomeSolicitante() {
-       const requisicoes =  await get(`requisicoes/solicitante/${this.props.match.params.id}`);
-       if(requisicoes.length !== 0){
-        this.setState({requisicoes,mostraTable:true});
-       }       
+        const aluno =  await get(`usuarios/auth/`); 
+        const requisicoes = await get(`requisicoes/solicitante/${aluno.id}`);            
+        this.setState({requisicoes,aluno,mostraTable:true});
     }
 
     componentDidMount() {
@@ -24,7 +24,7 @@ class RequisicaoAluno extends Component {
         return (
             <div>
                  { this.state.mostraTable && <><br/><br/>
-                    <h3>Requisições do Aluno: {this.state.requisicoes[0].usuario.perfil.nome} </h3>
+                    <h3>Requisições do Aluno: {this.state.aluno&&this.state.aluno.perfil.nome}</h3>
                     <table className="table" >
                         <thead className="p-3 mb-2 bg-primary text-white">
                             <tr>

@@ -22,9 +22,11 @@ const postCadastroUsuario = async (usuario) => {
             }
         }
 
-        const putAluno = async (end, id) => {
+        const putAluno = async (end, id,dados) => {
+            
             try {
-                await axios.put(`${baseURL}/${end}/${id}`).then((resp) => {
+                await axios.put(`${baseURL}/${end}/${id}`,dados).then((resp) => {
+                    console.log(resp);
                     return resp;
                 })
             } catch (error) {

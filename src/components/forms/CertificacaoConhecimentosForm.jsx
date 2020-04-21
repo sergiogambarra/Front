@@ -8,6 +8,7 @@ import AnexarArquivosInput from '../inputs/anexarArquivosInput/AnexarArquivosInp
 import ModalConfirmarRequisicao from '../ModalConfirmarRequisicao';
 import { postRequisicao } from '../../services/RequisicaoService';
 import SACEAlert from '../SACEAlert';
+import { get } from '../../services/ServicoCrud';
 
 export default function CertificacaoConhecimentosForm({user}) {
 
@@ -22,7 +23,7 @@ export default function CertificacaoConhecimentosForm({user}) {
 
     const [anexos, setAnexos] = useState([]);
     const [anexosInvalidos, setAnexosInvalidos] = useState(false);
-    
+    const [id, setId] = useState("");
     const [showModal, setShowModal] = useState(false);
     const [alert, setAlert] = useState(null);    
     const [requisicao, setRequisicao] = useState(null);
@@ -32,7 +33,13 @@ export default function CertificacaoConhecimentosForm({user}) {
     useEffect(() => setFormacaoAtividadeAnteriorInvalida(false), [formacaoAtividadeAnterior]);
     useEffect(() => setAnexosInvalidos(false), [anexos]);
     useEffect(() => setShowModal(true), [requisicao]);
-
+    useEffect(()=>{
+        const fetchData = async () => {
+            const aluno =  await get(`usuarios/auth/`); 
+            setId(aluno.id);
+        } 
+        fetchData();
+    })
 
     const camposInvalidos = () => {
         if(!curso) setCursoInvalido(true);
@@ -64,7 +71,7 @@ export default function CertificacaoConhecimentosForm({user}) {
                 cargaHoraria: discSolicitada.carga, 
             },
             usuario:{
-                id:user.id
+                id
             }
         });
         setShowModal(true);

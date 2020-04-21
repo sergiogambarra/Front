@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { get, getId } from './../services/ServicoCrud'
 import { Button } from 'react-bootstrap'
-import { delAluno,putAluno } from '../services/AlunoService';
+import { delAluno, putAluno } from '../services/AlunoService';
 import SACEInput from '../components/inputs/SACEInput';
+import { format } from '../auxiliares/FormataData';
 
 class ListaAlunos extends Component {
     constructor(props) {
@@ -12,9 +13,10 @@ class ListaAlunos extends Component {
             mostraEditar: false,
             nome: "",
             matricula: "",
+            dataIngresso: "",
             email: "",
             username: "",
-            id:""
+            id: ""
         }
     }
     listarAlunos() {
@@ -26,9 +28,9 @@ class ListaAlunos extends Component {
     async buscaPeloId(e) {
         const usuario = await getId("usuarios/", e)
         this.setState({
-            
-            id:usuario.id,
+            id: usuario.id,
             nome: usuario.perfil.nome,
+            dataIngresso: usuario.perfil.dataIngresso,
             matricula: usuario.perfil.matricula,
             email: usuario.perfil.email,
             mostraEditar: true
@@ -39,17 +41,19 @@ class ListaAlunos extends Component {
         this.listarAlunos()
     }
     editar(e) {
-    console.log(this.state.nome);
-    console.log(this.state.matricula);
-    console.log(this.state.email);
-    
-        putAluno("usuarios",e,
-        {tipo:"ALUNO",
-        nome:this.state.nome,
-         matricula:this.state.matricula,
-         email:this.state.email,
-        }
-        )
+        putAluno("usuarios", e,
+            {
+                perfil:{
+                    nome: this.state.nome,
+                    tipo: "ALUNO",
+                    dataIngresso: this.state.dataIngresso,
+                    matricula: this.state.matricula,
+                    email: this.state.email
+                }
+            } ).then(() =>{
+                this.setState({mostraEditar:false});
+                this.listarAlunos()
+            })
     }
     render() {
         return (
@@ -61,6 +65,7 @@ class ListaAlunos extends Component {
                         <tr>
                             <th scope="col">Id</th>
                             <th scope="col">Nome</th>
+                            <th scope="col">Data Ingresso</th>
                             <th scope="col">Matrícula</th>
                             <th scope="col">Email</th>
                             <th scope="col">Login</th>
@@ -75,6 +80,7 @@ class ListaAlunos extends Component {
                                 <tr key={aluno.id}>
                                     <td>{aluno.id}</td>
                                     <td>{aluno.perfil.nome}</td>
+                                    <td>{format(aluno.perfil.dataIngresso)}</td>
                                     <td>{aluno.perfil.matricula}</td>
                                     <td>{aluno.perfil.email}</td>
                                     <td>{aluno.username}</td>
@@ -95,6 +101,12 @@ class ListaAlunos extends Component {
                     </tbody>
                 </table>
                 {this.state.mostraEditar && this.state.mostraEditar === true ? <>
+                    <hr/><br /><br />
+                    
+                    <h3 style={{textAlign:'center'}}>Formulário Edição</h3>
+                <p >ID : <span style={{
+                    color:'red'
+                }}>{this.state.id}</span></p>
                     <SACEInput
                         label={'Nome'}
                         value={this.state.nome}
@@ -102,6 +114,15 @@ class ListaAlunos extends Component {
                         onChange={(e) => this.setState({ nome: e.target.value })}
                         onError={this.state.nomeInvalido}
                         onErrorMessage={'Você não inseriu o seu nome corretamente!'}
+                    />
+                    <SACEInput
+                        label={'Data de Ingresso'}
+                        value={this.state.dataIngresso}
+                        placeholder={'Informe a data de Ingresso. '}
+                        onChange={(e) => this.setState({ dataIngresso: e.target.value })}
+                        onError={this.state.dataIngressoInvalido}
+                        onErrorMessage={'Você não inseriu uma data válida!'}
+                        tipo={"date"}
                     />
                     <SACEInput
                         label={'Matricula'}

@@ -18,20 +18,27 @@ class Parecer extends Component {
             deferido: "escolha",
             disciplinaSolicitada: "",
             usuario: "",
+            professor:{},
             anexos: [],
             formacaoAtividadeAnterior: "",
             criterioAvaliacao: "", tipo: "",atualizarParecer:""
 
         }
+      
+        
     }
     async componentDidMount() {
+    
         const c = await getRequisicaoId(this.props.match.params.id);
+        console.log(c);
+        
         this.setState({
             dataRequisicao: c.dataRequisicao,
             parecer: c.parecer,
             deferido: c.deferido,
             disciplinaSolicitada: c.disciplinaSolicitada,
             usuario: c.usuario.perfil.nome,
+            professor: c.professor,
             anexos:c.anexos,
             formacaoAtividadeAnterior: c.formacaoAtividadeAnterior,
             criterioAvaliacao: c.criterioAvaliacao,
@@ -45,7 +52,8 @@ class Parecer extends Component {
             tipo: this.state.tipo,
             deferido: this.state.deferido,
             parecer: this.state.atualizarParecer ? this.state.atualizarParecer : this.state.parecer
-        });
+        }).then(()=>{})
+
     }
     
     render() {
@@ -88,6 +96,13 @@ class Parecer extends Component {
                         disabled={true}
                         />
                 </Form.Group>
+
+                {
+                  console.log(this.state)
+                  
+                
+                }
+
                 <div style={{ fontSize: "200%" }}> Modificar Status </div>
                 <br />
                 <div class="custom-control custom-radio custom-control-inline">
@@ -138,7 +153,7 @@ class Parecer extends Component {
                 </Form.Group>
 
                 <div className="row container" style={{ position: 'relative', left: '32%' }}>
-                <Link to="/minhas-requisicoes">        <Button onClick={(e) => this.atualizar()} variant="primary" className="btn btn-primary m-1" data-toggle="modal" data-target="#exampleModal" style={{ border: "5px solid white" }}>Enviar</Button></Link>
+               <Button onClick={(e) => this.atualizar()} variant="primary" className="btn btn-primary m-1" data-toggle="modal" data-target="#exampleModal" style={{ border: "5px solid white" }}>Enviar</Button>
                     <Link to="/minhas-requisicoes"> <Button variant="danger" className="btn btn-primary m-2" >Voltar </Button></Link>
                 </div>
 
