@@ -9,7 +9,6 @@ export const login = token => {
   axios.defaults.headers.common['Authorization'] = `${token.tipo} ${token.token}`;
   sessionStorage.setItem(TOKEN_KEY,`${token.tipo} ${token.token}`);
   sessionStorage.setItem("ID",`${token.id}`);
-  console.log(token);
 };
 
 export const logout = () => {

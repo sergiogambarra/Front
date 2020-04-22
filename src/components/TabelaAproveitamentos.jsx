@@ -7,7 +7,7 @@ import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 import './tabelarequisicoes.css';
 
-export default function(props) {
+export default function({user}) {
   const [requisicoes, setRequisicoes] = useState([]);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -15,7 +15,7 @@ export default function(props) {
 
   useEffect(() => {
     setIsLoading(true);
-    getAproveitamentos()
+    getAproveitamentos(user)
       .then(result => {
         setRequisicoes(result);
         setIsLoading(false);
@@ -24,7 +24,7 @@ export default function(props) {
         setError(error);
         setIsLoading(false);
       });
-  }, []);
+  }, [user]);
 
 
   return (

@@ -2,22 +2,30 @@
 import { post, get } from '../services/ServicoCrud';
 
 const postRequisicao = async (requisicao) => {
-    return await post("requisicoes/",requisicao);
+    return await post("requisicoes/", requisicao);
 }
 
-const getAproveitamentos = async () => {
-   return  await get("requisicoes/aproveitamentos/");
+const getCertificacoes = async (user) => {
+    if (user.user.permissao === "PROFESSOR") {
+        return await get("requisicoes/professor/"+user.user.id+"?tipo=certificacao");
+    } else  {
+        return await get("requisicoes/certificacoes/");
+    }
+}
+
+const getAproveitamentos = async (user) => {
+    if (user.permissao === "PROFESSOR") {
+        return await get("requisicoes/professor/"+user.id+"?tipo=aproveitamento");
+    } else  {
+        return await get("requisicoes/aproveitamentos/");
+    }
 }
 
 const getRequisicaoId = async (id) => {
-    return  await get(`requisicoes/${id}`);
- }
-
-const getCertificacoes = async () => {
-   return await get("requisicoes/certificacoes/");
+    return await get(`requisicoes/${id}`);
 }
 
-export { 
+export {
     postRequisicao,
     getAproveitamentos,
     getCertificacoes,

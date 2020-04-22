@@ -6,10 +6,9 @@ import Col from 'react-bootstrap/Col'
 
 export default function  CardAproveitamento ({requisicao}){
   let history = useHistory();
-  console.log(requisicao);
   const {
     id, dataRequisicao, usuario, disciplinaSolicitada, deferido,
-    disciplinasCursadasAnterior, parecer,
+     parecer,
   } = requisicao;
      return (
       <Col className="box-card" sm={4}>
@@ -19,8 +18,7 @@ export default function  CardAproveitamento ({requisicao}){
         <p>{`Data: ${dataRequisicao}`}</p>
         <p>{`Aluno: ${usuario && usuario.perfil.nome}`}</p>
         <p>{`Parecer: ${parecer}`}</p>
-        <p>{`Disciplina solicitada: ${disciplinaSolicitada.nome}`}</p>
-        <p>{`Disciplina cursada anteriormente: ${disciplinasCursadasAnterior}`}</p>
+        <p>{`Disciplina : ${disciplinaSolicitada.nome}`}</p>
         </div>
       </Col>
     );

@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import TituloPagina from '../../components/TituloPagina';
 import { Form } from 'react-bootstrap';
 import { getRequisicaoId } from '../../services/RequisicaoService';
-import { put } from '../../services/ServicoCrud';
+import { put, get } from '../../services/ServicoCrud';
 
 
 class Parecer extends Component {
@@ -18,20 +18,27 @@ class Parecer extends Component {
             deferido: "escolha",
             disciplinaSolicitada: "",
             usuario: "",
-            professor:{},
+            professor: {},
             anexos: [],
             formacaoAtividadeAnterior: "",
-            criterioAvaliacao: "", tipo: "",atualizarParecer:""
+            criterioAvaliacao: "", tipo: "", atualizarParecer: "",
+           listaProfessores: []
 
         }
-      
-        
+
+
     }
+
+    async buscaProfessores() {
+        const listaProfessores = await get("usuarios/professores/");
+        this.setState({ listaProfessores })
+        console.log(this.state.listaProfessores);
+
+    }
+
     async componentDidMount() {
-    
+        this.buscaProfessores()
         const c = await getRequisicaoId(this.props.match.params.id);
-        console.log(c);
-        
         this.setState({
             dataRequisicao: c.dataRequisicao,
             parecer: c.parecer,
@@ -39,23 +46,25 @@ class Parecer extends Component {
             disciplinaSolicitada: c.disciplinaSolicitada,
             usuario: c.usuario.perfil.nome,
             professor: c.professor,
-            anexos:c.anexos,
+            anexos: c.anexos,
             formacaoAtividadeAnterior: c.formacaoAtividadeAnterior,
             criterioAvaliacao: c.criterioAvaliacao,
             tipo: c.tipo,
-            titulo:""
+            titulo: ""
         });
     }
-    
+
     atualizar() {
-        put("requisicoes",this.props.match.params.id, {
+        put("requisicoes", this.props.match.params.id, {
             tipo: this.state.tipo,
             deferido: this.state.deferido,
-            parecer: this.state.atualizarParecer ? this.state.atualizarParecer : this.state.parecer
-        }).then(()=>{})
+            parecer: this.state.atualizarParecer ? this.state.atualizarParecer : this.state.parecer,
+            professor:{
+                id:this.state.id}
+        }).then(() => { })
 
     }
-    
+
     render() {
         return (<div>
             <Form.Group className="col-md-6 container">
@@ -75,7 +84,7 @@ class Parecer extends Component {
                 />
                 <SACEInput
                     label={'Tipo'}
-                    value={this.state.tipo==="aproveitamento"?"APROVEITAMENTO DE ESTUDOS":"CERTIFICAÇÃO DE CONHECIMENTOS"}
+                    value={this.state.tipo === "aproveitamento" ? "APROVEITAMENTO DE ESTUDOS" : "CERTIFICAÇÃO DE CONHECIMENTOS"}
                     disabled={true}
 
                 />
@@ -89,21 +98,31 @@ class Parecer extends Component {
                     disabled={true} />
                 <Form.Group controlId="exampleForm.ControlTextarea1">
                     <Form.Label>Parecer</Form.Label>
-                    
+
                     <Form.Control as="textarea" rows="2"
                         id={this.state.parecer}
                         value={this.state.parecer}
                         disabled={true}
-                        />
+                    />
                 </Form.Group>
 
-                {
-                  console.log(this.state)
-                  
-                
-                }
-
                 <div style={{ fontSize: "200%" }}> Modificar Status </div>
+                <Form>
+                    <Form.Group controlId="exampleForm.SelectCustom">
+                        <br />
+                        <Form.Label>Selecione professor</Form.Label>
+                        <Form.Control as="select" custom
+                         id={this.state.listaProfessores.id}
+                         value={this.state.listaProfessores.id}
+                         onChange={(e)=>this.setState({id:e.target.value})}
+                         >
+                             <option></option>
+                            {this.state.listaProfessores&&this.state.listaProfessores.map((p)=>
+                                <option key={p.id} value={p.id}>{p.perfil.nome}</option>
+                            )}
+                        </Form.Control>
+                    </Form.Group>
+                </Form>
                 <br />
                 <div class="custom-control custom-radio custom-control-inline">
                     <input type="radio"
@@ -153,7 +172,7 @@ class Parecer extends Component {
                 </Form.Group>
 
                 <div className="row container" style={{ position: 'relative', left: '32%' }}>
-               <Button onClick={(e) => this.atualizar()} variant="primary" className="btn btn-primary m-1" data-toggle="modal" data-target="#exampleModal" style={{ border: "5px solid white" }}>Enviar</Button>
+                    <Button onClick={(e) => this.atualizar()} variant="primary" className="btn btn-primary m-1" data-toggle="modal" data-target="#exampleModal" style={{ border: "5px solid white" }}>Enviar</Button>
                     <Link to="/minhas-requisicoes"> <Button variant="danger" className="btn btn-primary m-2" >Voltar </Button></Link>
                 </div>
 

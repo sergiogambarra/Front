@@ -8,7 +8,7 @@ export default function CardCertificacao({requisicao}) {
   let history = useHistory();
   const {
     id, dataRequisicao, usuario, disciplinaSolicitada, deferido,
-    formacaoAtividadeAnterior, parecer,
+     parecer,
   } = requisicao;
 
   return (
@@ -19,8 +19,7 @@ export default function CardCertificacao({requisicao}) {
         <p>{`Data: ${dataRequisicao}`}</p>
         <p>{`Aluno: ${usuario && usuario.perfil.nome}`}</p>
         <p>{`Parecer: ${parecer}`}</p>
-        <p>{`Disciplina solicitada: ${disciplinaSolicitada.nome}`}</p>
-        <p>{`Disciplina cursada anteriormente: ${formacaoAtividadeAnterior}`}</p>
+        <p>{`Disciplina : ${disciplinaSolicitada.nome}`}</p>
         </div>
       </Col>
   );

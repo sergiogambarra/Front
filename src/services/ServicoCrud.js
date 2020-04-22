@@ -15,7 +15,7 @@ const getId = async (end, id) => {
         const entidade = await axios.get(`${baseURL}/${end}${id}`);
         return entidade.data;
     } catch (error) {
-        console.log(`${end.toUpperCase()}Service/get${end}:`, error);
+        console.log(`${end.toUpperCase()} Service/get ${baseURL}/${end}:`, error);
     }
 }
 
