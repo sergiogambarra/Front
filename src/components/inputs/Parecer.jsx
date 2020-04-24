@@ -7,7 +7,6 @@ import { Form, Modal } from 'react-bootstrap';
 import { getRequisicaoId } from '../../services/RequisicaoService';
 import { put, get } from '../../services/ServicoCrud';
 
-
 class Parecer extends Component {
     constructor(props) {
         super(props);
@@ -27,6 +26,7 @@ class Parecer extends Component {
 
 
     }
+    
     async listaAth(){
         const user = await get("usuarios/auth/")
             this.setState({user})
@@ -55,7 +55,7 @@ class Parecer extends Component {
             criterioAvaliacao: c.criterioAvaliacao,
             tipo: c.tipo,
             titulo: "",
-            cordenador: c.professor.perfil.cordenador
+            cordenador: c.professor  && c.professor.perfil.cordenador
         });
         if (this.state.id === "" || this.state.id === null) {
             this.setState({ id: this.state.professor && this.state.professor.perfil.id })
@@ -165,7 +165,6 @@ class Parecer extends Component {
                         this.state.anexos.map((a) => {
                             return <li>
                                 <a href={a.arquivo} download>{a.nome}</a>
-                                
                                 </li>
                         })
                     }
