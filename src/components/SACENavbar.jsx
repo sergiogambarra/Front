@@ -38,7 +38,7 @@ function retornaLinks(user) {
             <SACELink to={'/minhas-requisicoes'} label={'Listar Requisições'} />
                 <DropdownButton id="dropdown-basic-button" title="CADASTRAR" >
                 <Dropdown.Item><Link to="/cadastrar-curso">Curso</Link></Dropdown.Item>
-                <Dropdown.Item ><Link to="/cadastro-servidor">Servidor</Link></Dropdown.Item>
+                <Dropdown.Item ><Link to="/cadastro-servidor">Servidor / Professor</Link></Dropdown.Item>
                 <Dropdown.Item ><Link to="/cadastrar-disciplina">Disciplina</Link></Dropdown.Item>
                 </DropdownButton>
                 <DropdownButton id="dropdown-basic-button" title="LISTAR" style={{}}>
@@ -50,7 +50,10 @@ function retornaLinks(user) {
                 </DropdownButton>
         </>
     } else {
-        return <SACELink to={'/minhas-requisicoes'} label={'Listar Requisições'} />
+        return <>
+        <SACELink to={'/minhas-requisicoes'} label={'Listar Requisições'} />
+        <SACELink to={'/troca-senha'} label={'Alterar-senha'} />
+        </>
     }
 }
 
@@ -65,14 +68,17 @@ export default function SACENavbar({ setUserData, user }) {
                     }
                 </Nav>
             </Navbar.Collapse>
+            Usuário :&nbsp;
+                <strong variant="outline-light" >{user.login}</strong>
             <NavLink to={'/'}>
+            &nbsp;&nbsp;
                 <Button
                     variant="danger" className="btn btn-primary m-1"
                     onClick={() => {
                         logout();
                         setUserData(null);
                     }}
-                >
+                    >
                     Logout
                 </Button>
             </NavLink>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { get, getId, put } from '../../services/ServicoCrud';
+import { get, getId, put, del } from '../../services/ServicoCrud';
 import SACEInput from '../../components/inputs/SACEInput';
 import { Button, Form } from 'react-bootstrap'
 
@@ -13,7 +13,7 @@ class ListaProfessor extends Component {
             mostrarEditar: false
         }
     }
-  
+
     async componentDidMount() {
         const professores = await get("usuarios/professores/");
         this.setState({ professores })
@@ -41,6 +41,11 @@ class ListaProfessor extends Component {
                 this.setState({ mostrarEditar: false });
                 this.componentDidMount()
             })
+    }
+    deletar(e) {
+        del("usuarios",e).then(()=>{
+            this.componentDidMount()
+        })
     }
 
     render() {
@@ -70,6 +75,7 @@ class ListaProfessor extends Component {
                                 <td> {p.perfil.nome === "" ? "" : <Button
                                     variant="primary"
                                     className="btn btn-danger m-1"
+                                    onClick={() => this.deletar(p.id)}
                                 > Deletar </Button>}
                                 </td>
                                 <td> {p.perfil.nome === "" ? "" : <Button
@@ -107,10 +113,10 @@ class ListaProfessor extends Component {
                     onError={this.state.siapeInvalido}
                     onErrorMessage={'Você não inseriu a seu siape corretamente!'}
                 />
-               <Form.Check type="switch" id="custom-switch" label="Cordenador" value={this.state.cordenador} checked={this.state.cordenador}
-                        onChange={() => this.setState({ cordenador: !this.state.cordenador })} />
-                        <br />
-              
+                <Form.Check type="switch" id="custom-switch" label="Cordenador" value={this.state.cordenador} checked={this.state.cordenador}
+                    onChange={() => this.setState({ cordenador: !this.state.cordenador })} />
+                <br />
+
                 <Button
                     variant="primary"
                     className="btn btn-primary m-1"

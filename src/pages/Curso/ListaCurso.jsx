@@ -97,16 +97,18 @@ export default class ListaCursos extends Component {
                                         </Button>
                                 </td>
                                 <td>
-                                    <Button id={curso.id} type="button" className="btn btn-success m-1"
-                                        onClick={(e) => this.listarCursosId(e.target.id)}> Editar </Button>
+                                 <a href={"#top"}> <Button id={curso.id} type="button" className="btn btn-success m-1"
+                                        onClick={(e) => this.listarCursosId(e.target.id)}> Editar </Button></a>
                                 </td>
                             </tr>
                         )}
                     </tbody>
                 </table>
+                <hr/>
                 <br /><br />
                 <Alert key={"idx"} variant={"success"} show={this.state.modal}>Cadastrado com sucesso</Alert>
                 <fieldset>
+                    {this.state.editar===true?<h3 id={"top"}style={{textAlign:"center"}}>Formulário de edição</h3>:""}
                     <SACEInput label={'Nome do Curso'} value={this.state.nome} placeholder={'Preencha com o nome do curso que você deseja cadastrar'}
                         onChange={(e) => this.setState({ nome: e.target.value })} onError={this.state.texto} onErrorMessage={'Nome do curso não encontrado'} />
                     <Form.Group className="d-flex justify-content-end">

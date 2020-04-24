@@ -90,11 +90,12 @@ class ListaAlunos extends Component {
                                         onClick={(e) => delAluno("usuarios", aluno.id).then(() => { this.listarAlunos() })}
                                     > Deletar </Button>}
                                     </td>
-                                    <td> {aluno.perfil.nome === "" ? "" : <Button
+                                    <td> {aluno.perfil.nome === "" ? "" :<a href={"#top"}> <Button
                                         variant="primary"
                                         className="btn btn-success m-1"
                                         onClick={() => this.buscaPeloId(aluno.id)}
-                                    > Editar </Button>}
+
+                                    > Editar </Button></a>}
                                     </td>
                                 </tr>
                             )}
@@ -103,11 +104,12 @@ class ListaAlunos extends Component {
                 {this.state.mostraEditar && this.state.mostraEditar === true ? <>
                     <hr/><br /><br />
                     
-                    <h3 style={{textAlign:'center'}}>Formulário Edição</h3>
+                    <h3 id={"top"}style={{textAlign:'center'} }>Formulário Edição</h3>
                 <p >ID : <span style={{
                     color:'red'
                 }}>{this.state.id}</span></p>
                     <SACEInput
+                        autoFocus
                         label={'Nome'}
                         value={this.state.nome}
                         placeholder={'Informe o seu nome. '}

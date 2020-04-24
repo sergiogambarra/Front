@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { get, getId ,put} from './../../services/ServicoCrud'
+import { get, getId ,put, del} from './../../services/ServicoCrud'
 import { Button} from 'react-bootstrap'
 import SACEInput from '../../components/inputs/SACEInput';
 
@@ -39,6 +39,11 @@ class ListaServidor extends Component {
                 this.componentDidMount()
             })
     }
+    deletar(e){
+        del("usuarios",e).then(()=>{
+            this.componentDidMount()
+        })
+    }
     render() {
         return (<div>
             <br /><br />
@@ -66,13 +71,14 @@ class ListaServidor extends Component {
                                 <td> {s.perfil.nome === "" ? "" : <Button
                                     variant="primary"
                                     className="btn btn-danger m-1"
+                                    onClick={()=>this.deletar(s.id)}
                                 > Deletar </Button>}
                                 </td>
-                                <td> {s.perfil.nome === "" ? "" : <Button
+                                <td> {s.perfil.nome === "" ? "" :<a href="#top"><Button
                                     variant="primary"
                                     className="btn btn-success m-1"
                                     onClick={() => this.buscaPeloId(s.id)}
-                                > Editar </Button>}
+                                > Editar </Button></a>}
                                 </td>
                             </tr>
                         )}
@@ -82,11 +88,12 @@ class ListaServidor extends Component {
             {this.state.mostrarEditar && this.state.mostrarEditar === true ? <>
                 <hr /><br /><br />
 
-                <h3 style={{ textAlign: 'center' }}>Formulário Edição</h3>
+                <h3 id="top" style={{ textAlign: 'center' }}>Formulário Edição</h3>
                 <p >ID : <span style={{
                     color: 'red'
                 }}>{this.state.id}</span></p>
                 <SACEInput
+                    autoFocus={true}
                     label={'Nome'}
                     value={this.state.nome}
                     placeholder={'Informe o seu nome. '}

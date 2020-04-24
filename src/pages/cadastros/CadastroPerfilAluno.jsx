@@ -165,13 +165,12 @@ async verifica(){
 
                     <div className="row container" style={{ position: 'relative', left: '32%' }}>
 
-
                         <Button variant="primary" className="btn btn-primary m-1" onClick={() => this.verifica()}> Enviar </Button>
                         <Modal show={this.state.modalShow} onHide={() => this.setState({ modalShow: false })} animation={false}>
                             <Modal.Header closeButton>
                                 <Modal.Title > Confirmar</Modal.Title>
                             </Modal.Header>
-                            <Modal.Body>Confira seus dados você não podera alteralos depois de salvar</Modal.Body>
+                            <Modal.Body>Confira seus dados! Você não poderá alterá-los depois de salvar</Modal.Body>
                             <Modal.Footer>
                                 <Button variant="danger" onClick={() => this.setState({ modalShow: false })}>  Fechar </Button>
                                 <Button onClick={() => this.enviarCadastro()} className="btn btn-primary m-1" data-toggle="modal" data-target="#exampleModal" style={{ border: "5px solid white" }}>Salvar</Button>

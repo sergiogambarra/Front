@@ -6,6 +6,9 @@ const postRequisicao = async (requisicao) => {
 }
 
 const getCertificacoes = async (user) => {
+    if(user.user.perfil.cordenador === true){
+        return await get("requisicoes/certificacoes/");
+    }else
     if (user.user.permissao === "PROFESSOR") {
         return await get("requisicoes/professor/"+user.user.id+"?tipo=certificacao");
     } else  {
@@ -14,6 +17,9 @@ const getCertificacoes = async (user) => {
 }
 
 const getAproveitamentos = async (user) => {
+    if(user.perfil.cordenador === true){
+        return await get("requisicoes/aproveitamentos/");
+    }else
     if (user.permissao === "PROFESSOR") {
         return await get("requisicoes/professor/"+user.id+"?tipo=aproveitamento");
     } else  {

@@ -15,6 +15,7 @@ export default function SACEInput(props) {
         className,
         disabled,
         size,
+        autoFocus,
     } = props;
 
     return (
@@ -25,6 +26,7 @@ export default function SACEInput(props) {
             <Form.Control 
                 min={min}
                 type={tipo}  
+                autoFocus={autoFocus}
                 placeholder={placeholder}
                 onChange={onChange}
                 value={value}

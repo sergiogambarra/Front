@@ -45,6 +45,6 @@ class MinhasRequisicoes extends Component {
     );
   }
 }
-export default MinhasRequisicoes;
+export default MinhasRequisicoes ;
 
 

@@ -29,11 +29,15 @@ const post = async (end, data) => {
 }
 
 const put = async (end, id, data) => {
+    console.log(end);
+    console.log(id);
+    console.log(data);
     try {
         const entidade = await axios.put(`${baseURL}/${end}/${id}`, data);
+        
         return (entidade);
     } catch (error) {
-        console.log(`${end.toUpperCase()}Service/put${end}:`, error);
+        console.log(`${end.toUpperCase()}Service/put${baseURL}/${end}/${id}:`, error);
     }
 }
 
@@ -43,7 +47,7 @@ const del = async (end, id) => {
             return resp;
         })
     } catch (error) {
-        console.log(`${end.toUpperCase()}Service/delete${end}:`, error);
+        console.log(`${end.toUpperCase()}Service/delete${baseURL}/${end}/${id}:`, error);
     }
 }
 const delDisciplinaCurso = async (end, id) => {

@@ -8,7 +8,7 @@ export default function  CardAproveitamento ({requisicao}){
   let history = useHistory();
   const {
     id, dataRequisicao, usuario, disciplinaSolicitada, deferido,
-     parecer,
+     parecer,professor
   } = requisicao;
      return (
       <Col className="box-card" sm={4}>
@@ -19,6 +19,7 @@ export default function  CardAproveitamento ({requisicao}){
         <p>{`Aluno: ${usuario && usuario.perfil.nome}`}</p>
         <p>{`Parecer: ${parecer}`}</p>
         <p>{`Disciplina : ${disciplinaSolicitada.nome}`}</p>
+        <p>{`Professor : ${professor&&professor.perfil.nome}`}</p>
         </div>
       </Col>
     );

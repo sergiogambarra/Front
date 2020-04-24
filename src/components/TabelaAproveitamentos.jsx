@@ -35,7 +35,9 @@ export default function({user}) {
                {error && <Alert variant='danger'>Não foi possível carregar suas requisições.</Alert>}
           </Col>
         </Row>
-        <Row sm={12}>
+        <Row sm={12} style={{
+        height:'200px'
+      }}>
                 {
                   isLoading 
                 ? 

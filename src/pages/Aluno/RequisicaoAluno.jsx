@@ -27,12 +27,12 @@ class RequisicaoAluno extends Component {
                     <h3>Requisições do Aluno: {this.state.aluno&&this.state.aluno.perfil.nome}</h3>
                     <table className="table" >
                         <thead className="p-3 mb-2 bg-primary text-white">
-                            <tr>
+                            <tr >
                                 <th scope="col">Id</th>
                                 <th scope="col">Data</th>
                                 <th scope="col">Tipo de requisição</th>
                                 <th scope="col">Disciplina</th>
-                                <th scope="col">Status</th>
+                                <th style={{textAlign:"center"}} scope="col">Status</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -43,7 +43,11 @@ class RequisicaoAluno extends Component {
                                         <td>{u.dataRequisicao}</td>
                                         <td>{u.tipo === "aproveitamento" ? "Aproveitamentos de estudos" : "Certificação de conhecimentos "}</td>
                                         <td>{u.disciplinaSolicitada.nome}</td>
-                                        <td>{u.deferido}</td>
+                                        <td style={{backgroundColor:
+                                            u.deferido === "DEFERIDO" ? 'green' : u.deferido === "INDEFERIDO" ? 'red' : 'orange'
+                                            ,textAlign:"center"}}>
+                                            {u.deferido}
+                                        </td>
                                     </tr>
                                 )}
                         </tbody>
