@@ -36,6 +36,11 @@ class MinhasRequisicoes extends Component {
             onChange={(e) => this.setState({ requisicoes: e.target.id, cont: "" })} />
           <label id="mudarCor" class="custom-control-label" for="certificacao">Certificação de conhecimentos</label>
         </div>
+        <div class="custom-control custom-radio custom-control-inline">
+          <input type="radio" id="pesquisar" name="customRadioInline1" class="custom-control-input"
+            onChange={(e) => this.setState({ requisicoes: e.target.id, cont: "" })} />
+          <label id="mudarCor" class="custom-control-label" for="pesquisar">Pesquisar</label>
+        </div>
         <br /><br /><br />
 
         {this.state.requisicoes === "aproveitamento" ?

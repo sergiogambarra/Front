@@ -29,10 +29,7 @@ const post = async (end, data) => {
 }
 
 const put = async (end, id, data) => {
-    console.log(end);
-    console.log(id);
-    console.log(data);
-    try {
+      try {
         const entidade = await axios.put(`${baseURL}/${end}/${id}`, data);
         
         return (entidade);
@@ -67,6 +64,26 @@ const getNomeCurso = async (end) => {
         console.log(`${end.toUpperCase()}Service/get${end}:`, error);
     }
 }
+const getIdDisciplina = async (end, id) => {
+    try {
+        const entidade = await axios.get(`${baseURL}/${end}`);
+        return entidade.data;
+    } catch (error) {
+        console.log(`${end.toUpperCase()}Service/get${end}:`, error);
+    }
+}
+const putDisciplinas = async (end, data) => {
+    console.log(end);
+    console.log(data);
+    
+    try {
+      const entidade = await axios.put(`${baseURL}/${end}/`,data);
+      
+      return (entidade);
+  } catch (error) {
+      console.log(`${end.toUpperCase()}Service/put${baseURL}/${end}/${data}/:`, error);
+  }
+}
 
 
 
@@ -77,6 +94,7 @@ export {
     put,
     del,
     delDisciplinaCurso,
-    getNomeCurso
-   
+    getNomeCurso,
+    getIdDisciplina,
+    putDisciplinas  
 };
