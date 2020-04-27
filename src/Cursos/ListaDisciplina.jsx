@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button } from 'react-bootstrap';
-import { get, delDisciplinaCurso } from '../services/ServicoCrud';
-
+import { get, delDisciplinaCurso, put } from '../services/ServicoCrud';
+import SACEInput from '../components/inputs/SACEInput';
 
 
 class ListaDiscipinas extends Component {
@@ -11,7 +11,7 @@ class ListaDiscipinas extends Component {
         this.state = {
             disciplinas: [],
             cursos:[],
-            nome:""
+            nome:"",mostraEditar:false,idDisciplina:"",cargaHoraria:""
         }
     }
 
@@ -36,6 +36,16 @@ class ListaDiscipinas extends Component {
         this.listarDisciplinas();
         
     }
+    editar(e){
+        this.setState({mostraEditar:true,idDisciplina:e})
+    }
+    editarDisciplina(){
+        put("cursos",this.state.idDisciplina,{
+            nome:this.state.nome,
+            cargaHoraria:this.state.cargaHoraria
+        })
+    }
+
     render() {
 
         return (
@@ -64,6 +74,7 @@ class ListaDiscipinas extends Component {
                                 <th scope="col">Nome</th>
                                 <th scope="col">Carga Horária</th>
                                 <th scope="col">Apagar</th>
+                                <th scope="col">Editar</th>
 
                             </tr>
                         </thead>
@@ -77,10 +88,41 @@ class ListaDiscipinas extends Component {
                                         className="btn btn-danger m-1"
                                         onClick={(e) => this.apagar(d.id)}
                                     > Deletar </Button></td>
+                                    <td><Button variant="primary"
+                                        className="btn btn-success m-1"
+                                        onClick={(e) => this.editar(d.id)}
+                                    > Editar </Button></td>
                                 </tr>
                             )}
                         </tbody>
                     </table>
+                            <hr></hr><br /><br />
+                    {this.state.mostraEditar===true?
+                   <><h3 id={"top"}style={{textAlign:'center'} }>Formulário Edição</h3>
+                   <p >ID : <span style={{
+                       color:'red'
+                   }}>{this.state.idDisciplina}</span></p> <SACEInput
+                   autoFocus
+                placeholder={'Digite o nome Disciplina'}
+                value={this.state.nome}
+                label={'Nome Disciplina'}
+                onChange={(e) => this.setState({ nome: e.target.value })}
+                onError={this.state.textodisciplina}
+                onErrorMessage={'Campo da disciplina obrigatório'}
+            />
+
+            <b />
+            <SACEInput tipo="number" id="quantity" name="cargaHoraria" min="15" max=""
+                placeholder={'Digite a carga horária da disciplina'}
+                label="Carga Horária"
+                onChange={(e) => this.setState({ cargaHoraria: e.target.value })}
+                onError={this.state.textocargahoraria}
+                onErrorMessage={'Campo carga Horária é obrigatório e não pode ser menor que 15 horas'}
+                value={this.state.cargaHoraria}
+            />
+            <Button style={{ position: 'relative', left: '80%' }} variant="primary" className="btn btn-primary m-1" onClick={(e) => this.editarDisciplina()}>
+                Enviar
+                </Button></>:""}
                 </div>
 
                 }

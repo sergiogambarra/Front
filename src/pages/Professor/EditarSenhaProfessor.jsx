@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { get, put } from '../../services/ServicoCrud';
 import SACEInput from '../../components/inputs/SACEInput';
-import { Button } from 'react-bootstrap';
+import { Button, Alert } from 'react-bootstrap';
 
 
 class EditarSenhaProfessor extends Component {
@@ -9,7 +9,8 @@ class EditarSenhaProfessor extends Component {
         super(props);
         this.state = {
             password: "", username: "", id: "",
-            novaSenha: ""
+            novaSenha: "",confirmaSenhaInvalida:false,
+            senhaInvalida:false,alert:false
         }
     }
     async componentDidMount() {
@@ -20,14 +21,25 @@ class EditarSenhaProfessor extends Component {
         })
     }
     async editar() {
+        if(this.state.password ===""?this.setState({ senhaInvalida:true}):this.setState({ senhaInvalida:false})){}
+        if(this.state.password !== this.state.novaSenha || this.state.novaSenha ===""){
+            this.setState({confirmaSenhaInvalida:true})
+            return
+        }
         put("usuarios/senha",this.state.id, {
                 password:this.state.password
-        })
+        }).then(()=>{this.setState({alert:true})})
+        setTimeout(()=>{this.setState({alert:false})},2000)
+        this.limpar()
+    }
+    limpar(){
+        this.setState({confirmaSenhaInvalida:false,senhaInvalida:false,password:"",novaSenha:""})
     }
 
     render() {
         return (<div>
             <br /><br /><br />
+            <Alert show={this.state.alert} variant={"success"}>Salvo com sucesso!</Alert>
             <SACEInput
                 label={'Login'}
                 value={this.state.username}
@@ -50,8 +62,9 @@ class EditarSenhaProfessor extends Component {
                 onError={this.state.confirmaSenhaInvalida}
                 onErrorMessage={'As senhas não conferem! Favor inserir a mesma senha!'}
                 tipo={"password"}
-            />
-            <Button variant="primary" onClick={() => this.editar()}>Salvar</Button>
+            /><br />
+            <Button variant="primary" onClick={() => this.editar()}>Salvar</Button>&nbsp;
+            <Button variant="danger" onClick={() => this.limpar()}>limpar</Button>
         </div>);
     }
 }
