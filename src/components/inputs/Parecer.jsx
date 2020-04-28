@@ -21,22 +21,24 @@ class Parecer extends Component {
             formacaoAtividadeAnterior: "",
             criterioAvaliacao: "", tipo: "", atualizarParecer: "",
             listaProfessores: [],
-            idRequisicao: "", id: "", modal: false, cordenador: ""
+            idRequisicao: "", id: "", modal: false, cordenador: "", disciplinas: [],
+            idDisciplina:""
         }
 
 
     }
-    
-    async listaAth(){
+
+    async listaAth() {
         const user = await get("usuarios/auth/")
-            this.setState({user})
-      }
+        this.setState({ user })
+    }
     async buscaProfessores() {
         const listaProfessores = await get("usuarios/professores/");
         this.setState({ listaProfessores })
     }
 
     async componentDidMount() {
+        this.listaDisciplinas()
         this.listaAth()
         this.buscaProfessores()
         const c = await getRequisicaoId(this.props.match.params.id)
@@ -55,23 +57,42 @@ class Parecer extends Component {
             criterioAvaliacao: c.criterioAvaliacao,
             tipo: c.tipo,
             titulo: "",
-            cordenador: c.professor  && c.professor.perfil.cordenador
+            cordenador: c.professor && c.professor.perfil.cordenador
         });
         if (this.state.id === "" || this.state.id === null) {
             this.setState({ id: this.state.professor && this.state.professor.perfil.id })
         }
     }
+    async listaDisciplinas() {
+        await get("disciplinas/").then((r) => this.setState({
+            disciplinas: r
+        }))
+        console.log(this.state.disciplinas);
+
+    }
 
     async atualizar() {
-        put("requisicoes", this.props.match.params.id, {
-            tipo: this.state.tipo,
-            deferido: this.state.deferido,
-            parecer: this.state.atualizarParecer ? this.state.atualizarParecer : this.state.parecer,
-            professor: {
-                id: this.state.id
-            }
-        }).then(() => { this.setState({ modal: false }) })
+        if (this.state.id === null||this.state.id>0 & this.state.disciplinaSolicitada===null) {
+            console.log("ihihihihi");
+            put("requisicoes", this.props.match.params.id, {
+                tipo: this.state.tipo,
+                deferido: this.state.deferido,
+                disciplinaSolicitada:{
+                    id:this.state.idDisciplina
+                },
+                parecer: this.state.atualizarParecer ? this.state.atualizarParecer : this.state.parecer,
+            }).then(() => { this.setState({ modal: false }) })
+        }else{
+            put("requisicoes", this.props.match.params.id, {
+                tipo: this.state.tipo,
+                deferido: this.state.deferido,
+                parecer: this.state.atualizarParecer ? this.state.atualizarParecer : this.state.parecer,
+                professor: {
+                    id: this.state.id
+                }
 
+            }).then(() => { this.setState({ modal: false }) })
+        }
     }
 
     render() {
@@ -99,7 +120,7 @@ class Parecer extends Component {
                 />
                 <SACEInput
                     label={'Disciplina'}
-                    value={this.state.disciplinaSolicitada.nome}
+                    value={this.state.disciplinaSolicitada && this.state.disciplinaSolicitada.nome}
                     disabled={true} />
                 <SACEInput
                     label={'Status'}
@@ -116,7 +137,7 @@ class Parecer extends Component {
                 </Form.Group>
 
                 <div style={{ fontSize: "200%" }}> Modificar Status </div>
-                {this.state.user&&this.state.user.perfil.cordenador===true? <Form>
+                {this.state.user && this.state.user.perfil.cordenador === true ? <Form>
                     <Form.Group controlId="exampleForm.SelectCustom">
                         <br />
                         <Form.Label>Selecione professor</Form.Label>
@@ -130,7 +151,19 @@ class Parecer extends Component {
                             )}
                         </Form.Control>
                     </Form.Group>
-                </Form> : ""}
+                </Form> : <Form>
+                        <Form.Group controlId="exampleForm.SelectCustom">
+                            <br />
+                            <Form.Label>Editar disciplina</Form.Label>
+                            <Form.Control as="select" custom
+                                onChange={(e) => this.setState({ idDisciplina: e.target.value })} >
+                                <option selected ></option>
+                                {this.state.disciplinas && this.state.disciplinas.map((disc) =>
+                                    <option key={disc.id} value={disc.id}>{disc.nome}</option>
+                                )}
+                            </Form.Control>
+                        </Form.Group>
+                    </Form>}
                 <br />
                 <div class="custom-control custom-radio custom-control-inline">
                     <input type="radio"
@@ -165,7 +198,7 @@ class Parecer extends Component {
                         this.state.anexos.map((a) => {
                             return <li>
                                 <a href={a.arquivo} download>{a.nome}</a>
-                                </li>
+                            </li>
                         })
                     }
                 </ol>

@@ -20,7 +20,7 @@ export default function CardCertificacao({requisicao}) {
         <p>{`Data: ${dataRequisicao}`}</p>
         <p>{`Aluno: ${usuario && usuario.perfil.nome}`}</p>
         <p>{`Parecer: ${parecer}`}</p>
-        <p>{`Disciplina : ${disciplinaSolicitada.nome}`}</p>
+        <p>{`Disciplina : ${disciplinaSolicitada&&disciplinaSolicitada.nome}`}</p>
         <p>{`Professor : ${professor&&professor.perfil.nome}`}</p>
         </div>
       </Col>

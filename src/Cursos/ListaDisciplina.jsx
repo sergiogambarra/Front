@@ -20,7 +20,8 @@ class ListaDiscipinas extends Component {
 
 
     async apagar(e) {
-        await delDisciplinaCurso(`cursos/${this.state}/disciplinas/${e}`).then(() => {
+        await delDisciplinaCurso(`cursos/${this.state.idcurso}/disciplinas/${e}`).then(() => {
+            this.listarDisciplinas()
         })
     }
     async listarCurso() {

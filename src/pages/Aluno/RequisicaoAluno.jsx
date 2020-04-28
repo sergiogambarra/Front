@@ -42,7 +42,7 @@ class RequisicaoAluno extends Component {
                                         <td>{u.id}</td>
                                         <td>{u.dataRequisicao}</td>
                                         <td>{u.tipo === "aproveitamento" ? "Aproveitamentos de estudos" : "Certificação de conhecimentos "}</td>
-                                        <td>{u.disciplinaSolicitada.nome}</td>
+                                        <td>{u.disciplinaSolicitada&&u.disciplinaSolicitada.nome}</td>
                                         <td style={{backgroundColor:
                                             u.deferido === "DEFERIDO" ? 'green' : u.deferido === "INDEFERIDO" ? 'red' : 'orange'
                                             ,textAlign:"center"}}>
