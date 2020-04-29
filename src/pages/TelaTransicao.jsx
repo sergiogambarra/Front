@@ -17,7 +17,7 @@ export default function TelaTransicao() {
       <Card style={{ width: '50 rem' }}>
           <Card.Img variant="top" src={path} />
           <Card.Body>
-            <Card.Title>Portal de Requisição de Aproveitamento de Estudos ou Certificação de Conhecimentos.</Card.Title>
+            <Card.Title>Portal de Requisição de Aproveitamento de Estudos e de Certificação de Conhecimentos.</Card.Title>
             <Card.Text>
             </Card.Text>
           </Card.Body>

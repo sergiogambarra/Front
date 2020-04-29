@@ -136,7 +136,7 @@ class Parecer extends Component {
                 {this.state.user && this.state.user.perfil.cordenador === true ? <Form>
                     <Form.Group controlId="exampleForm.SelectCustom">
                         <br />
-                        <Form.Label>Selecione professor</Form.Label>
+                        <Form.Label>Selecione um professor para tratar essa requisição  </Form.Label>
                         <Form.Control as="select" custom
                             id={this.state.listaProfessores.id}
                             value={this.state.listaProfessores.id}
@@ -177,6 +177,7 @@ class Parecer extends Component {
                     <label class="custom-control-label" for="escolha" style={{ display: "none" }}></label><br /><br />
                 </div>
                 <br />
+                <label>Documentos enviados pelo aluno :</label>
                 <ol>
                     {
                         this.state.anexos.map((a) => {
@@ -209,7 +210,7 @@ class Parecer extends Component {
                     </Modal.Footer>
                 </Modal>
                 <div className="row container" style={{ position: 'relative', left: '32%' }}>
-                    <Button onClick={(e) => this.setState({ modal: true })} variant="primary" className="btn btn-primary m-1" data-toggle="modal" data-target="#exampleModal" style={{ border: "5px solid white" }}>Enviar</Button>
+                    <Button onClick={(e) => this.setState({ modal: true })} variant="primary" className="btn btn-primary m-1" data-toggle="modal" data-target="#exampleModal" style={{ border: "5px solid white" }}>Salvar</Button>
                     <Link to="/minhas-requisicoes"> <Button variant="danger" className="btn btn-primary m-2" >Voltar </Button></Link>
                 </div>
 

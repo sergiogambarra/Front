@@ -8,15 +8,15 @@ import { get } from '../services/ServicoCrud'
 class MinhasRequisicoes extends Component {
   constructor(props) {
     super();
-    this.state = { requisicoes: "", escolha: "",id:"",user:{} }
+    this.state = { requisicoes: "", escolha: "", id: "", user: {} }
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.listaAth()
   }
-  async listaAth(){
+  async listaAth() {
     const user = await get("usuarios/auth/")
-        this.setState({user})
+    this.setState({ user })
 
   }
 
@@ -44,12 +44,14 @@ class MinhasRequisicoes extends Component {
         <br /><br /><br />
 
         {this.state.requisicoes === "aproveitamento" ?
-          <TabelaAproveitamentos user={this.state.user}/> : this.state.requisicoes === "certificacao" ?
-            <TabelaCertificacoes user={ this.state.user}/> : ""}</Container>
+          <TabelaAproveitamentos user={this.state.user} /> : this.state.requisicoes === "certificacao" ?
+            <TabelaCertificacoes user={this.state.user} /> :
+           ""
+        }</Container>
 
     );
   }
 }
-export default MinhasRequisicoes ;
+export default MinhasRequisicoes;
 
 

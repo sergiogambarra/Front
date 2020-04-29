@@ -58,8 +58,8 @@ class ListaProfessor extends Component {
                     <tr>
                         <th scope="col">Id</th>
                         <th scope="col">Nome</th>
-                        <th scope="col">Siape</th>
-                        <th scope="col">Cordenador</th>
+                        <th scope="col">SIAPE</th>
+                        <th scope="col">Coordenador</th>
                         <th scope="col">Apagar</th>
                         <th scope="col">Editar</th>
                     </tr>
@@ -92,7 +92,7 @@ class ListaProfessor extends Component {
             {this.state.mostrarEditar && this.state.mostrarEditar === true ? <>
                 <hr /><br /><br />
 
-                <h3 style={{ textAlign: 'center' }}>Formulário Edição</h3>
+                <h3 style={{ textAlign: 'center' }}>Formulário de Edição</h3>
                 <p >ID : <span style={{
                     color: 'red'
                 }}>{this.state.id}</span></p>
@@ -107,14 +107,14 @@ class ListaProfessor extends Component {
                 <SACEInput
                     tipo={"number"}
                     min="0"
-                    label={'Siape'}
+                    label={'SIAPE'}
                     value={this.state.siape}
                     placeholder={'Informe a sua siape. '}
                     onChange={(e) => this.setState({ siape: e.target.value })}
                     onError={this.state.siapeInvalido}
                     onErrorMessage={'Você não inseriu a seu siape corretamente!'}
                 />
-                <Form.Check type="switch" id="custom-switch" label="Cordenador" value={this.state.cordenador} checked={this.state.cordenador}
+                <Form.Check type="switch" id="custom-switch" label="Coordenador" value={this.state.cordenador} checked={this.state.cordenador}
                     onChange={() => this.setState({ cordenador: !this.state.cordenador })} />
                 <br />
 

@@ -58,7 +58,7 @@ export default function LoginForm({ history, setUserData }) {
                 tipo="password"
             />
             <div className="row">
-                <Link to="/cadastro-aluno" style={{ position: 'relative', left: '30%' }}>Aluno, não é Cadastrado?</Link>
+                <Link to="/cadastro-aluno" style={{ position: 'relative', left: '30%' }}>Aluno, clique aqui para se cadastrar</Link>
             </div>
             
             <Form.Group
@@ -69,7 +69,7 @@ export default function LoginForm({ history, setUserData }) {
                     Enviar
                 </Button>
                 <Button variant="btn btn-danger" className="btn btn-primary m-1" onClick={limparCampos}>
-                    Cancelar
+                    Limpar 
                 </Button>
             </Form.Group>
         </Form.Group>

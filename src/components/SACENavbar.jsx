@@ -43,8 +43,8 @@ function retornaLinks(user) {
                 </DropdownButton>
                 <DropdownButton id="dropdown-basic-button" title="LISTAR" style={{}}>
                 <Dropdown.Item ><Link to="/lista-alunos">Alunos</Link></Dropdown.Item>
-                <Dropdown.Item ><Link to="/lista-professor">Professor</Link></Dropdown.Item>
-                <Dropdown.Item ><Link to="/lista-servidor">Servidor</Link></Dropdown.Item>
+                <Dropdown.Item ><Link to="/lista-professor">Professores</Link></Dropdown.Item>
+                <Dropdown.Item ><Link to="/lista-servidor">Servidores</Link></Dropdown.Item>
                 <Dropdown.Item ><Link to="/listar-curso">Cursos</Link></Dropdown.Item>
                 <Dropdown.Item ><Link to="/lista-disciplina">Disciplinas</Link></Dropdown.Item>
                 </DropdownButton>
@@ -52,7 +52,7 @@ function retornaLinks(user) {
     } else {
         return <>
         <SACELink to={'/minhas-requisicoes'} label={'Listar Requisições'} />
-        <SACELink to={'/troca-senha'} label={'Alterar-senha'} />
+        <SACELink to={'/troca-senha'} label={'Alterar senha'} />
         </>
     }
 }

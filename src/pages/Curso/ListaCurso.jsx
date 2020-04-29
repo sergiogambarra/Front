@@ -76,7 +76,7 @@ export default class ListaCursos extends Component {
             <div>
                 <br />
                 <br />
-                <h2>Lista de Cursos cadastrados</h2>
+                <h2>Cursos </h2>
                 <table className="table">
                     <thead className="p-3 mb-2 bg-primary text-white">
                         <tr>
@@ -107,12 +107,12 @@ export default class ListaCursos extends Component {
                 <br /><br />
                 <Alert key={"idx"} variant={"success"} show={this.state.modal}>Cadastrado com sucesso</Alert>
                 <fieldset>
-                    {this.state.editar === true ? <h3 id={"top"} style={{ textAlign: "center" }}>Formulário de edição</h3> : ""}
+                    {this.state.editar === true ? <h3 id={"top"} style={{ textAlign: "center" }}>Formulário de Edição</h3> : ""}
                     <SACEInput label={'Nome do Curso'} value={this.state.nome} placeholder={'Preencha com o nome do curso que você deseja cadastrar'}
                         onChange={(e) => this.setState({ nome: e.target.value })} onError={this.state.texto} onErrorMessage={'Nome do curso não encontrado'} />
                     <Form.Group className="d-flex justify-content-end">
                         {this.state.editar === false ? <Button className="btn btn-primary m-1" onClick={() => this.enviar()}>
-                            Enviar  </Button> : <Button className="btn btn-primary m-1" onClick={(e) => this.atualizar()} >Confirmar editar</Button>}
+                            Enviar  </Button> : <Button className="btn btn-primary m-1" onClick={(e) => this.atualizar()} >Salvar</Button>}
                         <Button variant="danger" className="btn btn-primary m-1" onClick={() => this.limpar()}> Limpar </Button>
                     </Form.Group>
                 </fieldset >

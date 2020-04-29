@@ -40,6 +40,7 @@ class EditarSenhaProfessor extends Component {
         return (<div>
             <br /><br /><br />
             <Alert show={this.state.alert} variant={"success"}>Salvo com sucesso!</Alert>
+            <h2>Alterar senha</h2>
             <SACEInput
                 label={'Login'}
                 value={this.state.username}
@@ -64,7 +65,7 @@ class EditarSenhaProfessor extends Component {
                 tipo={"password"}
             /><br />
             <Button variant="primary" onClick={() => this.editar()}>Salvar</Button>&nbsp;
-            <Button variant="danger" onClick={() => this.limpar()}>limpar</Button>
+            <Button variant="danger" onClick={() => this.limpar()}>Limpar</Button>
         </div>);
     }
 }

@@ -41,21 +41,20 @@ class ListaServidor extends Component {
     }
     deletar(e) {
         del("usuarios", e).then(() => {
-            this.setState({modalShow:false})
+            this.setState({modalShow:false,mostrarEditar:false})
             this.componentDidMount()
         })
     }
     render() {
         return (<div>
             <br /><br />
-            <h3>Servidor </h3>
+            <h3>Servidores </h3>
             <table className="table">
                 <thead className="s-3 mb-2 bg-primary text-white">
                     <tr>
                         <th scope="col">Id</th>
                         <th scope="col">Nome</th>
-                        <th scope="col">Siape</th>
-                        <th scope="col">Login</th>
+                        <th scope="col">SIAPE</th>
                         <th scope="col">Apagar</th>
                         <th scope="col">Editar</th>
                     </tr>
@@ -68,7 +67,6 @@ class ListaServidor extends Component {
                                 <td>{s.id}</td>
                                 <td>{s.perfil.nome}</td>
                                 <td>{s.perfil.siape}</td>
-                                <td>{s.username}</td>
                                 <td> {s.perfil.nome === "" ? "" : <Button
                                     variant="primary"
                                     className="btn btn-danger m-1"
@@ -89,7 +87,7 @@ class ListaServidor extends Component {
             {this.state.mostrarEditar && this.state.mostrarEditar === true ? <>
                 <hr /><br /><br />
 
-                <h3 id="top" style={{ textAlign: 'center' }}>Formulário Edição</h3>
+                <h3 id="top" style={{ textAlign: 'center' }}>Formulário de Edição</h3>
                 <p >ID : <span style={{
                     color: 'red'
                 }}>{this.state.id}</span></p>
@@ -105,7 +103,7 @@ class ListaServidor extends Component {
                 <SACEInput
                     tipo={"number"}
                     min="0"
-                    label={'Siape'}
+                    label={'SIAPE'}
                     value={this.state.siape}
                     placeholder={'Informe a sua siape. '}
                     onChange={(e) => this.setState({ siape: e.target.value })}

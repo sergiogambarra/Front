@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import SACEInput from '../../components/inputs/SACEInput';
 import { Button, Alert } from 'react-bootstrap';
-import { Link } from "react-router-dom";
 import TituloPagina from '../../components/TituloPagina';
 import { Form } from 'react-bootstrap';
 import { postCadastroUsuarioServidor, getPesquisaLogin } from '../../services/UsuarioService';
@@ -92,7 +91,7 @@ class CadastroPerfilServidor extends Component {
     render() {
         return (
             <Form.Group className="col-md-6 container">
-                <TituloPagina titulo="Cadastro Servidor" />
+                <TituloPagina titulo="Cadastrar Servidor" />
                 <Alert key={"idx"} variant={"success"} show={this.state.modal}>Cadastrado com Sucesso</Alert>
                 <SACEInput
                     label={'Nome'}
@@ -105,7 +104,7 @@ class CadastroPerfilServidor extends Component {
                 <SACEInput
                     tipo={"number"}
                     min="0"
-                    label={'Siape'}
+                    label={'SIAPE'}
                     value={this.state.siape}
                     placeholder={'Informe a sua siape. '}
                     onChange={(e) => this.setState({ siape: e.target.value })}
@@ -159,9 +158,8 @@ class CadastroPerfilServidor extends Component {
                     tipo={"password"}
                 />
                 <div className="row container" style={{ position: 'relative', left: '32%' }}>
-                    <Button onClick={(e) => this.verifica(e)} className="btn btn-dark" style={{ border: "5px solid white" }}>Enviar</Button>
-                    <Button onClick={() => this.limpar()} className="btn btn-danger" style={{ border: "5px solid white" }}>Limpar</Button>
-                    <Link to="/minhas-requisicoes"> <Button variant="primary" className="btn btn-primary m-1" >Voltar </Button></Link>
+                    <Button onClick={(e) => this.verifica(e)}variant="primary" >Salvar</Button>
+                    <Button onClick={() => this.limpar()} variant="danger"className="btn btn-primary m-1" style={{ border: "5px solid white" }}>Limpar</Button>
                 </div>
             </Form.Group>
 

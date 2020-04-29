@@ -84,7 +84,7 @@ class CadastrarDisciplinas extends Component {
             <br /><br />
             <Alert key={"idx"} variant={"success"} show={this.state.modal}>
                 Cadastrado com sucesso</Alert>
-            <h2>Cadastrar disciplinas</h2><br />
+            <h2>Cadastrar Disciplina</h2><br />
             <label >Selecione o curso</label>
             <select className="browser-default custom-select" disabled={this.state.disabled}
                 id={this.state.idcurso}
@@ -119,7 +119,7 @@ class CadastrarDisciplinas extends Component {
                 value={this.state.cargaHoraria}
             />
             <Button style={{ position: 'relative', left: '80%' }} variant="primary" className="btn btn-primary m-1" onClick={(e) => this.cadastrarDisciplinas()}>
-                Enviar
+                Salvar
                 </Button>
             <Button style={{ position: 'relative', left: '80%' }} variant="danger" className="btn btn-primary m-1" onClick={(e) => this.limpar()}>
                 Limpar

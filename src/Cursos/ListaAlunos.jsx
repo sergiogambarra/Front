@@ -65,10 +65,9 @@ class ListaAlunos extends Component {
                         <tr>
                             <th scope="col">Id</th>
                             <th scope="col">Nome</th>
-                            <th scope="col">Data Ingresso</th>
+                            <th scope="col">Data de Ingresso</th>
                             <th scope="col">Matrícula</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Login</th>
+                            <th scope="col">E-mail</th>
                             <th scope="col">Apagar</th>
                             <th scope="col">Editar</th>
                         </tr>
@@ -83,7 +82,6 @@ class ListaAlunos extends Component {
                                     <td>{format(aluno.perfil.dataIngresso)}</td>
                                     <td>{aluno.perfil.matricula}</td>
                                     <td>{aluno.perfil.email}</td>
-                                    <td>{aluno.username}</td>
                                     <td> {aluno.perfil.nome === "" ? "" : <Button
                                         variant="primary"
                                         className="btn btn-danger m-1"
@@ -104,7 +102,7 @@ class ListaAlunos extends Component {
                 {this.state.mostraEditar && this.state.mostraEditar === true ? <>
                     <hr /><br /><br />
 
-                    <h3 id={"top"} style={{ textAlign: 'center' }}>Formulário Edição</h3>
+                    <h3 id={"top"} style={{ textAlign: 'center' }}>Formulário de Edição</h3>
                     <p >ID : <span style={{
                         color: 'red'
                     }}>{this.state.id}</span></p>
@@ -127,7 +125,7 @@ class ListaAlunos extends Component {
                         tipo={"date"}
                     />
                     <SACEInput
-                        label={'Matricula'}
+                        label={'Matrícula'}
                         tipo="number"
                         min="0"
                         value={this.state.matricula}
@@ -137,7 +135,7 @@ class ListaAlunos extends Component {
                         onErrorMessage={'Você não inseriu a sua matrícula corretamente!'}
                     />
                     <SACEInput
-                        label={'Email'}
+                        label={'E-mail'}
                         value={this.state.email}
                         placeholder={'Informe o seu email. '}
                         onChange={(e) => this.setState({ email: e.target.value })}

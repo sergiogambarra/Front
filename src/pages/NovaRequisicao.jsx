@@ -9,7 +9,7 @@ export default function NovaRequisicao({user}){
 
     return(
         <>
-            <TituloPagina titulo={'Nova requisição'} />
+            <TituloPagina titulo={'Criar Requisição'} />
             <Form.Group className="mx-auto col-6 mb-4 mt-3">
                 <Form.Label className="mb-1">
                     {'Selecione o tipo'}

@@ -63,7 +63,7 @@ class ListaDiscipinas extends Component {
 
         return (
             <div ><br /><br />
-                <label>Selecione Curso</label>
+                <label>Selecione um Curso</label>
                 <select className="browser-default custom-select" disabled={this.state.disabled}
                     id={this.state.idcurso}
                     value={this.state.idcurso}
@@ -79,7 +79,7 @@ class ListaDiscipinas extends Component {
                     )}
                 </select>
                 <br /><br /><br />
-                {typeof this.state.idcurso === "undefined" ? "" : <div><h3>Diciplinas </h3>
+                {typeof this.state.idcurso === "undefined" ? "" : <div><h3>Disciplinas </h3>
                     <table class="table">
                         <thead class="p-3 mb-2 bg-primary text-white">
                             <tr>
@@ -111,16 +111,16 @@ class ListaDiscipinas extends Component {
                     </table>
                     <hr></hr><br /><br />
                     {this.state.mostraEditar === true ?
-                        <><h3 id={"top"} style={{ textAlign: 'center' }}>Formulário Edição</h3>
+                        <><h3 id={"top"} style={{ textAlign: 'center' }}>Formulário de Edição</h3>
                             <p >ID : <span style={{
                                 color: 'red'
                             }}>{this.state.idDisciplina}</span></p>
 
                             <SACEInput
                                 autoFocus
-                                placeholder={'Digite o nome Disciplina'}
+                                placeholder={'Digite o nome da disciplina'}
                                 value={this.state.nome}
-                                label={'Nome Disciplina'}
+                                label={'Nome da Disciplina'}
                                 onChange={(e) => this.setState({ nome: e.target.value })}
                                 onError={this.state.textodisciplina}
                                 onErrorMessage={'Campo da disciplina obrigatório'}
@@ -136,7 +136,7 @@ class ListaDiscipinas extends Component {
                                 onErrorMessage={'Campo carga Horária é obrigatório e não pode ser menor que 15 horas'}
                             />
                             <Button style={{ position: 'relative', left: '80%' }} variant="primary" className="btn btn-primary m-1" onClick={(e) => this.editarDisciplina()}>
-                                Enviar
+                                Salvar
                 </Button></> : ""}
                 </div>
 
