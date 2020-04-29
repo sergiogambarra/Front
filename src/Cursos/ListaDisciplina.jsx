@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Button } from 'react-bootstrap';
-import { get, delDisciplinaCurso ,getIdDisciplina,putDisciplinas} from '../services/ServicoCrud';
+import { Button, Modal } from 'react-bootstrap';
+import { get, delDisciplinaCurso, getIdDisciplina, putDisciplinas } from '../services/ServicoCrud';
 import SACEInput from '../components/inputs/SACEInput';
 
 
@@ -11,10 +11,10 @@ class ListaDiscipinas extends Component {
         this.state = {
             disciplinas: [],
             cursos: [],
-           disciplina:{
-            nome: "", cargaHoraria: ""
-           },
-            mostraEditar: false, idDisciplina: ""
+            disciplina: {
+                nome: "", cargaHoraria: ""
+            },
+            mostraEditar: false, idDisciplina: "",modalShow:false
         }
     }
 
@@ -22,6 +22,7 @@ class ListaDiscipinas extends Component {
     async apagar(e) {
         await delDisciplinaCurso(`cursos/${this.state.idcurso}/disciplinas/${e}`).then(() => {
             this.listarDisciplinas()
+            this.setState({modalShow:false})
         })
     }
     async listarCurso() {
@@ -38,22 +39,24 @@ class ListaDiscipinas extends Component {
         this.listarCurso();
         this.listarDisciplinas();
     }
-  async busca(e) {
-      
-      await getIdDisciplina(`cursos/${this.state.idcurso}/disciplinas/${e}`).then((retorno)=>
-      {this.setState({
-          idDisciplina:retorno.id,
-          nome:retorno.nome ,
-          cargaHoraria:retorno.cargaHoraria ,
-          mostraEditar:true})})
+    async busca(e) {
+
+        await getIdDisciplina(`cursos/${this.state.idcurso}/disciplinas/${e}`).then((retorno) => {
+            this.setState({
+                idDisciplina: retorno.id,
+                nome: retorno.nome,
+                cargaHoraria: retorno.cargaHoraria,
+                mostraEditar: true
+            })
+        })
     }
     editarDisciplina() {
-        putDisciplinas(`cursos/${this.state.idcurso}/disciplinas`,{
-            id:this.state.idDisciplina,
+        putDisciplinas(`cursos/${this.state.idcurso}/disciplinas`, {
+            id: this.state.idDisciplina,
             nome: this.state.nome,
             cargaHoraria: this.state.cargaHoraria
-        }).then(()=>this.listarDisciplinas(),
-        this.setState({mostraEditar:false}))
+        }).then(() => this.listarDisciplinas(),
+            this.setState({ mostraEditar: false }))
     }
 
     render() {
@@ -96,7 +99,7 @@ class ListaDiscipinas extends Component {
                                     <td>{d.cargaHoraria}</td>
                                     <td><Button variant="primary"
                                         className="btn btn-danger m-1"
-                                        onClick={(e) => this.apagar(d.id)}
+                                        onClick={(e) => this.setState({modalShow:true,idDisciplina:d.id})}
                                     > Deletar </Button></td>
                                     <td><Button variant="primary"
                                         className="btn btn-success m-1"
@@ -112,7 +115,7 @@ class ListaDiscipinas extends Component {
                             <p >ID : <span style={{
                                 color: 'red'
                             }}>{this.state.idDisciplina}</span></p>
-                            
+
                             <SACEInput
                                 autoFocus
                                 placeholder={'Digite o nome Disciplina'}
@@ -138,7 +141,20 @@ class ListaDiscipinas extends Component {
                 </div>
 
                 }
-            </div>
+                <Modal show={this.state.modalShow} onHide={() => this.setState({ modalShow: false })} animation={false}>
+                    <Modal.Header closeButton>
+                        <Modal.Title > Confirmar</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>Apagar disciplina? </Modal.Body>
+                    <Modal.Footer>
+                    <Button variant="primary"
+                                        className="btn btn-danger m-1"
+                                        onClick={(e) => this.apagar(this.state.idDisciplina)}
+                                    > Deletar </Button>
+                    </Modal.Footer>
+                </Modal>
+
+            </div >
         );
     }
 }

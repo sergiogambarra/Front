@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { get, getId, put, del } from '../../services/ServicoCrud';
 import SACEInput from '../../components/inputs/SACEInput';
-import { Button, Form } from 'react-bootstrap'
+import { Button, Form,Modal } from 'react-bootstrap'
 
 class ListaProfessor extends Component {
     constructor(props) {
@@ -10,7 +10,7 @@ class ListaProfessor extends Component {
             professores: [],
             siape: "",
             cordenador: "",
-            mostrarEditar: false
+            mostrarEditar: false,id:""
         }
     }
 
@@ -44,6 +44,7 @@ class ListaProfessor extends Component {
     }
     deletar(e) {
         del("usuarios",e).then(()=>{
+            this.setState({modalShow:false})
             this.componentDidMount()
         })
     }
@@ -75,7 +76,7 @@ class ListaProfessor extends Component {
                                 <td> {p.perfil.nome === "" ? "" : <Button
                                     variant="primary"
                                     className="btn btn-danger m-1"
-                                    onClick={() => this.deletar(p.id)}
+                                    onClick={() => this.setState({modalShow:true,id:p.id})}
                                 > Deletar </Button>}
                                 </td>
                                 <td> {p.perfil.nome === "" ? "" : <Button
@@ -124,7 +125,19 @@ class ListaProfessor extends Component {
                 > Salvar </Button>
 
             </> : ""}
-
+            <Modal show={this.state.modalShow} onHide={() => this.setState({ modalShow: false })} animation={false}>
+                <Modal.Header closeButton>
+                    <Modal.Title > Confirmar</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Apagar cadastro do professor? </Modal.Body>
+                <Modal.Footer>
+                    <Button
+                        variant="primary"
+                        className="btn btn-danger m-1"
+                        onClick={() => this.deletar(this.state.id)}
+                    > Deletar </Button>
+                </Modal.Footer>
+            </Modal>
         </div>);
     }
 }

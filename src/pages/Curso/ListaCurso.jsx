@@ -4,7 +4,7 @@ import { Form, Button, } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import Alert from 'react-bootstrap/Alert'
 import { post, del, put, getId, get } from '../../services/ServicoCrud';
-
+import { Modal } from 'react-bootstrap';
 
 export default class ListaCursos extends Component {
     constructor(props) {
@@ -15,7 +15,7 @@ export default class ListaCursos extends Component {
             id: "",
             editar: false,
             texto: false,
-            modal: false,
+            modal: false, modalShow: false
         }
     }
     async listarCursos() {
@@ -23,12 +23,12 @@ export default class ListaCursos extends Component {
         this.setState({ cursosLista });
     }
 
-    async listarCursosId(id) {    
+    async listarCursosId(id) {
         const curso = await getId("cursos/", id);
         this.setState({ nome: curso.nome, id: id, editar: true });
     }
 
- async componentDidMount() {
+    async componentDidMount() {
         this.listarCursos();
     }
 
@@ -39,7 +39,7 @@ export default class ListaCursos extends Component {
             })
         }
         post("cursos/", { nome: this.state.nome }).then((r) => {
-            
+
             if (this.state.nome === "") { return }
             this.setState({ modal: true })
             setTimeout(() => {
@@ -49,8 +49,8 @@ export default class ListaCursos extends Component {
             this.limpar();
         })
     }
-        atualizar() {
-        put("cursos",this.state.id, { nome: this.state.nome }).then(() => {
+    atualizar() {
+        put("cursos", this.state.id, { nome: this.state.nome }).then(() => {
             this.setState({ modal: true })
             setTimeout(() => {
                 this.setState({ modal: false })
@@ -58,7 +58,7 @@ export default class ListaCursos extends Component {
             this.listarCursos()
             this.limpar();
             console.log("nhjiuohj");
-            
+
         })
     }
 
@@ -92,23 +92,22 @@ export default class ListaCursos extends Component {
                                 <td>{curso.id}</td>
                                 <td><Link to="/cadastrar-disciplina">{curso.nome}</Link></td>
                                 <td> <Button variant="primary" className="btn btn-danger m-1"
-                                    onClick={() => { del("cursos", curso.id).then(() => { this.listarCursos() }) }}>
+                                    onClick={() =>this.setState({modalShow:true,curso, id:curso.id})}>
                                     Deletar
-                                        </Button>
-                                </td>
+                                        </Button>  </td>
                                 <td>
-                                 <a href={"#top"}> <Button id={curso.id} type="button" className="btn btn-success m-1"
+                                    <a href={"#top"}> <Button id={curso.id} type="button" className="btn btn-success m-1"
                                         onClick={(e) => this.listarCursosId(e.target.id)}> Editar </Button></a>
                                 </td>
                             </tr>
                         )}
                     </tbody>
                 </table>
-                <hr/>
+                <hr />
                 <br /><br />
                 <Alert key={"idx"} variant={"success"} show={this.state.modal}>Cadastrado com sucesso</Alert>
                 <fieldset>
-                    {this.state.editar===true?<h3 id={"top"}style={{textAlign:"center"}}>Formulário de edição</h3>:""}
+                    {this.state.editar === true ? <h3 id={"top"} style={{ textAlign: "center" }}>Formulário de edição</h3> : ""}
                     <SACEInput label={'Nome do Curso'} value={this.state.nome} placeholder={'Preencha com o nome do curso que você deseja cadastrar'}
                         onChange={(e) => this.setState({ nome: e.target.value })} onError={this.state.texto} onErrorMessage={'Nome do curso não encontrado'} />
                     <Form.Group className="d-flex justify-content-end">
@@ -117,6 +116,20 @@ export default class ListaCursos extends Component {
                         <Button variant="danger" className="btn btn-primary m-1" onClick={() => this.limpar()}> Limpar </Button>
                     </Form.Group>
                 </fieldset >
+                <Modal show={this.state.modalShow} onHide={() => this.setState({ modalShow: false })} animation={false}>
+                                    <Modal.Header closeButton>
+                                        <Modal.Title > Confirmar</Modal.Title>
+                                    </Modal.Header>
+                                    <Modal.Body>Você vai deletar o curso e todas as disciplinas relacionadas a esse curso? </Modal.Body>
+                                    <Modal.Footer>
+                                        <Button variant="primary" className="btn btn-danger m-1"
+                                            onClick={() => { del("cursos",this.state.curso&&this.state.id ).then(() => { this.listarCursos()
+                                            this.setState({modalShow:false})
+                                            }) }}>
+                                            Deletar
+                                        </Button>
+                                    </Modal.Footer>
+                                </Modal>
             </div>
         );
     }

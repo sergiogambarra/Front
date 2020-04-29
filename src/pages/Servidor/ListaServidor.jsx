@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { get, getId ,put, del} from './../../services/ServicoCrud'
-import { Button} from 'react-bootstrap'
+import { get, getId, put, del } from './../../services/ServicoCrud'
+import { Button, Modal } from 'react-bootstrap'
 import SACEInput from '../../components/inputs/SACEInput';
 
 class ListaServidor extends Component {
@@ -8,8 +8,8 @@ class ListaServidor extends Component {
         super(props);
         this.state = {
             servidores: [],
-            siape: "",
-            mostrarEditar: false
+            siape: "",id:"",
+            mostrarEditar: false,modalShow:false
 
         }
     }
@@ -39,8 +39,9 @@ class ListaServidor extends Component {
                 this.componentDidMount()
             })
     }
-    deletar(e){
-        del("usuarios",e).then(()=>{
+    deletar(e) {
+        del("usuarios", e).then(() => {
+            this.setState({modalShow:false})
             this.componentDidMount()
         })
     }
@@ -71,10 +72,10 @@ class ListaServidor extends Component {
                                 <td> {s.perfil.nome === "" ? "" : <Button
                                     variant="primary"
                                     className="btn btn-danger m-1"
-                                    onClick={()=>this.deletar(s.id)}
+                                    onClick={() => this.setState({modalShow:true,id:s.id})}
                                 > Deletar </Button>}
                                 </td>
-                                <td> {s.perfil.nome === "" ? "" :<a href="#top"><Button
+                                <td> {s.perfil.nome === "" ? "" : <a href="#top"><Button
                                     variant="primary"
                                     className="btn btn-success m-1"
                                     onClick={() => this.buscaPeloId(s.id)}
@@ -119,6 +120,19 @@ class ListaServidor extends Component {
 
             </> : ""}
 
+            <Modal show={this.state.modalShow} onHide={() => this.setState({ modalShow: false })} animation={false}>
+                <Modal.Header closeButton>
+                    <Modal.Title > Confirmar</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Apagar cadastro do servidor? </Modal.Body>
+                <Modal.Footer>
+                    <Button
+                        variant="primary"
+                        className="btn btn-danger m-1"
+                        onClick={() => this.deletar(this.state.id)}
+                    > Deletar </Button>
+                </Modal.Footer>
+            </Modal>
         </div>);
     }
 }

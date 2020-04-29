@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { get, getId } from './../services/ServicoCrud'
-import { Button } from 'react-bootstrap'
+import { Button, Modal } from 'react-bootstrap'
 import { delAluno, putAluno } from '../services/AlunoService';
 import SACEInput from '../components/inputs/SACEInput';
 import { format } from '../auxiliares/FormataData';
@@ -43,15 +43,15 @@ class ListaAlunos extends Component {
     editar(e) {
         putAluno("usuarios", e,
             {
-                perfil:{
+                perfil: {
                     nome: this.state.nome,
                     tipo: "ALUNO",
                     dataIngresso: this.state.dataIngresso,
                     matricula: this.state.matricula,
                     email: this.state.email
                 }
-            } ).then(() =>{
-                this.setState({mostraEditar:false});
+            }).then(() => {
+                this.setState({ mostraEditar: false });
                 this.listarAlunos()
             })
     }
@@ -87,10 +87,10 @@ class ListaAlunos extends Component {
                                     <td> {aluno.perfil.nome === "" ? "" : <Button
                                         variant="primary"
                                         className="btn btn-danger m-1"
-                                        onClick={(e) => delAluno("usuarios", aluno.id).then(() => { this.listarAlunos() })}
+                                        onClick={(e) => this.setState({ modalShow: true, id: aluno.id })}
                                     > Deletar </Button>}
                                     </td>
-                                    <td> {aluno.perfil.nome === "" ? "" :<a href={"#top"}> <Button
+                                    <td> {aluno.perfil.nome === "" ? "" : <a href={"#top"}> <Button
                                         variant="primary"
                                         className="btn btn-success m-1"
                                         onClick={() => this.buscaPeloId(aluno.id)}
@@ -102,12 +102,12 @@ class ListaAlunos extends Component {
                     </tbody>
                 </table>
                 {this.state.mostraEditar && this.state.mostraEditar === true ? <>
-                    <hr/><br /><br />
-                    
-                    <h3 id={"top"}style={{textAlign:'center'} }>Formulário Edição</h3>
-                <p >ID : <span style={{
-                    color:'red'
-                }}>{this.state.id}</span></p>
+                    <hr /><br /><br />
+
+                    <h3 id={"top"} style={{ textAlign: 'center' }}>Formulário Edição</h3>
+                    <p >ID : <span style={{
+                        color: 'red'
+                    }}>{this.state.id}</span></p>
                     <SACEInput
                         autoFocus
                         label={'Nome'}
@@ -152,6 +152,24 @@ class ListaAlunos extends Component {
                     > Salvar </Button>
 
                 </> : ""}
+
+                <Modal show={this.state.modalShow} onHide={() => this.setState({ modalShow: false })} animation={false}>
+                    <Modal.Header closeButton>
+                        <Modal.Title > Confirmar</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>Apagar cadastro do aluno? </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="primary"
+                            className="btn btn-danger m-1"
+                            onClick={(e) => delAluno("usuarios", this.state.id).then(() => {
+                                this.listarAlunos()
+                                this.setState({ modalShow: false })
+                            })}
+                        > Deletar </Button>
+                    </Modal.Footer>
+                </Modal>
+                
+
             </div>
         );
     }

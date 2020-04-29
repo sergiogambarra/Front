@@ -72,14 +72,10 @@ class Parecer extends Component {
     }
 
     async atualizar() {
-        if (this.state.id === null||this.state.id>0 & this.state.disciplinaSolicitada===null) {
-            console.log("ihihihihi");
+        if (this.state.id === null) {
             put("requisicoes", this.props.match.params.id, {
                 tipo: this.state.tipo,
                 deferido: this.state.deferido,
-                disciplinaSolicitada:{
-                    id:this.state.idDisciplina
-                },
                 parecer: this.state.atualizarParecer ? this.state.atualizarParecer : this.state.parecer,
             }).then(() => { this.setState({ modal: false }) })
         }else{
@@ -151,19 +147,7 @@ class Parecer extends Component {
                             )}
                         </Form.Control>
                     </Form.Group>
-                </Form> : <Form>
-                        <Form.Group controlId="exampleForm.SelectCustom">
-                            <br />
-                            <Form.Label>Editar disciplina</Form.Label>
-                            <Form.Control as="select" custom
-                                onChange={(e) => this.setState({ idDisciplina: e.target.value })} >
-                                <option selected ></option>
-                                {this.state.disciplinas && this.state.disciplinas.map((disc) =>
-                                    <option key={disc.id} value={disc.id}>{disc.nome}</option>
-                                )}
-                            </Form.Control>
-                        </Form.Group>
-                    </Form>}
+                </Form> : ""}
                 <br />
                 <div class="custom-control custom-radio custom-control-inline">
                     <input type="radio"
