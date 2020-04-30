@@ -92,7 +92,6 @@ class ListaAlunos extends Component {
                                         variant="primary"
                                         className="btn btn-success m-1"
                                         onClick={() => this.buscaPeloId(aluno.id)}
-
                                     > Editar </Button></a>}
                                     </td>
                                 </tr>
@@ -160,8 +159,8 @@ class ListaAlunos extends Component {
                         <Button variant="primary"
                             className="btn btn-danger m-1"
                             onClick={(e) => delAluno("usuarios", this.state.id).then(() => {
+                                this.setState({ modalShow: false ,mostraEditar:false})
                                 this.listarAlunos()
-                                this.setState({ modalShow: false })
                             })}
                         > Deletar </Button>
                     </Modal.Footer>

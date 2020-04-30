@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import { get, delDisciplinaCurso, getIdDisciplina, putDisciplinas } from '../services/ServicoCrud';
 import SACEInput from '../components/inputs/SACEInput';
-
+import Alert from 'react-bootstrap/Alert'
 
 class ListaDiscipinas extends Component {
     constructor(props) {
@@ -14,7 +14,7 @@ class ListaDiscipinas extends Component {
             disciplina: {
                 nome: "", cargaHoraria: ""
             },
-            mostraEditar: false, idDisciplina: "",modalShow:false
+            mostraEditar: false, idDisciplina: "",modalShow:false,alert:false
         }
     }
 
@@ -22,7 +22,7 @@ class ListaDiscipinas extends Component {
     async apagar(e) {
         await delDisciplinaCurso(`cursos/${this.state.idcurso}/disciplinas/${e}`).then(() => {
             this.listarDisciplinas()
-            this.setState({modalShow:false})
+            this.setState({modalShow:false,mostraEditar:false})
         })
     }
     async listarCurso() {
@@ -56,7 +56,10 @@ class ListaDiscipinas extends Component {
             nome: this.state.nome,
             cargaHoraria: this.state.cargaHoraria
         }).then(() => this.listarDisciplinas(),
-            this.setState({ mostraEditar: false }))
+           this.setState({ mostraEditar: false ,alert:true}))
+           setTimeout(() => {
+            this.setState({ alert: false })
+        }, 2000)
     }
 
     render() {
@@ -79,6 +82,7 @@ class ListaDiscipinas extends Component {
                     )}
                 </select>
                 <br /><br /><br />
+                <Alert key={"idx"} variant={"success"} show={this.state.alert}>Atualizado com sucesso!</Alert>
                 {typeof this.state.idcurso === "undefined" ? "" : <div><h3>Disciplinas </h3>
                     <table class="table">
                         <thead class="p-3 mb-2 bg-primary text-white">
@@ -135,7 +139,7 @@ class ListaDiscipinas extends Component {
                                 onError={this.state.textocargahoraria}
                                 onErrorMessage={'Campo carga Horária é obrigatório e não pode ser menor que 15 horas'}
                             />
-                            <Button style={{ position: 'relative', left: '80%' }} variant="primary" className="btn btn-primary m-1" onClick={(e) => this.editarDisciplina()}>
+                            <Button  variant="primary" className="btn btn-primary m-1" onClick={(e) => this.editarDisciplina()}>
                                 Salvar
                 </Button></> : ""}
                 </div>

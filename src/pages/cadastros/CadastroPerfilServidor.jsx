@@ -158,8 +158,8 @@ class CadastroPerfilServidor extends Component {
                     tipo={"password"}
                 />
                 <div className="row container" style={{ position: 'relative', left: '32%' }}>
-                    <Button onClick={(e) => this.verifica(e)}variant="primary" >Salvar</Button>
-                    <Button onClick={() => this.limpar()} variant="danger"className="btn btn-primary m-1" style={{ border: "5px solid white" }}>Limpar</Button>
+                    <Button onClick={(e) => this.verifica(e)} variant="primary" className="btn btn-primary m-1">Salvar</Button>
+                    <Button onClick={() => this.limpar()} variant="danger"className="btn btn-primary m-1" >Limpar</Button>
                 </div>
             </Form.Group>
 

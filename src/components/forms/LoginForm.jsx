@@ -58,7 +58,8 @@ export default function LoginForm({ history, setUserData }) {
                 tipo="password"
             />
             <div className="row">
-                <Link to="/cadastro-aluno" style={{ position: 'relative', left: '30%' }}>Aluno, clique aqui para se cadastrar</Link>
+                <Link to="/cadastro-aluno" style={{ position: 'relative', left: '5%' }}>Aluno, clique aqui para se cadastrar</Link>
+                <Link style={{ position: 'relative', left: '20%' }}>Recuperar Login e/ou Senha</Link>
             </div>
             
             <Form.Group

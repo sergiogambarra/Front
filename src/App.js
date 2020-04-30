@@ -35,13 +35,12 @@ function App() {
           <Route exact path="/" component={Inicio} />
           <Route path="/login" render={({ history }) => <LoginForm history={history} setUserData={setUserData} />} />
           <Route path="/cadastro-aluno" component={CadastroPerfilAluno} />
-          <Route path="/cadastro-servidor" component={CadastroPerfilServidor} />
           <PrivateRoute exact path="/tela-transicao/" component={TelaTransicao} />
           <PrivateRoute exact path="/aluno-requisicoes/" component={RequisicaoAluno} />
           <PrivateRoute exact path="/minhas-requisicoes" component={MinhasRequisicoes} />
           <PrivateRoute exact path="/nova-requisicao" component={()=><NovaRequisicao user={userData}/>} />
           <PrivateRoute exact path="/cadastrar-disciplina" component={CadastrarDisciplinas} />
-          <PrivateRoute exact path="/cadastrar-servidor/:id" component={CadastroPerfilServidor} />
+          <PrivateRoute exact path="/cadastro-servidor" component={CadastroPerfilServidor} />
           <PrivateRoute exact path="/cadastrar-curso" component={CadastroCurso} />
           <PrivateRoute exact path="/parecer/:id" component={Parecer} />
           <PrivateRoute exact path="/listar-curso" component={ListaCursos} />

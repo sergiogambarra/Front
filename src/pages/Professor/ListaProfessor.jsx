@@ -44,7 +44,7 @@ class ListaProfessor extends Component {
     }
     deletar(e) {
         del("usuarios",e).then(()=>{
-            this.setState({modalShow:false})
+            this.setState({modalShow:false,mostrarEditar:false})
             this.componentDidMount()
         })
     }
