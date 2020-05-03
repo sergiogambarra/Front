@@ -42,6 +42,13 @@ class ListaAlunos extends Component {
         this.listarAlunos()
     }
     editar(e) {
+        console.log(this.state.nome);
+        
+        if(this.state.nome===""||this.state.nome===null?this.setState({nomeInvalido:true}):this.setState({nomeInvalido:false})){}        
+        if(this.state.matricula===""||this.state.matricula===null||this.state.matricula <= 0?this.setState({matriculaInvalida:true}):this.setState({matriculaInvalida:false})){}        
+        if(this.state.email===""||this.state.email===null?this.setState({emailInvalido:true}):this.setState({emailInvalido:false})){}
+        if(this.state.nome===null||this.state.nome===""||this.state.email===""||this.state.email===null||this.state.matricula===null||this.state.siape===null||this.state.matricula===""||this.state.siape==="" ){
+            return }
         putAluno("usuarios", e,
             {
                 email: this.state.email,
@@ -55,7 +62,11 @@ class ListaAlunos extends Component {
             }).then(() => {
                 this.setState({ mostraEditar: false });
                 this.listarAlunos()
+                this.limpar()
             })
+    }
+    limpar(){
+        this.setState({nomeInvalido:false,matriculaInvalida:false,emailInvalido:false})
     }
     render() {
         return (
@@ -87,7 +98,7 @@ class ListaAlunos extends Component {
                                     <td> {aluno.perfil.nome === "" ? "" : <Button
                                         variant="primary"
                                         className="btn btn-danger m-1"
-                                        onClick={(e) => this.setState({ modalShow: true, id: aluno.id,nome:aluno.perfil.nome ,mostraEditar:false})}
+                                        onClick={(e) => this.setState({ modalShow: true, id: aluno.id, nome: aluno.perfil.nome, mostraEditar: false })}
                                     > Apagar </Button>}
                                     </td>
                                     <td> {aluno.perfil.nome === "" ? "" : <a href={"#top"}> <Button

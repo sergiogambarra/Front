@@ -9,7 +9,8 @@ class ListaServidor extends Component {
         this.state = {
             servidores: [],
             siape: "",id:"",email:"",
-            mostrarEditar: false,modalShow:false,alert:false
+            mostrarEditar: false,modalShow:false,alert:false,
+            emailInvalido:false,siapeInvalido:false,nomeInvalido:false
 
         }
     }
@@ -29,6 +30,12 @@ class ListaServidor extends Component {
     }
     
     editar(e) {
+console.log(this.state.email);
+
+        if(this.nome===null||this.state.nome===""?this.setState({nomeInvalido:true}):this.setState({nomeInvalido:false})){}
+        if(this.siape===null||this.state.siape===""?this.setState({siapeInvalido:true}):this.setState({siapeInvalido:false})){}
+        if(this.email===null||this.state.email===""?this.setState({emailInvalido:true}):this.setState({emailInvalido:false})){}
+        if(this.email===null||this.state.email===""||this.siape===null||this.state.siape===""||this.nome===null||this.state.nome===""){return}
         put("usuarios", e,
         {
             email:this.state.email,
@@ -122,12 +129,11 @@ class ListaServidor extends Component {
                     onErrorMessage={'Você não inseriu a seu siape corretamente!'}
                 />
                  <SACEInput
-                    autoFocus={true}
                     label={'E-mail'}
                     value={this.state.email}
                     placeholder={'Informe o seu nome. '}
                     onChange={(e) => this.setState({ email: e.target.value })}
-                    onError={this.state.nomeInvalido}
+                    onError={this.state.emailInvalido}
                     onErrorMessage={'Você não inseriu o seu nome corretamente!'}
                 />
                 <Button

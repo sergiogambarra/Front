@@ -36,26 +36,26 @@ class ListaProfessor extends Component {
         })
     }
     async editar(e) {
-        if (this.state.nome === "" ? this.setState({ nomeInvalido: true }) : this.setState({ nomeInvalido: false })) { }
-        if (this.state.siape === "" ? this.setState({ siapeInvalido: true }) : this.setState({ siapeInvalido: false })) { }
-        if (this.state.email === "" ? this.setState({ emailInvalido: true }) : this.setState({ emailInvalido: false })) { }
 
-        else if (this.state.nome !== "" && this.state.siape !== "" && this.state.email !== "") {
-
-            put("usuarios", e,
-                {
-                    email: this.state.email,
-                    perfil: {
-                        nome: this.state.nome,
-                        tipo: "PROFESSOR",
-                        siape: this.state.siape,
-                        coordenador: this.state.coordenador,
-                    }
-                }).then(() => {
-                    this.setState({ mostrarEditar: false, nomeInvalido: false, siapeInvalido: false, emailInvalido: false });
-                    this.componentDidMount()
-                })
+        if (this.state.nome === "" || this.state.nome === null?this.setState({nomeInvalido:true}):this.setState({nomeInvalido:false})){}
+        if (this.state.siape === "" || this.state.siape === null?this.setState({siapeInvalido:true}):this.setState({siapeInvalido:false})){}
+        if (this.state.email === "" || this.state.email === null?this.setState({emailInvalido:true}):this.setState({emailInvalido:false})){}
+        if (this.state.nome === "" ||this.state.nome===null||this.state.siape === "" ||this.state.siape|| this.state.email === ""||this.state.siape) {
+            return
         }
+        put("usuarios", e,
+            {
+                email: this.state.email,
+                perfil: {
+                    nome: this.state.nome,
+                    tipo: "PROFESSOR",
+                    siape: this.state.siape,
+                    coordenador: this.state.coordenador,
+                }
+            }).then(() => {
+                this.setState({ mostrarEditar: false, nomeInvalido: false, siapeInvalido: false, emailInvalido: false });
+                this.componentDidMount()
+            })
     }
     async deletar(e) {
         await deleteProfessor("usuarios", e).then((r) => {
