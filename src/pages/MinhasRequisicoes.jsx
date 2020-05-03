@@ -46,7 +46,7 @@ class MinhasRequisicoes extends Component {
         {this.state.requisicoes === "aproveitamento" ?
           <TabelaAproveitamentos user={this.state.user} /> : this.state.requisicoes === "certificacao" ?
             <TabelaCertificacoes user={this.state.user} /> :
-           ""
+            ""
         }</Container>
 
     );

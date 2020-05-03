@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import TituloPagina from '../../components/TituloPagina';
 import { Form, Modal } from 'react-bootstrap';
 import { postCadastroUsuario } from '../../services/AlunoService';
-import {getPesquisaLogin} from '../../services/UsuarioService'
+import { getPesquisaLogin } from '../../services/UsuarioService'
 
 class CadastroPerfilAluno extends Component {
     constructor(props) {
@@ -16,22 +16,22 @@ class CadastroPerfilAluno extends Component {
             password: "",
             passwordInvalido: false,
             nome: "",
-            nomeInvalido:false,
+            nomeInvalido: false,
             email: "",
             emailInvalido: false,
             matricula: "",
             matriculaInvalida: false,
             dataIngresso: "",
             dataIngressoInvalido: false,
-            verificaSenha:"",
-            verificaSenhaInvalido:false,
+            verificaSenha: "",
+            verificaSenhaInvalido: false,
             modalShow: false,
-            alert:false,
-            msgSenhaNaoConfere:false
+            alert: false,
+            msgSenhaNaoConfere: false
         }
     }
 
-    
+
     limpar() {
         this.setState({
             userName: "",
@@ -43,67 +43,69 @@ class CadastroPerfilAluno extends Component {
             userNameInvalido: "",
             passwordInvalido: "",
             verificaSenha: "",
-            nomeInvalido:false,
+            nomeInvalido: false,
             emailInvalido: false,
             matriculaInvalida: false,
             dataIngressoInvalido: false,
-            verificaSenhaInvalido:false,
+            verificaSenhaInvalido: false,
         })
 
     }
 
-async verifica(){
-    await getPesquisaLogin(`usuarios/pesquisa/aluno/${this.state.userName}`).then((retorno) => {
-        this.setState({ loginPesquisa: retorno })
-    });
-    if (this.state.loginPesquisa === this.state.userName.toUpperCase()) { this.setState({ userNameInvalido: true }) }
-    if(this.state.nome===""?this.setState({nomeInvalido:true}):this.setState({nomeInvalido:false})){}
-    if(this.state.email===""?this.setState({emailInvalido:true}):this.setState({emailInvalido:false})){}
-    if(this.state.matricula===""?this.setState({matriculaInvalida:true}):this.setState({matriculaInvalida:false})){}
-    if(this.state.dataIngresso===""?this.setState({dataIngressoInvalido:true}):this.setState({dataIngressoInvalido:false})){}
-    if(this.state.userName===""?this.setState({userNameInvalido:true}):this.setState({userNameInvalido:false})){}
-    if(this.state.password===""?this.setState({passwordInvalido:true}):this.setState({passwordInvalido:false})){}
-    if(this.state.verificaSenha===""?this.setState({verificaSenhaInvalido:true}):this.setState({verificaSenhaInvalido:false})){}
-    if(this.state.nome !== "" && this.state.email !== "" &&this.state.matricula !== "" && this.state.dataIngresso !== "" &&
-    this.state.userName !== "" && this.state.password !== ""&&this.state.verificaSenha !== ""){ this.setState({modalShow:true})
+    async verifica() {
+        await getPesquisaLogin(`usuarios/pesquisa/aluno/${this.state.userName}`).then((retorno) => {
+            this.setState({ loginPesquisa: retorno })
+        });
+        if (this.state.loginPesquisa === this.state.userName.toUpperCase()) { this.setState({ userNameInvalido: true }) }
+        if (this.state.nome === "" ? this.setState({ nomeInvalido: true }) : this.setState({ nomeInvalido: false })) { }
+        if (this.state.email === "" ? this.setState({ emailInvalido: true }) : this.setState({ emailInvalido: false })) { }
+        if (this.state.matricula === "" ? this.setState({ matriculaInvalida: true }) : this.setState({ matriculaInvalida: false })) { }
+        if (this.state.dataIngresso === "" ? this.setState({ dataIngressoInvalido: true }) : this.setState({ dataIngressoInvalido: false })) { }
+        if (this.state.userName === "" ? this.setState({ userNameInvalido: true }) : this.setState({ userNameInvalido: false })) { }
+        if (this.state.password === "" ? this.setState({ passwordInvalido: true }) : this.setState({ passwordInvalido: false })) { }
+        if (this.state.verificaSenha === "" ? this.setState({ verificaSenhaInvalido: true }) : this.setState({ verificaSenhaInvalido: false })) { }
+        if (this.state.nome !== "" && this.state.email !== "" && this.state.matricula !== "" && this.state.dataIngresso !== "" &&
+            this.state.userName !== "" && this.state.password !== "" && this.state.verificaSenha !== "") {
+                this.setState({ modalShow: true })
+        }
+        if (this.state.verificaSenha !== this.state.password) { this.setState({ verificaSenhaInvalido: true, modalShow: false }); return }
     }
-    if(this.state.verificaSenha !== this.state.password){this.setState({verificaSenhaInvalido:true,modalShow:false}); return }
-}
-   async  enviarCadastro() {
-            postCadastroUsuario({
-                password:this.state.password,
-                userName:this.state.userName,
-                nome:this.state.nome,
-                permissao:"ALUNO",
-                matricula:this.state.matricula,
-                email:this.state.email,
-                dataIngresso:this.state.dataIngresso                
-            }).then((e) => {
-                console.log(e);
-                this.setState({ modalShow:false,alert: true })
-                setTimeout(() => {
-                    this.setState({ alert: false })
-                }, 2000)
-                this.limpar()
-                window.location.href=("/login")
-            })
+    async  enviarCadastro() {
+        postCadastroUsuario({
+            password: this.state.password,
+            userName: this.state.userName,
+            nome: this.state.nome,
+            permissao: "ALUNO",
+            matricula: this.state.matricula,
+            email: this.state.email,
+            dataIngresso: this.state.dataIngresso
+        }).then((e) => {
+            console.log(e);
+            this.setState({ modalShow: false, alert: true })
+            setTimeout(() => {
+                this.setState({ alert: false })
+            }, 2000)
+            this.limpar()
+            window.location.href = ("/login")
+        })
     }
-        
-        
-        render() {
-            return (
-                <div>
-                   
+
+
+    render() {
+        return (
+            <div>
+
                 <Form.Group className="col-md-6 container">
 
                     <TituloPagina titulo="Cadastro de Alunos" />
                     <Alert key={"idx"} variant={"success"} show={this.state.alert}>
                         Cadastrado com sucesso</Alert>
                     <SACEInput
+                        autoFocus={true}
                         label={'Nome'}
                         value={this.state.nome}
                         placeholder={'Informe o seu nome. '}
-                        onChange={(e) => this.setState({nome:e.target.value})}
+                        onChange={(e) => this.setState({ nome: e.target.value })}
                         onError={this.state.nomeInvalido}
                         onErrorMessage={'Você não inseriu o seu nome corretamente!'}
                     />
@@ -111,7 +113,7 @@ async verifica(){
                         label={'Email'}
                         value={this.state.email}
                         placeholder={'Informe o seu email. '}
-                        onChange={(e) => this.setState({email: e.target.value})}
+                        onChange={(e) => this.setState({ email: e.target.value })}
                         onError={this.state.emailInvalido}
                         onErrorMessage={'Você não inseriu o seu email corretamente!'}
                     />
@@ -121,7 +123,7 @@ async verifica(){
                         min="0"
                         value={this.state.matricula}
                         placeholder={'Informe a sua matrícula. '}
-                        onChange={(e) => this.setState({matricula: e.target.value})}
+                        onChange={(e) => this.setState({ matricula: e.target.value })}
                         onError={this.state.matriculaInvalida}
                         onErrorMessage={'Você não inseriu a sua matrícula corretamente!'}
                     />
@@ -172,8 +174,8 @@ async verifica(){
                             </Modal.Header>
                             <Modal.Body>Confira seus dados! Você não poderá alterá-los depois de salvar</Modal.Body>
                             <Modal.Footer>
-                                <Button variant="danger" onClick={() => this.setState({ modalShow: false })}>  Fechar </Button>
                                 <Button onClick={() => this.enviarCadastro()} className="btn btn-primary m-1" data-toggle="modal" data-target="#exampleModal" style={{ border: "5px solid white" }}>Salvar</Button>
+                                <Button variant="danger" onClick={() => this.setState({ modalShow: false })}>  Fechar </Button>
                             </Modal.Footer>
                         </Modal>
                         <Link to="/login"> <Button variant="primary" className="btn btn-primary m-1" >Voltar </Button></Link>

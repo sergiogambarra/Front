@@ -9,6 +9,7 @@ const postCadastroUsuario = async (usuario) => {
     return  post("usuarios/alunos/",{
         password: usuario.password,
         userName: usuario.userName,
+        email: usuario.email,
         permissao:usuario.permissao,
         perfil :retornaPerfil(usuario)
     });
@@ -22,6 +23,7 @@ const postCadastroUsuarioServidor = async (usuario) => {
     return  post("usuarios/servidor/",{
         password: usuario.password,
         userName: usuario.userName,
+        email: usuario.email,
         permissao:usuario.permissao,
         perfil :retornaPerfil(usuario)
     });

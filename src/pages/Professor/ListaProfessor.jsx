@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
-import { get, getId, put, del } from '../../services/ServicoCrud';
+import { get, getId, put, deleteProfessor } from '../../services/ServicoCrud';
 import SACEInput from '../../components/inputs/SACEInput';
-import { Button, Form,Modal } from 'react-bootstrap'
+import { Button, Form, Modal } from 'react-bootstrap'
 
 class ListaProfessor extends Component {
     constructor(props) {
         super(props);
         this.state = {
             professores: [],
-            siape: "",
-            cordenador: "",
-            mostrarEditar: false,id:""
+            siape: "", siapeInvalido: false, nome: "",
+            coordenador: "", email: "", emailInvalido: false,
+            mostrarEditar: false, id: "", alert: false
         }
     }
 
@@ -19,32 +19,48 @@ class ListaProfessor extends Component {
         this.setState({ professores })
     }
     async buscaPeloId(e) {
+        this.limpar()
         const usuario = await getId("usuarios/", e)
         this.setState({
             id: usuario.id,
             nome: usuario.perfil.nome,
+            email: usuario.email,
             siape: usuario.perfil.siape,
-            cordenador: usuario.perfil.cordenador,
+            coordenador: usuario.perfil.coordenador,
             mostrarEditar: true
         })
     }
-    editar(e) {
-        put("usuarios", e,
-            {
-                perfil: {
-                    nome: this.state.nome,
-                    tipo: "PROFESSOR",
-                    siape: this.state.siape,
-                    cordenador: this.state.cordenador,
-                }
-            }).then(() => {
-                this.setState({ mostrarEditar: false });
-                this.componentDidMount()
-            })
+    limpar() {
+        this.setState({
+            nomeInvalido: false, siapeInvalido: false, emailInvalido: false
+        })
     }
-    deletar(e) {
-        del("usuarios",e).then(()=>{
-            this.setState({modalShow:false,mostrarEditar:false})
+    async editar(e) {
+        if (this.state.nome === "" ? this.setState({ nomeInvalido: true }) : this.setState({ nomeInvalido: false })) { }
+        if (this.state.siape === "" ? this.setState({ siapeInvalido: true }) : this.setState({ siapeInvalido: false })) { }
+        if (this.state.email === "" ? this.setState({ emailInvalido: true }) : this.setState({ emailInvalido: false })) { }
+
+        else if (this.state.nome !== "" && this.state.siape !== "" && this.state.email !== "") {
+
+            put("usuarios", e,
+                {
+                    email: this.state.email,
+                    perfil: {
+                        nome: this.state.nome,
+                        tipo: "PROFESSOR",
+                        siape: this.state.siape,
+                        coordenador: this.state.coordenador,
+                    }
+                }).then(() => {
+                    this.setState({ mostrarEditar: false, nomeInvalido: false, siapeInvalido: false, emailInvalido: false });
+                    this.componentDidMount()
+                })
+        }
+    }
+    async deletar(e) {
+        await deleteProfessor("usuarios", e).then((r) => {
+            this.setState({ modalShow: false, mostrarEditar: false, alert: true, nomeInvalido: false, siapeInvalido: false, emailInvalido: false })
+            setTimeout(() => { this.setState({ alert: false }) }, 2000)
             this.componentDidMount()
         })
     }
@@ -59,6 +75,7 @@ class ListaProfessor extends Component {
                         <th scope="col">Id</th>
                         <th scope="col">Nome</th>
                         <th scope="col">SIAPE</th>
+                        <th scope="col">E-mail</th>
                         <th scope="col">Coordenador</th>
                         <th scope="col">Apagar</th>
                         <th scope="col">Editar</th>
@@ -72,12 +89,13 @@ class ListaProfessor extends Component {
                                 <td>{p.id}</td>
                                 <td>{p.perfil.nome}</td>
                                 <td>{p.perfil.siape}</td>
-                                <td>{p.perfil.cordenador ? "SIM" : "Não"}</td>
+                                <td>{p.email}</td>
+                                <td>{p.perfil.coordenador ? "SIM" : "Não"}</td>
                                 <td> {p.perfil.nome === "" ? "" : <Button
                                     variant="primary"
                                     className="btn btn-danger m-1"
-                                    onClick={() => this.setState({modalShow:true,id:p.id})}
-                                > Deletar </Button>}
+                                    onClick={() => this.setState({ modalShow: true, id: p.id, mostrarEditar: false, nome: p.perfil.nome })}
+                                > Apagar </Button>}
                                 </td>
                                 <td> {p.perfil.nome === "" ? "" : <Button
                                     variant="primary"
@@ -97,6 +115,7 @@ class ListaProfessor extends Component {
                     color: 'red'
                 }}>{this.state.id}</span></p>
                 <SACEInput
+                    autoFocus={true}
                     label={'Nome'}
                     value={this.state.nome}
                     placeholder={'Informe o seu nome. '}
@@ -114,8 +133,16 @@ class ListaProfessor extends Component {
                     onError={this.state.siapeInvalido}
                     onErrorMessage={'Você não inseriu a seu siape corretamente!'}
                 />
-                <Form.Check type="switch" id="custom-switch" label="Coordenador" value={this.state.cordenador} checked={this.state.cordenador}
-                    onChange={() => this.setState({ cordenador: !this.state.cordenador })} />
+                <SACEInput
+                    label={'E-mail'}
+                    value={this.state.email}
+                    placeholder={'Informe o seu nome. '}
+                    onChange={(e) => this.setState({ email: e.target.value })}
+                    onError={this.state.emailInvalido}
+                    onErrorMessage={'Você não inseriu o seu nome corretamente!'}
+                />
+                <Form.Check type="switch" id="custom-switch" label="Coordenador" value={this.state.coordenador} checked={this.state.coordenador}
+                    onChange={() => this.setState({ coordenador: !this.state.coordenador })} />
                 <br />
 
                 <Button
@@ -129,13 +156,16 @@ class ListaProfessor extends Component {
                 <Modal.Header closeButton>
                     <Modal.Title > Confirmar</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>Apagar cadastro do professor? </Modal.Body>
+                <Modal.Body>Apagar cadastro do professor/professora? </Modal.Body>
+                <Modal.Body>ID: &nbsp;{this.state.id} </Modal.Body>
+                <Modal.Body>Nome :&nbsp;{this.state.nome} </Modal.Body>
                 <Modal.Footer>
+
                     <Button
                         variant="primary"
                         className="btn btn-danger m-1"
                         onClick={() => this.deletar(this.state.id)}
-                    > Deletar </Button>
+                    > Apagar </Button>
                 </Modal.Footer>
             </Modal>
         </div>);

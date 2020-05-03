@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { get, getId, put, del } from './../../services/ServicoCrud'
-import { Button, Modal } from 'react-bootstrap'
+import { Button, Modal, Alert } from 'react-bootstrap'
 import SACEInput from '../../components/inputs/SACEInput';
 
 class ListaServidor extends Component {
@@ -8,8 +8,8 @@ class ListaServidor extends Component {
         super(props);
         this.state = {
             servidores: [],
-            siape: "",id:"",
-            mostrarEditar: false,modalShow:false
+            siape: "",id:"",email:"",
+            mostrarEditar: false,modalShow:false,alert:false
 
         }
     }
@@ -23,31 +23,40 @@ class ListaServidor extends Component {
             id: usuario.id,
             nome: usuario.perfil.nome,
             siape: usuario.perfil.siape,
+            email: usuario.email,
             mostrarEditar: true
         })
     }
+    
     editar(e) {
         put("usuarios", e,
-            {
-                perfil: {
-                    nome: this.state.nome,
-                    tipo: "SERVIDOR",
-                    siape: this.state.siape,
-                }
-            }).then(() => {
-                this.setState({ mostrarEditar: false });
-                this.componentDidMount()
-            })
+        {
+            email:this.state.email,
+            perfil: {
+                nome: this.state.nome,
+                tipo: "SERVIDOR",
+                siape: this.state.siape,
+            }
+        }).then(() => {
+            this.setState({ mostrarEditar: false });
+            this.componentDidMount()
+        })
     }
     deletar(e) {
         del("usuarios", e).then(() => {
             this.setState({modalShow:false,mostrarEditar:false})
             this.componentDidMount()
-        })
+        }).then(()=>
+        this.setState({alert:true}), setTimeout(() => {
+            this.setState({ alert: false })
+        }, 2000)
+        )
     }
     render() {
+            console.log(this.state.servidores);
         return (<div>
             <br /><br />
+            <Alert variant={"danger"} show= {this.state.alert}>Apagou com sucesso</Alert>
             <h3>Servidores </h3>
             <table className="table">
                 <thead className="s-3 mb-2 bg-primary text-white">
@@ -55,6 +64,7 @@ class ListaServidor extends Component {
                         <th scope="col">Id</th>
                         <th scope="col">Nome</th>
                         <th scope="col">SIAPE</th>
+                        <th scope="col">E-mail</th>
                         <th scope="col">Apagar</th>
                         <th scope="col">Editar</th>
                     </tr>
@@ -67,11 +77,12 @@ class ListaServidor extends Component {
                                 <td>{s.id}</td>
                                 <td>{s.perfil.nome}</td>
                                 <td>{s.perfil.siape}</td>
+                                <td>{s.email}</td>
                                 <td> {s.perfil.nome === "" ? "" : <Button
                                     variant="primary"
                                     className="btn btn-danger m-1"
-                                    onClick={() => this.setState({modalShow:true,id:s.id})}
-                                > Deletar </Button>}
+                                    onClick={() => this.setState({modalShow:true,id:s.id,mostrarEditar:false,nome:s.perfil.nome})}
+                                > Apagar </Button>}
                                 </td>
                                 <td> {s.perfil.nome === "" ? "" : <a href="#top"><Button
                                     variant="primary"
@@ -110,6 +121,15 @@ class ListaServidor extends Component {
                     onError={this.state.siapeInvalido}
                     onErrorMessage={'Você não inseriu a seu siape corretamente!'}
                 />
+                 <SACEInput
+                    autoFocus={true}
+                    label={'E-mail'}
+                    value={this.state.email}
+                    placeholder={'Informe o seu nome. '}
+                    onChange={(e) => this.setState({ email: e.target.value })}
+                    onError={this.state.nomeInvalido}
+                    onErrorMessage={'Você não inseriu o seu nome corretamente!'}
+                />
                 <Button
                     variant="primary"
                     className="btn btn-primary m-1"
@@ -122,13 +142,15 @@ class ListaServidor extends Component {
                 <Modal.Header closeButton>
                     <Modal.Title > Confirmar</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>Apagar cadastro do servidor? </Modal.Body>
+                <Modal.Body>Apagar cadastro do servidor/servidora? </Modal.Body>
+                <Modal.Body>ID :&nbsp;{this.state.id} </Modal.Body>
+                <Modal.Body>Nome :&nbsp;{this.state.nome} </Modal.Body>
                 <Modal.Footer>
                     <Button
                         variant="primary"
                         className="btn btn-danger m-1"
                         onClick={() => this.deletar(this.state.id)}
-                    > Deletar </Button>
+                    > Apagar </Button>
                 </Modal.Footer>
             </Modal>
         </div>);

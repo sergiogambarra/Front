@@ -3,7 +3,7 @@ import SACEInput from '../../components/inputs/SACEInput';
 import { Button, } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import Alert from 'react-bootstrap/Alert'
-import {  del, put, getId, get } from '../../services/ServicoCrud';
+import {   put, getId, get, delCurso } from '../../services/ServicoCrud';
 import { Modal } from 'react-bootstrap';
 
 export default class ListaCursos extends Component {
@@ -69,8 +69,8 @@ export default class ListaCursos extends Component {
                                 <td>{curso.id}</td>
                                 <td><Link to="/cadastrar-disciplina">{curso.nome}</Link></td>
                                 <td> <Button variant="primary" className="btn btn-danger m-1"
-                                    onClick={() =>this.setState({modalShow:true,curso, id:curso.id,editar:false})}>
-                                    Deletar
+                                    onClick={() =>this.setState({modalShow:true,curso, id:curso.id,editar:false,nome:curso.nome})}>
+                                    Apagar
                                         </Button>  </td>
                                 <td>
                                     <a href={"#top"}> <Button id={curso.id} type="button" className="btn btn-success m-1"
@@ -86,7 +86,7 @@ export default class ListaCursos extends Component {
                     {this.state.editar === true ?<> <h3 id={"top"} style={{ textAlign: "center" }}>Formulário de Edição</h3> 
                         <p>ID : &nbsp;<span style={{color:"red"}}>{this.state.id}</span></p>
                     <SACEInput label={"Curso"} value={this.state.nome} placeholder={'Preencha com o nome do curso que você deseja cadastrar'}
-                    onChange={(e) => this.setState({ nome: e.target.value })} onError={this.state.nomeInvalido} onErrorMessage={'Campo nome não pode ficar em branco'} />
+                 autoFocus   onChange={(e) => this.setState({ nome: e.target.value })} onError={this.state.nomeInvalido} onErrorMessage={'Campo nome não pode ficar em branco'} />
                     <Button className="btn btn-primary m-1" onClick={(e) => this.atualizar()} >Salvar</Button>
                     </>: ""}
                     
@@ -95,13 +95,15 @@ export default class ListaCursos extends Component {
                                     <Modal.Header closeButton>
                                         <Modal.Title > Confirmar</Modal.Title>
                                     </Modal.Header>
-                                    <Modal.Body>Você vai deletar o curso e todas as disciplinas relacionadas a esse curso? </Modal.Body>
+                                    <Modal.Body>Você deseja deletar o curso? </Modal.Body>
+                                    <Modal.Body>ID :&nbsp;{this.state.id} </Modal.Body>
+                                    <Modal.Body>Nome :&nbsp;{this.state.nome} </Modal.Body>
                                     <Modal.Footer>
                                         <Button variant="primary" className="btn btn-danger m-1"
-                                            onClick={() => { del("cursos",this.state.curso&&this.state.id ).then(() => { this.listarCursos()
+                                            onClick={() => { delCurso("cursos",this.state.curso&&this.state.id ).then(() => { this.listarCursos()
                                             this.setState({modalShow:false})
                                             }) }}>
-                                            Deletar
+                                            Apagar
                                         </Button>
                                     </Modal.Footer>
                                 </Modal>

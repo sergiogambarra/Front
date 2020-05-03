@@ -7,6 +7,7 @@ const postCadastroUsuario = async (usuario) => {
     return  post("usuarios/alunos/",{
         password: usuario.password,
         userName: usuario.userName,
+        email: usuario.email,
         permissao:usuario.permissao,
         perfil :retornaPerfil(usuario)
     });
@@ -17,7 +18,8 @@ const postCadastroUsuario = async (usuario) => {
                 await axios.delete(`${baseURL}/${end}/${id}`).then((resp) => {
                     return resp;
                 })
-            } catch (error) {
+            } catch (error) { alert("Não pode apagar o aluno porque ele possui requisições em análise")
+               
                 console.log(`${end.toUpperCase()}Service/delete${end}:`, error);
             }
         }

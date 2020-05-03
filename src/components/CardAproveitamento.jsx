@@ -5,6 +5,8 @@ import Col from 'react-bootstrap/Col'
 
 
 export default function  CardAproveitamento ({requisicao}){
+  console.log(requisicao);
+  
   let history = useHistory();
   const {
     id, dataRequisicao, usuario, disciplinaSolicitada, deferido,
@@ -19,7 +21,7 @@ export default function  CardAproveitamento ({requisicao}){
         <p>{`Aluno: ${usuario && usuario.perfil.nome}`}</p>
         <p>{`Parecer: ${parecer===null?"":parecer}`}</p>
         <p>{`Disciplina : ${disciplinaSolicitada&&disciplinaSolicitada.nome}`}</p>
-        <p>{`Professor : ${professor&&professor.perfil.nome}`}</p>
+        <p>{`Professor : ${professor===null?"":professor&&professor.perfil.nome}`}</p>
         </div>
       </Col>
     );

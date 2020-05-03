@@ -13,8 +13,8 @@ class ListaDiscipinas extends Component {
             cursos: [],
             disciplina: {
                 nome: "", cargaHoraria: ""
-            },
-            mostraEditar: false, idDisciplina: "",modalShow:false,alert:false
+            }, variant: "", msgAlert: "Atualizado com sucesso!",
+            mostraEditar: false, idDisciplina: "", modalShow: false, alert: false
         }
     }
 
@@ -22,7 +22,10 @@ class ListaDiscipinas extends Component {
     async apagar(e) {
         await delDisciplinaCurso(`cursos/${this.state.idcurso}/disciplinas/${e}`).then(() => {
             this.listarDisciplinas()
-            this.setState({modalShow:false,mostraEditar:false})
+            this.setState({ modalShow: false, mostraEditar: false, alert: false, variant: "danger", msgAlert: "Apagou com sucesso" })
+            setTimeout(() => {
+                this.setState({ alert: false })
+            }, 2000)
         })
     }
     async listarCurso() {
@@ -39,8 +42,8 @@ class ListaDiscipinas extends Component {
         this.listarCurso();
         this.listarDisciplinas();
     }
+ 
     async busca(e) {
-
         await getIdDisciplina(`cursos/${this.state.idcurso}/disciplinas/${e}`).then((retorno) => {
             this.setState({
                 idDisciplina: retorno.id,
@@ -56,8 +59,8 @@ class ListaDiscipinas extends Component {
             nome: this.state.nome,
             cargaHoraria: this.state.cargaHoraria
         }).then(() => this.listarDisciplinas(),
-           this.setState({ mostraEditar: false ,alert:true}))
-           setTimeout(() => {
+            this.setState({ mostraEditar: false, alert: true, variant: "success" }))
+        setTimeout(() => {
             this.setState({ alert: false })
         }, 2000)
     }
@@ -82,7 +85,7 @@ class ListaDiscipinas extends Component {
                     )}
                 </select>
                 <br /><br /><br />
-                <Alert key={"idx"} variant={"success"} show={this.state.alert}>Atualizado com sucesso!</Alert>
+                <Alert key={"idx"} variant={this.state.variant} show={this.state.alert}>{this.state.msgAlert}</Alert>
                 {typeof this.state.idcurso === "undefined" ? "" : <div><h3>Disciplinas </h3>
                     <table class="table">
                         <thead class="p-3 mb-2 bg-primary text-white">
@@ -103,8 +106,8 @@ class ListaDiscipinas extends Component {
                                     <td>{d.cargaHoraria}</td>
                                     <td><Button variant="primary"
                                         className="btn btn-danger m-1"
-                                        onClick={(e) => this.setState({modalShow:true,idDisciplina:d.id})}
-                                    > Deletar </Button></td>
+                                        onClick={(e) => this.setState({ modalShow: true, idDisciplina: d.id })}
+                                    > Apagar </Button></td>
                                     <td><Button variant="primary"
                                         className="btn btn-success m-1"
                                         onClick={(e) => this.busca(d.id)}
@@ -139,7 +142,7 @@ class ListaDiscipinas extends Component {
                                 onError={this.state.textocargahoraria}
                                 onErrorMessage={'Campo carga Horária é obrigatório e não pode ser menor que 15 horas'}
                             />
-                            <Button  variant="primary" className="btn btn-primary m-1" onClick={(e) => this.editarDisciplina()}>
+                            <Button variant="primary" className="btn btn-primary m-1" onClick={(e) => this.editarDisciplina()}>
                                 Salvar
                 </Button></> : ""}
                 </div>
@@ -151,10 +154,10 @@ class ListaDiscipinas extends Component {
                     </Modal.Header>
                     <Modal.Body>Apagar disciplina? </Modal.Body>
                     <Modal.Footer>
-                    <Button variant="primary"
-                                        className="btn btn-danger m-1"
-                                        onClick={(e) => this.apagar(this.state.idDisciplina)}
-                                    > Deletar </Button>
+                        <Button variant="primary"
+                            className="btn btn-danger m-1"
+                            onClick={(e) => this.apagar(this.state.idDisciplina)}
+                        > Apagar </Button>
                     </Modal.Footer>
                 </Modal>
 

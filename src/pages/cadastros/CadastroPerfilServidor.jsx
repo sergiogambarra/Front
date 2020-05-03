@@ -14,42 +14,46 @@ class CadastroPerfilServidor extends Component {
             password: "",
             novaSenha: "",
             siape: "",
+            email: "",
             cargo: "",
             permissao: "SERVIDOR",
-            isCordenador: false,
+            isCoordenador: false,
             loginInvalido: false,
             confirmaSenhaInvalida: false,
             loginPesquisa: "",
             senhaInvalida: false,
             siapeInvalido: false,
+            emailInvalido: false,
             cargoInvalido: false,
             nomeInvalido: false,
             modal: false,
             msgLogin: false
-
+            
         }
     }
-
+    
     async verifica() {
         await getPesquisaLogin(`usuarios/pesquisa/${this.state.userName}`).then((retorno) => {
             this.setState({ loginPesquisa: retorno })
-
+            
         });
         if (this.state.nome === "" ? this.setState({ nomeInvalido: true }) : this.setState({ nomeInvalido: false })) { }
         if (this.state.cargo === "" ? this.setState({ cargoInvalido: true }) : this.setState({ cargoInvalido: false })) { }
         if (this.state.siape === "" ? this.setState({ siapeInvalido: true }) : this.setState({ siapeInvalido: false })) { }
+        if (this.state.email === "" ? this.setState({ emailInvalido: true }) : this.setState({ emailInvalido: false })) { }
         if (this.state.password === "" ? this.setState({ senhaInvalida: true }) : this.setState({ senhaInvalida: false })) { }
         if (this.state.novaSenha === "" ? this.setState({ confirmaSenhaInvalida: true }) : this.setState({ confirmaSenhaInvalida: false })) { }
         if (this.state.userName === "") { this.setState({ loginInvalido: true }) }
         if (this.state.password !== this.state.novaSenha) { this.setState({ confirmaSenhaInvalida: true }) }
         if (this.state.loginPesquisa === this.state.userName.toUpperCase()) { this.setState({ loginInvalido: true }) }
         if (this.state.userName !== "" && this.state.email !== "" && this.state.siape !== "" && this.state.password !== ""
-            && this.state.login !== "" && this.state.password === this.state.novaSenha) {
+        && this.state.login !== "" && this.state.password === this.state.novaSenha) {
             if (this.state.loginPesquisa === this.state.userName.toUpperCase()) { this.setState({ loginInvalido: true }); return }
             postCadastroUsuarioServidor({
                 password: this.state.password,
                 userName: this.state.userName,
-                isCordenador: this.state.isCordenador,
+                email: this.state.email,
+                isCoordenador: this.state.isCoordenador,
                 nome: this.state.nome,
                 permissao: this.state.permissao,
                 siape: this.state.siape,
@@ -60,34 +64,37 @@ class CadastroPerfilServidor extends Component {
                     this.setState({ modal: false })
                 }, 3000)
                 this.limpar()
+                
             })
-
+            
             return
         }
     }
-
-
-
+    
+    
+    
     limpar() {
         this.setState({
             confirmaSenha: "",
             nomeInvalido: false,
             siapeInvalido: false,
+            emailInvalido: false,
             loginInvalido: false,
             senhaInvalida: false,
-            isCordenador: false,
+            isCoordenador: false,
             confirmaSenhaInvalida: false,
             nome: "",
             siape: "",
+            email: "",
             userName: "",
             password: "",
             novaSenha: "",
             cargo: ""
         })
     }
-
-
-
+    
+    
+    
     render() {
         return (
             <Form.Group className="col-md-6 container">
@@ -100,7 +107,7 @@ class CadastroPerfilServidor extends Component {
                     onChange={(e) => this.setState({ nome: e.target.value })}
                     onError={this.state.nomeInvalido}
                     onErrorMessage={'Você não inseriu o seu nome corretamente!'}
-                />
+                    />
                 <SACEInput
                     tipo={"number"}
                     min="0"
@@ -110,7 +117,15 @@ class CadastroPerfilServidor extends Component {
                     onChange={(e) => this.setState({ siape: e.target.value })}
                     onError={this.state.siapeInvalido}
                     onErrorMessage={'Você não inseriu a seu siape corretamente!'}
-                />
+                    />
+                <SACEInput
+                    label={'E-mail'}
+                    value={this.state.email}
+                    placeholder={'Informe o seu E-mail. '}
+                    onChange={(e) => this.setState({ email: e.target.value })}
+                    onError={this.state.emailInvalido}
+                    onErrorMessage={'Você não inseriu o seu email corretamente!'}
+                    />
                 <label >Cargo</label>
                 <select class="custom-select" value={this.state.cargo}
                     onChange={(e) => {
@@ -129,8 +144,8 @@ class CadastroPerfilServidor extends Component {
                 <br />
                 <br />
                 {this.state.cargo === "PROFESSOR" &&
-                    <Form.Check type="switch" id="custom-switch" label="Cordenador" value={this.state.isCordenador}
-                        onChange={() => this.setState({ isCordenador: !this.state.isCordenador })} />}
+                    <Form.Check type="switch" id="custom-switch" label="Cordenador" value={this.state.isCoordenador}
+                        onChange={() => this.setState({ isCoordenador: !this.state.isCoordenador })} />}
                 <SACEInput
                     label={'Login'}
                     value={this.state.userName}

@@ -94,7 +94,7 @@ export default function CertificacaoConhecimentosForm() {
             });
         }
 
-         /*setTimeout(() => setAlert(null), 3000);*/
+         setTimeout(() => setAlert(null), 3000);
         limparCampos();
     }
 

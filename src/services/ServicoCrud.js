@@ -6,7 +6,7 @@ const get = async (end) => {
         const entidade = await axios.get(`${baseURL}/${end}`);
         return entidade.data;
     } catch (error) {
-        console.log(`${end.toUpperCase()}Service/get${end}:`, error);
+        console.log(`${end.toUpperCase()}Service/get${baseURL}/${end}:`, error);
     }
 }
 
@@ -48,12 +48,33 @@ const del = async (end, id) => {
         console.log(`${end.toUpperCase()}Service/delete${baseURL}/${end}/${id}:`, error);
     }
 }
+const delCurso = async (end, id) => {
+    try {
+        await axios.delete(`${baseURL}/${end}/${id}`).then((resp) => {
+            return resp;
+        })
+    } catch (error) {
+        alert("Você não pode apagar curso ele possui disciplina associada a requisição de aluno")
+        console.log(`${end.toUpperCase()}Service/delete${baseURL}/${end}/${id}:`, error);
+    }
+}
+const deleteProfessor = async (end, id) => {
+    try {
+        await axios.delete(`${baseURL}/${end}/${id}`).then((resp) => {
+            return resp;
+        })
+    } catch (error) {
+        alert("Não pode apagar cadastro do professor porque tem requisição em andamento sob sua responsabilidade")
+        console.log(`${end.toUpperCase()}Service/delete${baseURL}/${end}/${id}:`, error);
+    }
+}
 const delDisciplinaCurso = async (end, id) => {
     try {
         await axios.delete(`${baseURL}/${end}/`).then((resp) => {
             return resp;
         })
     } catch (error) {
+        alert("Não pode apagar disciplina devido estar associada a uma requisição em análise")
         console.log(`${end.toUpperCase()}Service/delete${end}:`, error);
     }
 }
@@ -97,5 +118,6 @@ export {
     delDisciplinaCurso,
     getNomeCurso,
     getIdDisciplina,
-    putDisciplinas  
+    putDisciplinas  ,
+    deleteProfessor,delCurso
 };

@@ -16,12 +16,13 @@ class ListaAlunos extends Component {
             dataIngresso: "",
             email: "",
             username: "",
-            id: ""
+            id: "", alert: false
         }
     }
     listarAlunos() {
         get("usuarios/alunos/").then((retorno) => {
             this.setState({ alunos: retorno })
+            console.log(this.state.alunos);
         })
     }
 
@@ -32,7 +33,7 @@ class ListaAlunos extends Component {
             nome: usuario.perfil.nome,
             dataIngresso: usuario.perfil.dataIngresso,
             matricula: usuario.perfil.matricula,
-            email: usuario.perfil.email,
+            email: usuario.email,
             mostraEditar: true
         })
     }
@@ -43,6 +44,7 @@ class ListaAlunos extends Component {
     editar(e) {
         putAluno("usuarios", e,
             {
+                email: this.state.email,
                 perfil: {
                     nome: this.state.nome,
                     tipo: "ALUNO",
@@ -81,12 +83,12 @@ class ListaAlunos extends Component {
                                     <td>{aluno.perfil.nome}</td>
                                     <td>{format(aluno.perfil.dataIngresso)}</td>
                                     <td>{aluno.perfil.matricula}</td>
-                                    <td>{aluno.perfil.email}</td>
+                                    <td>{aluno.email}</td>
                                     <td> {aluno.perfil.nome === "" ? "" : <Button
                                         variant="primary"
                                         className="btn btn-danger m-1"
-                                        onClick={(e) => this.setState({ modalShow: true, id: aluno.id })}
-                                    > Deletar </Button>}
+                                        onClick={(e) => this.setState({ modalShow: true, id: aluno.id,nome:aluno.perfil.nome ,mostraEditar:false})}
+                                    > Apagar </Button>}
                                     </td>
                                     <td> {aluno.perfil.nome === "" ? "" : <a href={"#top"}> <Button
                                         variant="primary"
@@ -154,18 +156,23 @@ class ListaAlunos extends Component {
                     <Modal.Header closeButton>
                         <Modal.Title > Confirmar</Modal.Title>
                     </Modal.Header>
-                    <Modal.Body>Apagar cadastro do aluno? </Modal.Body>
+                    <Modal.Body>Apagar cadastro do aluno/aluna? </Modal.Body>
+                    <Modal.Body>ID :&nbsp;{this.state.id} </Modal.Body>
+                    <Modal.Body>Nome :&nbsp;{this.state.nome} </Modal.Body>
                     <Modal.Footer>
                         <Button variant="primary"
                             className="btn btn-danger m-1"
                             onClick={(e) => delAluno("usuarios", this.state.id).then(() => {
-                                this.setState({ modalShow: false ,mostraEditar:false})
+                                this.setState({ modalShow: false, mostraEditar: false, alert: true })
+                                setTimeout(() => {
+                                    this.setState({ alert: false })
+                                }, 2000)
                                 this.listarAlunos()
                             })}
-                        > Deletar </Button>
+                        > Apagar </Button>
                     </Modal.Footer>
                 </Modal>
-                
+
 
             </div>
         );

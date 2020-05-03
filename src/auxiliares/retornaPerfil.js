@@ -5,7 +5,6 @@ const retornaPerfil = (usuario) =>{
               
                   nome: usuario.nome,
                   matricula: usuario.matricula,
-                  email: usuario.email,
                   dataIngresso: usuario.dataIngresso,
                   tipo:"ALUNO"
           }
@@ -21,7 +20,7 @@ const retornaPerfil = (usuario) =>{
                   return {
                   nome: usuario.nome,
                   siape: usuario.siape,
-                  cordenador: usuario.isCordenador,
+                  coordenador: usuario.isCoordenador,
                   tipo:"PROFESSOR"
           }
       default:
