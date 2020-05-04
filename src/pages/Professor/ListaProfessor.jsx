@@ -38,9 +38,9 @@ class ListaProfessor extends Component {
     async editar(e) {
 
         if (this.state.nome === "" || this.state.nome === null?this.setState({nomeInvalido:true}):this.setState({nomeInvalido:false})){}
-        if (this.state.siape === "" || this.state.siape === null?this.setState({siapeInvalido:true}):this.setState({siapeInvalido:false})){}
+        if (this.state.siape === "" || this.state.siape === null||this.state.siape<=0?this.setState({siapeInvalido:true}):this.setState({siapeInvalido:false})){}
         if (this.state.email === "" || this.state.email === null?this.setState({emailInvalido:true}):this.setState({emailInvalido:false})){}
-        if (this.state.nome === "" ||this.state.nome===null||this.state.siape === "" ||this.state.siape|| this.state.email === ""||this.state.siape) {
+        if (this.state.nome === "" ||this.state.nome===null||this.state.siape === "" ||this.state.siape<=0||this.state.siape===null|| this.state.email === ""||this.state.email==null) {
             return
         }
         put("usuarios", e,

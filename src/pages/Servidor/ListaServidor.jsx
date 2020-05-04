@@ -8,9 +8,9 @@ class ListaServidor extends Component {
         super(props);
         this.state = {
             servidores: [],
-            siape: "",id:"",email:"",
-            mostrarEditar: false,modalShow:false,alert:false,
-            emailInvalido:false,siapeInvalido:false,nomeInvalido:false
+            siape: "", id: "", email: "",
+            mostrarEditar: false, modalShow: false, alert: false,
+            emailInvalido: false, siapeInvalido: false, nomeInvalido: false
 
         }
     }
@@ -28,42 +28,47 @@ class ListaServidor extends Component {
             mostrarEditar: true
         })
     }
-    
-    editar(e) {
-console.log(this.state.email);
 
-        if(this.nome===null||this.state.nome===""?this.setState({nomeInvalido:true}):this.setState({nomeInvalido:false})){}
-        if(this.siape===null||this.state.siape===""?this.setState({siapeInvalido:true}):this.setState({siapeInvalido:false})){}
-        if(this.email===null||this.state.email===""?this.setState({emailInvalido:true}):this.setState({emailInvalido:false})){}
-        if(this.email===null||this.state.email===""||this.siape===null||this.state.siape===""||this.nome===null||this.state.nome===""){return}
+    editar(e) {
+        console.log(this.state.email);
+
+        if (this.nome === null || this.state.nome === "" ? this.setState({ nomeInvalido: true }) : this.setState({ nomeInvalido: false })) { }
+        if (this.siape === null || this.state.siape === ""||this.state.siape<=0 ? this.setState({ siapeInvalido: true }) : this.setState({ siapeInvalido: false })) { }
+        if (this.email === null || this.state.email === "" ? this.setState({ emailInvalido: true }) : this.setState({ emailInvalido: false })) { }
+        if (this.email === null || this.state.email === "" || this.siape === null ||this.state.siape<=0||this.state.siape === "" || this.nome === null || this.state.nome === "") { return }
         put("usuarios", e,
-        {
-            email:this.state.email,
-            perfil: {
-                nome: this.state.nome,
-                tipo: "SERVIDOR",
-                siape: this.state.siape,
-            }
-        }).then(() => {
-            this.setState({ mostrarEditar: false });
-            this.componentDidMount()
-        })
+            {
+                email: this.state.email,
+                perfil: {
+                    nome: this.state.nome,
+                    tipo: "SERVIDOR",
+                    siape: this.state.siape,
+                }
+            }).then(() => {
+                this.setState({ mostrarEditar: false });
+                this.componentDidMount()
+            })
     }
     deletar(e) {
         del("usuarios", e).then(() => {
-            this.setState({modalShow:false,mostrarEditar:false})
+            this.setState({ modalShow: false, mostrarEditar: false })
             this.componentDidMount()
-        }).then(()=>
-        this.setState({alert:true}), setTimeout(() => {
-            this.setState({ alert: false })
-        }, 2000)
+        }).then(() =>
+            this.setState({ alert: true }), setTimeout(() => {
+                this.setState({ alert: false })
+            }, 2000)
         )
     }
+    limpar() {
+        this.setState({
+            nomeInvalido: false, siapeInvalido: false, emailInvalido: false
+        })
+    }
     render() {
-            console.log(this.state.servidores);
+        console.log(this.state.servidores);
         return (<div>
             <br /><br />
-            <Alert variant={"danger"} show= {this.state.alert}>Apagou com sucesso</Alert>
+            <Alert variant={"danger"} show={this.state.alert}>Apagou com sucesso</Alert>
             <h3>Servidores </h3>
             <table className="table">
                 <thead className="s-3 mb-2 bg-primary text-white">
@@ -88,7 +93,7 @@ console.log(this.state.email);
                                 <td> {s.perfil.nome === "" ? "" : <Button
                                     variant="primary"
                                     className="btn btn-danger m-1"
-                                    onClick={() => this.setState({modalShow:true,id:s.id,mostrarEditar:false,nome:s.perfil.nome})}
+                                    onClick={() => this.setState({ modalShow: true, id: s.id, mostrarEditar: false, nome: s.perfil.nome }, this.limpar(),)}
                                 > Apagar </Button>}
                                 </td>
                                 <td> {s.perfil.nome === "" ? "" : <a href="#top"><Button
@@ -128,7 +133,7 @@ console.log(this.state.email);
                     onError={this.state.siapeInvalido}
                     onErrorMessage={'Você não inseriu a seu siape corretamente!'}
                 />
-                 <SACEInput
+                <SACEInput
                     label={'E-mail'}
                     value={this.state.email}
                     placeholder={'Informe o seu nome. '}

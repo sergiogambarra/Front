@@ -25,7 +25,7 @@ export default class ListaCursos extends Component {
 
     async listarCursosId(id) {
         const curso = await getId("cursos/", id);
-        this.setState({ nome: curso.nome, id: id, editar: true });
+        this.setState({ nome: curso.nome, id: id, editar: true,nomeInvalido:false });
     }
 
     async componentDidMount() {
@@ -33,7 +33,7 @@ export default class ListaCursos extends Component {
     }
 
     atualizar() {
-        if (this.state.nome ==="") {
+        if (this.state.nome ===""||this.state.nome ===null) {
             this.setState({nomeInvalido:true})
             return
         }
@@ -69,7 +69,7 @@ export default class ListaCursos extends Component {
                                 <td>{curso.id}</td>
                                 <td><Link to="/cadastrar-disciplina">{curso.nome}</Link></td>
                                 <td> <Button variant="primary" className="btn btn-danger m-1"
-                                    onClick={() =>this.setState({modalShow:true,curso, id:curso.id,editar:false,nome:curso.nome})}>
+                                    onClick={() =>this.setState({modalShow:true,curso, id:curso.id,editar:false,nome:curso.nome,nomeInvalido:false})}>
                                     Apagar
                                         </Button>  </td>
                                 <td>

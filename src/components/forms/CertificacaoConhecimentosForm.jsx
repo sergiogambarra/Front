@@ -136,8 +136,8 @@ export default function CertificacaoConhecimentosForm({user}) {
             />
 
             <Form.Group className="d-flex justify-content-end">
-                <Button variant="link" className="btn btn-link m-1" onClick={limparCampos}>Cancelar</Button>
                 <Button variant="primary" className="btn btn-primary m-1" onClick={fazerRequisicao}>Enviar</Button>
+                <Button variant="danger" className="btn btn-primary m-1" onClick={limparCampos}>Cancelar</Button>
             </Form.Group>
 
             {(showModal && requisicao)

@@ -95,9 +95,6 @@ const getIdDisciplina = async (end, id) => {
     }
 }
 const putDisciplinas = async (end, data) => {
-    console.log(end);
-    console.log(data);
-    
     try {
       const entidade = await axios.put(`${baseURL}/${end}/`,data);
       

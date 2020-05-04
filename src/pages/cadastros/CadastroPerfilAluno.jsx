@@ -56,21 +56,22 @@ class CadastroPerfilAluno extends Component {
         await getPesquisaLogin(`usuarios/pesquisa/aluno/${this.state.userName}`).then((retorno) => {
             this.setState({ loginPesquisa: retorno })
         });
+        
         if (this.state.loginPesquisa === this.state.userName.toUpperCase()) { this.setState({ userNameInvalido: true }) }
         if (this.state.nome === "" ? this.setState({ nomeInvalido: true }) : this.setState({ nomeInvalido: false })) { }
         if (this.state.email === "" ? this.setState({ emailInvalido: true }) : this.setState({ emailInvalido: false })) { }
-        if (this.state.matricula === "" ? this.setState({ matriculaInvalida: true }) : this.setState({ matriculaInvalida: false })) { }
+        if (this.state.matricula === "" || this.state.matricula <= 0 ? this.setState({ matriculaInvalida: true }) : this.setState({ matriculaInvalida: false })) { }
         if (this.state.dataIngresso === "" ? this.setState({ dataIngressoInvalido: true }) : this.setState({ dataIngressoInvalido: false })) { }
         if (this.state.userName === "" ? this.setState({ userNameInvalido: true }) : this.setState({ userNameInvalido: false })) { }
         if (this.state.password === "" ? this.setState({ passwordInvalido: true }) : this.setState({ passwordInvalido: false })) { }
         if (this.state.verificaSenha === "" ? this.setState({ verificaSenhaInvalido: true }) : this.setState({ verificaSenhaInvalido: false })) { }
-        if (this.state.nome !== "" && this.state.email !== "" && this.state.matricula !== "" && this.state.dataIngresso !== "" &&
-            this.state.userName !== "" && this.state.password !== "" && this.state.verificaSenha !== "") {
-                this.setState({ modalShow: true })
+        
+        if (this.state.nome !== "" && this.state.email !== "" &&  this.state.dataIngresso !== "" && this.state.userName !== "" &&
+         this.state.password !== "" && this.state.verificaSenha !== ""&&this.state.matricula > 0 &&this.state.verificaSenha === this.state.password) { this.setState({ modalShow: true }) }else{return}
+         
         }
-        if (this.state.verificaSenha !== this.state.password) { this.setState({ verificaSenhaInvalido: true, modalShow: false }); return }
-    }
-    async  enviarCadastro() {
+        
+        async  enviarCadastro() {
         postCadastroUsuario({
             password: this.state.password,
             userName: this.state.userName,

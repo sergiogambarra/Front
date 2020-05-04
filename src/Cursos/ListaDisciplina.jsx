@@ -14,7 +14,8 @@ class ListaDiscipinas extends Component {
             disciplina: {
                 nome: "", cargaHoraria: ""
             }, variant: "", msgAlert: "Atualizado com sucesso!",
-            mostraEditar: false, idDisciplina: "", modalShow: false, alert: false
+            mostraEditar: false, idDisciplina: "", modalShow: false, alert: false,
+            nomeInvalido: false, cargaHorariaInvalida: false
         }
     }
 
@@ -42,7 +43,7 @@ class ListaDiscipinas extends Component {
         this.listarCurso();
         this.listarDisciplinas();
     }
- 
+
     async busca(e) {
         await getIdDisciplina(`cursos/${this.state.idcurso}/disciplinas/${e}`).then((retorno) => {
             this.setState({
@@ -52,8 +53,14 @@ class ListaDiscipinas extends Component {
                 mostraEditar: true
             })
         })
+        this.limpar()
     }
-    editarDisciplina() {
+  async editarDisciplina() {
+      console.log(this.state.cargaHoraria);
+      
+        if (this.state.nome === null || this.state.nome === "" ? this.setState({ nomeInvalido: true }) : this.setState({ nomeInvalido: false })) { }
+        if (this.state.cargaHoraria === null || this.state.cargaHoraria === ""||this.state.cargaHoraria <15 ? this.setState({ cargaHorariaInvalida: true }) : this.setState({ cargaHorariaInvalida: false })) { }
+        if (this.state.nome === null || this.state.nome === "" || this.state.cargaHoraria === null || this.state.cargaHoraria === ""||this.state.cargaHoraria <15) { return }
         putDisciplinas(`cursos/${this.state.idcurso}/disciplinas`, {
             id: this.state.idDisciplina,
             nome: this.state.nome,
@@ -64,7 +71,11 @@ class ListaDiscipinas extends Component {
             this.setState({ alert: false })
         }, 2000)
     }
-
+    limpar() {
+this.setState({
+    nomeInvalido:false,cargaHorariaInvalida:false
+})
+    }
     render() {
 
         return (
@@ -106,7 +117,7 @@ class ListaDiscipinas extends Component {
                                     <td>{d.cargaHoraria}</td>
                                     <td><Button variant="primary"
                                         className="btn btn-danger m-1"
-                                        onClick={(e) => this.setState({ modalShow: true, idDisciplina: d.id })}
+                                        onClick={(e) => this.setState({ modalShow: true, idDisciplina: d.id, mostraEditar: false ,nome:d.nome},this.limpar())}
                                     > Apagar </Button></td>
                                     <td><Button variant="primary"
                                         className="btn btn-success m-1"
@@ -129,7 +140,7 @@ class ListaDiscipinas extends Component {
                                 value={this.state.nome}
                                 label={'Nome da Disciplina'}
                                 onChange={(e) => this.setState({ nome: e.target.value })}
-                                onError={this.state.textodisciplina}
+                                onError={this.state.nomeInvalido}
                                 onErrorMessage={'Campo da disciplina obrigatório'}
                             />
 
@@ -139,7 +150,7 @@ class ListaDiscipinas extends Component {
                                 label="Carga Horária"
                                 value={this.state.cargaHoraria}
                                 onChange={(e) => this.setState({ cargaHoraria: e.target.value })}
-                                onError={this.state.textocargahoraria}
+                                onError={this.state.cargaHorariaInvalida}
                                 onErrorMessage={'Campo carga Horária é obrigatório e não pode ser menor que 15 horas'}
                             />
                             <Button variant="primary" className="btn btn-primary m-1" onClick={(e) => this.editarDisciplina()}>
@@ -153,6 +164,8 @@ class ListaDiscipinas extends Component {
                         <Modal.Title > Confirmar</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>Apagar disciplina? </Modal.Body>
+                    <Modal.Body>ID : &nbsp;{this.state.idDisciplina} </Modal.Body>
+                    <Modal.Body>Nome : &nbsp;{this.state.nome} </Modal.Body>
                     <Modal.Footer>
                         <Button variant="primary"
                             className="btn btn-danger m-1"
