@@ -15,10 +15,13 @@ class ListaDiscipinas extends Component {
                 nome: "", cargaHoraria: ""
             }, variant: "", msgAlert: "Atualizado com sucesso!",
             mostraEditar: false, idDisciplina: "", modalShow: false, alert: false,
-            nomeInvalido: false, cargaHorariaInvalida: false
+            nomeInvalido: false, cargaHorariaInvalida: false,
+            page: 0,
+            last: false,
+            first: true,
+
         }
     }
-
 
     async apagar(e) {
         await delDisciplinaCurso(`cursos/${this.state.idcurso}/disciplinas/${e}`).then(() => {
@@ -33,15 +36,15 @@ class ListaDiscipinas extends Component {
         const cursos = await get("cursos/");
         this.setState({ cursos });
     }
+    async  listarDisciplinas(e) {
 
-    async  listarDisciplinas() {
-        await get(`cursos/${this.state.idcurso}/disciplinas/`).then((retorno) => {
-            this.setState({ disciplinas: retorno })
+        await get(`cursos/${this.state.idcurso}/disciplinas/paginacao?page=${this.state.page}&size=5`).then((retorno) => {
+            this.setState({ disciplinas: retorno && retorno.content, last: retorno && retorno.last, first: retorno && retorno.first })
         });
     }
-    componentDidMount() {
+    async componentDidMount() {
+        this.listarDisciplinas()
         this.listarCurso();
-        this.listarDisciplinas();
     }
 
     async busca(e) {
@@ -55,12 +58,11 @@ class ListaDiscipinas extends Component {
         })
         this.limpar()
     }
-  async editarDisciplina() {
-      console.log(this.state.cargaHoraria);
-      
+    async editarDisciplina() {
+
         if (this.state.nome === null || this.state.nome === "" ? this.setState({ nomeInvalido: true }) : this.setState({ nomeInvalido: false })) { }
-        if (this.state.cargaHoraria === null || this.state.cargaHoraria === ""||this.state.cargaHoraria <15 ? this.setState({ cargaHorariaInvalida: true }) : this.setState({ cargaHorariaInvalida: false })) { }
-        if (this.state.nome === null || this.state.nome === "" || this.state.cargaHoraria === null || this.state.cargaHoraria === ""||this.state.cargaHoraria <15) { return }
+        if (this.state.cargaHoraria === null || this.state.cargaHoraria === "" || this.state.cargaHoraria < 15 ? this.setState({ cargaHorariaInvalida: true }) : this.setState({ cargaHorariaInvalida: false })) { }
+        if (this.state.nome === null || this.state.nome === "" || this.state.cargaHoraria === null || this.state.cargaHoraria === "" || this.state.cargaHoraria < 15) { return }
         putDisciplinas(`cursos/${this.state.idcurso}/disciplinas`, {
             id: this.state.idDisciplina,
             nome: this.state.nome,
@@ -72,12 +74,11 @@ class ListaDiscipinas extends Component {
         }, 2000)
     }
     limpar() {
-this.setState({
-    nomeInvalido:false,cargaHorariaInvalida:false
-})
+        this.setState({
+            nomeInvalido: false, cargaHorariaInvalida: false
+        })
     }
     render() {
-
         return (
             <div ><br /><br />
                 <label>Selecione um Curso</label>
@@ -117,7 +118,7 @@ this.setState({
                                     <td>{d.cargaHoraria}</td>
                                     <td><Button variant="primary"
                                         className="btn btn-danger m-1"
-                                        onClick={(e) => this.setState({ modalShow: true, idDisciplina: d.id, mostraEditar: false ,nome:d.nome},this.limpar())}
+                                        onClick={(e) => this.setState({ modalShow: true, idDisciplina: d.id, mostraEditar: false, nome: d.nome }, this.limpar())}
                                     > Apagar </Button></td>
                                     <td><Button variant="primary"
                                         className="btn btn-success m-1"
@@ -127,6 +128,14 @@ this.setState({
                             )}
                         </tbody>
                     </table>
+                    {
+                        <>
+                            {this.state.first || <button id="menos" onClick={(e) => this.listarDisciplinas(e)}>Anterior</button>}
+                        </>
+
+                    }
+                    <button id="mais" onClick={(e) => this.a()}>Próximo</button>
+
                     <hr></hr><br /><br />
                     {this.state.mostraEditar === true ?
                         <><h3 id={"top"} style={{ textAlign: 'center' }}>Formulário de Edição</h3>

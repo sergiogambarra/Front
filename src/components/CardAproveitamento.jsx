@@ -19,7 +19,9 @@ export default function  CardAproveitamento ({requisicao}){
         <p>{`ID: ${id}`}</p>
         <p>{`Data: ${dataRequisicao}`}</p>
         <p>{`Aluno: ${usuario && usuario.perfil.nome}`}</p>
-        <p>{`Parecer: ${parecer===null?"":parecer}`}</p>
+        <p>{`Parecer Servidor: ${parecer===null?"":parecer}`}</p>
+        <p>{`Parecer Coodenador: ${parecer===null?"":parecer}`}</p>
+        <p>{`Parecer Professor: ${parecer===null?"":parecer}`}</p>
         <p>{`Disciplina : ${disciplinaSolicitada&&disciplinaSolicitada.nome}`}</p>
         <p>{`Professor : ${professor===null?"":professor&&professor.perfil.nome}`}</p>
         </div>
