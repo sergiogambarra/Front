@@ -19,6 +19,7 @@ class ListaDiscipinas extends Component {
             page: 0,
             last: false,
             first: true,
+            total:0
 
         }
     }
@@ -36,15 +37,16 @@ class ListaDiscipinas extends Component {
         const cursos = await get("cursos/");
         this.setState({ cursos });
     }
-    async  listarDisciplinas(e) {
+    async  listarDisciplinas() {
 
-        await get(`cursos/${this.state.idcurso}/disciplinas/paginacao?page=${this.state.page}&size=5`).then((retorno) => {
-            this.setState({ disciplinas: retorno && retorno.content, last: retorno && retorno.last, first: retorno && retorno.first })
+        await get(`cursos/${this.state.idcurso}/disciplinas/paginacao?page=${this.state.page}&size=6`).then((retorno) => {
+            console.log(retorno)
+            if(retorno) this.setState({ disciplinas: retorno.content, last: retorno.last, first: retorno.first, total:retorno.totalPages })
         });
     }
     async componentDidMount() {
-        this.listarDisciplinas()
         this.listarCurso();
+        this.listarDisciplinas()
     }
 
     async busca(e) {
@@ -58,6 +60,14 @@ class ListaDiscipinas extends Component {
         })
         this.limpar()
     }
+    control(e){
+        if(e.target.id === "+"){
+            this.setState({page:this.state.page+1},()=>this.listarDisciplinas())
+        }else{
+            this.setState({page:this.state.page-1},()=>this.listarDisciplinas())
+        }
+    }
+
     async editarDisciplina() {
 
         if (this.state.nome === null || this.state.nome === "" ? this.setState({ nomeInvalido: true }) : this.setState({ nomeInvalido: false })) { }
@@ -130,11 +140,14 @@ class ListaDiscipinas extends Component {
                     </table>
                     {
                         <>
-                            {this.state.first || <button id="menos" onClick={(e) => this.listarDisciplinas(e)}>Anterior</button>}
+                            {this.state.first || <button id="-" onClick={(e) => this.control(e)}>Anterior</button>}
+                            &nbsp;&nbsp;
+                            {this.state.last  || <button id="+" onClick={(e) => this.control(e)}>Próximo</button>}
+
+                            <span style={{float:"right"}}>Página  { this.state.page+1 } / {this.state.total}</span>
                         </>
 
                     }
-                    <button id="mais" onClick={(e) => this.a()}>Próximo</button>
 
                     <hr></hr><br /><br />
                     {this.state.mostraEditar === true ?

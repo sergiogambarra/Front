@@ -6,7 +6,7 @@ const postRequisicao = async (requisicao) => {
 }
 
 const getCertificacoes = async (user) => {
-    if(user.user.perfil.cordenador === true){
+    if(user.user.perfil.coordenador === true){
         return await get("requisicoes/certificacoes/");
     }else
     if (user.user.permissao === "PROFESSOR") {
@@ -17,7 +17,8 @@ const getCertificacoes = async (user) => {
 }
 
 const getAproveitamentos = async (user) => {
-    if(user.perfil.cordenador === true){
+    
+    if(user.perfil.coordenador === true){
         return await get("requisicoes/aproveitamentos/");
     }else
     if (user.permissao === "PROFESSOR") {

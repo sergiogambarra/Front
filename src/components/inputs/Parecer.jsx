@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import SACEInput from '../../../src//components/inputs/SACEInput';
-import { Button } from 'react-bootstrap';
+import { Button, Alert } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import TituloPagina from '../../components/TituloPagina';
 import { Form, Modal } from 'react-bootstrap';
@@ -12,7 +12,9 @@ class Parecer extends Component {
         super(props);
         this.state = {
             dataRequisicao: "",
-            parecer: "",
+            parecerCoordenador: "",
+            parecerProfessor: "",
+            parecerServidor: "",
             deferido: "escolha",
             disciplinaSolicitada: "",
             usuario: "",
@@ -21,8 +23,8 @@ class Parecer extends Component {
             formacaoAtividadeAnterior: "",
             criterioAvaliacao: "", tipo: "", atualizarParecer: "",
             listaProfessores: [],
-            idRequisicao: "", id: "", modal: false, cordenador: "", disciplinas: [],
-            idDisciplina:""
+            idRequisicao: "", id: "", modal: false, coordenador: "", disciplinas: [],
+            idDisciplina: "", stringParecer: "", mudaParecer: "", alert: false
         }
 
 
@@ -30,6 +32,9 @@ class Parecer extends Component {
 
     async listaAth() {
         const user = await get("usuarios/auth/")
+        console.log(user.perfil.tipo);
+        console.log(user);
+
         this.setState({ user })
     }
     async buscaProfessores() {
@@ -43,11 +48,13 @@ class Parecer extends Component {
         this.buscaProfessores()
         const c = await getRequisicaoId(this.props.match.params.id)
         this.setState({ c })
-
+        this.mudaNomeStringParecer()
         this.setState({
             idRequisicao: c.id,
             dataRequisicao: c.dataRequisicao,
-            parecer: c.parecer,
+            parecerCoordenador: c.parecerCoordenador,
+            parecerProfessor: c.parecerProfessor,
+            parecerServidor: c.parecerServidor,
             deferido: c.deferido,
             disciplinaSolicitada: c.disciplinaSolicitada,
             usuario: c.usuario.perfil.nome,
@@ -57,38 +64,48 @@ class Parecer extends Component {
             criterioAvaliacao: c.criterioAvaliacao,
             tipo: c.tipo,
             titulo: "",
-            cordenador: c.professor && c.professor.perfil.cordenador
+            coordenador: c.professor && c.professor.perfil.coordenador, alert: false
+
         });
         if (this.state.id === "" || this.state.id === null) {
             this.setState({ id: this.state.professor && this.state.professor.perfil.id })
         }
     }
+    mudaNomeStringParecer() {
+        if (this.state.user && this.state.user.perfil.tipo === "SERVIDOR") {
+            this.setState({ stringParecer: "SERVIDOR" })
+        } else if (this.state.user && this.state.user.perfil.coordenador === true) {
+            this.setState({ stringParecer: "Coordenador" })
+        } else { this.setState({ stringParecer: "Professor" }) }
+    }
     async listaDisciplinas() {
         await get("disciplinas/").then((r) => this.setState({
             disciplinas: r
         }))
-        console.log(this.state.disciplinas);
-
     }
 
     async atualizar() {
+        if (this.state.id) { }
+        console.log(this.state.id);
+
         if (this.state.id === null) {
             put("requisicoes", this.props.match.params.id, {
                 tipo: this.state.tipo,
                 deferido: this.state.deferido,
                 parecer: this.state.atualizarParecer ? this.state.atualizarParecer : this.state.parecer,
             }).then(() => { this.setState({ modal: false }) })
-        }else{
-            put("requisicoes", this.props.match.params.id, {
-                tipo: this.state.tipo,
-                deferido: this.state.deferido,
-                parecer: this.state.atualizarParecer ? this.state.atualizarParecer : this.state.parecer,
-                professor: {
-                    id: this.state.id
-                }
-
-            }).then(() => { this.setState({ modal: false }) })
+        } else if (this.state.id === null && this.state.user && this.state.user.perfil.coordenador === true) {
+            this.setState({ alert: true })
+            return
         }
+        put("requisicoes", this.props.match.params.id, {
+            tipo: this.state.tipo,
+            deferido: this.state.deferido,
+            parecerCoordenador: this.state.atualizarParecer ? this.state.atualizarParecer : this.state.parecer,
+            professor: {
+                id: this.state.id
+            }
+        }).then(() => { this.setState({ modal: false }) })
     }
 
     render() {
@@ -122,18 +139,31 @@ class Parecer extends Component {
                     label={'Status'}
                     value={this.state.deferido}
                     disabled={true} />
-                <Form.Group controlId="exampleForm.ControlTextarea1">
-                    <Form.Label>Parecer</Form.Label>
 
+                <Form.Group controlId="exampleForm.ControlTextarea1">
+                    <Form.Label>Parecer do Coodenador</Form.Label>
                     <Form.Control as="textarea" rows="2"
-                        id={this.state.parecer}
-                        value={this.state.parecer}
+                        value={this.state.parecerCoordenador}
                         disabled={true}
                     />
                 </Form.Group>
-
+                <Form.Group controlId="exampleForm.ControlTextarea1">
+                    <Form.Label>Parecer do Professor</Form.Label>
+                    <Form.Control as="textarea" rows="2"
+                        value={this.state.parecerProfessor}
+                        disabled={true}
+                    />
+                </Form.Group>
+                <Form.Group controlId="exampleForm.ControlTextarea1">
+                    <Form.Label>Parecer do Servidor</Form.Label>
+                    <Form.Control as="textarea" rows="2"
+                        value={this.state.parecerServidor}
+                        disabled={true}
+                    />
+                </Form.Group>
                 <div style={{ fontSize: "200%" }}> Modificar Status </div>
-                {this.state.user && this.state.user.perfil.cordenador === true ? <Form>
+                <Alert variant={"danger"} show={this.state.alert}>Selecione um professor tratar requisição</Alert>
+                {this.state.user && this.state.user.perfil.coordenador === true ? <Form>
                     <Form.Group controlId="exampleForm.SelectCustom">
                         <br />
                         <Form.Label>Selecione um professor para tratar essa requisição  </Form.Label>
@@ -155,7 +185,9 @@ class Parecer extends Component {
                         onChange={(e) => this.setState({ deferido: e.target.id })}
                         defaultChecked={false}
                     />
-                    <label class="custom-control-label" for="DEFERIDO">Deferido</label>
+                    {console.log(this.state.user && this.state.user.perfil.tipo)}
+
+                    {this.state.user && this.state.user.perfil.tipo === "SERVIDOR" ? "" : <label class="custom-control-label" for="DEFERIDO">Deferido</label>}
                 </div>
                 <div class="custom-control custom-radio custom-control-inline">
                     <input type="radio" id="INDEFERIDO" name="customRadioInline1" class="custom-control-input"
@@ -189,7 +221,7 @@ class Parecer extends Component {
                 </ol>
 
                 <Form.Group controlId="exampleForm.ControlTextarea1">
-                    <Form.Label>Novo Parecer</Form.Label>
+                    <Form.Label>Novo Parecer do : &nbsp;{this.state.stringParecer}</Form.Label>
                     <Form.Control as="textarea" rows="2"
                         id={this.state.atualizarParecer}
                         value={this.state.atualizarParecer}
@@ -209,11 +241,13 @@ class Parecer extends Component {
                         <Button variant="danger" onClick={() => this.setState({ modal: false })}>  Fechar </Button>
                     </Modal.Footer>
                 </Modal>
+              
+
                 <div className="row container" style={{ position: 'relative', left: '32%' }}>
                     <Button onClick={(e) => this.setState({ modal: true })} variant="primary" className="btn btn-primary m-1" data-toggle="modal" data-target="#exampleModal" style={{ border: "5px solid white" }}>Salvar</Button>
                     <Link to="/minhas-requisicoes"> <Button variant="danger" className="btn btn-primary m-2" >Voltar </Button></Link>
                 </div>
-
+                {console.log(this.state.alert)}
             </Form.Group>
 
 

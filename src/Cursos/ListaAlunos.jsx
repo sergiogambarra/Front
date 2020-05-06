@@ -16,7 +16,10 @@ class ListaAlunos extends Component {
             dataIngresso: "",
             email: "",
             username: "",
-            id: "", alert: false
+            id: "", alert: false,  page: 0,
+            last: false,
+            first: true,
+            total:0
         }
     }
     listarAlunos() {
@@ -36,6 +39,13 @@ class ListaAlunos extends Component {
             email: usuario.email,
             mostraEditar: true
         })
+    }
+    control(e){
+        if(e.target.id === "+"){
+            this.setState({page:this.state.page+1},()=>this.listarDisciplinas())
+        }else{
+            this.setState({page:this.state.page-1},()=>this.listarDisciplinas())
+        }
     }
 
     componentDidMount() {
@@ -185,7 +195,16 @@ class ListaAlunos extends Component {
                         > Apagar </Button>
                     </Modal.Footer>
                 </Modal>
+                {
+                        <>
+                            {this.state.first || <button id="-" onClick={(e) => this.control(e)}>Anterior</button>}
+                            &nbsp;&nbsp;
+                            {this.state.last  || <button id="+" onClick={(e) => this.control(e)}>Próximo</button>}
 
+                            <span style={{float:"right"}}>Página  { this.state.page+1 } / {this.state.total}</span>
+                        </>
+
+                    }
 
             </div>
         );
