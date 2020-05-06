@@ -24,7 +24,8 @@ class Parecer extends Component {
             criterioAvaliacao: "", tipo: "", atualizarParecer: "",
             listaProfessores: [],
             idRequisicao: "", id: "", modal: false, coordenador: "", disciplinas: [],
-            idDisciplina: "", stringParecer: "", mudaParecer: "", alert: false
+            idDisciplina: "", stringParecer: "", mudaParecer: "", listaProfessoresInvalido: false,
+            msgErrorProfessor: ""
         }
 
 
@@ -101,11 +102,24 @@ class Parecer extends Component {
         put("requisicoes", this.props.match.params.id, {
             tipo: this.state.tipo,
             deferido: this.state.deferido,
-            parecerCoordenador: this.state.atualizarParecer ? this.state.atualizarParecer : this.state.parecer,
+            parecerCoordenador: this.state.atualizarParecer ? this.state.atualizarParecer : this.state.parecerServidor,
             professor: {
                 id: this.state.id
             }
         }).then(() => { this.setState({ modal: false }) })
+    }
+    verificarDados() {
+        if (this.state.user && this.state.user.perfil.coordenador === true) {
+            if (this.state.id === null || this.state.id === "") {
+                this.setState({ listaProfessoresInvalido: true, msgErrorProfessor: "Campo professor é obrigatório" })
+                return
+            }
+        } else{
+            this.setState({ modal: true })
+        }
+    }
+    limpar() {
+        this.state({ id: null })
     }
 
     render() {
@@ -163,21 +177,25 @@ class Parecer extends Component {
                 </Form.Group>
                 <div style={{ fontSize: "200%" }}> Modificar Status </div>
                 <Alert variant={"danger"} show={this.state.alert}>Selecione um professor tratar requisição</Alert>
-                {this.state.user && this.state.user.perfil.coordenador === true ? <Form>
-                    <Form.Group controlId="exampleForm.SelectCustom">
-                        <br />
-                        <Form.Label>Selecione um professor para tratar essa requisição  </Form.Label>
-                        <Form.Control as="select" custom
-                            id={this.state.listaProfessores.id}
-                            value={this.state.listaProfessores.id}
-                            onChange={(e) => this.setState({ id: e.target.value })} >
-                            <option selected ></option>
-                            {this.state.listaProfessores && this.state.listaProfessores.map((p) =>
-                                <option key={p.id} value={p.id}>{p.perfil.nome}</option>
-                            )}
-                        </Form.Control>
-                    </Form.Group>
-                </Form> : ""}
+                {this.state.user && this.state.user.perfil.coordenador === true ?
+                    <Form>
+                        <Form.Group controlId="exampleForm.SelectCustom">
+                            <br />
+                            <Form.Label>Selecione um professor para tratar essa requisição  </Form.Label>
+                            <Form.Control as="select" custom
+                                id={this.state.listaProfessores.id}
+                                value={this.state.listaProfessores.id}
+                                isInvalid={this.state.listaProfessoresInvalido}
+                                onChange={(e) => this.setState({ id: e.target.value, msgErrorProfessor: "", listaProfessoresInvalido: false })} >
+                                <option onClick={() => this.limpar()} ></option>
+                                {this.state.listaProfessores && this.state.listaProfessores.map((p) =>
+                                    <option key={p.id} value={p.id}>{p.perfil.nome}</option>
+
+                                )}
+                            </Form.Control>
+                            <Form.Text className="text-danger">{this.state.msgErrorProfessor} </Form.Text>
+                        </Form.Group>
+                    </Form> : ""}
                 <br />
                 <div class="custom-control custom-radio custom-control-inline">
                     <input type="radio"
@@ -241,16 +259,13 @@ class Parecer extends Component {
                         <Button variant="danger" onClick={() => this.setState({ modal: false })}>  Fechar </Button>
                     </Modal.Footer>
                 </Modal>
-              
+
 
                 <div className="row container" style={{ position: 'relative', left: '32%' }}>
-                    <Button onClick={(e) => this.setState({ modal: true })} variant="primary" className="btn btn-primary m-1" data-toggle="modal" data-target="#exampleModal" style={{ border: "5px solid white" }}>Salvar</Button>
+                    <Button onClick={(e) => this.verificarDados()} variant="primary" className="btn btn-primary m-1" data-toggle="modal" data-target="#exampleModal" style={{ border: "5px solid white" }}>Salvar</Button>
                     <Link to="/minhas-requisicoes"> <Button variant="danger" className="btn btn-primary m-2" >Voltar </Button></Link>
                 </div>
-                {console.log(this.state.alert)}
             </Form.Group>
-
-
         </div>);
     }
 }
