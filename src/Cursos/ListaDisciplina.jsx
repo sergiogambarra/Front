@@ -25,7 +25,7 @@ class ListaDiscipinas extends Component {
     }
 
     async apagar(e) {
-        await delDisciplinaCurso(`cursos/${this.state.idcurso}/disciplinas/${e}`).then(() => {
+        await delDisciplinaCurso(`cursos/${this.state.idcurso}/disciplinas/${e}`).then((retorno) => {
             this.listarDisciplinas()
             this.setState({ modalShow: false, mostraEditar: false, alert: false, variant: "danger", msgAlert: "Apagou com sucesso" })
             setTimeout(() => {

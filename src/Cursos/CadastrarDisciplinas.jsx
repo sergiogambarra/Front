@@ -34,22 +34,22 @@ class CadastrarDisciplinas extends Component {
         if (this.state.idcurso === null || this.state.idcurso === "" ? this.setState({ msgError: "Campo select obrigatório" }) : this.setState({ msgError: "" })) { }
         if (this.state.nome === "" ? this.setState({ textodisciplina: true }) : this.setState({ textodisciplina: false })) { }
         if (typeof this.state.cargaHoraria === "undefined" || this.state.cargaHoraria === "" || this.state.cargaHoraria < 15 ? this.setState({ textocargahoraria: true }) : this.setState({ textocargahoraria: false })) { }
-        if (this.state.idcurso !== "" && this.state.nome !== "" && typeof this.state.cargaHoraria !== "undefined" && this.state.msgError === "") {
-            if (this.state.textodisciplina === true || this.state.textocargahoraria === true || this.state.msgError === "Campo select obrigatório") {
-                return
+        if (this.state.idcurso !== "" && this.state.nome !== "" &&  this.state.cargaHoraria !== "") {
+            if (this.state.nome !== "" || this.state.cargaHoraria > 0 || this.state.idcurso !== "") {
+
+                await post(`cursos/${this.state.idcurso}/disciplinas/`, {
+                    nome: this.state.nome,
+                    cargaHoraria: this.state.cargaHoraria
+                }).then(() => {
+                    this.setState({ modal: true, disabled: true })
+                    setTimeout(() => {
+                        this.setState({ modal: false })
+                    }, 2000)
+                    this.listarDisciplinas();
+                    this.limparDados()
+                }
+                )
             }
-            await post(`cursos/${this.state.idcurso}/disciplinas/`, {
-                nome: this.state.nome,
-                cargaHoraria: this.state.cargaHoraria
-            }).then(() => {
-                this.setState({ modal: true, disabled: true })
-                setTimeout(() => {
-                    this.setState({ modal: false })
-                }, 2000)
-                this.listarDisciplinas();
-                this.limparDados()
-            }
-            )
         }
 
     }
