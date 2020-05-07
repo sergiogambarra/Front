@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import SACEInput from '../components/inputs/SACEInput';
 import Alert from 'react-bootstrap/Alert'
 import { delDisciplinaCurso, post, get } from '../services/ServicoCrud';
@@ -11,15 +11,13 @@ class CadastrarDisciplinas extends Component {
             cursos: [],
             idcurso: "",
             option: "",
-            textodisciplina: false,
-            textocargahoraria: false,
-            textooption: "erro",
+            textodisciplina: "",
+            textocargahoraria: "",
             disciplinas: [],
             modal: "",
             nome: "",
-            mostraLista: false,
             tituloCurso: "",
-            disabled: false,
+            disabled: false, msgError: ""
         }
     }
     async listarCurso() {
@@ -32,54 +30,55 @@ class CadastrarDisciplinas extends Component {
             this.setState({ disciplinas: retorno })
         });
     }
-
-    cadastrarDisciplinas() {
-        if (typeof this.state.nome === "undefined" || this.state.nome === "") { this.setState({ textodisciplina: true }) }
-        if (typeof this.state.cargaHoraria === "undefined" || this.state.cargaHoraria < 15) { this.setState({ textocargahoraria: true }) }
-        else {
-            post(`cursos/${this.state.idcurso}/disciplinas/`, {
+    async valida() {
+        if (this.state.idcurso === null || this.state.idcurso === "" ? this.setState({ msgError: "Campo select obrigatório" }) : this.setState({ msgError: "" })) { }
+        if (this.state.nome === "" ? this.setState({ textodisciplina: true }) : this.setState({ textodisciplina: false })) { }
+        if (typeof this.state.cargaHoraria === "undefined" || this.state.cargaHoraria === "" || this.state.cargaHoraria < 15 ? this.setState({ textocargahoraria: true }) : this.setState({ textocargahoraria: false })) { }
+        if (this.state.idcurso !== "" && this.state.nome !== "" && typeof this.state.cargaHoraria !== "undefined" && this.state.msgError === "") {
+            if (this.state.textodisciplina === true || this.state.textocargahoraria === true || this.state.msgError === "Campo select obrigatório") {
+                return
+            }
+            await post(`cursos/${this.state.idcurso}/disciplinas/`, {
                 nome: this.state.nome,
                 cargaHoraria: this.state.cargaHoraria
             }).then(() => {
-                this.setState({ modal: true, mostraLista: true, disabled: true })
+                this.setState({ modal: true, disabled: true })
                 setTimeout(() => {
                     this.setState({ modal: false })
                 }, 2000)
                 this.listarDisciplinas();
-                this.limpaDados()
+                this.limparDados()
             }
             )
-
         }
+
     }
     async apagar(e) {
         await delDisciplinaCurso(`cursos/${this.state.idcurso}/disciplinas/${e}`).then(() => {
             this.listarDisciplinas()
         })
     }
-    componentDidMount() {
+    async componentDidMount() {
         this.listarCurso();
     }
-    limpaDados() {
-        this.setState({
-            textodisciplina: "",
-            textocargahoraria: false,
-            nome: "", cargaHoraria: ""
-        })
-    }
+
     limpar() {
         this.setState({
             textodisciplina: "",
-            textocargahoraria: false,
-            nome: "", cargaHoraria: ""
+            textocargahoraria: "",
+            nome: "", cargaHoraria: "", msgError: ""
         })
         if (this.state.disabled) {
-            this.setState({ mostraLista: false, disabled: false })
+            this.setState({ disabled: false })
         }
+    }
+    limparDados() {
+        this.setState({ nome: "", cargaHoraria: "", textocargahoraria: "", textodisciplina: "", msgError: "" })
     }
 
 
     render() {
+
         return (<div >
             <br /><br />
             <Alert key={"idx"} variant={"success"} show={this.state.modal}>
@@ -95,11 +94,12 @@ class CadastrarDisciplinas extends Component {
 
                     })
                 }>
-                <option id={""}></option>
+                <option id={"e"} selected></option>
                 {this.state.cursos.map((curso) =>
                     <option key={curso.id} value={curso.id}>{curso.nome}</option>
                 )}
             </select>
+            <Form.Text className="text-danger">{this.state.msgError} </Form.Text>
             <SACEInput
                 placeholder={'Digite o nome Disciplina'}
                 value={this.state.nome}
@@ -118,7 +118,7 @@ class CadastrarDisciplinas extends Component {
                 onErrorMessage={'Campo carga Horária é obrigatório e não pode ser menor que 15 horas'}
                 value={this.state.cargaHoraria}
             />
-            <Button style={{ position: 'relative', left: '80%' }} variant="primary" className="btn btn-primary m-1" onClick={(e) => this.cadastrarDisciplinas()}>
+            <Button style={{ position: 'relative', left: '80%' }} variant="primary" className="btn btn-primary m-1" onClick={(e) => this.valida()}>
                 Salvar
                 </Button>
             <Button style={{ position: 'relative', left: '80%' }} variant="danger" className="btn btn-primary m-1" onClick={(e) => this.limpar()}>

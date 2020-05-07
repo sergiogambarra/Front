@@ -89,32 +89,45 @@ class Parecer extends Component {
         if (this.state.id) { }
         console.log(this.state.id);
 
-        if (this.state.id === null) {
+        if (this.state.user && this.state.user.perfil.tipo === "SERVIDOR") {
             put("requisicoes", this.props.match.params.id, {
                 tipo: this.state.tipo,
                 deferido: this.state.deferido,
-                parecer: this.state.atualizarParecer ? this.state.atualizarParecer : this.state.parecer,
+                parecerServidor: this.state.atualizarParecer ? this.state.atualizarParecer : this.state.parecerServidor,
+                parecerCoordenador: this.state.parecerCoordenador,
+                parecerProfessor: this.state.parecerProfessor,
             }).then(() => { this.setState({ modal: false }) })
-        } else if (this.state.id === null && this.state.user && this.state.user.perfil.coordenador === true) {
-            this.setState({ alert: true })
-            return
+        } else if (this.state.user && this.state.user.perfil.coordenador === true) {
+
+            put("requisicoes", this.props.match.params.id, {
+                tipo: this.state.tipo,
+                deferido: this.state.deferido,
+                parecerCoordenador: this.state.atualizarParecer ? this.state.atualizarParecer : this.state.parecerCoordenador,
+                parecerProfessor: this.state.parecerProfessor,
+                parecerServidor: this.state.parecerServidor,
+                professor: {
+                    id: this.state.id
+                }
+            }).then(() => { this.setState({ modal: false }) })
+        }else{
+            put("requisicoes", this.props.match.params.id, {
+                tipo: this.state.tipo,
+                deferido: this.state.deferido,
+                parecerServidor: this.state.parecerServidor,
+                parecerCoordenador: this.state.parecerCoordenador,
+                parecerProfessor: this.state.atualizarParecer ? this.state.atualizarParecer : this.state.parecerProfessor,
+            }).then(() => { this.setState({ modal: false }) })
         }
-        put("requisicoes", this.props.match.params.id, {
-            tipo: this.state.tipo,
-            deferido: this.state.deferido,
-            parecerCoordenador: this.state.atualizarParecer ? this.state.atualizarParecer : this.state.parecerServidor,
-            professor: {
-                id: this.state.id
-            }
-        }).then(() => { this.setState({ modal: false }) })
     }
     verificarDados() {
+        console.log("aaaaaaaaa");
         if (this.state.user && this.state.user.perfil.coordenador === true) {
             if (this.state.id === null || this.state.id === "") {
                 this.setState({ listaProfessoresInvalido: true, msgErrorProfessor: "Campo professor é obrigatório" })
                 return
             }
-        } else{
+            this.setState({ modal: true })
+        } else {
             this.setState({ modal: true })
         }
     }

@@ -23,7 +23,7 @@ export default function CardCertificacao({requisicao}) {
         <p>{`Parecer Professor: ${parecerProfessor===null?"":parecerProfessor}`}</p>
         <p>{`Parecer Servidor: ${parecerServidor===null?"":parecerServidor}`}</p>
         <p>{`Disciplina : ${disciplinaSolicitada&&disciplinaSolicitada.nome}`}</p>
-        <p>{`Professor : ${professor&&professor.perfil.nome}`}</p>
+        <p>{`Professor : ${professor === null ?"":professor&&professor.perfil.nome}`}</p>
         </div>
       </Col>
   );

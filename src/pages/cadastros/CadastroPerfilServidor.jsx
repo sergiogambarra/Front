@@ -27,7 +27,7 @@ class CadastroPerfilServidor extends Component {
             cargoInvalido: false,
             nomeInvalido: false,
             modal: false,
-            msgLogin: false
+            msgLogin: false,msgError:""
             
         }
     }
@@ -37,6 +37,9 @@ class CadastroPerfilServidor extends Component {
             this.setState({ loginPesquisa: retorno })
             
         });
+        console.log(this.state.cargo);
+        
+        if(this.state.cargo === null||this.state.cargo === ""?this.setState({msgError:"Você não inseriu o cargo corretamente"}):this.setState({msgError:""})){}
         if (this.state.nome === "" ? this.setState({ nomeInvalido: true }) : this.setState({ nomeInvalido: false })) { }
         if (this.state.cargo === "" ? this.setState({ cargoInvalido: true }) : this.setState({ cargoInvalido: false })) { }
         if (this.state.siape === "" ? this.setState({ siapeInvalido: true }) : this.setState({ siapeInvalido: false })) { }
@@ -49,6 +52,8 @@ class CadastroPerfilServidor extends Component {
         if (this.state.userName !== "" && this.state.email !== "" && this.state.siape !== "" && this.state.password !== ""
         && this.state.login !== "" && this.state.password === this.state.novaSenha) {
             if (this.state.loginPesquisa === this.state.userName.toUpperCase()) { this.setState({ loginInvalido: true }); return }
+            if(this.state.nomeInvalido === true|| this.state.siapeInvalido  === true||this.state.emailInvalido  === true||this.state.loginInvalido === true||
+                this.state.confirmaSenhaInvalida  === true||this.state.senhaInvalida === true|| this.state.msgError === "Você não inseriu o cargo corretamente"){return}
             postCadastroUsuarioServidor({
                 password: this.state.password,
                 userName: this.state.userName,
@@ -75,6 +80,7 @@ class CadastroPerfilServidor extends Component {
     
     limpar() {
         this.setState({
+            msgError:"",
             confirmaSenha: "",
             nomeInvalido: false,
             siapeInvalido: false,
@@ -141,6 +147,7 @@ class CadastroPerfilServidor extends Component {
                     <option value="PROFESSOR">Professor</option>
 
                 </select>
+                <Form.Text className="text-danger">{this.state.msgError} </Form.Text>
                 <br />
                 <br />
                 {this.state.cargo === "PROFESSOR" &&
