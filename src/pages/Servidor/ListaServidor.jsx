@@ -10,14 +10,13 @@ class ListaServidor extends Component {
             servidores: [],
             siape: "", id: "", email: "",
             mostrarEditar: false, modalShow: false, alert: false,
-            emailInvalido: false, siapeInvalido: false, nomeInvalido: false
+            emailInvalido: false, siapeInvalido: false, nomeInvalido: false,
+            variant:"",msgAlert:""
 
         }
     }
     async componentDidMount() {
         const servidores = await get("usuarios/pages?tipo=SERVIDOR")
-        console.log(servidores);
-        
         this.setState({ servidores })
     }
     async buscaPeloId(e) {
@@ -32,8 +31,6 @@ class ListaServidor extends Component {
     }
 
     editar(e) {
-        console.log(this.state.email);
-
         if (this.nome === null || this.state.nome === "" ? this.setState({ nomeInvalido: true }) : this.setState({ nomeInvalido: false })) { }
         if (this.siape === null || this.state.siape === ""||this.state.siape<=0 ? this.setState({ siapeInvalido: true }) : this.setState({ siapeInvalido: false })) { }
         if (this.email === null || this.state.email === "" ? this.setState({ emailInvalido: true }) : this.setState({ emailInvalido: false })) { }
@@ -47,13 +44,15 @@ class ListaServidor extends Component {
                     siape: this.state.siape,
                 }
             }).then(() => {
-                this.setState({ mostrarEditar: false });
+                this.setState({ mostrarEditar: false ,alert:true,variant:"success",msgAlert:"Atualizado com sucesso"});
                 this.componentDidMount()
-            })
+            },this.setState({ alert: true }), setTimeout(() => {
+                this.setState({ alert: false })
+            }, 3000))
     }
     deletar(e) {
         del("usuarios", e).then(() => {
-            this.setState({ modalShow: false, mostrarEditar: false })
+            this.setState({ modalShow: false, mostrarEditar: false ,variant:"danger",msgAlert:"Apagou com sucesso"})
             this.componentDidMount()
         }).then(() =>
             this.setState({ alert: true }), setTimeout(() => {
@@ -67,10 +66,9 @@ class ListaServidor extends Component {
         })
     }
     render() {
-        console.log(this.state.servidores);
         return (<div>
             <br /><br />
-            <Alert variant={"danger"} show={this.state.alert}>Apagou com sucesso</Alert>
+        <Alert variant={this.state.variant} show={this.state.alert}>{this.state.msgAlert}</Alert>
             <h3>Servidores </h3>
             <table className="table">
                 <thead className="s-3 mb-2 bg-primary text-white">

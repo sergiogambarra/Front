@@ -145,7 +145,6 @@ class CadastroPerfilServidor extends Component {
                     <option ></option>
                     <option value="SERVIDOR" selected={true}>Servidor</option>
                     <option value="PROFESSOR">Professor</option>
-
                 </select>
                 <Form.Text className="text-danger">{this.state.msgError} </Form.Text>
                 <br />

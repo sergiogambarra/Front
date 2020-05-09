@@ -60,11 +60,14 @@ class CadastroPerfilAluno extends Component {
         });
         if (this.state.userName === "") {
             this.setState({ userNameInvalido: true, msgLogin: "Você não inseriu login corretamente" })
+            return
         } else if (this.state.loginPesquisa === this.state.userName) {
             this.setState({ userNameInvalido: true, msgLogin: "Login inválido, login já cadastrado" })
+            return
         } else if (this.state.userName.length < 6 || this.state.userName.length > 10) {
             this.setState({ userNameInvalido: true, msgLogin: "Escolha login entre 6 e 10 caracteres" })
-        }
+            return
+        }if(this.state.verificaSenhaInvalido!==""){this.setState({msgLogin:""})}
         if (this.state.nome === "" ? this.setState({ nomeInvalido: true }) : this.setState({ nomeInvalido: false })) { }
         if (this.state.email === "" ? this.setState({ emailInvalido: true }) : this.setState({ emailInvalido: false })) { }
         if (this.state.matricula === "" || this.state.matricula <= 0 ? this.setState({ matriculaInvalida: true }) : this.setState({ matriculaInvalida: false })) { }
@@ -75,7 +78,6 @@ class CadastroPerfilAluno extends Component {
         }else if (this.state.verificaSenha === ""){
             this.setState({verificaSenhaInvalido:true})                
         }else{this.setState({verificaSenhaInvalido:false})                }
-
         if (this.state.userName && this.state.userName){
             if(this.state.userName.length < 6 || this.state.userName.length > 10){return}
         }
@@ -93,11 +95,9 @@ class CadastroPerfilAluno extends Component {
             email: this.state.email,
             dataIngresso: this.state.dataIngresso
         }).then((e) => {
-            console.log(e);
             this.setState({ modalShow: false, alert: true })
             setTimeout(() => {
-                this.setState({ alert: false })
-            }, 2000)
+                this.setState({ alert: false })}, 2000)
             this.limpar()
             window.location.href = ("/login")
         })
@@ -158,7 +158,6 @@ class CadastroPerfilAluno extends Component {
                         onError={this.state.userNameInvalido}
                         onErrorMessage={this.state.msgLogin}
                     />
-                    <Form.Text style={{ fontSize: "10px", textAlign: "center" }} className="text-danger">Escolha login entre 6 e 10 caracteres </Form.Text>
                     <SACEInput
                         label={'Senha'}
                         value={this.state.password}

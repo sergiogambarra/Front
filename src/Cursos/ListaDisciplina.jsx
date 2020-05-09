@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Button, Modal } from 'react-bootstrap';
-import { get, delDisciplinaCurso, getIdDisciplina, putDisciplinas } from '../services/ServicoCrud';
+import { get, getIdDisciplina, putDisciplinas } from '../services/ServicoCrud';
 import SACEInput from '../components/inputs/SACEInput';
 import Alert from 'react-bootstrap/Alert'
+import axios from 'axios';
 
 class ListaDiscipinas extends Component {
     constructor(props) {
@@ -13,35 +14,37 @@ class ListaDiscipinas extends Component {
             cursos: [],
             disciplina: {
                 nome: "", cargaHoraria: ""
-            }, variant: "", msgAlert: "Atualizado com sucesso!",
+            }, variant: "", msgAlert: "",
             mostraEditar: false, idDisciplina: "", modalShow: false, alert: false,
             nomeInvalido: false, cargaHorariaInvalida: false,
             page: 0,
             last: false,
             first: true,
-            total:0
+            total: 0
         }
     }
 
-    async apagar(e) {
-        await delDisciplinaCurso(`cursos/${this.state.idcurso}/disciplinas/${e}`).then((retorno) => {
+    async apagar() {
+        await axios.delete(`http://localhost:8080/api/cursos/${this.state.idcurso}/disciplinas/${this.state.idDisciplina}`).then((retorno) => {
             this.listarDisciplinas()
-            this.setState({ modalShow: false, mostraEditar: false, alert: false, variant: "danger", msgAlert: "Apagou com sucesso" })
+            this.setState({ modalShow: false, mostraEditar: false, alert: true, variant: "danger", msgAlert: "Apagou com sucesso" })
             setTimeout(() => {
                 this.setState({ alert: false })
             }, 2000)
-        })
+        }).catch(()=>
+        alert("Não pode apagar disciplina está associada a uma requisição no sistema")
+        ,this.setState({modalShow:false})
+        ,this.listarDisciplinas()
+        )
     }
     async listarCurso() {
         const cursos = await get("cursos/");
-        console.log(cursos);
-        
         this.setState({ cursos });
     }
     async  listarDisciplinas() {
 
         await get(`cursos/${this.state.idcurso}/disciplinas/paginacao?page=${this.state.page}&size=6`).then((retorno) => {
-            if(retorno) this.setState({ disciplinas: retorno.content, last: retorno.last, first: retorno.first, total:retorno.totalPages })
+            if (retorno) this.setState({ disciplinas: retorno.content, last: retorno.last, first: retorno.first, total: retorno.totalPages })
         });
     }
     async componentDidMount() {
@@ -60,11 +63,11 @@ class ListaDiscipinas extends Component {
         })
         this.limpar()
     }
-    control(e){
-        if(e.target.id === "+"){
-            this.setState({page:this.state.page+1},()=>this.listarDisciplinas())
-        }else{
-            this.setState({page:this.state.page-1},()=>this.listarDisciplinas())
+    control(e) {
+        if (e.target.id === "+") {
+            this.setState({ page: this.state.page + 1 }, () => this.listarDisciplinas())
+        } else {
+            this.setState({ page: this.state.page - 1 }, () => this.listarDisciplinas())
         }
     }
 
@@ -78,10 +81,10 @@ class ListaDiscipinas extends Component {
             nome: this.state.nome,
             cargaHoraria: this.state.cargaHoraria
         }).then(() => this.listarDisciplinas(),
-            this.setState({ mostraEditar: false, alert: true, variant: "success" }))
+            this.setState({ mostraEditar: false, alert: true, variant: "success",msgAlert:"Atualizado com sucesso" }))
         setTimeout(() => {
             this.setState({ alert: false })
-        }, 2000)
+        }, 4000)
     }
     limpar() {
         this.setState({
@@ -142,9 +145,9 @@ class ListaDiscipinas extends Component {
                         <>
                             {this.state.first || <button id="-" onClick={(e) => this.control(e)}>Anterior</button>}
                             &nbsp;&nbsp;
-                            {this.state.last  || <button id="+" onClick={(e) => this.control(e)}>Próximo</button>}
+                            {this.state.last || <button id="+" onClick={(e) => this.control(e)}>Próximo</button>}
 
-                            <span style={{float:"right"}}>Página  { this.state.page+1 } / {this.state.total}</span>
+                            <span style={{ float: "right" }}>Página  {this.state.page + 1} / {this.state.total}</span>
                         </>
 
                     }
@@ -191,7 +194,7 @@ class ListaDiscipinas extends Component {
                     <Modal.Footer>
                         <Button variant="primary"
                             className="btn btn-danger m-1"
-                            onClick={(e) => this.apagar(this.state.idDisciplina)}
+                            onClick={(e) => this.apagar()}
                         > Apagar </Button>
                     </Modal.Footer>
                 </Modal>

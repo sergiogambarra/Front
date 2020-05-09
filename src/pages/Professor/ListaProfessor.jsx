@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { get, getId, put, deleteProfessor } from '../../services/ServicoCrud';
+import { get, getId, put } from '../../services/ServicoCrud';
 import SACEInput from '../../components/inputs/SACEInput';
-import { Button, Form, Modal } from 'react-bootstrap'
+import { Button, Form, Modal, Alert } from 'react-bootstrap'
+import axios from 'axios';
 
 class ListaProfessor extends Component {
     constructor(props) {
@@ -10,15 +11,21 @@ class ListaProfessor extends Component {
             professores: [],
             siape: "", siapeInvalido: false, nome: "",
             coordenador: "", email: "", emailInvalido: false,
-            mostrarEditar: false, id: "", alert: false
+            mostrarEditar: false, id: "", alert: false,
+            msgAlert: "", show: false, variant: ""
         }
     }
 
     async componentDidMount() {
-        const professores = await get("usuarios/pages?tipo=PROFESSOR");
-        this.setState({ professores })
+        get("usuarios/pages?tipo=PROFESSOR").then((r) =>
+            this.setState({ professores: r })
+        )
     }
-    async buscaPeloId(e) {
+
+ 
+  
+
+    async  buscaPeloId(e) {
         this.limpar()
         const usuario = await getId("usuarios/", e)
         this.setState({
@@ -37,10 +44,10 @@ class ListaProfessor extends Component {
     }
     async editar(e) {
 
-        if (this.state.nome === "" || this.state.nome === null?this.setState({nomeInvalido:true}):this.setState({nomeInvalido:false})){}
-        if (this.state.siape === "" || this.state.siape === null||this.state.siape<=0?this.setState({siapeInvalido:true}):this.setState({siapeInvalido:false})){}
-        if (this.state.email === "" || this.state.email === null?this.setState({emailInvalido:true}):this.setState({emailInvalido:false})){}
-        if (this.state.nome === "" ||this.state.nome===null||this.state.siape === "" ||this.state.siape<=0||this.state.siape===null|| this.state.email === ""||this.state.email==null) {
+        if (this.state.nome === "" || this.state.nome === null ? this.setState({ nomeInvalido: true }) : this.setState({ nomeInvalido: false })) { }
+        if (this.state.siape === "" || this.state.siape === null || this.state.siape <= 0 ? this.setState({ siapeInvalido: true }) : this.setState({ siapeInvalido: false })) { }
+        if (this.state.email === "" || this.state.email === null ? this.setState({ emailInvalido: true }) : this.setState({ emailInvalido: false })) { }
+        if (this.state.nome === "" || this.state.nome === null || this.state.siape === "" || this.state.siape <= 0 || this.state.siape === null || this.state.email === "" || this.state.email == null) {
             return
         }
         put("usuarios", e,
@@ -53,21 +60,31 @@ class ListaProfessor extends Component {
                     coordenador: this.state.coordenador,
                 }
             }).then(() => {
-                this.setState({ mostrarEditar: false, nomeInvalido: false, siapeInvalido: false, emailInvalido: false });
+                this.setState({
+                    mostrarEditar: false, nomeInvalido: false, siapeInvalido: false, emailInvalido: false, show: true,
+                    variant: "success", msgAlert: "Atualizado com sucesso"
+                })
                 this.componentDidMount()
+                setTimeout(() => { this.setState({ show: false }) }, 3000);
             })
     }
-    async deletar(e) {
-        await deleteProfessor("usuarios", e).then((r) => {
-            this.setState({ modalShow: false, mostrarEditar: false, alert: true, nomeInvalido: false, siapeInvalido: false, emailInvalido: false })
-            setTimeout(() => { this.setState({ alert: false }) }, 2000)
+    deletar() {
+        axios.delete("http://localhost:8080/api/usuarios/" + this.state.id).then((r) =>
+            this.setState({ modalShow: false, show: true, variant: "danger", msgAlert: "Apagou com sucesso" }), 
             this.componentDidMount()
-        })
+        ).catch(() =>
+            alert("Não pode apagar cadastro do professor ele possui requisição no sistema "),
+            this.setState({ modalShow: false })
+            , setTimeout(() => {
+                this.setState({ show: false })
+            }, 3000),
+            this.componentDidMount()
+        )
     }
-
     render() {
         return (<div>
             <br /><br />
+            <Alert show={this.state.show} variant={this.state.variant}>{this.state.msgAlert}</Alert>
             <h3>Professores </h3>
             <table className="table">
                 <thead className="p-3 mb-2 bg-primary text-white">
@@ -90,7 +107,7 @@ class ListaProfessor extends Component {
                                 <td>{p.perfil.nome}</td>
                                 <td>{p.perfil.siape}</td>
                                 <td>{p.email}</td>
-                                <td>{p.perfil.coordenador ? "SIM" : "Não"}</td>
+                                <td style={{ textAlign: "center" }}>{p.perfil.coordenador ? "SIM" : "Não"}</td>
                                 <td> {p.perfil.nome === "" ? "" : <Button
                                     variant="primary"
                                     className="btn btn-danger m-1"
@@ -152,6 +169,8 @@ class ListaProfessor extends Component {
                 > Salvar </Button>
 
             </> : ""}
+            {console.log(this.state.id)}
+
             <Modal show={this.state.modalShow} onHide={() => this.setState({ modalShow: false })} animation={false}>
                 <Modal.Header closeButton>
                     <Modal.Title > Confirmar</Modal.Title>
@@ -160,12 +179,11 @@ class ListaProfessor extends Component {
                 <Modal.Body>ID: &nbsp;{this.state.id} </Modal.Body>
                 <Modal.Body>Nome :&nbsp;{this.state.nome} </Modal.Body>
                 <Modal.Footer>
-
-                    <Button
-                        variant="primary"
+                    <Button variant="primary"
                         className="btn btn-danger m-1"
-                        onClick={() => this.deletar(this.state.id)}
+                        onClick={(e) => this.deletar()}
                     > Apagar </Button>
+
                 </Modal.Footer>
             </Modal>
         </div>);
