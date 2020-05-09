@@ -15,7 +15,9 @@ class ListaServidor extends Component {
         }
     }
     async componentDidMount() {
-        const servidores = await get("usuarios/servidores/")
+        const servidores = await get("usuarios/pages?tipo=SERVIDOR")
+        console.log(servidores);
+        
         this.setState({ servidores })
     }
     async buscaPeloId(e) {
@@ -82,8 +84,8 @@ class ListaServidor extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {this.state.servidores &&
-                        this.state.servidores.map((s) =>
+                    {this.state.servidores.content &&
+                        this.state.servidores.content.map((s) =>
 
                             <tr key={s.id}>
                                 <td>{s.id}</td>

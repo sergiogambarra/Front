@@ -95,7 +95,7 @@ export default class ListaCursos extends Component {
                                     <Modal.Header closeButton>
                                         <Modal.Title > Confirmar</Modal.Title>
                                     </Modal.Header>
-                                    <Modal.Body>Você deseja deletar o curso? </Modal.Body>
+                                    <Modal.Body>Você deseja apagar o curso? </Modal.Body>
                                     <Modal.Body>ID :&nbsp;{this.state.id} </Modal.Body>
                                     <Modal.Body>Nome :&nbsp;{this.state.nome} </Modal.Body>
                                     <Modal.Footer>

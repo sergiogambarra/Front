@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { get, getId } from './../services/ServicoCrud'
-import { Button, Modal } from 'react-bootstrap'
-import { delAluno, putAluno } from '../services/AlunoService';
+import { Button, Modal, Alert } from 'react-bootstrap'
+import { putAluno } from '../services/AlunoService';
+import axios from 'axios';
 import SACEInput from '../components/inputs/SACEInput';
 import { format } from '../auxiliares/FormataData';
 
@@ -16,19 +17,20 @@ class ListaAlunos extends Component {
             dataIngresso: "",
             email: "",
             username: "",
-            id: "", alert: false,  page: 0,
+            id: "", alert: false, page: 0,
             last: false,
             first: true,
-            total:0
+            total: 0,
+            msgAlert: "",
+            showAlert: false,
+            variantAlert: ""
         }
     }
     listarAlunos() {
-        get("usuarios/alunos/").then((retorno) => {
+        get("usuarios/pages?tipo=ALUNO").then((retorno) => {
             this.setState({ alunos: retorno })
-            console.log(this.state.alunos);
         })
     }
-
     async buscaPeloId(e) {
         const usuario = await getId("usuarios/", e)
         this.setState({
@@ -38,13 +40,14 @@ class ListaAlunos extends Component {
             matricula: usuario.perfil.matricula,
             email: usuario.email,
             mostraEditar: true
+
         })
     }
-    control(e){
-        if(e.target.id === "+"){
-            this.setState({page:this.state.page+1},()=>this.listarDisciplinas())
-        }else{
-            this.setState({page:this.state.page-1},()=>this.listarDisciplinas())
+    control(e) {
+        if (e.target.id === "+") {
+            this.setState({ page: this.state.page + 1 }, () => this.listarDisciplinas())
+        } else {
+            this.setState({ page: this.state.page - 1 }, () => this.listarDisciplinas())
         }
     }
 
@@ -52,12 +55,11 @@ class ListaAlunos extends Component {
         this.listarAlunos()
     }
     editar(e) {
-        console.log(this.state.nome);
 
         if (this.state.nome === "" || this.state.nome === null ? this.setState({ nomeInvalido: true }) : this.setState({ nomeInvalido: false })) { }
         if (this.state.matricula === "" || this.state.matricula === null || this.state.matricula <= 0 ? this.setState({ matriculaInvalida: true }) : this.setState({ matriculaInvalida: false })) { }
         if (this.state.email === "" || this.state.email === null ? this.setState({ emailInvalido: true }) : this.setState({ emailInvalido: false })) { }
-        if (this.state.nome === null || this.state.nome === "" || this.state.email === "" || this.state.email === null || this.state.matricula === null || this.state.siape === null || this.state.matricula === "" || this.state.siape === ""|| this.state.matricula <= 0) {
+        if (this.state.nome === null || this.state.nome === "" || this.state.email === "" || this.state.email === null || this.state.matricula === null || this.state.siape === null || this.state.matricula === "" || this.state.siape === "" || this.state.matricula <= 0) {
             return
         }
         putAluno("usuarios", e,
@@ -71,7 +73,14 @@ class ListaAlunos extends Component {
                     email: this.state.email
                 }
             }).then(() => {
-                this.setState({ mostraEditar: false });
+                this.setState({
+                    mostraEditar: false, showAlert: true,
+                    variantAlert: "success",
+                    msgAlert: "Atualizado com sucesso"
+                })
+                setTimeout(() => {
+                    this.setState({ showAlert: false })
+                }, 3000)
                 this.listarAlunos()
                 this.limpar()
             })
@@ -80,10 +89,12 @@ class ListaAlunos extends Component {
         this.setState({ nomeInvalido: false, matriculaInvalida: false, emailInvalido: false })
     }
     render() {
+
         return (
             <div>
                 <br /><br />
-                <h3>Alunos </h3>
+                <Alert variant={this.state.variantAlert} show={this.state.showAlert} >{this.state.msgAlert}</Alert>
+                <h3 >Alunos </h3>
                 <table className="table">
                     <thead className="p-3 mb-2 bg-primary text-white">
                         <tr>
@@ -98,8 +109,8 @@ class ListaAlunos extends Component {
                     </thead>
                     <tbody>
 
-                        {this.state.alunos &&
-                            this.state.alunos.map((aluno) =>
+                        {this.state.alunos.content &&
+                            this.state.alunos.content.map((aluno) =>
                                 <tr key={aluno.id}>
                                     <td>{aluno.id}</td>
                                     <td>{aluno.perfil.nome}</td>
@@ -109,14 +120,15 @@ class ListaAlunos extends Component {
                                     <td> {aluno.perfil.nome === "" ? "" : <Button
                                         variant="primary"
                                         className="btn btn-danger m-1"
-                                        onClick={(e) => this.setState({ modalShow: true, id: aluno.id, nome: aluno.perfil.nome, mostraEditar: false } , this.limpar())
-                                    }
+                                        onClick={(e) => this.setState({ modalShow: true, id: aluno.id, nome: aluno.perfil.nome, mostraEditar: false }, this.limpar())
+                                        }
                                     > Apagar </Button>}
                                     </td>
                                     <td> {aluno.perfil.nome === "" ? "" : <a href={"#top"}> <Button
                                         variant="primary"
                                         className="btn btn-success m-1"
-                                        onClick={() => this.buscaPeloId(aluno.id)}
+                                        onClick={() => this.buscaPeloId(aluno.id)
+                                        }
                                     > Editar </Button></a>}
                                     </td>
                                 </tr>
@@ -185,26 +197,28 @@ class ListaAlunos extends Component {
                     <Modal.Footer>
                         <Button variant="primary"
                             className="btn btn-danger m-1"
-                            onClick={(e) => delAluno("usuarios", this.state.id).then(() => {
-                                this.setState({ modalShow: false, mostraEditar: false, alert: true })
-                                setTimeout(() => {
-                                    this.setState({ alert: false })
-                                }, 2000)
-                                this.listarAlunos()
-                            })}
+                            onClick={(e) => axios.delete("http://localhost:8080/api/usuarios/" + this.state.id).then((r) =>
+                            this.setState({ modalShow: false, showAlert: true, variantAlert: "danger", msgAlert: "Apagou com sucesso" },this.listarAlunos())
+                            ).catch(() =>
+                            alert("Não pode apagar cadastro do aluno devido ele ter requisição no sistema"),
+                            this.setState({ modalShow: false })
+                                , setTimeout(() => {
+                                    this.setState({ showAlert: false })
+                                }, 3000)
+                            )}
                         > Apagar </Button>
                     </Modal.Footer>
                 </Modal>
                 {
-                        <>
-                            {this.state.first || <button id="-" onClick={(e) => this.control(e)}>Anterior</button>}
-                            &nbsp;&nbsp;
-                            {this.state.last  || <button id="+" onClick={(e) => this.control(e)}>Próximo</button>}
+                    <>
+                        {this.state.first || <button id="-" onClick={(e) => this.control(e)}>Anterior</button>}
+                        &nbsp;&nbsp;
+                            {this.state.last || <button id="+" onClick={(e) => this.control(e)}>Próximo</button>}
 
-                            <span style={{float:"right"}}>Página  { this.state.page+1 } / {this.state.total}</span>
-                        </>
+                        <span style={{ float: "right" }}>Página  {this.state.page + 1} / {this.state.total}</span>
+                    </>
 
-                    }
+                }
 
             </div>
         );

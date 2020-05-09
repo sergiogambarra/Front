@@ -15,7 +15,7 @@ class ListaProfessor extends Component {
     }
 
     async componentDidMount() {
-        const professores = await get("usuarios/professores/");
+        const professores = await get("usuarios/pages?tipo=PROFESSOR");
         this.setState({ professores })
     }
     async buscaPeloId(e) {
@@ -82,8 +82,8 @@ class ListaProfessor extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {this.state.professores &&
-                        this.state.professores.map((p) =>
+                    {this.state.professores.content &&
+                        this.state.professores.content.map((p) =>
 
                             <tr key={p.id}>
                                 <td>{p.id}</td>

@@ -20,7 +20,6 @@ class ListaDiscipinas extends Component {
             last: false,
             first: true,
             total:0
-
         }
     }
 
@@ -35,12 +34,13 @@ class ListaDiscipinas extends Component {
     }
     async listarCurso() {
         const cursos = await get("cursos/");
+        console.log(cursos);
+        
         this.setState({ cursos });
     }
     async  listarDisciplinas() {
 
         await get(`cursos/${this.state.idcurso}/disciplinas/paginacao?page=${this.state.page}&size=6`).then((retorno) => {
-            console.log(retorno)
             if(retorno) this.setState({ disciplinas: retorno.content, last: retorno.last, first: retorno.first, total:retorno.totalPages })
         });
     }

@@ -14,14 +14,10 @@ const postCadastroUsuario = async (usuario) => {
     
 }
         const delAluno = async (end, id) => {
-            try {
                 await axios.delete(`${baseURL}/${end}/${id}`).then((resp) => {
                     return resp;
-                })
-            } catch (error) { alert("Não pode apagar o aluno porque ele possui requisições em análise")
-               
-                console.log(`${end.toUpperCase()}Service/delete${end}:`, error);
-            }
+                }).catch((error) => {return error});
+         
         }
 
         const putAluno = async (end, id,dados) => {

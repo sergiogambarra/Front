@@ -33,13 +33,10 @@ class Parecer extends Component {
 
     async listaAth() {
         const user = await get("usuarios/auth/")
-        console.log(user.perfil.tipo);
-        console.log(user);
-
         this.setState({ user })
     }
     async buscaProfessores() {
-        const listaProfessores = await get("usuarios/professores/");
+        const listaProfessores = await get("usuarios/pages?tipo=PROFESSOR");
         this.setState({ listaProfessores })
     }
 
@@ -96,6 +93,9 @@ class Parecer extends Component {
                 parecerServidor: this.state.atualizarParecer ? this.state.atualizarParecer : this.state.parecerServidor,
                 parecerCoordenador: this.state.parecerCoordenador,
                 parecerProfessor: this.state.parecerProfessor,
+                professor: {
+                    id: this.state.id
+                }
             }).then(() => { this.setState({ modal: false }) })
         } else if (this.state.user && this.state.user.perfil.coordenador === true) {
 
@@ -120,7 +120,6 @@ class Parecer extends Component {
         }
     }
     verificarDados() {
-        console.log("aaaaaaaaa");
         if (this.state.user && this.state.user.perfil.coordenador === true) {
             if (this.state.id === null || this.state.id === "") {
                 this.setState({ listaProfessoresInvalido: true, msgErrorProfessor: "Campo professor é obrigatório" })
@@ -201,7 +200,7 @@ class Parecer extends Component {
                                 isInvalid={this.state.listaProfessoresInvalido}
                                 onChange={(e) => this.setState({ id: e.target.value, msgErrorProfessor: "", listaProfessoresInvalido: false })} >
                                 <option onClick={() => this.limpar()} ></option>
-                                {this.state.listaProfessores && this.state.listaProfessores.map((p) =>
+                                {this.state.listaProfessores.content && this.state.listaProfessores.content.map((p) =>
                                     <option key={p.id} value={p.id}>{p.perfil.nome}</option>
 
                                 )}
@@ -216,7 +215,6 @@ class Parecer extends Component {
                         onChange={(e) => this.setState({ deferido: e.target.id })}
                         defaultChecked={false}
                     />
-                    {console.log(this.state.user && this.state.user.perfil.tipo)}
 
                     {this.state.user && this.state.user.perfil.tipo === "SERVIDOR" ? "" : <label class="custom-control-label" for="DEFERIDO">Deferido</label>}
                 </div>
@@ -268,15 +266,15 @@ class Parecer extends Component {
                     <Modal.Body>Parecer : &nbsp;{this.state.atualizarParecer === "" ? this.state.parecer : this.state.atualizarParecer}</Modal.Body>
                     <Modal.Body>Status : &nbsp;{this.state.deferido}</Modal.Body>
                     <Modal.Footer>
-                        <Link to="/minhas-requisicoes">      <Button onClick={(e) => this.atualizar()} variant="primary" className="btn btn-primary m-1" data-toggle="modal" data-target="#exampleModal" style={{ border: "5px solid white" }}>Enviar</Button></Link>
+                        <Link to="/minhas-requisicoes">      <Button onClick={(e) => this.atualizar()} variant="primary" className="btn btn-primary m-1" >Salvar</Button></Link>
                         <Button variant="danger" onClick={() => this.setState({ modal: false })}>  Fechar </Button>
                     </Modal.Footer>
                 </Modal>
 
 
                 <div className="row container" style={{ position: 'relative', left: '32%' }}>
-                    <Button onClick={(e) => this.verificarDados()} variant="primary" className="btn btn-primary m-1" data-toggle="modal" data-target="#exampleModal" style={{ border: "5px solid white" }}>Salvar</Button>
-                    <Link to="/minhas-requisicoes"> <Button variant="danger" className="btn btn-primary m-2" >Voltar </Button></Link>
+                    <Button onClick={(e) => this.verificarDados()} variant="primary" className="btn btn-primary m-1"  >Salvar</Button>
+                    <Link to="/minhas-requisicoes"> <Button variant="danger" className="btn btn-primary m-1" >Voltar </Button></Link>
                 </div>
             </Form.Group>
         </div>);

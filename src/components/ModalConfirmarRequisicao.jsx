@@ -64,11 +64,11 @@ export default function ModalConfirmarRequisicao({ enviarRequisicao, requisicao,
                 </>
             </Modal.Body>
             <Modal.Footer>
-            <Button variant="secondary" onClick={() => setShowModal(false)}>
-                Cancelar
-            </Button>
             <Button variant="primary" onClick={() => enviarRequisicao()}>
-                Confirmar
+                Salvar
+            </Button>
+            <Button variant="danger" onClick={() => setShowModal(false)}>
+                Cancelar
             </Button>
             </Modal.Footer>
         </Modal>

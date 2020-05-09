@@ -39,14 +39,10 @@ const put = async (end, id, data) => {
     }
 }
 
-const del = async (end, id) => {
-    try {
+const del = async (end, id) => {    
         await axios.delete(`${baseURL}/${end}/${id}`).then((resp) => {
             return resp;
-        })
-    } catch (error) {
-        console.log(`${end.toUpperCase()}Service/delete${baseURL}/${end}/${id}:`, error);
-    }
+        }).catch((e) => {return e});
 }
 const delCurso = async (end, id) => {
     try {

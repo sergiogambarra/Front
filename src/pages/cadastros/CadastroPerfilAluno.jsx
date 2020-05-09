@@ -27,7 +27,8 @@ class CadastroPerfilAluno extends Component {
             verificaSenhaInvalido: false,
             modalShow: false,
             alert: false,
-            msgSenhaNaoConfere: false
+            msgSenhaNaoConfere: false,
+
         }
     }
 
@@ -48,30 +49,41 @@ class CadastroPerfilAluno extends Component {
             matriculaInvalida: false,
             dataIngressoInvalido: false,
             verificaSenhaInvalido: false,
+            msgLogin: ""
         })
 
     }
 
     async verifica() {
-        await getPesquisaLogin(`usuarios/pesquisa/aluno/${this.state.userName}`).then((retorno) => {
-            this.setState({ loginPesquisa: retorno })
+        await getPesquisaLogin(`usuarios/pesquisa/${this.state.userName}`).then((retorno) => {
+            this.setState({ loginPesquisa: retorno && retorno.username })
         });
-        
-        if (this.state.loginPesquisa === this.state.userName.toUpperCase()) { this.setState({ userNameInvalido: true }) }
+        if (this.state.userName === "") {
+            this.setState({ userNameInvalido: true, msgLogin: "Você não inseriu login corretamente" })
+        } else if (this.state.loginPesquisa === this.state.userName) {
+            this.setState({ userNameInvalido: true, msgLogin: "Login inválido, login já cadastrado" })
+        } else if (this.state.userName.length < 6 || this.state.userName.length > 10) {
+            this.setState({ userNameInvalido: true, msgLogin: "Escolha login entre 6 e 10 caracteres" })
+        }
         if (this.state.nome === "" ? this.setState({ nomeInvalido: true }) : this.setState({ nomeInvalido: false })) { }
         if (this.state.email === "" ? this.setState({ emailInvalido: true }) : this.setState({ emailInvalido: false })) { }
         if (this.state.matricula === "" || this.state.matricula <= 0 ? this.setState({ matriculaInvalida: true }) : this.setState({ matriculaInvalida: false })) { }
         if (this.state.dataIngresso === "" ? this.setState({ dataIngressoInvalido: true }) : this.setState({ dataIngressoInvalido: false })) { }
-        if (this.state.userName === "" ? this.setState({ userNameInvalido: true }) : this.setState({ userNameInvalido: false })) { }
         if (this.state.password === "" ? this.setState({ passwordInvalido: true }) : this.setState({ passwordInvalido: false })) { }
-        if (this.state.verificaSenha === "" ? this.setState({ verificaSenhaInvalido: true }) : this.setState({ verificaSenhaInvalido: false })) { }
-        
-        if (this.state.nome !== "" && this.state.email !== "" &&  this.state.dataIngresso !== "" && this.state.userName !== "" &&
-         this.state.password !== "" && this.state.verificaSenha !== ""&&this.state.matricula > 0 &&this.state.verificaSenha === this.state.password) { this.setState({ modalShow: true }) }else{return}
-         
+        if(this.state.password !== this.state.verificaSenha){
+            this.setState({verificaSenhaInvalido:true})                
+        }else if (this.state.verificaSenha === ""){
+            this.setState({verificaSenhaInvalido:true})                
+        }else{this.setState({verificaSenhaInvalido:false})                }
+
+        if (this.state.userName && this.state.userName){
+            if(this.state.userName.length < 6 || this.state.userName.length > 10){return}
         }
-        
-        async  enviarCadastro() {
+            if (this.state.nome !== "" && this.state.email !== "" && this.state.dataIngresso !== "" && this.state.userName !== "" && 
+                this.state.password !== "" && this.state.verificaSenha !== "" && this.state.matricula > 0 && this.state.verificaSenha === this.state.password) { this.setState({ modalShow: true }) } else { return }
+
+    }
+    async  enviarCadastro() {
         postCadastroUsuario({
             password: this.state.password,
             userName: this.state.userName,
@@ -98,7 +110,7 @@ class CadastroPerfilAluno extends Component {
 
                 <Form.Group className="col-md-6 container">
 
-                    <TituloPagina titulo="Cadastro de Alunos" />
+                    <TituloPagina autoFocus titulo="Cadastro de Alunos" />
                     <Alert key={"idx"} variant={"success"} show={this.state.alert}>
                         Cadastrado com sucesso</Alert>
                     <SACEInput
@@ -141,11 +153,12 @@ class CadastroPerfilAluno extends Component {
                     <SACEInput
                         label={'Login'}
                         value={this.state.userName}
-                        placeholder={'Informe um login. '}
+                        placeholder={'Informe um login entre 6 e 10 caracteres '}
                         onChange={(e) => this.setState({ userName: e.target.value })}
                         onError={this.state.userNameInvalido}
-                        onErrorMessage={'Você não inseriu um login válido!'}
+                        onErrorMessage={this.state.msgLogin}
                     />
+                    <Form.Text style={{ fontSize: "10px", textAlign: "center" }} className="text-danger">Escolha login entre 6 e 10 caracteres </Form.Text>
                     <SACEInput
                         label={'Senha'}
                         value={this.state.password}
@@ -175,12 +188,12 @@ class CadastroPerfilAluno extends Component {
                             </Modal.Header>
                             <Modal.Body>Confira seus dados! Você não poderá alterá-los depois de salvar</Modal.Body>
                             <Modal.Footer>
-                                <Button onClick={() => this.enviarCadastro()} className="btn btn-primary m-1" data-toggle="modal" data-target="#exampleModal" style={{ border: "5px solid white" }}>Salvar</Button>
+                                <Button onClick={() => this.enviarCadastro()} className="btn btn-primary m-1" >Salvar</Button>
                                 <Button variant="danger" onClick={() => this.setState({ modalShow: false })}>  Fechar </Button>
                             </Modal.Footer>
                         </Modal>
-                        <Link to="/login"> <Button variant="primary" className="btn btn-primary m-1" >Voltar </Button></Link>
-                        <Button onClick={() => this.limpar()} className="btn btn-danger" style={{ border: "5px solid white" }}>Limpar</Button>
+                        <Link to="/login"> <Button variant="danger" className="btn btn-primary m-1" >Voltar </Button></Link>
+                        <Button onClick={() => this.limpar()} className="btn btn-danger m-1" >Limpar</Button>
                     </div>
                 </Form.Group>
 
