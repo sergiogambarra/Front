@@ -67,22 +67,22 @@ class CadastroPerfilAluno extends Component {
         } else if (this.state.userName.length < 6 || this.state.userName.length > 10) {
             this.setState({ userNameInvalido: true, msgLogin: "Escolha login entre 6 e 10 caracteres" })
             return
-        }if(this.state.verificaSenhaInvalido!==""){this.setState({msgLogin:""})}
+        } if (this.state.verificaSenhaInvalido !== "") { this.setState({ msgLogin: "" }) }
         if (this.state.nome === "" ? this.setState({ nomeInvalido: true }) : this.setState({ nomeInvalido: false })) { }
         if (this.state.email === "" ? this.setState({ emailInvalido: true }) : this.setState({ emailInvalido: false })) { }
         if (this.state.matricula === "" || this.state.matricula <= 0 ? this.setState({ matriculaInvalida: true }) : this.setState({ matriculaInvalida: false })) { }
         if (this.state.dataIngresso === "" ? this.setState({ dataIngressoInvalido: true }) : this.setState({ dataIngressoInvalido: false })) { }
         if (this.state.password === "" ? this.setState({ passwordInvalido: true }) : this.setState({ passwordInvalido: false })) { }
-        if(this.state.password !== this.state.verificaSenha){
-            this.setState({verificaSenhaInvalido:true})                
-        }else if (this.state.verificaSenha === ""){
-            this.setState({verificaSenhaInvalido:true})                
-        }else{this.setState({verificaSenhaInvalido:false})                }
-        if (this.state.userName && this.state.userName){
-            if(this.state.userName.length < 6 || this.state.userName.length > 10){return}
+        if (this.state.password !== this.state.verificaSenha) {
+            this.setState({ verificaSenhaInvalido: true })
+        } else if (this.state.verificaSenha === "") {
+            this.setState({ verificaSenhaInvalido: true })
+        } else { this.setState({ verificaSenhaInvalido: false }) }
+        if (this.state.userName && this.state.userName) {
+            if (this.state.userName.length < 6 || this.state.userName.length > 10) { return }
         }
-            if (this.state.nome !== "" && this.state.email !== "" && this.state.dataIngresso !== "" && this.state.userName !== "" && 
-                this.state.password !== "" && this.state.verificaSenha !== "" && this.state.matricula > 0 && this.state.verificaSenha === this.state.password) { this.setState({ modalShow: true }) } else { return }
+        if (this.state.nome !== "" && this.state.email !== "" && this.state.dataIngresso !== "" && this.state.userName !== "" &&
+            this.state.password !== "" && this.state.verificaSenha !== "" && this.state.matricula > 0 && this.state.verificaSenha === this.state.password) { this.setState({ modalShow: true }) } else { return }
 
     }
     async  enviarCadastro() {
@@ -97,7 +97,8 @@ class CadastroPerfilAluno extends Component {
         }).then((e) => {
             this.setState({ modalShow: false, alert: true })
             setTimeout(() => {
-                this.setState({ alert: false })}, 2000)
+                this.setState({ alert: false })
+            }, 2000)
             this.limpar()
             window.location.href = ("/login")
         })
@@ -107,7 +108,7 @@ class CadastroPerfilAluno extends Component {
     render() {
         return (
             <div>
-
+<form>
                 <Form.Group className="col-md-6 container">
 
                     <TituloPagina autoFocus titulo="Cadastro de Alunos" />
@@ -130,6 +131,13 @@ class CadastroPerfilAluno extends Component {
                         onError={this.state.emailInvalido}
                         onErrorMessage={'Você não inseriu o seu email corretamente!'}
                     />
+                    
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Email address</label>
+                            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" />
+                            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                        </div>
+                  
                     <SACEInput
                         label={'Matricula'}
                         tipo="number"
@@ -180,7 +188,7 @@ class CadastroPerfilAluno extends Component {
 
                     <div className="row container" style={{ position: 'relative', left: '32%' }}>
 
-                        <Button variant="primary" className="btn btn-primary m-1" onClick={() => this.verifica()}> Enviar </Button>
+                        <Button type="submit"  variant="primary" className="btn btn-primary m-1" onClick={() => this.verifica()}> Enviar </Button>
                         <Modal show={this.state.modalShow} onHide={() => this.setState({ modalShow: false })} animation={false}>
                             <Modal.Header closeButton>
                                 <Modal.Title > Confirmar</Modal.Title>
@@ -196,7 +204,7 @@ class CadastroPerfilAluno extends Component {
                     </div>
                 </Form.Group>
 
-
+                </form>
             </div>
         );
     }
