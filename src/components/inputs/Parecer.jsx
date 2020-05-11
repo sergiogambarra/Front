@@ -61,6 +61,7 @@ class Parecer extends Component {
             formacaoAtividadeAnterior: c.formacaoAtividadeAnterior,
             criterioAvaliacao: c.criterioAvaliacao,
             tipo: c.tipo,
+            prova:"",
             titulo: "",
             coordenador: c.professor && c.professor.perfil.coordenador, alert: false
 
@@ -134,6 +135,9 @@ class Parecer extends Component {
         this.state({ id: null })
     }
 
+    getProva(e){
+        this.setState({prova:e.target.files[0]})
+    }
     render() {
         return (<div>
             <Form.Group className="col-md-6 container">
@@ -230,7 +234,7 @@ class Parecer extends Component {
                         onChange={(e) => this.setState({ deferido: e.target.id })}
                         defaultChecked={this.state.deferido === "EM ANÁLISE" ? true : false}
                     />
-                    <label class="custom-control-label" for="EM ANÁLISE">Em análise</label><br /><br />
+                    {this.state.user && this.state.user.perfil.tipo === "PROFESSOR" && this.state.user && this.state.user.perfil.coordenador === false ? "" :<><label class="custom-control-label" for="EM ANÁLISE">Em análise</label><br /><br /></>}
                 </div>
                 <div class="custom-control custom-radio custom-control-inline">
                     <input type="radio" id="escolha" name="customRadioInline" class="custom-control-input"
@@ -271,17 +275,19 @@ class Parecer extends Component {
                     </Modal.Footer>
                 </Modal>
 
-                {this.state.user && this.state.user.perfil.tipo === "PROFESSOR" && this.state.coordenador === false&&<>
-                <label>Adiciona prova no aluno </label>
+                {this.state.user && this.state.user.perfil.tipo === "PROFESSOR" && this.state.coordenador === false &&this.state.tipo === "aproveitamento" ?"":<> 
+                <label>Adicionar prova  </label>
                 <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
-                    </div>
-                    <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" />
-                        <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
-                    </div>
-                </div></>}
+            
+                        <input type="file" onChange={(e)=>{
+                             this.getProva(e);
+                             console.log(this.state.prova)
+                             
+                             }
+                            }/>
+
+                </div>
+                </>}
                 
                 <div className="row container" style={{ position: 'relative', left: '32%' }}>
                     <Button onClick={(e) => this.verificarDados()} variant="primary" className="btn btn-primary m-1"  >Salvar</Button>

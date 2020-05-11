@@ -24,7 +24,7 @@ const post = async (end, data) => {
         const entidade = await axios.post(`${baseURL}/${end}`, data);
         return entidade;
     } catch (error) {
-        console.log(`${end.toUpperCase()}Service/post${end}:`, error);
+        return error.response;
     }
 }
 

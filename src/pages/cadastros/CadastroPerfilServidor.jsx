@@ -43,7 +43,7 @@ class CadastroPerfilServidor extends Component {
         if (this.state.nome === "" ? this.setState({ nomeInvalido: true }) : this.setState({ nomeInvalido: false })) { }
         if (this.state.cargo === "" ? this.setState({ cargoInvalido: true }) : this.setState({ cargoInvalido: false })) { }
         if (this.state.siape === "" ? this.setState({ siapeInvalido: true }) : this.setState({ siapeInvalido: false })) { }
-        if (this.state.email === "" ? this.setState({ emailInvalido: true }) : this.setState({ emailInvalido: false })) { }
+        if (this.state.email === "" || this.state.email.indexOf("@",0) === -1 ? this.setState({ emailInvalido: true }) : this.setState({ emailInvalido: false })) { }
         if (this.state.password === "" ? this.setState({ senhaInvalida: true }) : this.setState({ senhaInvalida: false })) { }
         if (this.state.novaSenha === "" ? this.setState({ confirmaSenhaInvalida: true }) : this.setState({ confirmaSenhaInvalida: false })) { }
         if (this.state.userName === "") { this.setState({ loginInvalido: true }) }

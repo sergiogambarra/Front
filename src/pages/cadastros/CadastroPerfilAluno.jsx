@@ -69,7 +69,7 @@ class CadastroPerfilAluno extends Component {
             return
         } if (this.state.verificaSenhaInvalido !== "") { this.setState({ msgLogin: "" }) }
         if (this.state.nome === "" ? this.setState({ nomeInvalido: true }) : this.setState({ nomeInvalido: false })) { }
-        if (this.state.email === "" ? this.setState({ emailInvalido: true }) : this.setState({ emailInvalido: false })) { }
+        if (this.state.email === "" || this.state.email.indexOf("@",0) === -1 ? this.setState({ emailInvalido: true }) : this.setState({ emailInvalido: false })) { }
         if (this.state.matricula === "" || this.state.matricula <= 0 ? this.setState({ matriculaInvalida: true }) : this.setState({ matriculaInvalida: false })) { }
         if (this.state.dataIngresso === "" ? this.setState({ dataIngressoInvalido: true }) : this.setState({ dataIngressoInvalido: false })) { }
         if (this.state.password === "" ? this.setState({ passwordInvalido: true }) : this.setState({ passwordInvalido: false })) { }
@@ -81,7 +81,8 @@ class CadastroPerfilAluno extends Component {
         if (this.state.userName && this.state.userName) {
             if (this.state.userName.length < 6 || this.state.userName.length > 10) { return }
         }
-        if (this.state.nome !== "" && this.state.email !== "" && this.state.dataIngresso !== "" && this.state.userName !== "" &&
+        
+        if (this.state.nome !== "" && this.state.email !== ""  && this.state.email.indexOf("@",0) > -1 && this.state.dataIngresso !== "" && this.state.userName !== "" &&
             this.state.password !== "" && this.state.verificaSenha !== "" && this.state.matricula > 0 && this.state.verificaSenha === this.state.password) { this.setState({ modalShow: true }) } else { return }
 
     }

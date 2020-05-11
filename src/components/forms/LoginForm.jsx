@@ -56,7 +56,7 @@ export default function LoginForm({ history, setUserData }) {
                 value={password}
                 onError={senhaInvalida}
                 onErrorMessage={'Você não inseriu o sua senha corretamente!'}
-                tipo="password"
+                type="password"
             />
             <div className="row">
                 <Link to="/cadastro-aluno" style={{ position: 'relative', left: '5%' }}>Aluno, clique aqui para se cadastrar</Link>

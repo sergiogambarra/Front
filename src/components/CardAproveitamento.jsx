@@ -5,8 +5,6 @@ import Col from 'react-bootstrap/Col'
 
 
 export default function  CardAproveitamento ({requisicao}){
-  console.log(requisicao);
-  
   let history = useHistory();
   const {
     id, dataRequisicao, usuario, disciplinaSolicitada, deferido,

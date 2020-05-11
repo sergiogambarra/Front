@@ -28,7 +28,6 @@ class MinhasRequisicoes extends Component {
 
   async carregaAlunos() {
     await get("usuarios/alunos/").then((retorno) => {
-      console.log(retorno);
       this.setState({ alunos: retorno })
     })
   }
@@ -78,9 +77,7 @@ class MinhasRequisicoes extends Component {
             <datalist id="pesquisa">
               {this.state.alunos.map((a) => <option id={a.id} value={"ID :  " +a.id+"  "+ a.perfil.nome} />)}
             </datalist>
-
           </div>
-
         }
 
 

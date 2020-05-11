@@ -61,8 +61,8 @@ class ListaAlunos extends Component {
 
         if (this.state.nome === "" || this.state.nome === null ? this.setState({ nomeInvalido: true }) : this.setState({ nomeInvalido: false })) { }
         if (this.state.matricula === "" || this.state.matricula === null || this.state.matricula <= 0 ? this.setState({ matriculaInvalida: true }) : this.setState({ matriculaInvalida: false })) { }
-        if (this.state.email === "" || this.state.email === null ? this.setState({ emailInvalido: true }) : this.setState({ emailInvalido: false })) { }
-        if (this.state.nome === null || this.state.nome === "" || this.state.email === "" || this.state.email === null || this.state.matricula === null || this.state.siape === null || this.state.matricula === "" || this.state.siape === "" || this.state.matricula <= 0) {
+        if (this.state.email === "" || this.state.email === null  || this.state.email.indexOf("@",0) === -1  ? this.setState({ emailInvalido: true }) : this.setState({ emailInvalido: false })) { }
+        if (this.state.nome === null || this.state.email.indexOf("@",0) === -1 || this.state.nome === "" || this.state.email === "" || this.state.email === null || this.state.matricula === null || this.state.siape === null || this.state.matricula === "" || this.state.siape === "" || this.state.matricula <= 0) {
             return
         }
         putAluno("usuarios", e,

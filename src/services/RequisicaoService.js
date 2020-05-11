@@ -2,7 +2,7 @@
 import { post, get } from '../services/ServicoCrud';
 
 const postRequisicao = async (requisicao) => {
-    return await post("requisicoes/", requisicao);
+    return await post("requisicoes/", requisicao).then(e=> e).catch(error => error);
 }
 
 const getCertificacoes = async (user) => {

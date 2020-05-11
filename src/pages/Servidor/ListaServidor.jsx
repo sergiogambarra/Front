@@ -43,8 +43,8 @@ class ListaServidor extends Component {
     editar(e) {
         if (this.nome === null || this.state.nome === "" ? this.setState({ nomeInvalido: true }) : this.setState({ nomeInvalido: false })) { }
         if (this.siape === null || this.state.siape === ""||this.state.siape<=0 ? this.setState({ siapeInvalido: true }) : this.setState({ siapeInvalido: false })) { }
-        if (this.email === null || this.state.email === "" ? this.setState({ emailInvalido: true }) : this.setState({ emailInvalido: false })) { }
-        if (this.email === null || this.state.email === "" || this.siape === null ||this.state.siape<=0||this.state.siape === "" || this.nome === null || this.state.nome === "") { return }
+        if (this.email === null || this.state.email === "" ||this.state.email.indexOf("@",0) === -1 ? this.setState({ emailInvalido: true }) : this.setState({ emailInvalido: false })) { }
+        if (this.email === null || this.state.email === "" ||this.state.email.indexOf("@",0) === -1 || this.siape === null ||this.state.siape<=0||this.state.siape === "" || this.nome === null || this.state.nome === "") { return }
         put("usuarios", e,
             {
                 email: this.state.email,

@@ -6,17 +6,18 @@ import { Form, Button } from 'react-bootstrap';
 export default function AnexarArquivosInput({ anexos, setAnexos, onError }) {
     const refAnexos = useRef();
 
+
     useEffect(() => refAnexos.current.setState({ files: anexos }), [anexos]);
 
     const onFilesChange = async (anexos) => {
-       
+
         const promises = anexos.map(
             anexo => new Promise((resolve) => {
                 if (anexo instanceof Blob) {
                     let reader = new FileReader();
-                    console.log(anexo);
-
+                   
                     reader.onload = () => {
+                        
                         resolve({
                             nome: anexo.name,
                             tipo: anexo.extension,

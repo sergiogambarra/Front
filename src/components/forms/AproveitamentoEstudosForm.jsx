@@ -82,19 +82,21 @@ export default function CertificacaoConhecimentosForm() {
     const enviarRequisicao = () => {
         setShowModal(false);
 
-        if (postRequisicao(requisicao)) {
-            setAlert({
-                mensagem: 'Requisição enviada com sucesso!',
+        postRequisicao(requisicao)
+        .then((e)=>{
+            if(e.status === 201){
+             setAlert({
+                mensagem: "Requisição cadastrada com sucesso !",
                 tipo: 'success'
-            });
-        } else {
-            setAlert({
-                mensagem: 'ATENÇÃO! Requisição não enviada!',
-                tipo: 'danger'
-            });
-        }
+             })}else{
+                setAlert({
+                    mensagem: 'ATENÇÃO requisição não cadastrada! '+e.data.message,
+                    tipo: 'danger'
+                 })
+             }
+        });
 
-        setTimeout(() => setAlert(null), 3000);
+       
         limparCampos();
     }
 
