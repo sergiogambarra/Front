@@ -23,7 +23,7 @@ export default function LoginForm({ history, setUserData }) {
     }
 
     const enviarLogin = () => {
-              postLogin({ userName, password })
+        postLogin({ userName, password })
             .then((response) => {
                 if (typeof response === "undefined") {
                     setUsuarioInvalido(true)
@@ -31,7 +31,7 @@ export default function LoginForm({ history, setUserData }) {
                 }
                 login(response.data);
                 setUserData(response.data);
-               
+
 
             }).then(() => history.push('/tela-transicao'))
             .catch(error => console.log(error))
@@ -41,6 +41,7 @@ export default function LoginForm({ history, setUserData }) {
     return (
         <Form.Group className="container col-md-6" style={{ position: "relative", top: "60px" }}>
             <SACEInput
+                autoFocus
                 label={'Login'}
                 placeholder={'Informe o seu Login. '}
                 onChange={({ target }) => setUserName(target.value)}
@@ -61,7 +62,7 @@ export default function LoginForm({ history, setUserData }) {
                 <Link to="/cadastro-aluno" style={{ position: 'relative', left: '5%' }}>Aluno, clique aqui para se cadastrar</Link>
                 <Link style={{ position: 'relative', left: '20%' }}>Recuperar Login e/ou Senha</Link>
             </div>
-            
+
             <Form.Group
                 className="d-flex justify-content-end"
                 style={{ position: 'relative', top: '50px', right: '30%' }}
@@ -70,7 +71,7 @@ export default function LoginForm({ history, setUserData }) {
                     Enviar
                 </Button>
                 <Button variant="btn btn-danger" className="btn btn-primary m-1" onClick={limparCampos}>
-                    Limpar 
+                    Limpar
                 </Button>
             </Form.Group>
         </Form.Group>

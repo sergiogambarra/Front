@@ -12,29 +12,31 @@ class ListaProfessor extends Component {
             siape: "", siapeInvalido: false, nome: "",
             coordenador: "", email: "", emailInvalido: false,
             mostrarEditar: false, id: "", alert: false,
-            msgAlert: "", show: false, variant: ""
+            msgAlert: "", show: false, variant: "", page: 0,
+            last: false,
+            first: true,
+            total: 0
         }
     }
 
     async componentDidMount() {
-        get("usuarios/pages?tipo=PROFESSOR").then((r) =>
-            this.setState({ professores: r })
+        get(`usuarios/pages?tipo=PROFESSOR&page=${this.state.page}&size=6`).then((retorno) => {
+            if (retorno) this.setState({ professores: retorno, last: retorno.last, first: retorno.first, total: retorno.totalPages })
+        }
         )
     }
-
- 
-  
-
     async  buscaPeloId(e) {
         this.limpar()
-        const usuario = await getId("usuarios/", e)
-        this.setState({
-            id: usuario.id,
-            nome: usuario.perfil.nome,
-            email: usuario.email,
-            siape: usuario.perfil.siape,
-            coordenador: usuario.perfil.coordenador,
-            mostrarEditar: true
+        getId("usuarios/", e).then((retorno) => {
+            this.setState({
+                id: retorno.id,
+                nome: retorno.perfil.nome,
+                email: retorno.email,
+                siape: retorno.perfil.siape,
+                coordenador: retorno.perfil.coordenador,
+                mostrarEditar: true
+
+            })
         })
     }
     limpar() {
@@ -70,7 +72,7 @@ class ListaProfessor extends Component {
     }
     deletar() {
         axios.delete("http://localhost:8080/api/usuarios/" + this.state.id).then((r) =>
-            this.setState({ modalShow: false, show: true, variant: "danger", msgAlert: "Apagou com sucesso" }), 
+            this.setState({ modalShow: false, show: true, variant: "danger", msgAlert: "Apagou com sucesso" }),
             this.componentDidMount()
         ).catch(() =>
             alert("Não pode apagar cadastro do professor ele possui requisição no sistema "),
@@ -80,6 +82,13 @@ class ListaProfessor extends Component {
             }, 3000),
             this.componentDidMount()
         )
+    }
+    control(e) {
+        if (e.target.id === "+") {
+            this.setState({ page: this.state.page + 1 }, () => this.componentDidMount())
+        } else {
+            this.setState({ page: this.state.page - 1 }, () => this.componentDidMount())
+        }
     }
     render() {
         return (<div>
@@ -186,6 +195,16 @@ class ListaProfessor extends Component {
 
                 </Modal.Footer>
             </Modal>
+            {
+                <>
+                    {this.state.first || <button id="-" onClick={(e) => this.control(e)}>Anterior</button>}
+                    &nbsp;&nbsp;
+                            {this.state.last || <button id="+" onClick={(e) => this.control(e)}>Próximo</button>}
+
+                    <span style={{ float: "right" }}>Página  {this.state.page + 1} / {this.state.total}</span>
+                </>
+
+            }
         </div>);
     }
 }

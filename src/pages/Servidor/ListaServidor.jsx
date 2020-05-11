@@ -11,13 +11,17 @@ class ListaServidor extends Component {
             siape: "", id: "", email: "",
             mostrarEditar: false, modalShow: false, alert: false,
             emailInvalido: false, siapeInvalido: false, nomeInvalido: false,
-            variant:"",msgAlert:""
+            variant:"",msgAlert:"", page: 0,
+            last: false,
+            first: true,
+            total: 0
 
         }
     }
     async componentDidMount() {
-        const servidores = await get("usuarios/pages?tipo=SERVIDOR")
-        this.setState({ servidores })
+       get(`usuarios/pages?tipo=SERVIDOR&page=${this.state.page}&size=6`).then((retorno)=>{
+           this.setState({ servidores:retorno, last: retorno.last, first:retorno.first , total: retorno.totalPages })
+       })
     }
     async buscaPeloId(e) {
         const usuario = await getId("usuarios/", e)
@@ -29,7 +33,13 @@ class ListaServidor extends Component {
             mostrarEditar: true
         })
     }
-
+    control(e) {
+        if (e.target.id === "+") {
+            this.setState({ page: this.state.page + 1 }, () => this.componentDidMount())
+        } else {
+            this.setState({ page: this.state.page - 1 }, () => this.componentDidMount())
+        }
+    }
     editar(e) {
         if (this.nome === null || this.state.nome === "" ? this.setState({ nomeInvalido: true }) : this.setState({ nomeInvalido: false })) { }
         if (this.siape === null || this.state.siape === ""||this.state.siape<=0 ? this.setState({ siapeInvalido: true }) : this.setState({ siapeInvalido: false })) { }
@@ -164,6 +174,16 @@ class ListaServidor extends Component {
                     > Apagar </Button>
                 </Modal.Footer>
             </Modal>
+            {
+                <>
+                    {this.state.first || <button id="-" onClick={(e) => this.control(e)}>Anterior</button>}
+                    &nbsp;&nbsp;
+                            {this.state.last || <button id="+" onClick={(e) => this.control(e)}>Próximo</button>}
+
+                    <span style={{ float: "right" }}>Página  {this.state.page + 1} / {this.state.total}</span>
+                </>
+
+            }
         </div>);
     }
 }

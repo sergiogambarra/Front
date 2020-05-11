@@ -17,17 +17,31 @@ export default class ListaCursos extends Component {
             editar: false,
             texto: false,
             showAlert: false, modalShow: false, nomeInvalido: false,
-            msgAlert: "",variantAlert:""
+            msgAlert: "", variantAlert: "",   
+            page: 0,
+            last: false,
+            first: true,
+            total: 0
+        }
+    }
+    control(e) {
+        if (e.target.id === "+") {
+            this.setState({ page: this.state.page + 1 }, () => this.listarCursos())
+        } else {
+            this.setState({ page: this.state.page - 1 }, () => this.listarCursos())
         }
     }
     async listarCursos() {
-        const cursosLista = await get("cursos/");
-        this.setState({ cursosLista });
+         get(`cursos/paginacao?page=${this.state.page}&size=6`).then((retorno)=>{
+            this.setState({ cursos:retorno.content, last: retorno.last, first: retorno.first, total: retorno.totalPages })
+
+        })
     }
 
     async listarCursosId(id) {
-        const curso = await getId("cursos/", id);
-        this.setState({ nome: curso&&curso.nome, id: id, editar: true, nomeInvalido: false });
+        getId("cursos/", id).then((retorno)=>{
+            this.setState({ nome: retorno && retorno.nome, id: id, editar: true, nomeInvalido: false });
+        })
     }
 
     componentDidMount() {
@@ -51,14 +65,14 @@ export default class ListaCursos extends Component {
     delete() {
         axios.delete("http://localhost:8080/api/cursos/" + this.state.id).then((r) =>
             this.setState({ modalShow: false, showAlert: true, variantAlert: "danger", msgAlert: "Apagou com sucesso" })
-            ,this.componentDidMount()
+            , this.listarCursos()
         ).catch(() =>
             alert("Não pode apagar cadastro do aluno devido ele ter requisição no sistema"),
             this.setState({ modalShow: false })
             , setTimeout(() => {
                 this.setState({ showAlert: false })
             }, 3000))
-        this.componentDidMount()
+        this.listarCursos()
     }
     render() {
         return (
@@ -77,7 +91,7 @@ export default class ListaCursos extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {this.state.cursosLista && this.state.cursosLista.map((curso) =>
+                        {this.state.cursos && this.state.cursos.map((curso) =>
                             <tr key={curso.id + curso.nome}>
                                 <td>{curso.id}</td>
                                 <td><Link to="/cadastrar-disciplina">{curso.nome}</Link></td>
@@ -118,6 +132,16 @@ export default class ListaCursos extends Component {
                         > Apagar </Button>
                     </Modal.Footer>
                 </Modal>
+                {
+                    <>
+                        {this.state.first || <button id="-" onClick={(e) => this.control(e)}>Anterior</button>}
+                        &nbsp;&nbsp;
+                            {this.state.last || <button id="+" onClick={(e) => this.control(e)}>Próximo</button>}
+
+                        <span style={{ float: "right" }}>Página  {this.state.page + 1} / {this.state.total}</span>
+                    </>
+
+                }
             </div>
         );
     }

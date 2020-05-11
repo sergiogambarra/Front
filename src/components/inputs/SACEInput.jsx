@@ -4,6 +4,7 @@ import { Form } from 'react-bootstrap';
 
 export default function SACEInput(props) {
     const {
+        type,
         label,
         placeholder,
         onChange,
@@ -25,7 +26,8 @@ export default function SACEInput(props) {
             </Form.Label>
             <Form.Control 
                 min={min}
-                type={tipo}  
+                type={type}
+                tipo={tipo}  
                 autoFocus={autoFocus}
                 placeholder={placeholder}
                 onChange={onChange}

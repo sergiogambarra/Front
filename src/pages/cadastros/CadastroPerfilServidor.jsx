@@ -115,7 +115,7 @@ class CadastroPerfilServidor extends Component {
                     onErrorMessage={'Você não inseriu o seu nome corretamente!'}
                     />
                 <SACEInput
-                    tipo={"number"}
+                    type={"number"}
                     min="0"
                     label={'SIAPE'}
                     value={this.state.siape}
@@ -167,7 +167,7 @@ class CadastroPerfilServidor extends Component {
                     onChange={(e) => this.setState({ password: e.target.value })}
                     onError={this.state.senhaInvalida}
                     onErrorMessage={'Você inseriu uma senha inválida!'}
-                    tipo={"password"}
+                    type={"password"}
                 />
                 <SACEInput
                     label={'Confirme a sua senha'}
@@ -176,7 +176,7 @@ class CadastroPerfilServidor extends Component {
                     onChange={(e) => this.setState({ novaSenha: e.target.value })}
                     onError={this.state.confirmaSenhaInvalida}
                     onErrorMessage={'As senhas não conferem! Favor inserir a mesma senha!'}
-                    tipo={"password"}
+                    type={"password"}
                 />
                 <div className="row container" style={{ position: 'relative', left: '32%' }}>
                     <Button onClick={(e) => this.verifica(e)} variant="primary" className="btn btn-primary m-1">Salvar</Button>

@@ -109,7 +109,7 @@ class Parecer extends Component {
                     id: this.state.id
                 }
             }).then(() => { this.setState({ modal: false }) })
-        }else{
+        } else {
             put("requisicoes", this.props.match.params.id, {
                 tipo: this.state.tipo,
                 deferido: this.state.deferido,
@@ -261,7 +261,7 @@ class Parecer extends Component {
                 <Modal show={this.state.modal} onHide={() => this.setState({ modal: false })} animation={false}>
                     <Modal.Header closeButton>
                         <Modal.Title > Confirmar</Modal.Title>
-                    </Modal.Header>
+                    </Modal.Header> 
                     <Modal.Body><strong>Deseja confirmar os dados</strong></Modal.Body>
                     <Modal.Body>Parecer : &nbsp;{this.state.atualizarParecer === "" ? this.state.parecer : this.state.atualizarParecer}</Modal.Body>
                     <Modal.Body>Status : &nbsp;{this.state.deferido}</Modal.Body>
@@ -271,7 +271,18 @@ class Parecer extends Component {
                     </Modal.Footer>
                 </Modal>
 
-
+                {this.state.user && this.state.user.perfil.tipo === "PROFESSOR" && this.state.coordenador === false&&<>
+                <label>Adiciona prova no aluno </label>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+                    </div>
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" />
+                        <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                    </div>
+                </div></>}
+                
                 <div className="row container" style={{ position: 'relative', left: '32%' }}>
                     <Button onClick={(e) => this.verificarDados()} variant="primary" className="btn btn-primary m-1"  >Salvar</Button>
                     <Link to="/minhas-requisicoes"> <Button variant="danger" className="btn btn-primary m-1" >Voltar </Button></Link>

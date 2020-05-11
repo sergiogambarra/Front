@@ -17,7 +17,9 @@ const getCertificacoes = async (user) => {
 }
 
 const getAproveitamentos = async (user) => {
-    
+    if(user.permissao === "ALUNO"){
+        return await get(`requisicoes/alunos/${user.id}`);
+    }
     if(user.perfil.coordenador === true){
         return await get("requisicoes/aproveitamentos/");
     }else

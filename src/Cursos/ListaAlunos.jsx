@@ -28,20 +28,21 @@ class ListaAlunos extends Component {
     }
     listarAlunos() {
         get(`usuarios/pages?tipo=ALUNO&page=${this.state.page}&size=6`).then((retorno) => {
-         if(retorno)this.setState({alunos:retorno.content,last:retorno.last,first:retorno.first,total:retorno.totalPages})
-            
+            if (retorno) this.setState({ alunos: retorno.content, last: retorno.last, first: retorno.first, total: retorno.totalPages })
+
             this.setState({ alunos: retorno })
         })
     }
     async buscaPeloId(e) {
-        const usuario = await getId("usuarios/", e)
-        this.setState({
-            id: usuario.id,
-            nome: usuario.perfil.nome,
-            dataIngresso: usuario.perfil.dataIngresso,
-            matricula: usuario.perfil.matricula,
-            email: usuario.email,
-            mostraEditar: true
+        getId("usuarios/", e).then((retorno) => {
+            this.setState({
+                id: retorno.id,
+                nome: retorno.perfil.nome,
+                dataIngresso: retorno.perfil.dataIngresso,
+                matricula: retorno.perfil.matricula,
+                email: retorno.email,
+                mostraEditar: true
+            })
 
         })
     }
@@ -173,6 +174,7 @@ class ListaAlunos extends Component {
                         onErrorMessage={'Você não inseriu a matrícula corretamente!'}
                     />
                     <SACEInput
+                        type={"email"}
                         label={'E-mail'}
                         value={this.state.email}
                         placeholder={'Informe o seu email. '}
@@ -200,10 +202,10 @@ class ListaAlunos extends Component {
                         <Button variant="primary"
                             className="btn btn-danger m-1"
                             onClick={(e) => axios.delete("http://localhost:8080/api/usuarios/" + this.state.id).then((r) =>
-                            this.setState({ modalShow: false, showAlert: true, variantAlert: "danger", msgAlert: "Apagou com sucesso" },this.listarAlunos())
+                                this.setState({ modalShow: false, showAlert: true, variantAlert: "danger", msgAlert: "Apagou com sucesso" }, this.listarAlunos())
                             ).catch(() =>
-                            alert("Não pode apagar cadastro do aluno devido ele ter requisição no sistema"),
-                            this.setState({ modalShow: false })
+                                alert("Não pode apagar cadastro do aluno devido ele ter requisição no sistema"),
+                                this.setState({ modalShow: false })
                                 , setTimeout(() => {
                                     this.setState({ showAlert: false })
                                 }, 3000)

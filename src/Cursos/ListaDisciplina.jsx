@@ -38,12 +38,12 @@ class ListaDiscipinas extends Component {
         )
     }
     async listarCurso() {
-        const cursos = await get("cursos/");
-        this.setState({ cursos });
+        get("cursos/").then((retorno)=>{
+            this.setState({ cursos:retorno});
+        })
     }
     async  listarDisciplinas() {
-
-        await get(`cursos/${this.state.idcurso}/disciplinas/paginacao?page=${this.state.page}&size=6`).then((retorno) => {
+         get(`cursos/${this.state.idcurso}/disciplinas/paginacao?page=${this.state.page}&size=6`).then((retorno) => {
             if (retorno) this.setState({ disciplinas: retorno.content, last: retorno.last, first: retorno.first, total: retorno.totalPages })
         });
     }
@@ -53,7 +53,7 @@ class ListaDiscipinas extends Component {
     }
 
     async busca(e) {
-        await getIdDisciplina(`cursos/${this.state.idcurso}/disciplinas/${e}`).then((retorno) => {
+         getIdDisciplina(`cursos/${this.state.idcurso}/disciplinas/${e}`).then((retorno) => {
             this.setState({
                 idDisciplina: retorno.id,
                 nome: retorno.nome,

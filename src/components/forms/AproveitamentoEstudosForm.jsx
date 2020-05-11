@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button,  } from 'react-bootstrap';
+import { Form, Button, } from 'react-bootstrap';
 import TituloPagina from '../TituloPagina';
 import SACEInput from '../inputs/SACEInput';
 import DisciplinaSolicitadaSelect from '../inputs/DisciplinaSolicitadaSelect';
 import AnexarArquivosInput from '../inputs/anexarArquivosInput/AnexarArquivosInput';
 import CursoSelect from '../inputs/CursoSelect';
 import ModalConfirmarRequisicao from '../ModalConfirmarRequisicao';
-import { postRequisicao } from '../../services/RequisicaoService';  
+import { postRequisicao } from '../../services/RequisicaoService';
 import SACEAlert from '../SACEAlert';
 import { get } from '../../services/ServicoCrud';
 
@@ -21,10 +21,10 @@ export default function CertificacaoConhecimentosForm() {
     const [discSolicitadaInvalida, setDiscSolicitadaInvalida] = useState(false);
     const [anexos, setAnexos] = useState([]);
     const [anexosInvalidos, setAnexosInvalidos] = useState(false);
-    
+
     const [showModal, setShowModal] = useState(false);
     const [id, setId] = useState("");
-    const [alert, setAlert] = useState(null);    
+    const [alert, setAlert] = useState(null);
     const [requisicao, setRequisicao] = useState(null);
 
     useEffect(() => setCursoInvalido(false), [curso]);
@@ -32,21 +32,21 @@ export default function CertificacaoConhecimentosForm() {
     useEffect(() => setDisciplinasCursadasAnteriorInvalida(false), [disciplinasCursadasAnterior]);
     useEffect(() => setAnexosInvalidos(false), [anexos]);
     useEffect(() => setShowModal(true), [requisicao]);
-    useEffect(()=>{
+    useEffect(() => {
         const fetchData = async () => {
-            const aluno =  await get(`usuarios/auth/`); 
+            const aluno = await get(`usuarios/auth/`);
             setId(aluno.id);
-        } 
+        }
         fetchData();
     })
-    
-    const camposInvalidos = () => {
-        if(!curso) setCursoInvalido(true);
-        if(!disciplinasCursadasAnterior) setDisciplinasCursadasAnteriorInvalida(true);
-        if(!discSolicitada) setDiscSolicitadaInvalida(true);
-        if(!anexos && !anexos.length) setAnexosInvalidos(true);
 
-        return ( !curso || !disciplinasCursadasAnterior || !discSolicitada || !anexos.length );
+    const camposInvalidos = () => {
+        if (!curso) setCursoInvalido(true);
+        if (!disciplinasCursadasAnterior) setDisciplinasCursadasAnteriorInvalida(true);
+        if (!discSolicitada) setDiscSolicitadaInvalida(true);
+        if (!anexos && !anexos.length) setAnexosInvalidos(true);
+
+        return (!curso || !disciplinasCursadasAnterior || !discSolicitada || !anexos.length);
     }
 
     const limparCampos = () => {
@@ -55,13 +55,13 @@ export default function CertificacaoConhecimentosForm() {
         setDiscSolicitada('');
         setDisciplinasCursadasAnterior('');
         setAnexos([]);
-        
+
 
     }
 
     const fazerRequisicao = async () => {
-        if(camposInvalidos()) return;   
-        
+        if (camposInvalidos()) return;
+
         setRequisicao({
             curso,
             disciplinasCursadasAnterior,
@@ -69,20 +69,20 @@ export default function CertificacaoConhecimentosForm() {
             anexos,
             disciplinaSolicitada: {
                 id: discSolicitada.value,
-                nome: discSolicitada.label, 
-                cargaHoraria: discSolicitada.carga, 
+                nome: discSolicitada.label,
+                cargaHoraria: discSolicitada.carga,
             },
-            usuario:{
+            usuario: {
                 id
             }
-        });  
+        });
         setShowModal(true);
     }
 
     const enviarRequisicao = () => {
         setShowModal(false);
-        
-        if(postRequisicao(requisicao)){
+
+        if (postRequisicao(requisicao)) {
             setAlert({
                 mensagem: 'Requisição enviada com sucesso!',
                 tipo: 'success'
@@ -94,20 +94,20 @@ export default function CertificacaoConhecimentosForm() {
             });
         }
 
-         setTimeout(() => setAlert(null), 3000);
+        setTimeout(() => setAlert(null), 3000);
         limparCampos();
     }
 
     return (
         <>
             <TituloPagina titulo={'Aproveitamento de Estudos'} />
-            
-            {alert && <SACEAlert mensagem={alert.mensagem} tipo={alert.tipo} setAlert={setAlert}/>}
+
+            {alert && <SACEAlert mensagem={alert.mensagem} tipo={alert.tipo} setAlert={setAlert} />}
 
             <CursoSelect
                 value={curso}
-                onChange={setCurso} 
-                onError={cursoInvalido} 
+                onChange={setCurso}
+                onError={cursoInvalido}
             />
 
             <DisciplinaSolicitadaSelect
@@ -132,7 +132,7 @@ export default function CertificacaoConhecimentosForm() {
                 setAnexos={setAnexos}
                 onError={anexosInvalidos}
             />
-
+            <Form.Text style={{textAlign:"center"}}className="text-danger">{"Só pode anexar arquivos com extensão em pdf, jpeg, jpg e png de até 8 Mb"} </Form.Text>
             <Form.Group className="d-flex justify-content-end">
                 <Button variant="primary" className="btn btn-primary m-1" onClick={fazerRequisicao}>
                     Enviar
@@ -140,13 +140,13 @@ export default function CertificacaoConhecimentosForm() {
                 <Button variant="danger" className="btn btn-primary m-1" onClick={limparCampos}>
                     Cancelar
                 </Button>
-                
+
             </Form.Group>
 
             {(showModal && requisicao)
                 &&
-                <ModalConfirmarRequisicao 
-                    requisicao={requisicao} 
+                <ModalConfirmarRequisicao
+                    requisicao={requisicao}
                     setShowModal={setShowModal}
                     showModal={showModal}
                     enviarRequisicao={enviarRequisicao}

@@ -108,9 +108,7 @@ class CadastroPerfilAluno extends Component {
     render() {
         return (
             <div>
-<form>
                 <Form.Group className="col-md-6 container">
-
                     <TituloPagina autoFocus titulo="Cadastro de Alunos" />
                     <Alert key={"idx"} variant={"success"} show={this.state.alert}>
                         Cadastrado com sucesso</Alert>
@@ -125,6 +123,7 @@ class CadastroPerfilAluno extends Component {
                     />
                     <SACEInput
                         label={'Email'}
+                        type={"email"}
                         value={this.state.email}
                         placeholder={'Informe o seu email. '}
                         onChange={(e) => this.setState({ email: e.target.value })}
@@ -132,15 +131,9 @@ class CadastroPerfilAluno extends Component {
                         onErrorMessage={'Você não inseriu o seu email corretamente!'}
                     />
                     
-                        <div class="form-group">
-                            <label for="exampleInputEmail1">Email address</label>
-                            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" />
-                            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-                        </div>
-                  
                     <SACEInput
                         label={'Matricula'}
-                        tipo="number"
+                        type="number"
                         min="0"
                         value={this.state.matricula}
                         placeholder={'Informe a sua matrícula. '}
@@ -156,7 +149,7 @@ class CadastroPerfilAluno extends Component {
                         onChange={(e) => this.setState({ dataIngresso: e.target.value })}
                         onError={this.state.dataIngressoInvalido}
                         onErrorMessage={'Você não inseriu uma data válida!'}
-                        tipo={"date"}
+                        type={"date"}
                     />
                     <SACEInput
                         label={'Login'}
@@ -173,7 +166,7 @@ class CadastroPerfilAluno extends Component {
                         onChange={(e) => this.setState({ password: e.target.value })}
                         onError={this.state.passwordInvalido}
                         onErrorMessage={'Campo senha não pode ficar em branco!'}
-                        tipo={"password"}
+                        type={"password"}
                     />
 
                     <SACEInput
@@ -183,7 +176,7 @@ class CadastroPerfilAluno extends Component {
                         onChange={(e) => this.setState({ verificaSenha: e.target.value })}
                         onError={this.state.verificaSenhaInvalido}
                         onErrorMessage={'Campo senha não pode ficar em branco ou senha não confere!'}
-                        tipo={"password"}
+                        type={"password"}
                     />
 
                     <div className="row container" style={{ position: 'relative', left: '32%' }}>
@@ -203,8 +196,6 @@ class CadastroPerfilAluno extends Component {
                         <Button onClick={() => this.limpar()} className="btn btn-danger m-1" >Limpar</Button>
                     </div>
                 </Form.Group>
-
-                </form>
             </div>
         );
     }

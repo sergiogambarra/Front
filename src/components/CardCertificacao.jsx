@@ -9,7 +9,7 @@ export default function CardCertificacao({requisicao}) {
   
   const {
     id, dataRequisicao, usuario, disciplinaSolicitada, deferido,
-    parecerCoordenador,professor,parecerProfessor,parecerServidor
+    professor
   } = requisicao;
 
   return (
@@ -19,9 +19,6 @@ export default function CardCertificacao({requisicao}) {
         <p>{`ID: ${id}`}</p>
         <p>{`Data: ${dataRequisicao}`}</p>
         <p>{`Aluno: ${usuario && usuario.perfil.nome}`}</p>
-        <p>{`Parecer Coodenador: ${parecerCoordenador===null?"":parecerCoordenador}`}</p>
-        <p>{`Parecer Professor: ${parecerProfessor===null?"":parecerProfessor}`}</p>
-        <p>{`Parecer Servidor: ${parecerServidor===null?"":parecerServidor}`}</p>
         <p>{`Disciplina : ${disciplinaSolicitada&&disciplinaSolicitada.nome}`}</p>
         <p>{`Professor : ${professor === null ?"":professor&&professor.perfil.nome}`}</p>
         </div>
