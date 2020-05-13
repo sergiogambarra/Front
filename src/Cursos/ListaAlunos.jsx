@@ -48,9 +48,9 @@ class ListaAlunos extends Component {
     }
     control(e) {
         if (e.target.id === "+") {
-            this.setState({ page: this.state.page + 1 }, () => this.listarAlunos())
+            this.setState({ page: this.state.page + 1 ,mostraEditar:false}, () => this.listarAlunos(),this.limpar())
         } else {
-            this.setState({ page: this.state.page - 1 }, () => this.listarAlunos())
+            this.setState({ page: this.state.page - 1 ,mostraEditar:false}, () => this.listarAlunos(),this.limpar())
         }
     }
 
@@ -59,10 +59,10 @@ class ListaAlunos extends Component {
     }
     editar(e) {
 
-        if (this.state.nome === "" || this.state.nome === null ? this.setState({ nomeInvalido: true }) : this.setState({ nomeInvalido: false })) { }
+        if (this.state.nome.trim() === "" || this.state.nome === null ? this.setState({ nomeInvalido: true }) : this.setState({ nomeInvalido: false })) { }
         if (this.state.matricula === "" || this.state.matricula === null || this.state.matricula <= 0 ? this.setState({ matriculaInvalida: true }) : this.setState({ matriculaInvalida: false })) { }
         if (this.state.email === "" || this.state.email === null  || this.state.email.indexOf("@",0) === -1  ? this.setState({ emailInvalido: true }) : this.setState({ emailInvalido: false })) { }
-        if (this.state.nome === null || this.state.email.indexOf("@",0) === -1 || this.state.nome === "" || this.state.email === "" || this.state.email === null || this.state.matricula === null || this.state.siape === null || this.state.matricula === "" || this.state.siape === "" || this.state.matricula <= 0) {
+        if (this.state.nome === null || this.state.email.indexOf("@",0) === -1 || this.state.nome.trim() === "" || this.state.email === "" || this.state.email === null || this.state.matricula === null || this.state.siape === null || this.state.matricula === "" || this.state.siape === "" || this.state.matricula <= 0) {
             return
         }
         putAluno("usuarios", e,
@@ -138,8 +138,18 @@ class ListaAlunos extends Component {
                             )}
                     </tbody>
                 </table>
+                <hr />
+                 {
+                    <>
+                        {this.state.first || <button id="-" onClick={(e) => this.control(e)}>Anterior</button>}
+                        &nbsp;&nbsp;
+                            {this.state.last || <button id="+" onClick={(e) => this.control(e)}>Próximo</button>}
+
+                        <span style={{ float: "right" }}>Página  {this.state.page + 1} / {this.state.total}</span>
+                    </>
+
+                }<br /><br />
                 {this.state.mostraEditar && this.state.mostraEditar === true ? <>
-                    <hr /><br /><br />
 
                     <h3 id={"top"} style={{ textAlign: 'center' }}>Formulário de Edição</h3>
                     <p >ID : <span style={{
@@ -213,16 +223,7 @@ class ListaAlunos extends Component {
                         > Apagar </Button>
                     </Modal.Footer>
                 </Modal>
-                {
-                    <>
-                        {this.state.first || <button id="-" onClick={(e) => this.control(e)}>Anterior</button>}
-                        &nbsp;&nbsp;
-                            {this.state.last || <button id="+" onClick={(e) => this.control(e)}>Próximo</button>}
-
-                        <span style={{ float: "right" }}>Página  {this.state.page + 1} / {this.state.total}</span>
-                    </>
-
-                }
+               
 
             </div>
         );

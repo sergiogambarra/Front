@@ -87,7 +87,7 @@ class CadastroPerfilAluno extends Component {
 
     }
     async  enviarCadastro() {
-        postCadastroUsuario({
+           postCadastroUsuario({
             password: this.state.password,
             userName: this.state.userName,
             nome: this.state.nome,

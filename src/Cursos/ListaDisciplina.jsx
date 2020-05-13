@@ -65,17 +65,24 @@ class ListaDiscipinas extends Component {
     }
     control(e) {
         if (e.target.id === "+") {
-            this.setState({ page: this.state.page + 1 }, () => this.listarDisciplinas())
+            this.setState({ page: this.state.page + 1 ,mostraEditar:false}, () => this.listarDisciplinas())
         } else {
-            this.setState({ page: this.state.page - 1 }, () => this.listarDisciplinas())
+            this.setState({ page: this.state.page - 1 ,mostraEditar:false}, () => this.listarDisciplinas())
         }
     }
 
     async editarDisciplina() {
+console.log(this.state.nome.trim());
+console.log(this.state.nomeInvalido);
+console.log(this.state.cargaHorariaInvalida);
 
-        if (this.state.nome === null || this.state.nome === "" ? this.setState({ nomeInvalido: true }) : this.setState({ nomeInvalido: false })) { }
-        if (this.state.cargaHoraria === null || this.state.cargaHoraria === "" || this.state.cargaHoraria < 15 ? this.setState({ cargaHorariaInvalida: true }) : this.setState({ cargaHorariaInvalida: false })) { }
-        if (this.state.nome === null || this.state.nome === "" || this.state.cargaHoraria === null || this.state.cargaHoraria === "" || this.state.cargaHoraria < 15) { return }
+
+        if (this.state.nome === null || this.state.nome.trim() === "" ? this.setState({ nomeInvalido: true }) : this.setState({ nomeInvalido: false })) { console.log("a");
+        }
+        if (this.state.cargaHoraria === null || this.state.cargaHoraria === "" || this.state.cargaHoraria < 15 ? this.setState({ cargaHorariaInvalida: true }) : this.setState({ cargaHorariaInvalida: false })) { console.log("b");
+        }
+        if (this.state.nome === null || this.state.nome.trim() === "" || this.state.cargaHoraria === null || this.state.cargaHoraria === "" || this.state.cargaHoraria < 15) { console.log("c");
+        return }
         putDisciplinas(`cursos/${this.state.idcurso}/disciplinas`, {
             id: this.state.idDisciplina,
             nome: this.state.nome,

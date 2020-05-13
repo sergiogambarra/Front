@@ -18,10 +18,15 @@ class ListaServidor extends Component {
 
         }
     }
+
+   async listaServidor(){
+       await get(`usuarios/pages?tipo=SERVIDOR&page=${this.state.page}&size=6`).then((retorno)=>{
+            this.setState({ servidores:retorno, last: retorno.last, first:retorno.first , total: retorno.totalPages })
+        })
+    }
+
     async componentDidMount() {
-       get(`usuarios/pages?tipo=SERVIDOR&page=${this.state.page}&size=6`).then((retorno)=>{
-           this.setState({ servidores:retorno, last: retorno.last, first:retorno.first , total: retorno.totalPages })
-       })
+        this.listaServidor()
     }
     async buscaPeloId(e) {
         const usuario = await getId("usuarios/", e)
@@ -35,16 +40,16 @@ class ListaServidor extends Component {
     }
     control(e) {
         if (e.target.id === "+") {
-            this.setState({ page: this.state.page + 1 }, () => this.componentDidMount())
+            this.setState({ page: this.state.page + 1 ,mostrarEditar:false}, () => this.listaServidor())
         } else {
-            this.setState({ page: this.state.page - 1 }, () => this.componentDidMount())
+            this.setState({ page: this.state.page - 1 ,mostrarEditar:false}, () => this.listaServidor())
         }
     }
     editar(e) {
-        if (this.nome === null || this.state.nome === "" ? this.setState({ nomeInvalido: true }) : this.setState({ nomeInvalido: false })) { }
+        if (this.nome === null || this.state.nome.trim() === "" ? this.setState({ nomeInvalido: true }) : this.setState({ nomeInvalido: false })) { }
         if (this.siape === null || this.state.siape === ""||this.state.siape<=0 ? this.setState({ siapeInvalido: true }) : this.setState({ siapeInvalido: false })) { }
         if (this.email === null || this.state.email === "" ||this.state.email.indexOf("@",0) === -1 ? this.setState({ emailInvalido: true }) : this.setState({ emailInvalido: false })) { }
-        if (this.email === null || this.state.email === "" ||this.state.email.indexOf("@",0) === -1 || this.siape === null ||this.state.siape<=0||this.state.siape === "" || this.nome === null || this.state.nome === "") { return }
+        if (this.email === null || this.state.email === "" ||this.state.email.indexOf("@",0) === -1 || this.siape === null ||this.state.siape<=0||this.state.siape === "" || this.nome === null || this.state.nome.trim() === "") { return }
         put("usuarios", e,
             {
                 email: this.state.email,
@@ -55,7 +60,7 @@ class ListaServidor extends Component {
                 }
             }).then(() => {
                 this.setState({ mostrarEditar: false ,alert:true,variant:"success",msgAlert:"Atualizado com sucesso"});
-                this.componentDidMount()
+                this.listaServidor()
             },this.setState({ alert: true }), setTimeout(() => {
                 this.setState({ alert: false })
             }, 3000))
@@ -63,7 +68,7 @@ class ListaServidor extends Component {
     deletar(e) {
         del("usuarios", e).then(() => {
             this.setState({ modalShow: false, mostrarEditar: false ,variant:"danger",msgAlert:"Apagou com sucesso"})
-            this.componentDidMount()
+            this.listaServidor()
         }).then(() =>
             this.setState({ alert: true }), setTimeout(() => {
                 this.setState({ alert: false })
@@ -116,7 +121,16 @@ class ListaServidor extends Component {
                         )}
                 </tbody>
             </table>
+            {
+                <>
+                    {this.state.first || <button id="-" onClick={(e) => this.control(e)}>Anterior</button>}
+                    &nbsp;&nbsp;
+                            {this.state.last || <button id="+" onClick={(e) => this.control(e)}>Próximo</button>}
 
+                    <span style={{ float: "right" }}>Página  {this.state.page + 1} / {this.state.total}</span>
+                </>
+
+            }
             {this.state.mostrarEditar && this.state.mostrarEditar === true ? <>
                 <hr /><br /><br />
 
@@ -174,16 +188,7 @@ class ListaServidor extends Component {
                     > Apagar </Button>
                 </Modal.Footer>
             </Modal>
-            {
-                <>
-                    {this.state.first || <button id="-" onClick={(e) => this.control(e)}>Anterior</button>}
-                    &nbsp;&nbsp;
-                            {this.state.last || <button id="+" onClick={(e) => this.control(e)}>Próximo</button>}
-
-                    <span style={{ float: "right" }}>Página  {this.state.page + 1} / {this.state.total}</span>
-                </>
-
-            }
+          
         </div>);
     }
 }

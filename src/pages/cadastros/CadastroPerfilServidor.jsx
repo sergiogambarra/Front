@@ -27,40 +27,52 @@ class CadastroPerfilServidor extends Component {
             cargoInvalido: false,
             nomeInvalido: false,
             modal: false,
-            msgLogin: false,msgError:""
+            msgLogin: "",msgError:""
             
         }
     }
     
     async verifica() {
         await getPesquisaLogin(`usuarios/pesquisa/${this.state.userName}`).then((retorno) => {
-            this.setState({ loginPesquisa: retorno })
+            this.setState({ loginPesquisa: retorno&&retorno.username })
             
         });
-        console.log(this.state.cargo);
-        
-        if(this.state.cargo === null||this.state.cargo === ""?this.setState({msgError:"Você não inseriu o cargo corretamente"}):this.setState({msgError:""})){}
-        if (this.state.nome === "" ? this.setState({ nomeInvalido: true }) : this.setState({ nomeInvalido: false })) { }
-        if (this.state.cargo === "" ? this.setState({ cargoInvalido: true }) : this.setState({ cargoInvalido: false })) { }
-        if (this.state.siape === "" ? this.setState({ siapeInvalido: true }) : this.setState({ siapeInvalido: false })) { }
-        if (this.state.email === "" || this.state.email.indexOf("@",0) === -1 ? this.setState({ emailInvalido: true }) : this.setState({ emailInvalido: false })) { }
-        if (this.state.password === "" ? this.setState({ senhaInvalida: true }) : this.setState({ senhaInvalida: false })) { }
-        if (this.state.novaSenha === "" ? this.setState({ confirmaSenhaInvalida: true }) : this.setState({ confirmaSenhaInvalida: false })) { }
-        if (this.state.userName === "") { this.setState({ loginInvalido: true }) }
-        if (this.state.password !== this.state.novaSenha) { this.setState({ confirmaSenhaInvalida: true }) }
-        if (this.state.loginPesquisa === this.state.userName.toUpperCase()) { this.setState({ loginInvalido: true }) }
-        if (this.state.userName !== "" && this.state.email !== "" && this.state.siape !== "" && this.state.password !== ""
-        && this.state.login !== "" && this.state.password === this.state.novaSenha) {
-            if (this.state.loginPesquisa === this.state.userName.toUpperCase()) { this.setState({ loginInvalido: true }); return }
-            if(this.state.nomeInvalido === true|| this.state.siapeInvalido  === true||this.state.emailInvalido  === true||this.state.loginInvalido === true||
-                this.state.confirmaSenhaInvalida  === true||this.state.senhaInvalida === true|| this.state.msgError === "Você não inseriu o cargo corretamente"){return}
-            postCadastroUsuarioServidor({
-                password: this.state.password,
-                userName: this.state.userName,
-                email: this.state.email,
-                isCoordenador: this.state.isCoordenador,
-                nome: this.state.nome,
-                permissao: this.state.permissao,
+        if (this.state.userName.trim() === "") {
+            this.setState({ loginInvalido: true, msgLogin: "Você não inseriu login corretamente" })
+            console.log("a");
+            
+            return
+        } else if (this.state.loginPesquisa === this.state.userName) {
+            this.setState({ loginInvalido: true, msgLogin: "Login inválido, login já cadastrado" })
+            console.log("b");
+            return
+        } else if (this.state.userName.length < 6 || this.state.userName.length > 10) {
+            this.setState({ loginInvalido: true, msgLogin: "Escolha login entre 6 e 10 caracteres" })
+            console.log("c");
+            return}
+            if(this.state.loginInvalido !== ""){this.setState({msgLogin:"",loginInvalido:false})}
+            if(this.state.cargo === null||this.state.cargo === ""?this.setState({msgError:"Você não inseriu o cargo corretamente"}):this.setState({msgError:""})){}
+            if (this.state.nome.trim() === "" ? this.setState({ nomeInvalido: true }) : this.setState({ nomeInvalido: false })) { }
+            if (this.state.cargo === "" ? this.setState({ cargoInvalido: true }) : this.setState({ cargoInvalido: false })) { }
+            if (this.state.siape === "" ? this.setState({ siapeInvalido: true }) : this.setState({ siapeInvalido: false })) { }
+            if (this.state.email === "" || this.state.email.indexOf("@",0) === -1 ? this.setState({ emailInvalido: true }) : this.setState({ emailInvalido: false })) { }
+            if (this.state.password.trim() === "" ? this.setState({ senhaInvalida: true }) : this.setState({ senhaInvalida: false })) { }
+            if (this.state.novaSenha.trim() === "" ? this.setState({ confirmaSenhaInvalida: true }) : this.setState({ confirmaSenhaInvalida: false })) { }
+            if (this.state.password !== this.state.novaSenha) { this.setState({ confirmaSenhaInvalida: true }) }
+            if (this.state.userName !== "" && this.state.email !== "" && this.state.siape !== "" && this.state.password !== ""
+            && this.state.login !== "" && this.state.password === this.state.novaSenha) {
+                if (this.state.loginPesquisa === this.state.userName.toUpperCase()) { this.setState({ loginInvalido: true }); return }
+                if(this.state.nomeInvalido === true|| this.state.siapeInvalido  === true||this.state.emailInvalido  === true||this.state.loginInvalido === true||
+                    this.state.confirmaSenhaInvalida  === true||this.state.senhaInvalida === true|| this.state.msgError === "Você não inseriu o cargo corretamente"){
+                        console.log("d");
+                        return}
+                    postCadastroUsuarioServidor({
+                        password: this.state.password,
+                        userName: this.state.userName,
+                        email: this.state.email,
+                        isCoordenador: this.state.isCoordenador,
+                        nome: this.state.nome,
+                        permissao: this.state.permissao,
                 siape: this.state.siape,
                 cargo: this.state.cargo
             }).then(() => {
@@ -158,7 +170,7 @@ class CadastroPerfilServidor extends Component {
                     placeholder={'Informe um login. '}
                     onChange={(e) => this.setState({ userName: e.target.value })}
                     onError={this.state.loginInvalido}
-                    onErrorMessage={'Campo obrigatório ou nome de login já existe!'}
+                    onErrorMessage={this.state.msgLogin}
                 />
                 <SACEInput
                     label={'Senha'}

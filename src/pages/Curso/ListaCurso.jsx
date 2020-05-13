@@ -26,9 +26,9 @@ export default class ListaCursos extends Component {
     }
     control(e) {
         if (e.target.id === "+") {
-            this.setState({ page: this.state.page + 1 }, () => this.listarCursos())
+            this.setState({ page: this.state.page + 1 ,editar:false,nome:""}, () => this.listarCursos())
         } else {
-            this.setState({ page: this.state.page - 1 }, () => this.listarCursos())
+            this.setState({ page: this.state.page - 1 ,editar:false,nome:""}, () => this.listarCursos())
         }
     }
     async listarCursos() {
@@ -49,7 +49,7 @@ export default class ListaCursos extends Component {
     }
 
     atualizar() {
-        if (this.state.nome === "" || this.state.nome === null) {
+        if (this.state.nome.trim() === "" || this.state.nome === null) {
             this.setState({ nomeInvalido: true })
             return
         }
@@ -108,6 +108,16 @@ export default class ListaCursos extends Component {
                     </tbody>
                 </table>
                 <hr />
+                {
+                    <>
+                        {this.state.first || <button id="-" onClick={(e) => this.control(e)}>Anterior</button>}
+                        &nbsp;&nbsp;
+                            {this.state.last || <button id="+" onClick={(e) => this.control(e)}>Próximo</button>}
+
+                        <span style={{ float: "right" }}>Página  {this.state.page + 1} / {this.state.total}</span>
+                    </>
+
+                }
                 <br /><br />
                 <fieldset>
                     {this.state.editar === true ? <> <h3 id={"top"} style={{ textAlign: "center" }}>Formulário de Edição</h3>
@@ -132,16 +142,7 @@ export default class ListaCursos extends Component {
                         > Apagar </Button>
                     </Modal.Footer>
                 </Modal>
-                {
-                    <>
-                        {this.state.first || <button id="-" onClick={(e) => this.control(e)}>Anterior</button>}
-                        &nbsp;&nbsp;
-                            {this.state.last || <button id="+" onClick={(e) => this.control(e)}>Próximo</button>}
-
-                        <span style={{ float: "right" }}>Página  {this.state.page + 1} / {this.state.total}</span>
-                    </>
-
-                }
+               
             </div>
         );
     }

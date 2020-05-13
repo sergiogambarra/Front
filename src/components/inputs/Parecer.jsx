@@ -39,12 +39,13 @@ class Parecer extends Component {
         const listaProfessores = await get("usuarios/pages?tipo=PROFESSOR");
         this.setState({ listaProfessores })
     }
-
+    
     async componentDidMount() {
         this.listaDisciplinas()
         this.listaAth()
         this.buscaProfessores()
         const c = await getRequisicaoId(this.props.match.params.id)
+        console.log(c);
         this.setState({ c })
         this.mudaNomeStringParecer()
         this.setState({
@@ -58,7 +59,7 @@ class Parecer extends Component {
             usuario: c.usuario.perfil.nome,
             professor: c.professor,
             anexos: c.anexos,
-            formacaoAtividadeAnterior: c.formacaoAtividadeAnterior,
+            formacaoAtividadeAnterior: c.disciplinasCursadasAnterior,
             criterioAvaliacao: c.criterioAvaliacao,
             tipo: c.tipo,
             prova:"",
@@ -162,9 +163,13 @@ class Parecer extends Component {
 
                 />
                 <SACEInput
-                    label={'Disciplina'}
+                    label={'Disciplina Solicitada'}
                     value={this.state.disciplinaSolicitada && this.state.disciplinaSolicitada.nome}
                     disabled={true} />
+              { this.state.tipo ==="certificacao"?"": <SACEInput
+                    label={'Disciplina cursada Anteriormente '}
+                    value={this.state.formacaoAtividadeAnterior && this.state.formacaoAtividadeAnterior}
+                    disabled={true} />}
                 <SACEInput
                     label={'Status'}
                     value={this.state.deferido}
@@ -275,7 +280,7 @@ class Parecer extends Component {
                     </Modal.Footer>
                 </Modal>
 
-                {this.state.user && this.state.user.perfil.tipo === "PROFESSOR" && this.state.coordenador === false &&this.state.tipo === "aproveitamento" ?"":<> 
+                {this.state.user && this.state.user.perfil.tipo === "PROFESSOR" && this.state.user.perfil.coordenador === false &&this.state.tipo === "certificacao" ?<> 
                 <label>Adicionar prova  </label>
                 <div class="input-group mb-3">
             
@@ -287,7 +292,7 @@ class Parecer extends Component {
                             }/>
 
                 </div>
-                </>}
+                </>:""}
                 
                 <div className="row container" style={{ position: 'relative', left: '32%' }}>
                     <Button onClick={(e) => this.verificarDados()} variant="primary" className="btn btn-primary m-1"  >Salvar</Button>

@@ -19,11 +19,14 @@ class ListaProfessor extends Component {
         }
     }
 
-    async componentDidMount() {
-        get(`usuarios/pages?tipo=PROFESSOR&page=${this.state.page}&size=6`).then((retorno) => {
+  async listaProfessor() {
+       await get(`usuarios/pages?tipo=PROFESSOR&page=${this.state.page}&size=6`).then((retorno) => {
             if (retorno) this.setState({ professores: retorno, last: retorno.last, first: retorno.first, total: retorno.totalPages })
-        }
-        )
+        })
+
+    }
+    async componentDidMount() {
+        this.listaProfessor()
     }
     async  buscaPeloId(e) {
         this.limpar()
@@ -46,10 +49,10 @@ class ListaProfessor extends Component {
     }
     async editar(e) {
 
-        if (this.state.nome === "" || this.state.nome === null ? this.setState({ nomeInvalido: true }) : this.setState({ nomeInvalido: false })) { }
+        if (this.state.nome.trim() === "" || this.state.nome === null ? this.setState({ nomeInvalido: true }) : this.setState({ nomeInvalido: false })) { }
         if (this.state.siape === "" || this.state.siape === null || this.state.siape <= 0 ? this.setState({ siapeInvalido: true }) : this.setState({ siapeInvalido: false })) { }
-        if (this.state.email === "" || this.state.email === null ||this.state.email.indexOf("@",0) === -1 ? this.setState({ emailInvalido: true }) : this.setState({ emailInvalido: false })) { }
-        if (this.state.nome === "" || this.state.nome === null ||this.state.email.indexOf("@",0) === -1 || this.state.siape === "" || this.state.siape <= 0 || this.state.siape === null || this.state.email === "" || this.state.email == null) {
+        if (this.state.email === "" || this.state.email === null || this.state.email.indexOf("@", 0) === -1 ? this.setState({ emailInvalido: true }) : this.setState({ emailInvalido: false })) { }
+        if (this.state.nome.trim() === "" || this.state.nome === null || this.state.email.indexOf("@", 0) === -1 || this.state.siape === "" || this.state.siape <= 0 || this.state.siape === null || this.state.email === "" || this.state.email == null) {
             return
         }
         put("usuarios", e,
@@ -66,28 +69,28 @@ class ListaProfessor extends Component {
                     mostrarEditar: false, nomeInvalido: false, siapeInvalido: false, emailInvalido: false, show: true,
                     variant: "success", msgAlert: "Atualizado com sucesso"
                 })
-                this.componentDidMount()
+                this.listaProfessor()
                 setTimeout(() => { this.setState({ show: false }) }, 3000);
             })
     }
     deletar() {
         axios.delete("http://localhost:8080/api/usuarios/" + this.state.id).then((r) =>
             this.setState({ modalShow: false, show: true, variant: "danger", msgAlert: "Apagou com sucesso" }),
-            this.componentDidMount()
+            this.listaProfessor()
         ).catch(() =>
             alert("Não pode apagar cadastro do professor ele possui requisição no sistema "),
             this.setState({ modalShow: false })
             , setTimeout(() => {
                 this.setState({ show: false })
             }, 3000),
-            this.componentDidMount()
+            this.listaProfessor()
         )
     }
     control(e) {
         if (e.target.id === "+") {
-            this.setState({ page: this.state.page + 1 }, () => this.componentDidMount())
+            this.setState({ page: this.state.page + 1, mostrarEditar: false }, () => this.listaProfessor())
         } else {
-            this.setState({ page: this.state.page - 1 }, () => this.componentDidMount())
+            this.setState({ page: this.state.page - 1, mostrarEditar: false }, () =>  this.listaProfessor())
         }
     }
     render() {
@@ -133,8 +136,18 @@ class ListaProfessor extends Component {
                         )}
                 </tbody>
             </table>
+            <hr />
+            {
+                <>
+                    {this.state.first || <button id="-" onClick={(e) => this.control(e)}>Anterior</button>}
+                    &nbsp;&nbsp;
+                            {this.state.last || <button id="+" onClick={(e) => this.control(e)}>Próximo</button>}
+
+                    <span style={{ float: "right" }}>Página  {this.state.page + 1} / {this.state.total}</span>
+                </>
+
+            }<br /><br />
             {this.state.mostrarEditar && this.state.mostrarEditar === true ? <>
-                <hr /><br /><br />
 
                 <h3 style={{ textAlign: 'center' }}>Formulário de Edição</h3>
                 <p >ID : <span style={{
@@ -195,16 +208,7 @@ class ListaProfessor extends Component {
 
                 </Modal.Footer>
             </Modal>
-            {
-                <>
-                    {this.state.first || <button id="-" onClick={(e) => this.control(e)}>Anterior</button>}
-                    &nbsp;&nbsp;
-                            {this.state.last || <button id="+" onClick={(e) => this.control(e)}>Próximo</button>}
 
-                    <span style={{ float: "right" }}>Página  {this.state.page + 1} / {this.state.total}</span>
-                </>
-
-            }
         </div>);
     }
 }
