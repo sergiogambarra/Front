@@ -32,7 +32,7 @@ class ListaDiscipinas extends Component {
                 this.setState({ alert: false })
             }, 2000)
         }).catch(()=>
-        alert("Não pode apagar disciplina está associada a uma requisição no sistema")
+        alert("Disciplina não pode ser apagada! Existe uma requisição associada no sistema")
         ,this.setState({modalShow:false})
         ,this.listarDisciplinas()
         )

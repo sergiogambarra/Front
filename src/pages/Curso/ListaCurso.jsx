@@ -67,7 +67,7 @@ export default class ListaCursos extends Component {
             this.setState({ modalShow: false, showAlert: true, variantAlert: "danger", msgAlert: "Apagou com sucesso" })
             , this.listarCursos()
         ).catch(() =>
-            alert("Não pode apagar cadastro do aluno devido ele ter requisição no sistema"),
+            alert("Curso não pode ser apagado! Existe uma requisição associada no sistema"),
             this.setState({ modalShow: false })
             , setTimeout(() => {
                 this.setState({ showAlert: false })
