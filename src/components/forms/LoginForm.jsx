@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import SACEInput from '../../components/inputs/SACEInput';
-import { postLogin } from '../../services/LoginService';
+import { post } from '../../services/ServicoCrud';
 import { Link } from "react-router-dom";
 import { login } from '../../services/TokenService';
 
@@ -23,19 +23,19 @@ export default function LoginForm({ history, setUserData }) {
     }
 
     const enviarLogin = () => {
-        postLogin({ userName, password })
+        post("login/",{ userName, password })
             .then((response) => {
-                if (typeof response === "undefined") {
-                    setUsuarioInvalido(true)
-                    setSenhaInvalida(true)
-                }
+                console.log(response)
+             if(response.status === 200){
                 login(response.data);
                 setUserData(response.data);
-
-
-            }).then(() => history.push('/tela-transicao'))
-            .catch(error => console.log(error))
-
+                history.push('/tela-transicao');
+             }else{
+                setUsuarioInvalido(true)
+                setSenhaInvalida(true)
+                return;
+             }
+            })
     }
 
     return (

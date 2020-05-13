@@ -21,15 +21,15 @@ class EditarSenhaProfessor extends Component {
         })
     }
     async editar() {
-        if(this.state.password ===""?this.setState({ senhaInvalida:true}):this.setState({ senhaInvalida:false})){}
-        if(this.state.password !== this.state.novaSenha || this.state.novaSenha ===""){
+        if(this.state.password.trim() ===""?this.setState({ senhaInvalida:true}):this.setState({ senhaInvalida:false})){}
+        if(this.state.password !== this.state.novaSenha || this.state.novaSenha.trim() ===""){
             this.setState({confirmaSenhaInvalida:true})
             return
         }
         put("usuarios/senha",this.state.id, {
                 password:this.state.password
         }).then(()=>{this.setState({alert:true})})
-        setTimeout(()=>{this.setState({alert:false})},2000)
+        setTimeout(()=>{this.setState({alert:false})},3000)
         this.limpar()
     }
     limpar(){
@@ -53,7 +53,7 @@ class EditarSenhaProfessor extends Component {
                 onChange={(e) => this.setState({ password: e.target.value })}
                 onError={this.state.senhaInvalida}
                 onErrorMessage={'Você inseriu uma senha inválida!'}
-                tipo={"password"}
+                type={"password"}
             />
             <SACEInput
                 label={'Confirme a sua senha'}
@@ -62,7 +62,7 @@ class EditarSenhaProfessor extends Component {
                 onChange={(e) => this.setState({ novaSenha: e.target.value })}
                 onError={this.state.confirmaSenhaInvalida}
                 onErrorMessage={'As senhas não conferem! Favor inserir a mesma senha!'}
-                tipo={"password"}
+                type={"password"}
             /><br />
             <Button variant="primary" onClick={() => this.editar()}>Salvar</Button>&nbsp;
             <Button variant="danger" onClick={() => this.limpar()}>Limpar</Button>

@@ -24,11 +24,7 @@ function SACELink({ to, label }) {
 
 }
 function retornaLinks(user) {
-    if (user.permissao === "ADMIN") {
-        return <>
-
-        </>
-    } else if (user.permissao === "ALUNO") {
+    if (user.permissao === "ALUNO") {
         return <>
             <SACELink to={'/nova-requisicao'} label={'Criar requisição'} />
             <SACELink to={`/aluno-requisicoes/`} label={'Requisições'} />
