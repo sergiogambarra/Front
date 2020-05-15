@@ -28,6 +28,7 @@ class CadastroPerfilAluno extends Component {
             modalShow: false,
             alert: false,
             msgSenhaNaoConfere: false,
+            msgNome: "", msgPassword: ""
 
         }
     }
@@ -49,7 +50,8 @@ class CadastroPerfilAluno extends Component {
             matriculaInvalida: false,
             dataIngressoInvalido: false,
             verificaSenhaInvalido: false,
-            msgLogin: ""
+            msgLogin: "",
+            msgMatricula: "", msgEmail: ""
         })
 
     }
@@ -68,11 +70,11 @@ class CadastroPerfilAluno extends Component {
             this.setState({ userNameInvalido: true, msgLogin: "Escolha login entre 6 e 10 caracteres" })
             return
         } if (this.state.verificaSenhaInvalido !== "") { this.setState({ msgLogin: "" }) }
-        if (this.state.nome === "" ? this.setState({ nomeInvalido: true }) : this.setState({ nomeInvalido: false })) { }
-        if (this.state.email === "" || this.state.email.indexOf("@",0) === -1 ? this.setState({ emailInvalido: true }) : this.setState({ emailInvalido: false })) { }
-        if (this.state.matricula === "" || this.state.matricula <= 0 ? this.setState({ matriculaInvalida: true }) : this.setState({ matriculaInvalida: false })) { }
+        if (this.state.nome === "" ? this.setState({ nomeInvalido: true, msgNome: "Você não inseriu o seu nome corretamente!" }) : this.setState({ nomeInvalido: false })) { }
+        if (this.state.email === "" || this.state.email.indexOf("@", 0) === -1 ? this.setState({ emailInvalido: true, msgEmail: "Você não inseriu email válido" }) : this.setState({ emailInvalido: false })) { }
+        if (this.state.matricula === "" || this.state.matricula <= 0 ? this.setState({ matriculaInvalida: true, msgMatricula: "Campo matrícula é campo obrigatório " }) : this.setState({ matriculaInvalida: false })) { }
         if (this.state.dataIngresso === "" ? this.setState({ dataIngressoInvalido: true }) : this.setState({ dataIngressoInvalido: false })) { }
-        if (this.state.password === "" ? this.setState({ passwordInvalido: true }) : this.setState({ passwordInvalido: false })) { }
+        if (this.state.password === "" ? this.setState({ passwordInvalido: true ,msgPassword:"Campo senha não pode ficar em branco"}) : this.setState({ passwordInvalido: false })) { }
         if (this.state.password !== this.state.verificaSenha) {
             this.setState({ verificaSenhaInvalido: true })
         } else if (this.state.verificaSenha === "") {
@@ -81,13 +83,28 @@ class CadastroPerfilAluno extends Component {
         if (this.state.userName && this.state.userName) {
             if (this.state.userName.length < 6 || this.state.userName.length > 10) { return }
         }
-        
-        if (this.state.nome !== "" && this.state.email !== ""  && this.state.email.indexOf("@",0) > -1 && this.state.dataIngresso !== "" && this.state.userName !== "" &&
+        if (this.state.nome.length > 45) {
+            console.log("fdefgf");
+            this.setState({ nomeInvalido: true, msgNome: "Limite máximo de cadastro de 45 caracteres" })
+            return
+        } if (this.state.email.length > 30) {
+            this.setState({ emailInvalido: true, msgEmail: "Limite máximo de cadastro de 30 caracteres" })
+            return
+        }
+        if (this.state.matricula > 99999999) {
+            this.setState({ matriculaInvalida: true, msgMatricula: "Não pode ser cadastrado número superior a 99999999" })
+            return
+        }
+        if (this.state.password.length > 30) {
+            this.setState({ passwordInvalido: true, msgPassword: "Limite máximo de cadastro de 30 caracteres" })
+            return
+        }
+        if (this.state.nome !== "" && this.state.email !== "" && this.state.email.indexOf("@", 0) > -1 && this.state.dataIngresso !== "" && this.state.userName !== "" &&
             this.state.password !== "" && this.state.verificaSenha !== "" && this.state.matricula > 0 && this.state.verificaSenha === this.state.password) { this.setState({ modalShow: true }) } else { return }
 
     }
     async  enviarCadastro() {
-           postCadastroUsuario({
+        postCadastroUsuario({
             password: this.state.password,
             userName: this.state.userName,
             nome: this.state.nome,
@@ -120,7 +137,7 @@ class CadastroPerfilAluno extends Component {
                         placeholder={'Informe o seu nome. '}
                         onChange={(e) => this.setState({ nome: e.target.value })}
                         onError={this.state.nomeInvalido}
-                        onErrorMessage={'Você não inseriu o seu nome corretamente!'}
+                        onErrorMessage={this.state.msgNome}
                     />
                     <SACEInput
                         label={'Email'}
@@ -129,9 +146,9 @@ class CadastroPerfilAluno extends Component {
                         placeholder={'Informe o seu email. '}
                         onChange={(e) => this.setState({ email: e.target.value })}
                         onError={this.state.emailInvalido}
-                        onErrorMessage={'Você não inseriu o seu email corretamente!'}
+                        onErrorMessage={this.state.msgEmail}
                     />
-                    
+
                     <SACEInput
                         label={'Matricula'}
                         type="number"
@@ -140,7 +157,7 @@ class CadastroPerfilAluno extends Component {
                         placeholder={'Informe a sua matrícula. '}
                         onChange={(e) => this.setState({ matricula: e.target.value })}
                         onError={this.state.matriculaInvalida}
-                        onErrorMessage={'Você não inseriu a sua matrícula corretamente!'}
+                        onErrorMessage={this.state.msgMatricula}
                     />
 
                     <SACEInput
@@ -166,7 +183,7 @@ class CadastroPerfilAluno extends Component {
                         placeholder={'Informe uma senha. '}
                         onChange={(e) => this.setState({ password: e.target.value })}
                         onError={this.state.passwordInvalido}
-                        onErrorMessage={'Campo senha não pode ficar em branco!'}
+                        onErrorMessage={this.state.msgPassword}
                         type={"password"}
                     />
 
@@ -182,7 +199,7 @@ class CadastroPerfilAluno extends Component {
 
                     <div className="row container" style={{ position: 'relative', left: '32%' }}>
 
-                        <Button type="submit"  variant="primary" className="btn btn-primary m-1" onClick={() => this.verifica()}> Enviar </Button>
+                        <Button type="submit" variant="primary" className="btn btn-primary m-1" onClick={() => this.verifica()}> Enviar </Button>
                         <Modal show={this.state.modalShow} onHide={() => this.setState({ modalShow: false })} animation={false}>
                             <Modal.Header closeButton>
                                 <Modal.Title > Confirmar</Modal.Title>

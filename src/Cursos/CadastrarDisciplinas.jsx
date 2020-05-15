@@ -15,7 +15,8 @@ class CadastrarDisciplinas extends Component {
             disciplinas: [],
             modal: "",
             nome: "",
-            msgError: ""
+            msgError: "",
+            msgNomeDisciplina: ""
         }
     }
     async listarCurso() {
@@ -30,8 +31,12 @@ class CadastrarDisciplinas extends Component {
     }
     async valida() {
         if (this.state.idcurso === null || this.state.idcurso === "" ? this.setState({ msgError: "Campo select obrigatório" }) : this.setState({ msgError: "" })) { }
-        if (this.state.nome.trim() === "" ? this.setState({ textodisciplina: true }) : this.setState({ textodisciplina: false })) { return }
-        if (typeof this.state.cargaHoraria === "undefined" || this.state.cargaHoraria === "" || this.state.cargaHoraria < 15 ? this.setState({ textocargahoraria: true }) : this.setState({ textocargahoraria: false })) { }
+        if (this.state.nome.trim() === "" ? this.setState({ textodisciplina: true, msgNomeDisciplina: "Campo nome é obrigatório" }) : this.setState({ textodisciplina: false })) { return }
+        if (this.state.nome.length > 45) {
+            this.setState({ textodisciplina: true, msgNomeDisciplina: "Limite máximo para cadastro de 45 caracteres" })
+            return
+        }
+        if (typeof this.state.cargaHoraria === "undefined" || this.state.cargaHoraria === "" || this.state.cargaHoraria < 15 ? this.setState({ textocargahoraria: true }) : this.setState({ textocargahoraria: false })) { return }
         if (this.state.idcurso !== "" && this.state.nome !== "" && this.state.cargaHoraria !== "") {
             if (this.state.nome.trim() !== "" && this.state.cargaHoraria > 14 && this.state.idcurso !== "") {
                 await post(`cursos/${this.state.idcurso}/disciplinas/`, {
@@ -40,7 +45,7 @@ class CadastrarDisciplinas extends Component {
                 }).then(() => {
                     this.setState({ modal: true, disabled: true })
                     setTimeout(() => {
-                        this.setState({ modal: false })
+                        this.setState({ modal: false})
                     }, 3000)
                     this.listarDisciplinas();
                     this.limparDados()
@@ -63,11 +68,11 @@ class CadastrarDisciplinas extends Component {
         this.setState({
             textodisciplina: "",
             textocargahoraria: "",
-            nome: "", cargaHoraria: ""
+            nome: "", cargaHoraria: "", msgError: ""
         })
     }
     limparDados() {
-        this.setState({ nome: "", cargaHoraria: "", textocargahoraria: "", textodisciplina: ""})
+        this.setState({ nome: "", cargaHoraria: "", textocargahoraria: "", textodisciplina: "" })
     }
 
 
@@ -100,7 +105,7 @@ class CadastrarDisciplinas extends Component {
                 label={'Nome Disciplina'}
                 onChange={(e) => this.setState({ nome: e.target.value })}
                 onError={this.state.textodisciplina}
-                onErrorMessage={'Campo da disciplina obrigatório'}
+                onErrorMessage={this.state.msgNomeDisciplina}
             />
 
             <b />
