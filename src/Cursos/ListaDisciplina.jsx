@@ -20,7 +20,7 @@ class ListaDiscipinas extends Component {
             page: 0,
             last: false,
             first: true,
-            total: 0
+            total: 0,msgNome:"",msgCargaHoraria:""
         }
     }
 
@@ -72,16 +72,24 @@ class ListaDiscipinas extends Component {
     }
 
     async editarDisciplina() {
-console.log(this.state.nome.trim());
-console.log(this.state.nomeInvalido);
-console.log(this.state.cargaHorariaInvalida);
+
+console.log(this.state.cargaHoraria);
 
 
-        if (this.state.nome === null || this.state.nome.trim() === "" ? this.setState({ nomeInvalido: true }) : this.setState({ nomeInvalido: false })) { console.log("a");
+        if (this.state.nome === null || this.state.nome.trim() === "" ? this.setState({ nomeInvalido: true ,msgNome:"Você não inseriu nome válido"}) : this.setState({ nomeInvalido: false })) { 
         }
-        if (this.state.cargaHoraria === null || this.state.cargaHoraria === "" || this.state.cargaHoraria < 15 ? this.setState({ cargaHorariaInvalida: true }) : this.setState({ cargaHorariaInvalida: false })) { console.log("b");
+        if (this.state.cargaHoraria === null || this.state.cargaHoraria === "" || this.state.cargaHoraria < 15? this.setState({ cargaHorariaInvalida: true,msgCargaHoraria:"Carga Horária mínimo de 15h" }) : this.setState({ cargaHorariaInvalida: false })) { 
         }
-        if (this.state.nome === null || this.state.nome.trim() === "" || this.state.cargaHoraria === null || this.state.cargaHoraria === "" || this.state.cargaHoraria < 15) { console.log("c");
+        if (this.state.nome.length > 40) {
+            this.setState({ nomeInvalido: true, msgNome: "Limite máximo para cadastro de 40 caracteres" })
+            return
+        }
+        if (this.state.cargaHoraria > 300) {
+            this.setState({ cargaHorariaInvalida: true, msgCargaHoraria: "Não pode cadastrar carga horária superior a 300h" })
+            return
+        }
+        
+        if (this.state.nome === null || this.state.nome.trim() === "" || this.state.cargaHoraria === null || this.state.cargaHoraria === "" || this.state.cargaHoraria < 15) {
         return }
         putDisciplinas(`cursos/${this.state.idcurso}/disciplinas`, {
             id: this.state.idDisciplina,
@@ -173,17 +181,17 @@ console.log(this.state.cargaHorariaInvalida);
                                 label={'Nome da Disciplina'}
                                 onChange={(e) => this.setState({ nome: e.target.value })}
                                 onError={this.state.nomeInvalido}
-                                onErrorMessage={'Campo da disciplina obrigatório'}
+                                onErrorMessage={this.state.msgNome}
                             />
 
                             <b />
-                            <SACEInput tipo="number" id="quantity" name="cargaHoraria" min="15" max=""
+                            <SACEInput type="number" id="quantity" name="cargaHoraria" min="15" max=""
                                 placeholder={'Digite a carga horária da disciplina'}
                                 label="Carga Horária"
                                 value={this.state.cargaHoraria}
                                 onChange={(e) => this.setState({ cargaHoraria: e.target.value })}
                                 onError={this.state.cargaHorariaInvalida}
-                                onErrorMessage={'Campo carga Horária é obrigatório e não pode ser menor que 15 horas'}
+                                onErrorMessage={this.state.msgCargaHoraria}
                             />
                             <Button variant="primary" className="btn btn-primary m-1" onClick={(e) => this.editarDisciplina()}>
                                 Salvar

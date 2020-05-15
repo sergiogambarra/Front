@@ -16,7 +16,8 @@ class CadastrarDisciplinas extends Component {
             modal: "",
             nome: "",
             msgError: "",
-            msgNomeDisciplina: ""
+            msgNomeDisciplina: "",
+            msgCargaHoraria:""
         }
     }
     async listarCurso() {
@@ -32,11 +33,12 @@ class CadastrarDisciplinas extends Component {
     async valida() {
         if (this.state.idcurso === null || this.state.idcurso === "" ? this.setState({ msgError: "Campo select obrigatório" }) : this.setState({ msgError: "" })) { }
         if (this.state.nome.trim() === "" ? this.setState({ textodisciplina: true, msgNomeDisciplina: "Campo nome é obrigatório" }) : this.setState({ textodisciplina: false })) { return }
-        if (this.state.nome.length > 45) {
-            this.setState({ textodisciplina: true, msgNomeDisciplina: "Limite máximo para cadastro de 45 caracteres" })
-            return
-        }
-        if (typeof this.state.cargaHoraria === "undefined" || this.state.cargaHoraria === "" || this.state.cargaHoraria < 15 ? this.setState({ textocargahoraria: true }) : this.setState({ textocargahoraria: false })) { return }
+        if (typeof this.state.cargaHoraria === "undefined" || this.state.cargaHoraria === "" || this.state.cargaHoraria < 15 ? this.setState({ textocargahoraria: true ,msgCargaHoraria:"Carga horária não pode ser inferior a 15h"}) : this.setState({ textocargahoraria: false })) { return }
+            if (this.state.nome.length > 40) {
+                this.setState({ textodisciplina: true, msgNomeDisciplina: "Limite máximo para cadastro de 40 caracteres" })
+                return
+            }
+        if(this.state.cargaHoraria > 300){this.setState({textocargahoraria:true,msgCargaHoraria:"Carga não pode ser superior 300h"})}
         if (this.state.idcurso !== "" && this.state.nome !== "" && this.state.cargaHoraria !== "") {
             if (this.state.nome.trim() !== "" && this.state.cargaHoraria > 14 && this.state.idcurso !== "") {
                 await post(`cursos/${this.state.idcurso}/disciplinas/`, {
@@ -114,7 +116,7 @@ class CadastrarDisciplinas extends Component {
                 label="Carga Horária"
                 onChange={(e) => this.setState({ cargaHoraria: e.target.value })}
                 onError={this.state.textocargahoraria}
-                onErrorMessage={'Campo carga Horária é obrigatório e não pode ser menor que 15 horas'}
+                onErrorMessage={this.state.msgCargaHoraria}
                 value={this.state.cargaHoraria}
             />
             <Button style={{ position: 'relative', left: '80%' }} variant="primary" className="btn btn-primary m-1" onClick={(e) => this.valida()}>

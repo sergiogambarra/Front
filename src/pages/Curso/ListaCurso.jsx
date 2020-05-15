@@ -21,7 +21,7 @@ export default class ListaCursos extends Component {
             page: 0,
             last: false,
             first: true,
-            total: 0
+            total: 0,msgNome:""
         }
     }
     control(e) {
@@ -50,7 +50,11 @@ export default class ListaCursos extends Component {
 
     atualizar() {
         if (this.state.nome.trim() === "" || this.state.nome === null) {
-            this.setState({ nomeInvalido: true })
+            this.setState({ nomeInvalido: true ,msgNome:"Você não inseriu nome corretamente"})
+            return
+        }
+        if (this.state.nome.length > 40) {
+            this.setState({ nomeInvalido: true, msgNome: "Limite máximo de cadastro de 40 caracteres" })
             return
         }
         put("cursos", this.state.id, { nome: this.state.nome }).then(() => {
@@ -123,7 +127,7 @@ export default class ListaCursos extends Component {
                     {this.state.editar === true ? <> <h3 id={"top"} style={{ textAlign: "center" }}>Formulário de Edição</h3>
                         <p>ID : &nbsp;<span style={{ color: "red" }}>{this.state.id}</span></p>
                         <SACEInput label={"Curso"} value={this.state.nome} placeholder={'Preencha com o nome do curso que você deseja cadastrar'}
-                            autoFocus onChange={(e) => this.setState({ nome: e.target.value })} onError={this.state.nomeInvalido} onErrorMessage={'Campo nome não pode ficar em branco'} />
+                            autoFocus onChange={(e) => this.setState({ nome: e.target.value })} onError={this.state.nomeInvalido} onErrorMessage={this.state.msgNome} />
                         <Button className="btn btn-primary m-1" onClick={(e) => this.atualizar()} >Salvar</Button>
                     </> : ""}
 

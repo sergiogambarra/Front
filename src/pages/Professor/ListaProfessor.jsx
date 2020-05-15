@@ -15,12 +15,12 @@ class ListaProfessor extends Component {
             msgAlert: "", show: false, variant: "", page: 0,
             last: false,
             first: true,
-            total: 0
+            total: 0, msgEmail: "", msgNome: "", msgSiape: ""
         }
     }
 
-  async listaProfessor() {
-       await get(`usuarios/pages?tipo=PROFESSOR&page=${this.state.page}&size=6`).then((retorno) => {
+    async listaProfessor() {
+        await get(`usuarios/pages?tipo=PROFESSOR&page=${this.state.page}&size=6`).then((retorno) => {
             if (retorno) this.setState({ professores: retorno, last: retorno.last, first: retorno.first, total: retorno.totalPages })
         })
 
@@ -49,9 +49,20 @@ class ListaProfessor extends Component {
     }
     async editar(e) {
 
-        if (this.state.nome.trim() === "" || this.state.nome === null ? this.setState({ nomeInvalido: true }) : this.setState({ nomeInvalido: false })) { }
-        if (this.state.siape === "" || this.state.siape === null || this.state.siape <= 0 ? this.setState({ siapeInvalido: true }) : this.setState({ siapeInvalido: false })) { }
-        if (this.state.email === "" || this.state.email === null || this.state.email.indexOf("@", 0) === -1 ? this.setState({ emailInvalido: true }) : this.setState({ emailInvalido: false })) { }
+        if (this.state.nome.trim() === "" || this.state.nome === null ? this.setState({ nomeInvalido: true,msgNome:"Você não inseriu nome corretamente" }) : this.setState({ nomeInvalido: false })) { }
+        if (this.state.siape === "" || this.state.siape === null || this.state.siape <= 0 ? this.setState({ siapeInvalido: true ,msgSiape:"Você não inseriu SIAPE corretamente"}) : this.setState({ siapeInvalido: false })) { }
+        if (this.state.email === "" || this.state.email === null || this.state.email.indexOf("@", 0) === -1 ? this.setState({ emailInvalido: true ,msgEmail:"Você não inseriu email corretamente"}) : this.setState({ emailInvalido: false })) { }
+        if (this.state.nome.length > 40) {
+            this.setState({ nomeInvalido: true, msgNome: "Limite máximo de cadastro de 40 caracteres" })
+            return
+        } if (this.state.email.length > 40) {
+            this.setState({ emailInvalido: true, msgEmail: "Limite máximo de cadastro de 40 caracteres" })
+            return
+        }
+        if (this.state.siape > 99999999) {
+            this.setState({ siapeInvalido: true, msgSiape: "Não pode ser cadastrado número superior a 99999999" })
+            return
+        }
         if (this.state.nome.trim() === "" || this.state.nome === null || this.state.email.indexOf("@", 0) === -1 || this.state.siape === "" || this.state.siape <= 0 || this.state.siape === null || this.state.email === "" || this.state.email == null) {
             return
         }
@@ -90,7 +101,7 @@ class ListaProfessor extends Component {
         if (e.target.id === "+") {
             this.setState({ page: this.state.page + 1, mostrarEditar: false }, () => this.listaProfessor())
         } else {
-            this.setState({ page: this.state.page - 1, mostrarEditar: false }, () =>  this.listaProfessor())
+            this.setState({ page: this.state.page - 1, mostrarEditar: false }, () => this.listaProfessor())
         }
     }
     render() {
@@ -160,25 +171,26 @@ class ListaProfessor extends Component {
                     placeholder={'Informe o seu nome. '}
                     onChange={(e) => this.setState({ nome: e.target.value })}
                     onError={this.state.nomeInvalido}
-                    onErrorMessage={'Você não inseriu o seu nome corretamente!'}
+                    onErrorMessage={this.state.msgNome}
                 />
                 <SACEInput
-                    tipo={"number"}
+                    type={"number"}
                     min="0"
                     label={'SIAPE'}
                     value={this.state.siape}
                     placeholder={'Informe a sua siape. '}
                     onChange={(e) => this.setState({ siape: e.target.value })}
                     onError={this.state.siapeInvalido}
-                    onErrorMessage={'Você não inseriu a seu siape corretamente!'}
+                    onErrorMessage={this.state.msgSiape}
                 />
                 <SACEInput
+                    type={"email"}
                     label={'E-mail'}
                     value={this.state.email}
                     placeholder={'Informe o seu nome. '}
                     onChange={(e) => this.setState({ email: e.target.value })}
                     onError={this.state.emailInvalido}
-                    onErrorMessage={'Você não inseriu o seu nome corretamente!'}
+                    onErrorMessage={this.state.msgEmail}
                 />
                 <Form.Check type="switch" id="custom-switch" label="Coordenador" value={this.state.coordenador} checked={this.state.coordenador}
                     onChange={() => this.setState({ coordenador: !this.state.coordenador })} />
@@ -189,10 +201,7 @@ class ListaProfessor extends Component {
                     className="btn btn-primary m-1"
                     onClick={() => this.editar(this.state.id)}
                 > Salvar </Button>
-
             </> : ""}
-            {console.log(this.state.id)}
-
             <Modal show={this.state.modalShow} onHide={() => this.setState({ modalShow: false })} animation={false}>
                 <Modal.Header closeButton>
                     <Modal.Title > Confirmar</Modal.Title>

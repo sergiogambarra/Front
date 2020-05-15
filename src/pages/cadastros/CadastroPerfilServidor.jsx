@@ -60,12 +60,12 @@ class CadastroPerfilServidor extends Component {
         if (this.state.password.trim() === "" ? this.setState({ senhaInvalida: true, msgPassword: "Você não inseriu senha corretamente" }) : this.setState({ senhaInvalida: false })) { }
         if (this.state.novaSenha.trim() === "" ? this.setState({ confirmaSenhaInvalida: true }) : this.setState({ confirmaSenhaInvalida: false })) { }
         if (this.state.password !== this.state.novaSenha) { this.setState({ confirmaSenhaInvalida: true }) }
-        if (this.state.nome.length > 45) {
-            this.setState({ nomeInvalido: true, msgNome: "Limite máximo para cadastro de 45 caracteres" })
+        if (this.state.nome.length > 40) {
+            this.setState({ nomeInvalido: true, msgNome: "Limite máximo para cadastro de 40 caracteres" })
             return
         }
-        if (this.state.email.length > 45) {
-            this.setState({ emailInvalido: true, msgEmail: "Limite máximo para cadastro de 30 caracteres" })
+        if (this.state.email.length > 40) {
+            this.setState({ emailInvalido: true, msgEmail: "Limite máximo para cadastro de 40 caracteres" })
             return
         }
         if (this.state.siape > 99999999) {
@@ -74,10 +74,6 @@ class CadastroPerfilServidor extends Component {
         }
         if (this.state.password.length > 30) {
             this.setState({ senhaInvalida: true, msgPassword: "Limite máximo de cadastro de 30 caracteres" })
-            return
-        }
-        if (this.state.email.length > 30) {
-            this.setState({ emailInvalido: true, msgEmail: "Limite máximo de cadastro de 30 caracteres" })
             return
         }
         if (this.state.userName !== "" && this.state.email !== "" && this.state.siape !== "" && this.state.password !== ""

@@ -23,7 +23,7 @@ class ListaAlunos extends Component {
             total: 0,
             msgAlert: "",
             showAlert: false,
-            variantAlert: ""
+            variantAlert: "",msgNome:"",msgMatricula:"",msgEmail:""
         }
     }
     listarAlunos() {
@@ -48,9 +48,9 @@ class ListaAlunos extends Component {
     }
     control(e) {
         if (e.target.id === "+") {
-            this.setState({ page: this.state.page + 1 ,mostraEditar:false}, () => this.listarAlunos(),this.limpar())
+            this.setState({ page: this.state.page + 1, mostraEditar: false }, () => this.listarAlunos(), this.limpar())
         } else {
-            this.setState({ page: this.state.page - 1 ,mostraEditar:false}, () => this.listarAlunos(),this.limpar())
+            this.setState({ page: this.state.page - 1, mostraEditar: false }, () => this.listarAlunos(), this.limpar())
         }
     }
 
@@ -59,10 +59,21 @@ class ListaAlunos extends Component {
     }
     editar(e) {
 
-        if (this.state.nome.trim() === "" || this.state.nome === null ? this.setState({ nomeInvalido: true }) : this.setState({ nomeInvalido: false })) { }
-        if (this.state.matricula === "" || this.state.matricula === null || this.state.matricula <= 0 ? this.setState({ matriculaInvalida: true }) : this.setState({ matriculaInvalida: false })) { }
-        if (this.state.email === "" || this.state.email === null  || this.state.email.indexOf("@",0) === -1  ? this.setState({ emailInvalido: true }) : this.setState({ emailInvalido: false })) { }
-        if (this.state.nome === null || this.state.email.indexOf("@",0) === -1 || this.state.nome.trim() === "" || this.state.email === "" || this.state.email === null || this.state.matricula === null || this.state.siape === null || this.state.matricula === "" || this.state.siape === "" || this.state.matricula <= 0) {
+        if (this.state.nome.trim() === "" || this.state.nome === null ? this.setState({ nomeInvalido: true,msgNome:"Você não inseriu o seu nome corretamente!" }) : this.setState({ nomeInvalido: false })) { }
+        if (this.state.matricula === "" || this.state.matricula === null || this.state.matricula <= 0 ? this.setState({ matriculaInvalida: true ,msgMatricula:"Você não inseriu matrícula corretamente"}) : this.setState({ matriculaInvalida: false })) { }
+        if (this.state.email === "" || this.state.email === null || this.state.email.indexOf("@", 0) === -1 ? this.setState({ emailInvalido: true ,msgEmail:"Você não inseriu email corretamente"}) : this.setState({ emailInvalido: false })) { }
+        if (this.state.nome.length > 40) {
+            this.setState({ nomeInvalido: true, msgNome: "Limite máximo de cadastro de 40 caracteres" })
+            return
+        } if (this.state.email.length > 40) {
+            this.setState({ emailInvalido: true, msgEmail: "Limite máximo de cadastro de 40 caracteres" })
+            return
+        }
+        if (this.state.matricula > 99999999) {
+            this.setState({ matriculaInvalida: true, msgMatricula: "Não pode ser cadastrado número superior a 99999999" })
+            return
+        }
+        if (this.state.nome === null || this.state.email.indexOf("@", 0) === -1 || this.state.nome.trim() === "" || this.state.email === "" || this.state.email === null || this.state.matricula === null || this.state.siape === null || this.state.matricula === "" || this.state.siape === "" || this.state.matricula <= 0) {
             return
         }
         putAluno("usuarios", e,
@@ -139,7 +150,7 @@ class ListaAlunos extends Component {
                     </tbody>
                 </table>
                 <hr />
-                 {
+                {
                     <>
                         {this.state.first || <button id="-" onClick={(e) => this.control(e)}>Anterior</button>}
                         &nbsp;&nbsp;
@@ -162,7 +173,7 @@ class ListaAlunos extends Component {
                         placeholder={'Informe o seu nome. '}
                         onChange={(e) => this.setState({ nome: e.target.value })}
                         onError={this.state.nomeInvalido}
-                        onErrorMessage={'Você não inseriu o seu nome corretamente!'}
+                        onErrorMessage={this.state.msgNome}
                     />
                     <SACEInput
                         label={'Data de Ingresso'}
@@ -171,17 +182,17 @@ class ListaAlunos extends Component {
                         onChange={(e) => this.setState({ dataIngresso: e.target.value })}
                         onError={this.state.dataIngressoInvalido}
                         onErrorMessage={'Você não inseriu uma data válida!'}
-                        tipo={"date"}
+                        type={"date"}
                     />
                     <SACEInput
                         label={'Matrícula'}
-                        tipo="number"
+                        type="number"
                         min="0"
                         value={this.state.matricula}
                         placeholder={'Informe a sua matrícula. '}
                         onChange={(e) => this.setState({ matricula: e.target.value })}
                         onError={this.state.matriculaInvalida}
-                        onErrorMessage={'Você não inseriu a matrícula corretamente!'}
+                        onErrorMessage={this.state.msgMatricula}
                     />
                     <SACEInput
                         type={"email"}
@@ -190,7 +201,7 @@ class ListaAlunos extends Component {
                         placeholder={'Informe o seu email. '}
                         onChange={(e) => this.setState({ email: e.target.value })}
                         onError={this.state.emailInvalido}
-                        onErrorMessage={'Você não inseriu o seu email corretamente!'}
+                        onErrorMessage={this.state.msgEmail}
                     />
 
                     <Button
@@ -223,7 +234,7 @@ class ListaAlunos extends Component {
                         > Apagar </Button>
                     </Modal.Footer>
                 </Modal>
-               
+
 
             </div>
         );

@@ -11,17 +11,17 @@ class ListaServidor extends Component {
             siape: "", id: "", email: "",
             mostrarEditar: false, modalShow: false, alert: false,
             emailInvalido: false, siapeInvalido: false, nomeInvalido: false,
-            variant:"",msgAlert:"", page: 0,
+            variant: "", msgAlert: "", page: 0,
             last: false,
             first: true,
-            total: 0
+            total: 0, msgEmail: "", msgNome: "", msgSiape: ""
 
         }
     }
 
-   async listaServidor(){
-       await get(`usuarios/pages?tipo=SERVIDOR&page=${this.state.page}&size=6`).then((retorno)=>{
-            this.setState({ servidores:retorno, last: retorno.last, first:retorno.first , total: retorno.totalPages })
+    async listaServidor() {
+        await get(`usuarios/pages?tipo=SERVIDOR&page=${this.state.page}&size=6`).then((retorno) => {
+            this.setState({ servidores: retorno, last: retorno.last, first: retorno.first, total: retorno.totalPages })
         })
     }
 
@@ -40,16 +40,27 @@ class ListaServidor extends Component {
     }
     control(e) {
         if (e.target.id === "+") {
-            this.setState({ page: this.state.page + 1 ,mostrarEditar:false}, () => this.listaServidor())
+            this.setState({ page: this.state.page + 1, mostrarEditar: false }, () => this.listaServidor())
         } else {
-            this.setState({ page: this.state.page - 1 ,mostrarEditar:false}, () => this.listaServidor())
+            this.setState({ page: this.state.page - 1, mostrarEditar: false }, () => this.listaServidor())
         }
     }
     editar(e) {
-        if (this.nome === null || this.state.nome.trim() === "" ? this.setState({ nomeInvalido: true }) : this.setState({ nomeInvalido: false })) { }
-        if (this.siape === null || this.state.siape === ""||this.state.siape<=0 ? this.setState({ siapeInvalido: true }) : this.setState({ siapeInvalido: false })) { }
-        if (this.email === null || this.state.email === "" ||this.state.email.indexOf("@",0) === -1 ? this.setState({ emailInvalido: true }) : this.setState({ emailInvalido: false })) { }
-        if (this.email === null || this.state.email === "" ||this.state.email.indexOf("@",0) === -1 || this.siape === null ||this.state.siape<=0||this.state.siape === "" || this.nome === null || this.state.nome.trim() === "") { return }
+        if (this.nome === null || this.state.nome.trim() === "" ? this.setState({ nomeInvalido: true, msgNome: "Você não inseriu nome corretamente" }) : this.setState({ nomeInvalido: false })) { }
+        if (this.siape === null || this.state.siape === "" || this.state.siape <= 0 ? this.setState({ siapeInvalido: true, msgSiape: "Você não inseriu SIAPE corretamente" }) : this.setState({ siapeInvalido: false })) { }
+        if (this.email === null || this.state.email === "" || this.state.email.indexOf("@", 0) === -1 ? this.setState({ emailInvalido: true, msgEmail: "Você não inseriu email válido" }) : this.setState({ emailInvalido: false })) { }
+        if (this.state.nome.length > 40) {
+            this.setState({ nomeInvalido: true, msgNome: "Limite máximo de cadastro de 40 caracteres" })
+            return
+        } if (this.state.email.length > 40) {
+            this.setState({ emailInvalido: true, msgEmail: "Limite máximo de cadastro de 40 caracteres" })
+            return
+        }
+        if (this.state.siape > 99999999) {
+            this.setState({ siapeInvalido: true, msgSiape: "Não pode ser cadastrado número superior a 99999999" })
+            return
+        }
+        if (this.email === null || this.state.email === "" || this.state.email.indexOf("@", 0) === -1 || this.siape === null || this.state.siape <= 0 || this.state.siape === "" || this.nome === null || this.state.nome.trim() === "") { return }
         put("usuarios", e,
             {
                 email: this.state.email,
@@ -59,15 +70,15 @@ class ListaServidor extends Component {
                     siape: this.state.siape,
                 }
             }).then(() => {
-                this.setState({ mostrarEditar: false ,alert:true,variant:"success",msgAlert:"Atualizado com sucesso"});
+                this.setState({ mostrarEditar: false, alert: true, variant: "success", msgAlert: "Atualizado com sucesso" });
                 this.listaServidor()
-            },this.setState({ alert: true }), setTimeout(() => {
+            }, this.setState({ alert: true }), setTimeout(() => {
                 this.setState({ alert: false })
             }, 3000))
     }
     deletar(e) {
         del("usuarios", e).then(() => {
-            this.setState({ modalShow: false, mostrarEditar: false ,variant:"danger",msgAlert:"Apagou com sucesso"})
+            this.setState({ modalShow: false, mostrarEditar: false, variant: "danger", msgAlert: "Apagou com sucesso" })
             this.listaServidor()
         }).then(() =>
             this.setState({ alert: true }), setTimeout(() => {
@@ -83,7 +94,7 @@ class ListaServidor extends Component {
     render() {
         return (<div>
             <br /><br />
-        <Alert variant={this.state.variant} show={this.state.alert}>{this.state.msgAlert}</Alert>
+            <Alert variant={this.state.variant} show={this.state.alert}>{this.state.msgAlert}</Alert>
             <h3>Servidores </h3>
             <table className="table">
                 <thead className="s-3 mb-2 bg-primary text-white">
@@ -108,7 +119,7 @@ class ListaServidor extends Component {
                                 <td> {s.perfil.nome === "" ? "" : <Button
                                     variant="primary"
                                     className="btn btn-danger m-1"
-                                    onClick={() => this.setState({ modalShow: true, id: s.id, mostrarEditar: false, nome: s.perfil.nome }, this.limpar(),)}
+                                    onClick={() => this.setState({ modalShow: true, id: s.id, mostrarEditar: false, nome: s.perfil.nome }, this.limpar())}
                                 > Apagar </Button>}
                                 </td>
                                 <td> {s.perfil.nome === "" ? "" : <a href="#top"><Button
@@ -145,25 +156,26 @@ class ListaServidor extends Component {
                     placeholder={'Informe o seu nome. '}
                     onChange={(e) => this.setState({ nome: e.target.value })}
                     onError={this.state.nomeInvalido}
-                    onErrorMessage={'Você não inseriu o seu nome corretamente!'}
+                    onErrorMessage={this.state.msgNome}
                 />
                 <SACEInput
-                    tipo={"number"}
+                    type={"number"}
                     min="0"
                     label={'SIAPE'}
                     value={this.state.siape}
                     placeholder={'Informe a sua siape. '}
                     onChange={(e) => this.setState({ siape: e.target.value })}
                     onError={this.state.siapeInvalido}
-                    onErrorMessage={'Você não inseriu a seu siape corretamente!'}
+                    onErrorMessage={this.state.msgSiape}
                 />
                 <SACEInput
+                    type={"email"}
                     label={'E-mail'}
                     value={this.state.email}
                     placeholder={'Informe o seu nome. '}
                     onChange={(e) => this.setState({ email: e.target.value })}
                     onError={this.state.emailInvalido}
-                    onErrorMessage={'Você não inseriu o seu nome corretamente!'}
+                    onErrorMessage={this.state.msgEmail}
                 />
                 <Button
                     variant="primary"
@@ -188,7 +200,7 @@ class ListaServidor extends Component {
                     > Apagar </Button>
                 </Modal.Footer>
             </Modal>
-          
+
         </div>);
     }
 }

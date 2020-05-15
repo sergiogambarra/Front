@@ -10,7 +10,7 @@ class EditarSenhaProfessor extends Component {
         this.state = {
             password: "", username: "", id: "",
             novaSenha: "",confirmaSenhaInvalida:false,
-            senhaInvalida:false,alert:false
+            senhaInvalida:false,alert:false,msgPassword:""
         }
     }
     async componentDidMount() {
@@ -21,7 +21,14 @@ class EditarSenhaProfessor extends Component {
         })
     }
     async editar() {
-        if(this.state.password.trim() ===""?this.setState({ senhaInvalida:true}):this.setState({ senhaInvalida:false})){}
+        console.log(this.state.senhaInvalida);
+        console.log(this.state.msgPassword);
+        
+        if(this.state.password.trim() ===""?this.setState({ senhaInvalida:true,msgPassword:"Campo senha é obrigatório"}):this.setState({ senhaInvalida:false})){}
+        if (this.state.password.length > 30) {
+            this.setState({ senhaInvalida: true, msgPassword: "Limite máximo de cadastro de 30 caracteres" })
+            return
+        }
         if(this.state.password !== this.state.novaSenha || this.state.novaSenha.trim() ===""){
             this.setState({confirmaSenhaInvalida:true})
             return
@@ -52,7 +59,7 @@ class EditarSenhaProfessor extends Component {
                 placeholder={'Informe uma senha. '}
                 onChange={(e) => this.setState({ password: e.target.value })}
                 onError={this.state.senhaInvalida}
-                onErrorMessage={'Você inseriu uma senha inválida!'}
+                onErrorMessage={this.state.msgPassword}
                 type={"password"}
             />
             <SACEInput
