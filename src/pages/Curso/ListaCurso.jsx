@@ -32,7 +32,7 @@ export default class ListaCursos extends Component {
         }
     }
     async listarCursos() {
-         get(`cursos/paginacao?page=${this.state.page}&size=6&sort=nome`).then((retorno)=>{
+      await get(`cursos/paginacao?page=${this.state.page}&size=6&sort=nome`).then((retorno)=>{
             this.setState({ cursos:retorno.content, last: retorno.last, first: retorno.first, total: retorno.totalPages })
 
         })
@@ -44,7 +44,7 @@ export default class ListaCursos extends Component {
         })
     }
 
-    componentDidMount() {
+   async componentDidMount() {
         this.listarCursos();
     }
 

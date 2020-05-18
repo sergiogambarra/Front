@@ -4,26 +4,27 @@ import SACEInput from '../../components/inputs/SACEInput';
 import { Button, Alert } from 'react-bootstrap';
 
 
-class EditarSenhaProfessor extends Component {
+class EditarSenha extends Component {
     constructor(props) {
         super(props);
         this.state = {
             password: "", username: "", id: "",
             novaSenha: "",confirmaSenhaInvalida:false,
-            senhaInvalida:false,alert:false,msgPassword:""
+            senhaInvalida:false,alert:false,msgPassword:"",alterouSenha:false
         }
     }
     async componentDidMount() {
-        const user = await get("usuarios/auth/")
+     
+        const user = await get("usuarios/auth/");
+        console.log(user);
+        
         this.setState({
             id: user.id,
-            username: user.username
+            username: user.username,
+            alterouSenha:user.alterouSenha
         })
     }
     async editar() {
-        console.log(this.state.senhaInvalida);
-        console.log(this.state.msgPassword);
-        
         if(this.state.password.trim() ===""?this.setState({ senhaInvalida:true,msgPassword:"Campo senha é obrigatório"}):this.setState({ senhaInvalida:false})){}
         if (this.state.password.length > 30) {
             this.setState({ senhaInvalida: true, msgPassword: "Limite máximo de cadastro de 30 caracteres" })
@@ -35,7 +36,7 @@ class EditarSenhaProfessor extends Component {
         }
         put("usuarios/senha",this.state.id, {
                 password:this.state.password
-        }).then(()=>{this.setState({alert:true})})
+        }).then(()=>{this.setState({alert:true,alterouSenha:false})})
         setTimeout(()=>{this.setState({alert:false})},3000)
         this.limpar()
     }
@@ -46,7 +47,8 @@ class EditarSenhaProfessor extends Component {
     render() {
         return (<div>
             <br /><br /><br />
-            <Alert show={this.state.alert} variant={"success"}>Salvo com sucesso!</Alert>
+            {this.props.match.params.trocar && (()=> this.setState({alert:true}))}
+        <Alert show={this.state.alert || this.state.alterouSenha} variant={this.state.alterouSenha ? "warning":"success"}>{this.state.alterouSenha ? "Troque sua senha !" : " Salvo com sucesso!"}</Alert>
             <h2>Alterar senha</h2>
             <SACEInput
                 label={'Login'}
@@ -77,4 +79,4 @@ class EditarSenhaProfessor extends Component {
     }
 }
 
-export default EditarSenhaProfessor;
+export default EditarSenha;

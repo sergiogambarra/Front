@@ -26,7 +26,7 @@ export default function ModalConfirmarRequisicao({ enviarRequisicao, requisicao,
     } = requisicao;
     
     return (
-        <Modal show={showModal}>
+        <Modal show={showModal} onHide={() =>setShowModal(false)}>
             <Modal.Header closeButton>
             <Modal.Title>Confirmar requisição?</Modal.Title>
             </Modal.Header>
@@ -62,14 +62,9 @@ export default function ModalConfirmarRequisicao({ enviarRequisicao, requisicao,
                         </div>
                     }
                 </>
-            </Modal.Body>
-            <Modal.Footer>
-            <Button variant="primary" onClick={() => enviarRequisicao()}>
-                Salvar
-            </Button>
-            <Button variant="danger" onClick={() => setShowModal(false)}>
-                Cancelar
-            </Button>
+            </Modal.Body >
+            <Modal.Footer  >
+            <Button variant="primary" onClick={() => enviarRequisicao()}>  Salvar   </Button>
             </Modal.Footer>
         </Modal>
     );

@@ -10,7 +10,7 @@ export default function CursoSelect({ onChange, onError, value }) {
     useEffect(() => {
         const fetchData = async () => {
             const result = await get("cursos/");
-            setCursos(result);
+            setCursos(result);        
         } 
         fetchData();
     }, []);
@@ -20,7 +20,7 @@ export default function CursoSelect({ onChange, onError, value }) {
             label={'Curso'}
             value={value || defaultSelect}
             selectedOption={null}
-            options={cursos}
+            options={ cursos }
             onChange={onChange}
             onError={onError}
             onErrorMessage={'O campo curso é obrigatório.'}

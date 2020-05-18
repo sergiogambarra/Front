@@ -29,7 +29,6 @@ class ListaAlunos extends Component {
     listarAlunos() {
         get(`usuarios/pages?tipo=ALUNO&page=${this.state.page}&size=6`).then((retorno) => {
             if (retorno) this.setState({ alunos: retorno.content, last: retorno.last, first: retorno.first, total: retorno.totalPages })
-
             this.setState({ alunos: retorno })
         })
     }

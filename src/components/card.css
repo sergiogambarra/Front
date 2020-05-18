@@ -1,3 +1,4 @@
+
 .requisicao {
     height: 100%;
     border: 2px solid #007BFF;
@@ -5,7 +6,7 @@
 }
 .requisicao:hover{
     cursor: pointer;
-    border: 2px solid red;
+    border: 2px solid rgb(1, 1, 7);
     opacity: 0.8;
 }
 .requisicao p {
@@ -19,4 +20,7 @@
 .box-card{
     margin-bottom: 2.5%;
     height: 100%;
+    padding-left: 0% !important;
 }
+
+

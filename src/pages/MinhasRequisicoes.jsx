@@ -9,7 +9,7 @@ import { InputGroup, Dropdown, DropdownButton } from 'react-bootstrap';
 class MinhasRequisicoes extends Component {
   constructor(props) {
     super();
-    this.state = { requisicoes: "", escolha: "", id: "", user: {}, nomePesquisa: "Pesquisar", alunos: []}
+    this.state = { requisicoes: "", escolha: "", id: "", user: {}, nomePesquisa: "Pesquisar", alunos: [] }
   }
 
   componentDidMount() {
@@ -20,7 +20,6 @@ class MinhasRequisicoes extends Component {
     this.setState({ user })
 
   }
-
 
   mudaNomePesquisa(e) {
     this.setState({ nomePesquisa: e.target.text });
@@ -34,7 +33,7 @@ class MinhasRequisicoes extends Component {
 
   render() {
     return (
-      <Container>
+      <>
         <TituloPagina titulo={'Visualizar Requisições'} />
 
         <div class="custom-control custom-radio custom-control-inline">
@@ -72,10 +71,10 @@ class MinhasRequisicoes extends Component {
               <Dropdown.Divider />
               <Dropdown.Item href="#">Separated link</Dropdown.Item>
             </DropdownButton>
-            <input list="pesquisa" name="pesquisa"/>
+            <input list="pesquisa" name="pesquisa" />
             {console.log(this.state.guarda)}
             <datalist id="pesquisa">
-              {this.state.alunos.map((a) => <option id={a.id} value={"ID :  " +a.id+"  "+ a.perfil.nome} />)}
+              {this.state.alunos.map((a) => <option id={a.id} value={"ID :  " + a.id + "  " + a.perfil.nome} />)}
             </datalist>
           </div>
         }
@@ -85,11 +84,10 @@ class MinhasRequisicoes extends Component {
 
         {this.state.requisicoes === "aproveitamento" ?
           <TabelaAproveitamentos user={this.state.user} /> : this.state.requisicoes === "certificacao" ?
-            <TabelaCertificacoes user={this.state.user} /> :
-            ""
-        }</Container>
+            <TabelaCertificacoes user={this.state.user} /> : ""} <br /><br />
 
-    );
+      </>);
+
   }
 }
 export default MinhasRequisicoes;

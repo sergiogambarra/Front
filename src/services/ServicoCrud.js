@@ -9,6 +9,10 @@ const get = async (end) => {
         console.log(`${end.toUpperCase()}Service/get${baseURL}/${end}:`, error);
     }
 }
+const getEmail = async (end) => {
+        return await axios.get(`${baseURL}/${end}`).then((response) => response).catch((error)=> error.response);
+}
+
 
 const getId = async (end, id) => {
     try {
@@ -108,6 +112,7 @@ export {
     post,
     put,
     del,
+    getEmail,
     delDisciplinaCurso,
     getNomeCurso,
     getIdDisciplina,

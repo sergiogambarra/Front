@@ -18,7 +18,8 @@ import TelaTransicao from './pages/TelaTransicao';
 import ListaProfessor from './pages/Professor/ListaProfessor';
 import ListaServidor from './../src/pages/Servidor/ListaServidor';
 import CadastroCurso from './pages/cadastros/CadastroCurso';
-import EditarSenhaProfessor from './pages/Professor/EditarSenhaProfessor';
+import EditarSenha from './pages/Professor/EditarSenha';
+import './components/card.css';
 
 function App() {
   const [userData, setUserData] = useState(null);
@@ -36,8 +37,8 @@ function App() {
           <Route path="/login" render={({ history }) => <LoginForm history={history} setUserData={setUserData} />} />
           <Route path="/cadastro-aluno" component={CadastroPerfilAluno} />
           <PrivateRoute exact path="/tela-transicao/" component={TelaTransicao} />
-          <PrivateRoute exact path="/aluno-requisicoes/" component={RequisicaoAluno} />
           <PrivateRoute exact path="/minhas-requisicoes" component={MinhasRequisicoes} />
+          <PrivateRoute exact path="/aluno-requisicoes/" component={RequisicaoAluno} />
           <PrivateRoute exact path="/nova-requisicao" component={()=><NovaRequisicao user={userData}/>} />
           <PrivateRoute exact path="/cadastrar-disciplina" component={CadastrarDisciplinas} />
           <PrivateRoute exact path="/cadastro-servidor" component={CadastroPerfilServidor} />
@@ -48,7 +49,7 @@ function App() {
           <PrivateRoute exact path="/lista-alunos" component={ListaAlunos} />
           <PrivateRoute exact path="/lista-professor" component={ListaProfessor} />
           <PrivateRoute exact path="/lista-servidor" component={ListaServidor} />
-          <PrivateRoute exact path="/troca-senha" component={EditarSenhaProfessor} />
+          <PrivateRoute exact path="/troca-senha" component={EditarSenha} />
           <Route path="*" component={() => <h1>Page not found</h1>} />
         </Switch>
       </div>

@@ -89,15 +89,15 @@ class Parecer extends Component {
         console.log(this.state.id);
 
         if (this.state.user && this.state.user.perfil.tipo === "SERVIDOR") {
+            console.log("Gy8uig7i87iu");
+            
             put("requisicoes", this.props.match.params.id, {
                 tipo: this.state.tipo,
                 deferido: this.state.deferido,
                 parecerServidor: this.state.atualizarParecer ? this.state.atualizarParecer : this.state.parecerServidor,
                 parecerCoordenador: this.state.parecerCoordenador,
                 parecerProfessor: this.state.parecerProfessor,
-                professor: {
-                    id: this.state.id
-                }
+               
             }).then(() => { this.setState({ modal: false }) })
         } else if (this.state.user && this.state.user.perfil.coordenador === true) {
 
@@ -275,8 +275,7 @@ class Parecer extends Component {
                     <Modal.Body>Parecer : &nbsp;{this.state.atualizarParecer === "" ? this.state.parecer : this.state.atualizarParecer}</Modal.Body>
                     <Modal.Body>Status : &nbsp;{this.state.deferido}</Modal.Body>
                     <Modal.Footer>
-                        <Link to="/minhas-requisicoes">      <Button onClick={(e) => this.atualizar()} variant="primary" className="btn btn-primary m-1" >Salvar</Button></Link>
-                        <Button variant="danger" onClick={() => this.setState({ modal: false })}>  Fechar </Button>
+                        <Link to="/minhas-requisicoes"> <Button onClick={(e) => this.atualizar()} variant="primary" className="btn btn-primary m-1" >Salvar</Button></Link>
                     </Modal.Footer>
                 </Modal>
 
@@ -287,7 +286,6 @@ class Parecer extends Component {
                         <input type="file" onChange={(e)=>{
                              this.getProva(e);
                              console.log(this.state.prova)
-                             
                              }
                             }/>
 

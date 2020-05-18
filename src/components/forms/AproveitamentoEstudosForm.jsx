@@ -110,6 +110,7 @@ export default function CertificacaoConhecimentosForm() {
                 value={curso}
                 onChange={setCurso}
                 onError={cursoInvalido}
+                
             />
 
             <DisciplinaSolicitadaSelect
@@ -133,8 +134,9 @@ export default function CertificacaoConhecimentosForm() {
                 anexos={anexos}
                 setAnexos={setAnexos}
                 onError={anexosInvalidos}
-            />
-            <Form.Text style={{textAlign:"center"}}className="text-danger">{"Só pode anexar arquivos com extensão em pdf, jpeg, jpg e png de até 8 Mb"} </Form.Text>
+            /> <br />
+            <Form.Text style={{textAlign:"center"}}className="text-danger">{"Só pode anexar arquivos com extensão em pdf, jpeg, jpg e png de até 4 Mb"} </Form.Text>
+            <br />
             <Form.Group className="d-flex justify-content-end">
                 <Button variant="primary" className="btn btn-primary m-1" onClick={fazerRequisicao}>
                     Enviar

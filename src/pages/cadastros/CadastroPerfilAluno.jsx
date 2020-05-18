@@ -207,8 +207,7 @@ class CadastroPerfilAluno extends Component {
                             <Modal.Body>Confira seus dados! Você não poderá alterá-los depois de salvar</Modal.Body>
                             <Modal.Footer>
                                 <Button onClick={() => this.enviarCadastro()} className="btn btn-primary m-1" >Salvar</Button>
-                                <Button variant="danger" onClick={() => this.setState({ modalShow: false })}>  Fechar </Button>
-                            </Modal.Footer>
+                                </Modal.Footer>
                         </Modal>
                         <Link to="/login"> <Button variant="danger" className="btn btn-primary m-1" >Voltar </Button></Link>
                         <Button onClick={() => this.limpar()} className="btn btn-danger m-1" >Limpar</Button>
