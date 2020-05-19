@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import TituloPagina from '../components/TituloPagina';
 import TabelaAproveitamentos from '../components/TabelaAproveitamentos';
 import TabelaCertificacoes from '../components/TabelaCertificacoes';
-import Container from 'react-bootstrap/Container'
 import { get } from '../services/ServicoCrud'
 import { InputGroup, Dropdown, DropdownButton } from 'react-bootstrap';
 
@@ -36,20 +35,20 @@ class MinhasRequisicoes extends Component {
       <>
         <TituloPagina titulo={'Visualizar Requisições'} />
 
-        <div class="custom-control custom-radio custom-control-inline">
-          <input type="radio" id="aproveitamento" name="customRadioInline1" class="custom-control-input"
+        <div className="custom-control custom-radio custom-control-inline">
+          <input type="radio" id="aproveitamento" name="customRadioInline1" className="custom-control-input"
             onChange={(e) => this.setState({ requisicoes: e.target.id, cont: "" })} />
-          <label id="mudarCor" class="custom-control-label" for="aproveitamento">Aproveitamento de estudos</label>
+          <label id="mudarCor" className="custom-control-label" htmlFor="aproveitamento">Aproveitamento de estudos</label>
         </div>
-        <div class="custom-control custom-radio custom-control-inline">
-          <input type="radio" id="certificacao" name="customRadioInline1" class="custom-control-input"
+        <div className="custom-control custom-radio custom-control-inline">
+          <input type="radio" id="certificacao" name="customRadioInline1" className="custom-control-input"
             onChange={(e) => this.setState({ requisicoes: e.target.id, cont: "" })} />
-          <label id="mudarCor" class="custom-control-label" for="certificacao">Certificação de conhecimentos</label>
+          <label id="mudarCor" className="custom-control-label" htmlFor="certificacao">Certificação de conhecimentos</label>
         </div>
-        <div class="custom-control custom-radio custom-control-inline">
-          <input type="radio" id="pesquisar" name="customRadioInline1" class="custom-control-input"
+        <div className="custom-control custom-radio custom-control-inline">
+          <input type="radio" id="pesquisar" name="customRadioInline1" className="custom-control-input"
             onChange={(e) => this.setState({ requisicoes: e.target.id, cont: "" })} />
-          <label id="mudarCor" class="custom-control-label" for="pesquisar">Pesquisar</label>
+          <label id="mudarCor" className="custom-control-label" htmlFor="pesquisar">Pesquisar</label>
         </div>
         <br /><br />
         {this.state.requisicoes === "pesquisar" &&

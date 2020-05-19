@@ -25,6 +25,7 @@ class ListaAlunos extends Component {
             showAlert: false,
             variantAlert: "",msgNome:"",msgMatricula:"",msgEmail:""
         }
+        
     }
     listarAlunos() {
         get(`usuarios/pages?tipo=ALUNO&page=${this.state.page}&size=6`).then((retorno) => {

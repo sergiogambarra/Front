@@ -5,28 +5,29 @@ const postRequisicao = async (requisicao) => {
     return await post("requisicoes/", requisicao).then(e=> e).catch(error => error);
 }
 
-const getCertificacoes = async (user) => {
-    if(user.user.perfil.coordenador === true){
-        return await get("requisicoes/certificacoes/");
+const getCertificacoes = async (user,page) => {
+    if(user.perfil.coordenador === true){
+        return await get(`requisicoes/certificacoes?page=${page}&size=6`);       
     }else
-    if (user.user.permissao === "PROFESSOR") {
-        return await get("requisicoes/professor/"+user.user.id+"?tipo=certificacao");
+    if (user.permissao === "PROFESSOR") {
+        return await get("requisicoes/professor/"+user.id+"?tipo=certificacao");
     } else  {
-        return await get("requisicoes/certificacoes/");
+        return await get(`requisicoes/certificacoes?page=${page}&size=6`);
     }
 }
 
-const getAproveitamentos = async (user) => {
+const getAproveitamentos = async (user,page) => {
     if(user.permissao === "ALUNO"){
         return await get(`requisicoes/alunos/${user.id}`);
     }
     if(user.perfil.coordenador === true){
-        return await get("requisicoes/aproveitamentos/");
+        return await get(`requisicoes/aproveitamentos?page=${page}&size=6`);       
     }else
     if (user.permissao === "PROFESSOR") {
-        return await get("requisicoes/professor/"+user.id+"?tipo=aproveitamento");
+        return await get("requisicoes/professor/"+user.id+"?tipo=certificacao");
     } else  {
-        return await get("requisicoes/aproveitamentos/");
+       return await get(`requisicoes/aproveitamentos?page=${page}&size=6`);
+        
     }
 }
 
