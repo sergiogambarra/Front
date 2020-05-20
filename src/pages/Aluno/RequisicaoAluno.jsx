@@ -17,8 +17,9 @@ class RequisicaoAluno extends Component {
 
     async pesquisarNomeSolicitante() {
         const aluno = await get(`usuarios/auth/`);
-        get(`requisicoes/solicitante/${aluno.id}`).then((retorno) => {
-            this.setState({ requisicoes: retorno, last: retorno.last, first: retorno.first, total: retorno.totalPages, aluno, mostraTable: true });
+        get(`requisicoes/alunos/${aluno.id}?page=${this.state.page}&size=6`).then((retorno) => {
+            console.log(retorno);
+            this.setState({ requisicoes: retorno.content, last: retorno.last, first: retorno.first, total: retorno.totalPages, aluno, mostraTable: true });
         })
     }
 
@@ -65,12 +66,13 @@ class RequisicaoAluno extends Component {
                                     </tr>
                                 )}
                         </tbody>
-                    </table> </>}
+                    </table>  <hr />
+                </>}
                 {
                     <>
-                        {this.state.first || <button id="-" onClick={(e) => this.control(e)}>Anterior</button>}
-                        &nbsp;&nbsp;
                         {this.state.last || <button id="+" onClick={(e) => this.control(e)}>Próximo</button>}
+                        &nbsp;&nbsp;
+                        {this.state.first || <button id="-" onClick={(e) => this.control(e)}>Anterior</button>}
 
                         <span style={{ float: "right" }}>Página  {this.state.page + 1} / {this.state.total}</span>
                     </>

@@ -19,6 +19,7 @@ export default function CertificacaoConhecimentosForm({ user }) {
     const [formacaoAtividadeAnteriorInvalida, setFormacaoAtividadeAnteriorInvalida] = useState(false);
 
     const [discSolicitada, setDiscSolicitada] = useState('');
+    const [msgAtividadeArterior, setAtividadeAnterior] = useState('');
     const [discSolicitadaInvalida, setdiscSolicitadaInvalida] = useState(false);
 
     const [anexos, setAnexos] = useState([]);
@@ -43,11 +44,19 @@ export default function CertificacaoConhecimentosForm({ user }) {
 
     const camposInvalidos = () => {
         if (!curso) setCursoInvalido(true);
-        if (!formacaoAtividadeAnterior) setFormacaoAtividadeAnteriorInvalida(true);
+       if(anexos.length===0){setAnexosInvalidos(true)}
         if (!discSolicitada) setdiscSolicitadaInvalida(true);
         if (!anexos && !anexos.length) setAnexosInvalidos(true);
+        if(formacaoAtividadeAnterior.length>45){
+            setFormacaoAtividadeAnteriorInvalida(true)
+            setAtividadeAnterior("Limite máximo de 45 caracteres para cadastro ")
+        }
+        if(formacaoAtividadeAnterior.trim()===""){
+            setFormacaoAtividadeAnteriorInvalida(true)
+            setAtividadeAnterior("Campo formação ou atividade é obrigatório ")
+        }
 
-        return (!curso || !formacaoAtividadeAnterior || !discSolicitada || !anexos.length);
+        return (!curso || !formacaoAtividadeAnterior || !discSolicitada || !anexos.length||formacaoAtividadeAnterior.trim()===""||formacaoAtividadeAnterior.length>45);
     }
 
     const limparCampos = () => {
@@ -127,13 +136,14 @@ export default function CertificacaoConhecimentosForm({ user }) {
                 value={formacaoAtividadeAnterior}
                 setFormacaoAtividadeAnterior={setFormacaoAtividadeAnterior}
                 onError={formacaoAtividadeAnteriorInvalida}
-                onErrorMessage={'O campo formação ou atividade é obrigatório.'}
+                onErrorMessage={msgAtividadeArterior}
             />
 
             <AnexarArquivosInput
                 anexos={anexos}
                 setAnexos={setAnexos}
                 onError={anexosInvalidos}
+                onErrorMessage={"Obrigatório inserir pelo menos um anexo"}
             /> <br />
             <Form.Text style={{ textAlign: "center" }} className="text-danger">{"Só pode anexar arquivos com extensão em pdf, jpeg, jpg e png de até 4 Mb"} </Form.Text>
             <br />

@@ -26,6 +26,7 @@ export default function CertificacaoConhecimentosForm() {
     const [id, setId] = useState("");
     const [alert, setAlert] = useState(null);
     const [requisicao, setRequisicao] = useState(null);
+    const [msgDisciplinaAnterior, setMsgDisciplinaAnterior] = useState("");
 
     useEffect(() => setCursoInvalido(false), [curso]);
     useEffect(() => setDiscSolicitadaInvalida(false), [discSolicitada]);
@@ -41,12 +42,22 @@ export default function CertificacaoConhecimentosForm() {
     })
 
     const camposInvalidos = () => {
+       console.log(anexos.length);
+       if(anexos.length === 0){setAnexosInvalidos(true)}
         if (!curso) setCursoInvalido(true);
-        if (!disciplinasCursadasAnterior) setDisciplinasCursadasAnteriorInvalida(true);
         if (!discSolicitada) setDiscSolicitadaInvalida(true);
         if (!anexos && !anexos.length) setAnexosInvalidos(true);
-
-        return (!curso || !disciplinasCursadasAnterior || !discSolicitada || !anexos.length);
+        if (disciplinasCursadasAnterior.length > 45) {
+            setDisciplinasCursadasAnteriorInvalida(true)
+            setMsgDisciplinaAnterior("Limite máximo de 45 caracteres para cadastro ")
+            
+        }
+        if(disciplinasCursadasAnterior.trim()===""){
+            setDisciplinasCursadasAnteriorInvalida(true)
+            setMsgDisciplinaAnterior("Campo disciplina cursada é obrigatório")
+            
+        }
+        return (!curso || !disciplinasCursadasAnterior || !discSolicitada || !anexos.length||disciplinasCursadasAnterior.length>45||disciplinasCursadasAnterior.trim()==="");
     }
 
     const limparCampos = () => {
@@ -61,8 +72,8 @@ export default function CertificacaoConhecimentosForm() {
 
     const fazerRequisicao = async () => {
         if (camposInvalidos()) return;
-
-        setRequisicao({
+       
+               setRequisicao({
             curso,
             disciplinasCursadasAnterior,
             tipo: "aproveitamento",
@@ -81,22 +92,22 @@ export default function CertificacaoConhecimentosForm() {
 
     const enviarRequisicao = () => {
         setShowModal(false);
-
         postRequisicao(requisicao)
-        .then((e)=>{
-            if(e.status === 201){
-             setAlert({
-                mensagem: "Requisição cadastrada com sucesso !",
-                tipo: 'success'
-             })}else{
-                setAlert({
-                    mensagem: 'ATENÇÃO requisição não cadastrada! '+e.data.message,
-                    tipo: 'danger'
-                 })
-             }
-        });
+            .then((e) => {
+                if (e.status === 201) {
+                    setAlert({
+                        mensagem: "Requisição cadastrada com sucesso !",
+                        tipo: 'success'
+                    })
+                } else {
+                    setAlert({
+                        mensagem: 'ATENÇÃO requisição não cadastrada! ' + e.data.message,
+                        tipo: 'danger'
+                    })
+                }
+            });
 
-       
+
         limparCampos();
     }
 
@@ -110,7 +121,7 @@ export default function CertificacaoConhecimentosForm() {
                 value={curso}
                 onChange={setCurso}
                 onError={cursoInvalido}
-                
+
             />
 
             <DisciplinaSolicitadaSelect
@@ -127,15 +138,16 @@ export default function CertificacaoConhecimentosForm() {
                 value={disciplinasCursadasAnterior}
                 onChange={({ target }) => setDisciplinasCursadasAnterior(target.value)}
                 onError={disciplinasCursadasAnteriorInvalida}
-                onErrorMessage={'O campo disciplina anterior é obrigatório.'}
+                onErrorMessage={msgDisciplinaAnterior}
             />
 
             <AnexarArquivosInput
                 anexos={anexos}
                 setAnexos={setAnexos}
                 onError={anexosInvalidos}
+                onErrorMessage={"Obrigatório inserir pelo menos um anexo"}
             /> <br />
-            <Form.Text style={{textAlign:"center"}}className="text-danger">{"Só pode anexar arquivos com extensão em pdf, jpeg, jpg e png de até 4 Mb"} </Form.Text>
+            <Form.Text style={{ textAlign: "center" }} className="text-danger">{"Só pode anexar arquivos com extensão em pdf, jpeg, jpg e png de até 4 Mb"} </Form.Text>
             <br />
             <Form.Group className="d-flex justify-content-end">
                 <Button variant="primary" className="btn btn-primary m-1" onClick={fazerRequisicao}>

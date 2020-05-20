@@ -49,9 +49,9 @@ class ListaProfessor extends Component {
     }
     async editar(e) {
 
-        if (this.state.nome.trim() === "" || this.state.nome === null ? this.setState({ nomeInvalido: true,msgNome:"Você não inseriu nome corretamente" }) : this.setState({ nomeInvalido: false })) { }
-        if (this.state.siape === "" || this.state.siape === null || this.state.siape <= 0 ? this.setState({ siapeInvalido: true ,msgSiape:"Você não inseriu SIAPE corretamente"}) : this.setState({ siapeInvalido: false })) { }
-        if (this.state.email === "" || this.state.email === null || this.state.email.indexOf("@", 0) === -1 ? this.setState({ emailInvalido: true ,msgEmail:"Você não inseriu email corretamente"}) : this.setState({ emailInvalido: false })) { }
+        if (this.state.nome.trim() === "" || this.state.nome === null ? this.setState({ nomeInvalido: true, msgNome: "Você não inseriu nome corretamente" }) : this.setState({ nomeInvalido: false })) { }
+        if (this.state.siape === "" || this.state.siape === null || this.state.siape <= 0 ? this.setState({ siapeInvalido: true, msgSiape: "Você não inseriu SIAPE corretamente" }) : this.setState({ siapeInvalido: false })) { }
+        if (this.state.email === "" || this.state.email === null || this.state.email.indexOf("@", 0) === -1 ? this.setState({ emailInvalido: true, msgEmail: "Você não inseriu email corretamente" }) : this.setState({ emailInvalido: false })) { }
         if (this.state.nome.length > 40) {
             this.setState({ nomeInvalido: true, msgNome: "Limite máximo de cadastro de 40 caracteres" })
             return
@@ -150,9 +150,9 @@ class ListaProfessor extends Component {
             <hr />
             {
                 <>
-                    {this.state.first || <button id="-" onClick={(e) => this.control(e)}>Anterior</button>}
+                    {this.state.last || <button id="+" onClick={(e) => this.control(e)}>Próximo</button>}
                     &nbsp;&nbsp;
-                            {this.state.last || <button id="+" onClick={(e) => this.control(e)}>Próximo</button>}
+                    {this.state.first || <button id="-" onClick={(e) => this.control(e)}>Anterior</button>}
 
                     <span style={{ float: "right" }}>Página  {this.state.page + 1} / {this.state.total}</span>
                 </>

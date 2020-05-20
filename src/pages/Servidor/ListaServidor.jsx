@@ -134,9 +134,9 @@ class ListaServidor extends Component {
             </table>
             {
                 <>
-                    {this.state.first || <button id="-" onClick={(e) => this.control(e)}>Anterior</button>}
+                    {this.state.last || <button id="+" onClick={(e) => this.control(e)}>Próximo</button>}
                     &nbsp;&nbsp;
-                            {this.state.last || <button id="+" onClick={(e) => this.control(e)}>Próximo</button>}
+                    {this.state.first || <button id="-" onClick={(e) => this.control(e)}>Anterior</button>}
 
                     <span style={{ float: "right" }}>Página  {this.state.page + 1} / {this.state.total}</span>
                 </>

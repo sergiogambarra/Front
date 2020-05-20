@@ -23,9 +23,9 @@ class ListaAlunos extends Component {
             total: 0,
             msgAlert: "",
             showAlert: false,
-            variantAlert: "",msgNome:"",msgMatricula:"",msgEmail:""
+            variantAlert: "", msgNome: "", msgMatricula: "", msgEmail: ""
         }
-        
+
     }
     listarAlunos() {
         get(`usuarios/pages?tipo=ALUNO&page=${this.state.page}&size=6`).then((retorno) => {
@@ -59,9 +59,9 @@ class ListaAlunos extends Component {
     }
     editar(e) {
 
-        if (this.state.nome.trim() === "" || this.state.nome === null ? this.setState({ nomeInvalido: true,msgNome:"Você não inseriu o seu nome corretamente!" }) : this.setState({ nomeInvalido: false })) { }
-        if (this.state.matricula === "" || this.state.matricula === null || this.state.matricula <= 0 ? this.setState({ matriculaInvalida: true ,msgMatricula:"Você não inseriu matrícula corretamente"}) : this.setState({ matriculaInvalida: false })) { }
-        if (this.state.email === "" || this.state.email === null || this.state.email.indexOf("@", 0) === -1 ? this.setState({ emailInvalido: true ,msgEmail:"Você não inseriu email corretamente"}) : this.setState({ emailInvalido: false })) { }
+        if (this.state.nome.trim() === "" || this.state.nome === null ? this.setState({ nomeInvalido: true, msgNome: "Você não inseriu o seu nome corretamente!" }) : this.setState({ nomeInvalido: false })) { }
+        if (this.state.matricula === "" || this.state.matricula === null || this.state.matricula <= 0 ? this.setState({ matriculaInvalida: true, msgMatricula: "Você não inseriu matrícula corretamente" }) : this.setState({ matriculaInvalida: false })) { }
+        if (this.state.email === "" || this.state.email === null || this.state.email.indexOf("@", 0) === -1 ? this.setState({ emailInvalido: true, msgEmail: "Você não inseriu email corretamente" }) : this.setState({ emailInvalido: false })) { }
         if (this.state.nome.length > 40) {
             this.setState({ nomeInvalido: true, msgNome: "Limite máximo de cadastro de 40 caracteres" })
             return
@@ -152,9 +152,9 @@ class ListaAlunos extends Component {
                 <hr />
                 {
                     <>
-                        {this.state.first || <button id="-" onClick={(e) => this.control(e)}>Anterior</button>}
+                        {this.state.last || <button id="+" onClick={(e) => this.control(e)}>Próximo</button>}
                         &nbsp;&nbsp;
-                            {this.state.last || <button id="+" onClick={(e) => this.control(e)}>Próximo</button>}
+                        {this.state.first || <button id="-" onClick={(e) => this.control(e)}>Anterior</button>}
 
                         <span style={{ float: "right" }}>Página  {this.state.page + 1} / {this.state.total}</span>
                     </>

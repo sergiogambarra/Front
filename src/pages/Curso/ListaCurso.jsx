@@ -114,9 +114,9 @@ export default class ListaCursos extends Component {
                 <hr />
                 {
                     <>
-                        {this.state.first || <button id="-" onClick={(e) => this.control(e)}>Anterior</button>}
-                        &nbsp;&nbsp;
                             {this.state.last || <button id="+" onClick={(e) => this.control(e)}>Próximo</button>}
+                        &nbsp;&nbsp;
+                        {this.state.first || <button id="-" onClick={(e) => this.control(e)}>Anterior</button>}
 
                         <span style={{ float: "right" }}>Página  {this.state.page + 1} / {this.state.total}</span>
                     </>
