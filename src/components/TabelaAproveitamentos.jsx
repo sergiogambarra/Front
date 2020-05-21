@@ -20,7 +20,6 @@ export default function ({ user }) {
     setIsLoading(true);
     getAproveitamentos(user, page)
       .then(result => {
-        console.log(result);
         setRequisicoes(result.content);
         setFirst(result.first);
         setLast(result.last);
@@ -63,9 +62,9 @@ export default function ({ user }) {
       <Row>
         {
           <>
-            {first || <button id="-" onClick={(e) => control(e)}>Anterior</button>}
-                                &nbsp;&nbsp;
         {last || <button id="+" onClick={(e) => control(e)}>Próximo</button>}
+                                &nbsp;&nbsp;
+            {first || <button id="-" onClick={(e) => control(e)}>Anterior</button>}
           </>
 
         }

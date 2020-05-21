@@ -59,9 +59,9 @@ export default function ({user}) {
       <Row>
         {
           <>
-            {first || <button id="-" onClick={(e) => control(e)}>Anterior</button>}
-                                &nbsp;&nbsp;
         {last || <button id="+" onClick={(e) => control(e)}>Próximo</button>}
+                                &nbsp;&nbsp;
+            {first || <button id="-" onClick={(e) => control(e)}>Anterior</button>}
           </>
 
         }
