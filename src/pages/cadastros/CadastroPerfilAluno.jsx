@@ -28,7 +28,8 @@ class CadastroPerfilAluno extends Component {
             modalShow: false,
             alert: false,
             msgSenhaNaoConfere: false,
-            msgNome: "", msgPassword: ""
+            msgNome: "", msgPassword: "",
+            msgAlert:"",variantAlert:""
 
         }
     }
@@ -56,10 +57,12 @@ class CadastroPerfilAluno extends Component {
 
     }
 
+
     async verifica() {
         await getPesquisaLogin(`usuarios/pesquisa/${this.state.userName}`).then((retorno) => {
             this.setState({ loginPesquisa: retorno && retorno.username })
         });
+        this.comparaData()
         if (this.state.userName === "") {
             this.setState({ userNameInvalido: true, msgLogin: "Você não inseriu login corretamente" })
             return
@@ -69,12 +72,13 @@ class CadastroPerfilAluno extends Component {
         } else if (this.state.userName.length < 6 || this.state.userName.length > 10) {
             this.setState({ userNameInvalido: true, msgLogin: "Escolha login entre 6 e 10 caracteres" })
             return
-        } if (this.state.verificaSenhaInvalido !== "") { this.setState({ msgLogin: "" }) }
+        }
+        if (this.state.verificaSenhaInvalido !== "") { this.setState({ msgLogin: "" }) }
         if (this.state.nome === "" ? this.setState({ nomeInvalido: true, msgNome: "Você não inseriu o seu nome corretamente!" }) : this.setState({ nomeInvalido: false })) { }
         if (this.state.email === "" || this.state.email.indexOf("@", 0) === -1 ? this.setState({ emailInvalido: true, msgEmail: "Você não inseriu email válido" }) : this.setState({ emailInvalido: false })) { }
         if (this.state.matricula === "" || this.state.matricula <= 0 ? this.setState({ matriculaInvalida: true, msgMatricula: "Campo matrícula é campo obrigatório " }) : this.setState({ matriculaInvalida: false })) { }
-        if (this.state.dataIngresso === "" ? this.setState({ dataIngressoInvalido: true }) : this.setState({ dataIngressoInvalido: false })) { }
-        if (this.state.password === "" ? this.setState({ passwordInvalido: true ,msgPassword:"Campo senha não pode ficar em branco"}) : this.setState({ passwordInvalido: false })) { }
+        if (this.state.dataIngresso === "" || this.comparaData() === false? this.setState({ dataIngressoInvalido: true }) : this.setState({ dataIngressoInvalido: false })) { }
+        if (this.state.password === "" ? this.setState({ passwordInvalido: true, msgPassword: "Campo senha não pode ficar em branco" }) : this.setState({ passwordInvalido: false })) { }
         if (this.state.password !== this.state.verificaSenha) {
             this.setState({ verificaSenhaInvalido: true })
         } else if (this.state.verificaSenha === "") {
@@ -100,7 +104,7 @@ class CadastroPerfilAluno extends Component {
             return
         }
         if (this.state.nome !== "" && this.state.email !== "" && this.state.email.indexOf("@", 0) > -1 && this.state.dataIngresso !== "" && this.state.userName !== "" &&
-            this.state.password !== "" && this.state.verificaSenha !== "" && this.state.matricula > 0 && this.state.verificaSenha === this.state.password) { this.setState({ modalShow: true }) } else { return }
+            this.state.password !== "" && this.state.verificaSenha !== "" && this.state.matricula > 0 && this.state.verificaSenha === this.state.password && this.comparaData()) { this.setState({ modalShow: true }) } else { return }
 
     }
     async  enviarCadastro() {
@@ -113,23 +117,40 @@ class CadastroPerfilAluno extends Component {
             email: this.state.email,
             dataIngresso: this.state.dataIngresso
         }).then((e) => {
-            this.setState({ modalShow: false, alert: true })
-            setTimeout(() => {
-                this.setState({ alert: false })
-            }, 2000)
-            this.limpar()
-            window.location.href = ("/login")
+            if(e.status === 400){
+                this.setState({ modalShow:false ,alert: true , variantAlert:"danger",msgAlert:e.data.message})
+                return
+            }else{
+                this.setState({ modalShow: false, alert: true ,variantAlert:"success",msgAlert:"Cadastrado com sucesso"})
+                setTimeout(() => {
+                    this.setState({ alert: false })
+                }, 5000 ,
+                window.location.href = ("/login")
+                )
+                this.limpar()
+               
+            }
+            
         })
     }
 
 
+    comparaData() {
+        console.log(this.state.dataIngresso);
+        let dataHoje = new Date();
+        this.setState({ dataIngresso: new Date(this.state.dataIngresso) });
+        return this.state.dataIngresso > dataHoje ? false : true;
+    }
+
+
     render() {
+
         return (
             <div>
                 <Form.Group className="col-md-6 container">
                     <TituloPagina autoFocus titulo="Cadastro de Alunos" />
-                    <Alert key={"idx"} variant={"success"} show={this.state.alert}>
-                        Cadastrado com sucesso</Alert>
+                    <Alert key={"idx"} variant={this.state.variantAlert} show={this.state.alert}>
+        {this.state.msgAlert}</Alert>
                     <SACEInput
                         autoFocus={true}
                         label={'Nome'}
@@ -161,13 +182,13 @@ class CadastroPerfilAluno extends Component {
                     />
 
                     <SACEInput
+                        type={"date"}
                         label={'Data de Ingresso'}
                         value={this.state.dataIngresso}
                         placeholder={'Informe a data de Ingresso. '}
                         onChange={(e) => this.setState({ dataIngresso: e.target.value })}
                         onError={this.state.dataIngressoInvalido}
                         onErrorMessage={'Você não inseriu uma data válida!'}
-                        type={"date"}
                     />
                     <SACEInput
                         label={'Login'}
@@ -207,7 +228,7 @@ class CadastroPerfilAluno extends Component {
                             <Modal.Body>Confira seus dados! Você não poderá alterá-los depois de salvar</Modal.Body>
                             <Modal.Footer>
                                 <Button onClick={() => this.enviarCadastro()} className="btn btn-primary m-1" >Salvar</Button>
-                                </Modal.Footer>
+                            </Modal.Footer>
                         </Modal>
                         <Link to="/login"> <Button variant="danger" className="btn btn-primary m-1" >Voltar </Button></Link>
                         <Button onClick={() => this.limpar()} className="btn btn-danger m-1" >Limpar</Button>

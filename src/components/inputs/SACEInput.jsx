@@ -13,6 +13,7 @@ export default function SACEInput(props) {
         onErrorMessage,
         tipo,
         min,
+        max,
         className,
         disabled,
         size,
@@ -35,6 +36,7 @@ export default function SACEInput(props) {
                 className={className}
                 disabled={disabled}
                 sise={size}
+                max={max}
             />
             {onError && 
                 <Form.Text className="text-danger">

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Alert } from 'react-bootstrap';
 import { getCertificacoes } from '../services/RequisicaoService';
 import { Loading } from '../auxiliares/Load';
 import CardCertificacao from '../components/CardCertificacao';
@@ -10,7 +9,6 @@ import './tabelarequisicoes.css';
 
 export default function ({user}) {
   const [requisicoes, setRequisicoes] = useState([]);
-  const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(0);
   const [first, setFirst] = useState(false);
@@ -30,7 +28,6 @@ export default function ({user}) {
         setIsLoading(false);
       })
       .catch(error => {
-        setError(error);
         setIsLoading(false);
       });
   }, [user,page]);
@@ -44,8 +41,7 @@ export default function ({user}) {
   return (
     <Container>
       <Row style={{ textAlign: "center" }}>
-        <h5 style={{ margin: "2% auto" }}>Certificação de conhecimentos</h5>
-        {error && <Alert variant='danger'>Não foi possível carregar suas requisições.</Alert>}
+       {requisicoes.length>0 && <h5 style={{ margin: "2% auto" }}>Certificação de conhecimentos</h5>}
       </Row>
       <Row>
         {
@@ -57,7 +53,7 @@ export default function ({user}) {
         }
       </Row>
       <Row>
-        {
+        {requisicoes.length>0 &&
           <>
         {last || <button id="+" onClick={(e) => control(e)}>Próximo</button>}
                                 &nbsp;&nbsp;
@@ -65,7 +61,7 @@ export default function ({user}) {
           </>
 
         }
-        <span style={{ position: 'relative', left: '70%' }} >Página  {page + 1} / {total}</span>
+       { requisicoes.length>0 && <span style={{ position: 'relative', left: '70%' }} >Página  {page + 1} / {total}</span>}
       </Row>
     </Container>
   );

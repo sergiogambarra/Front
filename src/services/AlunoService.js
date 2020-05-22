@@ -5,7 +5,7 @@ import { baseURL } from '../enviroment';
 
 const postCadastroUsuario = async (usuario) => {
     if (!usuario) return;
-    return post("usuarios/alunos/", {
+    return await post("usuarios/alunos/", {
         password: usuario.password,
         userName: usuario.userName,
         email: usuario.email,
