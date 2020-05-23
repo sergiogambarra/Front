@@ -6,11 +6,15 @@ import { get } from '../services/ServicoCrud'
 import { Form, Button } from 'react-bootstrap';
 import { Link } from "react-router-dom";
 import SACEInput from '../components/inputs/SACEInput';
+import { format2 } from '../auxiliares/FormataData'
 
 class MinhasRequisicoes extends Component {
   constructor(props) {
     super();
-    this.state = { requisicoes: "", escolha: "", id: "", user: {}, alunos: [], pesquisa: false, selecionaPesquisa: "" }
+    this.state = {
+      requisicoes: "", escolha: "", id: "", user: {}, alunos: [], pesquisa: false, selecionaPesquisa: "", dataInicio: "", dataFinal: "",
+      dataFinalInvalda: false, dataInioInvalida: false
+    }
   }
 
   componentDidMount() {
@@ -32,6 +36,14 @@ class MinhasRequisicoes extends Component {
   async alunoPeloId(e) {
     await get(`usuarios/${e}`).then((retorno) => {
       this.setState({ user: retorno })
+    })
+  }
+
+  async pesquisaData() {
+    await get(`requisicoes/data/${format2(this.state.dataInicio)}/${format2(this.state.dataFinal)}/?page=0&size=6`).then((retorno) => {
+      this.setState({ user: retorno.content })
+      console.log(this.state.user);
+      
     })
   }
 
@@ -78,16 +90,16 @@ class MinhasRequisicoes extends Component {
                     <label for="Status">Status</label>
                   </div><br />
 
-                  { this.state.selecionaPesquisa &&<> <div className="custom-control custom-radio custom-control-inline">
+                  {this.state.selecionaPesquisa && <> <div className="custom-control custom-radio custom-control-inline">
                     <input type="radio" id="aproveitamento" name="customRadioInline1" className="custom-control-input"
                       onChange={(e) => this.setState({ requisicoes: e.target.id, cont: "" })} />
                     <label id="mudarCor" className="custom-control-label" htmlFor="aproveitamento">Aproveitamento de estudos</label>
                   </div>
-                  <div className="custom-control custom-radio custom-control-inline">
-                    <input type="radio" id="certificacao" name="customRadioInline1" className="custom-control-input"
-                      onChange={(e) => this.setState({ requisicoes: e.target.id, cont: "" })} />
-                    <label id="mudarCor" className="custom-control-label" htmlFor="certificacao">Certificação de conhecimentos</label>
-                  </div></>}<br /><br />
+                    <div className="custom-control custom-radio custom-control-inline">
+                      <input type="radio" id="certificacao" name="customRadioInline1" className="custom-control-input"
+                        onChange={(e) => this.setState({ requisicoes: e.target.id, cont: "" })} />
+                      <label id="mudarCor" className="custom-control-label" htmlFor="certificacao">Certificação de conhecimentos</label>
+                    </div></>}<br /><br />
                   <Button onClick={() => this.setState({ requisicoes: "", selecionaPesquisa: "" })}>Limpar pesquisa</Button>&nbsp;&nbsp;
             <Link to="/tela-transicao" onClick={() => this.setState({ pesquisa: false, id: "" })}><Button variant={"danger"}>Voltar</Button></Link>
                 </>
@@ -101,13 +113,24 @@ class MinhasRequisicoes extends Component {
             <SACEInput
               type={"date"}
               label={'Apartir do dia '}
-              value={this.state.dataIngresso}
+              value={this.state.dataInicio}
               placeholder={'pesquisa por data. '}
-              onChange={(e) => this.setState({ dataIngresso: e.target.value })}
-              onError={this.state.dataIngressoInvalido}
+              onChange={(e) => this.setState({ dataInicio: e.target.value })}
+              onError={this.state.dataInioInvalida}
               onErrorMessage={'Você não inseriu uma data válida!'}
             />
 
+
+            <SACEInput
+              type={"date"}
+              label={'Até o dia '}
+              value={this.state.dataFinal}
+              placeholder={'pesquisa por data. '}
+              onChange={(e) => this.setState({ dataFinal: e.target.value })}
+              onError={this.state.dataFinalInvalda}
+              onErrorMessage={'Você não inseriu uma data válida!'}
+            />
+            <Button onClick={()=>this.pesquisaData()}>Pesquisar</Button>
 
 
           </>

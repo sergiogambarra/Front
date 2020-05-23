@@ -16,6 +16,8 @@ const getCertificacoes = async (user,page) => {
         
         return await get("requisicoes/professor/"+user.id+"?tipo=certificacao");
     } else  {
+        console.log("YGyuigy");
+        
         return await get(`requisicoes/certificacoes?page=${page}&size=6`);
     }
 }

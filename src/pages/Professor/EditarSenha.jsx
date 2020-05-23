@@ -73,7 +73,7 @@ class EditarSenha extends Component {
                 onErrorMessage={'As senhas não conferem! Favor inserir a mesma senha!'}
                 type={"password"}
             /><br />
-            <Button variant="primary" onClick={() => this.editar()}>Salvar</Button>&nbsp;
+         <Button variant="primary" onClick={() => this.editar()}>Salvar</Button>&nbsp;
             <Button variant="danger" onClick={() => this.limpar()}>Limpar</Button>
         </div>);
     }
