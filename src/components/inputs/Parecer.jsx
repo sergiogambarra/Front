@@ -85,12 +85,7 @@ class Parecer extends Component {
     }
 
     async atualizar() {
-        if (this.state.id) { }
-        console.log(this.state.id);
-
         if (this.state.user && this.state.user.perfil.tipo === "SERVIDOR") {
-            console.log("Gy8uig7i87iu");
-            
             put("requisicoes", this.props.match.params.id, {
                 tipo: this.state.tipo,
                 deferido: this.state.deferido,
@@ -135,14 +130,12 @@ class Parecer extends Component {
     limpar() {
         this.state({ id: null })
     }
-
     getProva(e){
         this.setState({prova:e.target.files[0]})
     }
     render() {
         return (<div>
             <Form.Group className="col-md-6 container">
-
                 <TituloPagina titulo="Parecer da Requisição" />
                 <p > ID da requisição :<span style={{ color: "red" }}>&nbsp;{this.state.idRequisicao}</span> </p>
                 <SACEInput
@@ -154,13 +147,11 @@ class Parecer extends Component {
                     label={'Data de cadastro da requisição'}
                     value={this.state.dataRequisicao}
                     disabled={true}
-
                 />
                 <SACEInput
                     label={'Tipo'}
                     value={this.state.tipo === "aproveitamento" ? "APROVEITAMENTO DE ESTUDOS" : "CERTIFICAÇÃO DE CONHECIMENTOS"}
                     disabled={true}
-
                 />
                 <SACEInput
                     label={'Disciplina Solicitada'}
@@ -174,7 +165,6 @@ class Parecer extends Component {
                     label={'Status'}
                     value={this.state.deferido}
                     disabled={true} />
-
                 <Form.Group controlId="exampleForm.ControlTextarea1">
                     <Form.Label>Parecer do Coodenador</Form.Label>
                     <Form.Control as="textarea" rows="2"
