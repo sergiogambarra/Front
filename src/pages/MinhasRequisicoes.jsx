@@ -43,7 +43,7 @@ class MinhasRequisicoes extends Component {
 
   async pesquisaStatus() {
     if (!this.state.status) {
-      this.setState({ msgErrorStatus: "Selecione status da pesquisa" })
+      this.setState({ msgErrorStatus: "Selecione status da pesquisa",mostraBotao:false ,requisicoesStatus:""})
       return
     }
     await get(`requisicoes/status/${this.state.status}?page=${this.state.page}&size=6&sort=DESC`).then((retorno) => {
@@ -63,7 +63,7 @@ class MinhasRequisicoes extends Component {
   }
   async pesquisaRequisicaoCurso() {
     if (!this.state.idCurso) {
-      this.setState({ msgErrorCurso: "Selecione em curso" })
+      this.setState({ msgErrorCurso: "Selecione em curso" ,mostraBotao:false,requisicoesDisciplina:""})
       return
     }
     await get(`requisicoes/curso/${this.state.idCurso}?page=${this.state.page}&size=6`).then((retorno) => {
@@ -98,7 +98,7 @@ class MinhasRequisicoes extends Component {
     console.log(this.state.page);
     this.setState({ dataInicioInvalida: "", dataFinalInvalida: "" })
     if (!this.state.user.id) {
-      this.setState({ msgErrorPesquisaNome: "Selecione nome do aluno", requisicoesAluno: "", user: "" })
+      this.setState({ msgErrorPesquisaNome: "Selecione nome do aluno", requisicoesAluno: "", user: "",mostraBotao:false })
       return
     }
 
@@ -312,10 +312,10 @@ class MinhasRequisicoes extends Component {
         {
           this.state.requisicoes === "aproveitamento" ? <TabelaAproveitamentos user={this.state.user} /> : this.state.requisicoes === "certificacao" ?
             <TabelaCertificacoes user={this.state.user} /> : ""} <br /><br />
+         { this.state.mostraBotao&& <h3> Requisições encontradas</h3>}<br />
         {
           <Container>
             <Row>
-
               {
 
                 this.state.requisicoesAluno && this.state.requisicoesAluno.map((requisicao) => {

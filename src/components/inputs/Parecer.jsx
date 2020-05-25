@@ -25,7 +25,7 @@ class Parecer extends Component {
             listaProfessores: [],
             idRequisicao: "", id: "", modal: false, coordenador: "", disciplinas: [],
             idDisciplina: "", stringParecer: "", mudaParecer: "", listaProfessoresInvalido: false,
-            msgErrorProfessor: ""
+            msgErrorProfessor: "", responsavelPelaRequisicao: "", msgErrorParecer: "", msgModal: "", alerteDonoRequisicao: false
         }
 
 
@@ -33,13 +33,15 @@ class Parecer extends Component {
 
     async listaAth() {
         const user = await get("usuarios/auth/")
+        console.log(user);
         this.setState({ user })
     }
     async buscaProfessores() {
         const listaProfessores = await get("usuarios/pages?tipo=PROFESSOR");
         this.setState({ listaProfessores })
     }
-    
+
+
     async componentDidMount() {
         this.listaDisciplinas()
         this.listaAth()
@@ -62,13 +64,35 @@ class Parecer extends Component {
             formacaoAtividadeAnterior: c.disciplinasCursadasAnterior,
             criterioAvaliacao: c.criterioAvaliacao,
             tipo: c.tipo,
-            prova:"",
+            prova: "",
             titulo: "",
-            coordenador: c.professor && c.professor.perfil.coordenador, alert: false
+            coordenador: c.professor && c.professor.perfil.coordenador, alert: false,
+            responsavelPelaRequisicao: c.responsavelPelaRequisicao
 
-        });
+        }
+        );
         if (this.state.id === "" || this.state.id === null) {
             this.setState({ id: this.state.professor && this.state.professor.perfil.id })
+        }
+
+        if (this.state.user && this.state.user.permissao === "SERVIDOR" && this.state.responsavelPelaRequisicao !== "SERVIDOR") {
+            this.setState({ alerteDonoRequisicao: true })
+        }
+        if (this.state.user && this.state.user.permissao === "PROFESSOR" && this.state.responsavelPelaRequisicao === "SERVIDOR") {
+            this.setState({ alerteDonoRequisicao: true })
+        }
+        console.log(this.state.user && this.state.user.permissao);
+        console.log(this.state.responsavelPelaRequisicao);
+        console.log(this.state.professor && this.state.professor.perfil.nome);
+        console.log(this.state.user && this.state.user.perfil.nome);
+
+        if (this.state.user && this.state.user.perfil.nome && this.state.professor && this.state.professor.perfil.nome) {
+            if (this.state.user && this.state.user.permissao === "PROFESSOR" && this.state.user && this.state.user.perfil.coordenador === true) {
+                if (this.state.user.perfil.nome !== this.state.professor.perfil.nome) {
+                    this.setState({ alerteDonoRequisicao: true })
+
+                }
+            }
         }
     }
     mudaNomeStringParecer() {
@@ -85,6 +109,7 @@ class Parecer extends Component {
     }
 
     async atualizar() {
+
         if (this.state.user && this.state.user.perfil.tipo === "SERVIDOR") {
             put("requisicoes", this.props.match.params.id, {
                 tipo: this.state.tipo,
@@ -92,7 +117,7 @@ class Parecer extends Component {
                 parecerServidor: this.state.atualizarParecer ? this.state.atualizarParecer : this.state.parecerServidor,
                 parecerCoordenador: this.state.parecerCoordenador,
                 parecerProfessor: this.state.parecerProfessor,
-               
+                responsavelPelaRequisicao: "COORDENADOR"
             }).then(() => { this.setState({ modal: false }) })
         } else if (this.state.user && this.state.user.perfil.coordenador === true) {
 
@@ -102,6 +127,7 @@ class Parecer extends Component {
                 parecerCoordenador: this.state.atualizarParecer ? this.state.atualizarParecer : this.state.parecerCoordenador,
                 parecerProfessor: this.state.parecerProfessor,
                 parecerServidor: this.state.parecerServidor,
+                responsavelPelaRequisicao: "PROFESSOR",
                 professor: {
                     id: this.state.id
                 }
@@ -113,10 +139,23 @@ class Parecer extends Component {
                 parecerServidor: this.state.parecerServidor,
                 parecerCoordenador: this.state.parecerCoordenador,
                 parecerProfessor: this.state.atualizarParecer ? this.state.atualizarParecer : this.state.parecerProfessor,
+                responsavelPelaRequisicao: "FINALIZADO"
             }).then(() => { this.setState({ modal: false }) })
         }
     }
     verificarDados() {
+        
+        if (this.state.atualizarParecer.length > 150) {
+            this.setState({ msgErrorParecer: "Limite máximo para cadastro do parecer é de 150 caracteres." })
+            return
+        }
+        if (this.state.atualizarParecer.trim() === "") {
+            this.setState({ msgErrorParecer: "Campo parecer é obrigatório" })
+            return
+        }
+        if (this.state.responsavelPelaRequisicao === "SERVIDOR") {
+            this.setState({ msgModal: " envio da requisição para coordenador?" })
+        }
         if (this.state.user && this.state.user.perfil.coordenador === true) {
             if (this.state.id === null || this.state.id === "") {
                 this.setState({ listaProfessoresInvalido: true, msgErrorProfessor: "Campo professor é obrigatório" })
@@ -128,13 +167,14 @@ class Parecer extends Component {
         }
     }
     limpar() {
-        this.state({ id: null })
+        this.state({ id: null, msgErrorParecer: "" })
     }
-    getProva(e){
-        this.setState({prova:e.target.files[0]})
+    getProva(e) {
+        this.setState({ prova: e.target.files[0] })
     }
     render() {
-        return (<div>
+        return (<div><br />
+            <Alert show={this.state.alerteDonoRequisicao} variant={"info"}>{this.state.responsavelPelaRequisicao === "FINALIZADA" ? "Processo da Solicitação do aluno  " : "Arquivo somente de leitura requisição está aguardando parecer do"} <span style={{ color: "red" }}>{this.state.responsavelPelaRequisicao}</span></Alert>
             <Form.Group className="col-md-6 container">
                 <TituloPagina titulo="Parecer da Requisição" />
                 <p > ID da requisição :<span style={{ color: "red" }}>&nbsp;{this.state.idRequisicao}</span> </p>
@@ -157,7 +197,7 @@ class Parecer extends Component {
                     label={'Disciplina Solicitada'}
                     value={this.state.disciplinaSolicitada && this.state.disciplinaSolicitada.nome}
                     disabled={true} />
-              { this.state.tipo ==="certificacao"?"": <SACEInput
+                {this.state.tipo === "certificacao" ? "" : <SACEInput
                     label={'Disciplina cursada Anteriormente '}
                     value={this.state.formacaoAtividadeAnterior && this.state.formacaoAtividadeAnterior}
                     disabled={true} />}
@@ -186,9 +226,11 @@ class Parecer extends Component {
                         disabled={true}
                     />
                 </Form.Group>
-                <div style={{ fontSize: "200%" }}> Modificar Status </div>
                 <Alert variant={"danger"} show={this.state.alert}>Selecione um professor tratar requisição</Alert>
-                {this.state.user && this.state.user.perfil.coordenador === true ?
+
+                {this.state.alerteDonoRequisicao ? "" : <div style={{ fontSize: "200%" }}> Modificar Status </div>}
+                {!this.state.alerteDonoRequisicao &&
+                    this.state.user && this.state.user.perfil.coordenador === true ?
                     <Form>
                         <Form.Group controlId="exampleForm.SelectCustom">
                             <br />
@@ -208,7 +250,7 @@ class Parecer extends Component {
                         </Form.Group>
                     </Form> : ""}
                 <br />
-                <div class="custom-control custom-radio custom-control-inline">
+                {!this.state.alerteDonoRequisicao ? <div class="custom-control custom-radio custom-control-inline">
                     <input type="radio"
                         id="DEFERIDO" name="customRadioInline1" class="custom-control-input"
                         onChange={(e) => this.setState({ deferido: e.target.id })}
@@ -216,26 +258,32 @@ class Parecer extends Component {
                     />
 
                     {this.state.user && this.state.user.perfil.tipo === "SERVIDOR" ? "" : <label class="custom-control-label" for="DEFERIDO">Deferido</label>}
-                </div>
-                <div class="custom-control custom-radio custom-control-inline">
-                    <input type="radio" id="INDEFERIDO" name="customRadioInline1" class="custom-control-input"
-                        onChange={(e) => this.setState({ deferido: e.target.id })}
-                        defaultChecked={false} />
-                    <label class="custom-control-label" for="INDEFERIDO">Indeferido</label><br /><br />
-                </div>
+                </div> : ""}
+                {console.log(this.state.alerteDonoRequisicao)}
 
-                <div class="custom-control custom-radio custom-control-inline">
-                    <input type="radio" id="EM ANÁLISE" name="customRadioInline1" class="custom-control-input"
-                        onChange={(e) => this.setState({ deferido: e.target.id })}
-                        defaultChecked={this.state.deferido === "EM ANÁLISE" ? true : false}
-                    />
-                    {this.state.user && this.state.user.perfil.tipo === "PROFESSOR" && this.state.user && this.state.user.perfil.coordenador === false ? "" :<><label class="custom-control-label" for="EM ANÁLISE">Em análise</label><br /><br /></>}
-                </div>
-                <div class="custom-control custom-radio custom-control-inline">
-                    <input type="radio" id="escolha" name="customRadioInline" class="custom-control-input"
-                        checked />
-                    <label class="custom-control-label" for="escolha" style={{ display: "none" }}></label><br /><br />
-                </div>
+                {this.state.alerteDonoRequisicao ? "" :
+                    <>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" id="INDEFERIDO" name="customRadioInline1" class="custom-control-input"
+                                onChange={(e) => this.setState({ deferido: e.target.id })}
+                                defaultChecked={false} />
+                            <label class="custom-control-label" for="INDEFERIDO">Indeferido</label><br /><br />
+                        </div>
+
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" id="EM ANÁLISE" name="customRadioInline1" class="custom-control-input"
+                                onChange={(e) => this.setState({ deferido: e.target.id })}
+                                defaultChecked={this.state.deferido === "EM ANÁLISE" ? true : false}
+                            />
+                            {this.state.user && this.state.user.perfil.tipo === "PROFESSOR" && this.state.user && this.state.user.perfil.coordenador === false ? "" : <><label class="custom-control-label" for="EM ANÁLISE">Em análise</label><br /><br /></>}
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" id="escolha" name="customRadioInline" class="custom-control-input"
+                                checked />
+                            <label class="custom-control-label" for="escolha" style={{ display: "none" }}></label><br /><br />
+                        </div>
+                    </>}
+
                 <br />
                 <label>Documentos enviados pelo aluno :</label>
                 <ol>
@@ -248,45 +296,48 @@ class Parecer extends Component {
                     }
                 </ol>
 
-                <Form.Group controlId="exampleForm.ControlTextarea1">
-                    <Form.Label>Novo Parecer do : &nbsp;{this.state.stringParecer}</Form.Label>
-                    <Form.Control as="textarea" rows="2"
-                        id={this.state.atualizarParecer}
-                        value={this.state.atualizarParecer}
-                        onChange={(e) => this.setState({ atualizarParecer: e.target.value })}
-                    />
+                {this.state.alerteDonoRequisicao ? "" :
 
-                </Form.Group>
-                <Modal show={this.state.modal} onHide={() => this.setState({ modal: false })} animation={false}>
-                    <Modal.Header closeButton>
-                        <Modal.Title > Confirmar</Modal.Title>
-                    </Modal.Header> 
-                    <Modal.Body><strong>Deseja confirmar os dados</strong></Modal.Body>
-                    <Modal.Body>Parecer : &nbsp;{this.state.atualizarParecer === "" ? this.state.parecer : this.state.atualizarParecer}</Modal.Body>
-                    <Modal.Body>Status : &nbsp;{this.state.deferido}</Modal.Body>
-                    <Modal.Footer>
-                        <Link to="/minhas-requisicoes"> <Button onClick={(e) => this.atualizar()} variant="primary" className="btn btn-primary m-1" >Salvar</Button></Link>
-                    </Modal.Footer>
-                </Modal>
+                    <Form.Group controlId="exampleForm.ControlTextarea1">
+                        <Form.Label>Novo Parecer do : &nbsp;{this.state.stringParecer}</Form.Label>
+                        <Form.Control as="textarea" rows="2"
+                            id={this.state.atualizarParecer}
+                            value={this.state.atualizarParecer}
+                            onChange={(e) => this.setState({ atualizarParecer: e.target.value })}
+                        />
+                        <Form.Text className="text-danger">{this.state.msgErrorParecer} </Form.Text>
+                    </Form.Group>
+                }
+                {this.state.alerteDonoRequisicao ? "" :
 
-                {this.state.user && this.state.user.perfil.tipo === "PROFESSOR" && this.state.user.perfil.coordenador === false &&this.state.tipo === "certificacao" ?<> 
-                <label>Adicionar prova  </label>
-                <div class="input-group mb-3">
-            
-                        <input type="file" onChange={(e)=>{
-                             this.getProva(e);
-                             console.log(this.state.prova)
-                             }
-                            }/>
+                    this.state.user && this.state.user.perfil.tipo === "PROFESSOR" && this.state.user.perfil.coordenador === false && this.state.tipo === "certificacao" ? <>
+                        <label>Adicionar prova  </label>
+                        <div class="input-group mb-3">
 
-                </div>
-                </>:""}
-                
-                <div className="row container" style={{ position: 'relative', left: '32%' }}>
-                    <Button onClick={(e) => this.verificarDados()} variant="primary" className="btn btn-primary m-1"  >Salvar</Button>
-                    <Link to="/minhas-requisicoes"> <Button variant="danger" className="btn btn-primary m-1" >Voltar </Button></Link>
-                </div>
+                            <input type="file" onChange={(e) => {
+                                this.getProva(e);
+                                console.log(this.state.prova)
+                            }} />
+                        </div>
+                    </> : ""}
+
+                {this.state.alerteDonoRequisicao ? "" :
+                    <div className="row container" style={{ position: 'relative', left: '32%' }}>
+                        <Button onClick={(e) => this.verificarDados()} variant="primary" className="btn btn-primary m-1"  >Salvar</Button>
+                        <Link to="/minhas-requisicoes"> <Button variant="danger" className="btn btn-primary m-1" >Voltar </Button></Link>
+                    </div>
+                }
             </Form.Group>
+
+            <Modal show={this.state.modal} onHide={() => this.setState({ modal: false })} animation={false}>
+                <Modal.Header closeButton>
+                    <Modal.Title > Confirmar {this.state.msgModal}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>Status : &nbsp;{this.state.deferido}</Modal.Body>
+                <Modal.Footer>
+                    <Link to="/minhas-requisicoes"> <Button onClick={(e) => this.atualizar()} variant="primary" className="btn btn-primary m-1" >Salvar</Button></Link>
+                </Modal.Footer>
+            </Modal>
         </div>);
     }
 }

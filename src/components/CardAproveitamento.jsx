@@ -12,7 +12,7 @@ export default function  CardAproveitamento ({requisicao}){
      return (
       <Col className="box-card" sm={4}>
         <div className='requisicao' onClick={()=>history.push(`/parecer/${id}`)}>
-        <p class={`badge badge-${mudaCor(deferido)}`}>{`Status do processo : ${deferido}`}</p>
+        <p className={`badge badge-${mudaCor(deferido)}`}>{`Status do processo : ${deferido}`}</p>
         <p>{`ID: ${id}`}</p>
         <p>{`Data: ${dataRequisicao}`}</p>
         <p>{`Aluno: ${usuario && usuario.perfil.nome}`}</p>

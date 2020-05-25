@@ -57,8 +57,6 @@ export default function ({ user }) {
 
       </Row>
       <Row>
-        {console.log(requisicoes)}
-        
         {requisicoes.length>0 &&
           <>
           

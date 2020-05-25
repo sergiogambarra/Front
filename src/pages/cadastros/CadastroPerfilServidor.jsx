@@ -81,7 +81,6 @@ class CadastroPerfilServidor extends Component {
             if (this.state.loginPesquisa === this.state.userName.toUpperCase()) { this.setState({ loginInvalido: true }); return }
             if (this.state.nomeInvalido === true || this.state.siapeInvalido === true || this.state.emailInvalido === true || this.state.loginInvalido === true ||
                 this.state.confirmaSenhaInvalida === true || this.state.senhaInvalida === true || this.state.msgError === "Você não inseriu o cargo corretamente") {
-                console.log("d");
                 return
             }
             postCadastroUsuarioServidor({
@@ -106,8 +105,6 @@ class CadastroPerfilServidor extends Component {
         }
     }
 
-
-
     limpar() {
         this.setState({
             msgError: "",
@@ -128,8 +125,6 @@ class CadastroPerfilServidor extends Component {
             cargo: ""
         })
     }
-
-
 
     render() {
         return (

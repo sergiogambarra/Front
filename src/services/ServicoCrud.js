@@ -35,8 +35,6 @@ const post = async (end, data) => {
 const put = async (end, id, data) => {
       try {
         const entidade = await axios.put(`${baseURL}/${end}/${id}`, data);
-        console.log(entidade);
-        
         return (entidade);
     } catch (error) {
         console.log(`${end.toUpperCase()}Service/put${baseURL}/${end}/${id}:`, error);
