@@ -72,7 +72,7 @@ export default function CertificacaoConhecimentosForm() {
 
     const fazerRequisicao = async () => {
         if (camposInvalidos()) return;
-       
+
                setRequisicao({
             curso,
             disciplinasCursadasAnterior,

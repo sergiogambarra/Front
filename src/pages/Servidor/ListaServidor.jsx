@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { get, getId, put, del } from './../../services/ServicoCrud'
 import { Button, Modal, Alert } from 'react-bootstrap'
 import SACEInput from '../../components/inputs/SACEInput';
+import {validaEmail} from '../../auxiliares/validacoes'
 
 class ListaServidor extends Component {
     constructor(props) {
@@ -28,7 +29,9 @@ class ListaServidor extends Component {
     async componentDidMount() {
         this.listaServidor()
     }
+    
     async buscaPeloId(e) {
+        this.limpar()
         const usuario = await getId("usuarios/", e)
         this.setState({
             id: usuario.id,
@@ -46,9 +49,10 @@ class ListaServidor extends Component {
         }
     }
     editar(e) {
+
         if (this.nome === null || this.state.nome.trim() === "" ? this.setState({ nomeInvalido: true, msgNome: "Você não inseriu nome corretamente" }) : this.setState({ nomeInvalido: false })) { }
         if (this.siape === null || this.state.siape === "" || this.state.siape <= 0 ? this.setState({ siapeInvalido: true, msgSiape: "Você não inseriu SIAPE corretamente" }) : this.setState({ siapeInvalido: false })) { }
-        if (this.email === null || this.state.email === "" || this.state.email.indexOf("@", 0) === -1 ? this.setState({ emailInvalido: true, msgEmail: "Você não inseriu email válido" }) : this.setState({ emailInvalido: false })) { }
+        if (this.email === null || this.state.email === "" || !validaEmail(this.state.email)? this.setState({ emailInvalido: true, msgEmail: "Você não inseriu email válido" }) : this.setState({ emailInvalido: false })) { }
         if (this.state.nome.length > 40) {
             this.setState({ nomeInvalido: true, msgNome: "Limite máximo de cadastro de 40 caracteres" })
             return
@@ -60,7 +64,7 @@ class ListaServidor extends Component {
             this.setState({ siapeInvalido: true, msgSiape: "Não pode ser cadastrado número superior a 99999999" })
             return
         }
-        if (this.email === null || this.state.email === "" || this.state.email.indexOf("@", 0) === -1 || this.siape === null || this.state.siape <= 0 || this.state.siape === "" || this.nome === null || this.state.nome.trim() === "") { return }
+        if (this.email === null || this.state.email === "" || !validaEmail(this.state.email) || this.siape === null || this.state.siape <= 0 || this.state.siape === "" || this.nome === null || this.state.nome.trim() === "") { return }
         put("usuarios", e,
             {
                 email: this.state.email,

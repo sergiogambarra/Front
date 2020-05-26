@@ -5,7 +5,8 @@ import { Link } from "react-router-dom";
 import TituloPagina from '../../components/TituloPagina';
 import { Form, Modal } from 'react-bootstrap';
 import { postCadastroUsuario } from '../../services/AlunoService';
-import { getPesquisaLogin } from '../../services/UsuarioService'
+import { getPesquisaLogin } from '../../services/UsuarioService';
+import {validaEmail} from '../../auxiliares/validacoes'
 
 class CadastroPerfilAluno extends Component {
     constructor(props) {
@@ -29,12 +30,11 @@ class CadastroPerfilAluno extends Component {
             alert: false,
             msgSenhaNaoConfere: false,
             msgNome: "", msgPassword: "",
-            msgAlert:"",variantAlert:""
+            msgAlert: "", variantAlert: ""
 
         }
     }
-
-
+  
     limpar() {
         this.setState({
             userName: "",
@@ -73,11 +73,13 @@ class CadastroPerfilAluno extends Component {
             this.setState({ userNameInvalido: true, msgLogin: "Escolha login entre 6 e 10 caracteres" })
             return
         }
+        
+     
         if (this.state.verificaSenhaInvalido !== "") { this.setState({ msgLogin: "" }) }
         if (this.state.nome === "" ? this.setState({ nomeInvalido: true, msgNome: "Você não inseriu o seu nome corretamente!" }) : this.setState({ nomeInvalido: false })) { }
-        if (this.state.email === "" || this.state.email.indexOf("@", 0) === -1 ? this.setState({ emailInvalido: true, msgEmail: "Você não inseriu email válido" }) : this.setState({ emailInvalido: false })) { }
+        if (this.state.email === "" || !validaEmail(this.state.email) ? this.setState({ emailInvalido: true, msgEmail: "Você não inseriu email válido" }) : this.setState({ emailInvalido: false })) { }
         if (this.state.matricula === "" || this.state.matricula <= 0 ? this.setState({ matriculaInvalida: true, msgMatricula: "Campo matrícula é campo obrigatório " }) : this.setState({ matriculaInvalida: false })) { }
-        if (this.state.dataIngresso === "" || this.comparaData() === false? this.setState({ dataIngressoInvalido: true }) : this.setState({ dataIngressoInvalido: false })) { }
+        if (this.state.dataIngresso === "" || this.comparaData() === false ? this.setState({ dataIngressoInvalido: true }) : this.setState({ dataIngressoInvalido: false })) { }
         if (this.state.password === "" ? this.setState({ passwordInvalido: true, msgPassword: "Campo senha não pode ficar em branco" }) : this.setState({ passwordInvalido: false })) { }
         if (this.state.password !== this.state.verificaSenha) {
             this.setState({ verificaSenhaInvalido: true })
@@ -103,7 +105,7 @@ class CadastroPerfilAluno extends Component {
             this.setState({ passwordInvalido: true, msgPassword: "Limite máximo de cadastro de 15 caracteres" })
             return
         }
-        if (this.state.nome !== "" && this.state.email !== "" && this.state.email.indexOf("@", 0) > -1 && this.state.dataIngresso !== "" && this.state.userName !== "" &&
+        if (this.state.nome !== "" && this.state.email !== "" && validaEmail(this.state.email)  && this.state.dataIngresso !== "" && this.state.userName !== "" &&
             this.state.password !== "" && this.state.verificaSenha !== "" && this.state.matricula > 0 && this.state.verificaSenha === this.state.password && this.comparaData()) { this.setState({ modalShow: true }) } else { return }
 
     }
@@ -117,20 +119,20 @@ class CadastroPerfilAluno extends Component {
             email: this.state.email,
             dataIngresso: this.state.dataIngresso
         }).then((e) => {
-            if(e.status === 400){
-                this.setState({ modalShow:false ,alert: true , variantAlert:"danger",msgAlert:e.data.message})
+            if (e.status === 400) {
+                this.setState({ modalShow: false, alert: true, variantAlert: "danger", msgAlert: e.data.message })
                 return
-            }else{
-                this.setState({ modalShow: false, alert: true ,variantAlert:"success",msgAlert:"Cadastrado com sucesso"})
+            } else {
+                this.setState({ modalShow: false, alert: true, variantAlert: "success", msgAlert: "Cadastrado com sucesso" })
                 setTimeout(() => {
                     this.setState({ alert: false })
-                }, 5000 ,
-                window.location.href = ("/login")
+                }, 5000,
+                    window.location.href = ("/login")
                 )
                 this.limpar()
-               
+
             }
-            
+
         })
     }
 
@@ -150,7 +152,7 @@ class CadastroPerfilAluno extends Component {
                 <Form.Group className="col-md-6 container">
                     <TituloPagina autoFocus titulo="Cadastro de Alunos" />
                     <Alert key={"idx"} variant={this.state.variantAlert} show={this.state.alert}>
-        {this.state.msgAlert}</Alert>
+                        {this.state.msgAlert}</Alert>
                     <SACEInput
                         autoFocus={true}
                         label={'Nome'}

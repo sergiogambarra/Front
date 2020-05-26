@@ -4,6 +4,7 @@ import { Button, Alert } from 'react-bootstrap';
 import TituloPagina from '../../components/TituloPagina';
 import { Form } from 'react-bootstrap';
 import { postCadastroUsuarioServidor, getPesquisaLogin } from '../../services/UsuarioService';
+import {validaEmail} from '../../auxiliares/validacoes'
 
 class CadastroPerfilServidor extends Component {
     constructor(props) {
@@ -56,7 +57,7 @@ class CadastroPerfilServidor extends Component {
         if (this.state.nome.trim() === "" ? this.setState({ nomeInvalido: true, msgNome: "Você não inseriu nome corretamente" }) : this.setState({ nomeInvalido: false })) { }
         if (this.state.cargo === "" ? this.setState({ cargoInvalido: true }) : this.setState({ cargoInvalido: false })) { }
         if (this.state.siape === "" ? this.setState({ siapeInvalido: true, msgSiape: "Você não inseriu SIAPE corretamente" }) : this.setState({ siapeInvalido: false })) { }
-        if (this.state.email === "" || this.state.email.indexOf("@", 0) === -1 ? this.setState({ emailInvalido: true, msgEmail: "Você não inseriu email válido" }) : this.setState({ emailInvalido: false })) { }
+        if (this.state.email === "" || !validaEmail(this.state.email) ? this.setState({ emailInvalido: true, msgEmail: "Você não inseriu email válido" }) : this.setState({ emailInvalido: false })) { }
         if (this.state.password.trim() === "" ? this.setState({ senhaInvalida: true, msgPassword: "Você não inseriu senha corretamente" }) : this.setState({ senhaInvalida: false })) { }
         if (this.state.novaSenha.trim() === "" ? this.setState({ confirmaSenhaInvalida: true }) : this.setState({ confirmaSenhaInvalida: false })) { }
         if (this.state.password !== this.state.novaSenha) { this.setState({ confirmaSenhaInvalida: true }) }
@@ -76,7 +77,7 @@ class CadastroPerfilServidor extends Component {
             this.setState({ senhaInvalida: true, msgPassword: "Limite máximo de cadastro de 30 caracteres" })
             return
         }
-        if (this.state.userName !== "" && this.state.email !== "" && this.state.siape !== "" && this.state.password !== ""
+        if (this.state.userName !== "" && this.state.email !== "" && this.state.siape !== "" && this.state.password !== ""&&validaEmail(this.state.email)
             && this.state.login !== "" && this.state.password === this.state.novaSenha) {
             if (this.state.loginPesquisa === this.state.userName.toUpperCase()) { this.setState({ loginInvalido: true }); return }
             if (this.state.nomeInvalido === true || this.state.siapeInvalido === true || this.state.emailInvalido === true || this.state.loginInvalido === true ||

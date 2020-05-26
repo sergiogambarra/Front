@@ -91,7 +91,9 @@ export default function CertificacaoConhecimentosForm({ user }) {
     const enviarRequisicao = () => {
         setShowModal(false);
 
+        console.log(requisicao);
         postRequisicao(requisicao)
+        
         .then((e)=>{
             if(e.status === 201){
              setAlert({

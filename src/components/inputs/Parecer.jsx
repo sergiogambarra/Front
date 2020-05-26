@@ -6,6 +6,7 @@ import TituloPagina from '../../components/TituloPagina';
 import { Form, Modal } from 'react-bootstrap';
 import { getRequisicaoId } from '../../services/RequisicaoService';
 import { put, get } from '../../services/ServicoCrud';
+import AnexarArquivosInput from '../inputs/anexarArquivosInput/AnexarArquivosInput';
 
 class Parecer extends Component {
     constructor(props) {
@@ -20,13 +21,15 @@ class Parecer extends Component {
             usuario: "",
             professor: {},
             anexos: [],
+            prova: [],
             formacaoAtividadeAnterior: "",
             criterioAvaliacao: "", tipo: "", atualizarParecer: "",
             listaProfessores: [],
             idRequisicao: "", id: "", modal: false, coordenador: "", disciplinas: [],
-            idDisciplina: "", stringParecer: "", mudaParecer: "", listaProfessoresInvalido: false,
+            idDisciplina: "", stringParecer: "", mudaParecer: "", listaProfessoresInvalido: false, msgStatus: "",
             msgErrorProfessor: "", responsavelPelaRequisicao: "", msgErrorParecer: "", msgModal: "", alerteDonoRequisicao: false
         }
+        this.setProva = this.setProva.bind(this)
 
 
     }
@@ -64,7 +67,7 @@ class Parecer extends Component {
             formacaoAtividadeAnterior: c.disciplinasCursadasAnterior,
             criterioAvaliacao: c.criterioAvaliacao,
             tipo: c.tipo,
-            prova: "",
+            prova: c.prova ||"",
             titulo: "",
             coordenador: c.professor && c.professor.perfil.coordenador, alert: false,
             responsavelPelaRequisicao: c.responsavelPelaRequisicao
@@ -81,20 +84,30 @@ class Parecer extends Component {
         if (this.state.user && this.state.user.permissao === "PROFESSOR" && this.state.responsavelPelaRequisicao === "SERVIDOR") {
             this.setState({ alerteDonoRequisicao: true })
         }
-        console.log(this.state.user && this.state.user.permissao);
-        console.log(this.state.responsavelPelaRequisicao);
-        console.log(this.state.professor && this.state.professor.perfil.nome);
-        console.log(this.state.user && this.state.user.perfil.nome);
 
-        if (this.state.user && this.state.user.perfil.nome && this.state.professor && this.state.professor.perfil.nome) {
+        if (this.state.user && this.state.user.id && this.state.professor && this.state.professor.id) {
             if (this.state.user && this.state.user.permissao === "PROFESSOR" && this.state.user && this.state.user.perfil.coordenador === true) {
-                if (this.state.user.perfil.nome !== this.state.professor.perfil.nome) {
+                if (this.state.user.id !== this.state.professor.id) {
                     this.setState({ alerteDonoRequisicao: true })
 
+                } else if (this.state.user.id === this.state.professor.id) {
+                    if (this.state.deferido !== "EM ANÁLISE") {
+                        this.setState({ responsavelPelaRequisicao: "FINALIZADO" })
+                    }
                 }
             }
         }
+        if (this.state.deferido !== "EM ANÁLISE") {
+            this.setState({ responsavelPelaRequisicao: "FINALIZADO" })
+        }
+        if (this.state.responsavelPelaRequisicao === "FINALIZADO") {
+            this.setState({ alerteDonoRequisicao: true })
+        }
+        
     }
+
+
+
     mudaNomeStringParecer() {
         if (this.state.user && this.state.user.perfil.tipo === "SERVIDOR") {
             this.setState({ stringParecer: "SERVIDOR" })
@@ -120,7 +133,6 @@ class Parecer extends Component {
                 responsavelPelaRequisicao: "COORDENADOR"
             }).then(() => { this.setState({ modal: false }) })
         } else if (this.state.user && this.state.user.perfil.coordenador === true) {
-
             put("requisicoes", this.props.match.params.id, {
                 tipo: this.state.tipo,
                 deferido: this.state.deferido,
@@ -128,6 +140,7 @@ class Parecer extends Component {
                 parecerProfessor: this.state.parecerProfessor,
                 parecerServidor: this.state.parecerServidor,
                 responsavelPelaRequisicao: "PROFESSOR",
+                prova: this.state.prova[0],
                 professor: {
                     id: this.state.id
                 }
@@ -139,12 +152,29 @@ class Parecer extends Component {
                 parecerServidor: this.state.parecerServidor,
                 parecerCoordenador: this.state.parecerCoordenador,
                 parecerProfessor: this.state.atualizarParecer ? this.state.atualizarParecer : this.state.parecerProfessor,
+                prova: this.state.prova[0],
                 responsavelPelaRequisicao: "FINALIZADO"
             }).then(() => { this.setState({ modal: false }) })
         }
     }
     verificarDados() {
-        
+
+        if (this.state.user && this.state.user.perfil.tipo === "PROFESSOR" && this.state.user && this.state.user.perfil.coordenador === true) {
+            if (this.state.user && this.state.professor) {
+                if (this.state.user.perfil.id === this.state.professor.perfil.id) {
+                    if (this.state.deferido === "EM ANÁLISE") {
+                        this.setState({ msgStatus: "Selecione status da requisição" })
+                        return
+                    }
+                }
+            }
+        }
+        if (this.state.user && this.state.user.perfil.tipo === "PROFESSOR" && this.state.user && this.state.user.perfil.coordenador === false) {
+            if (this.state.deferido === "EM ANÁLISE") {
+                this.setState({ msgStatus: "Selecione status da requisição" })
+                return
+            }
+        }
         if (this.state.atualizarParecer.length > 150) {
             this.setState({ msgErrorParecer: "Limite máximo para cadastro do parecer é de 150 caracteres." })
             return
@@ -172,9 +202,12 @@ class Parecer extends Component {
     getProva(e) {
         this.setState({ prova: e.target.files[0] })
     }
+    setProva(prova) {
+        this.setState({ prova: prova })
+    }
     render() {
         return (<div><br />
-            <Alert show={this.state.alerteDonoRequisicao} variant={"info"}>{this.state.responsavelPelaRequisicao === "FINALIZADA" ? "Processo da Solicitação do aluno  " : "Arquivo somente de leitura requisição está aguardando parecer do"} <span style={{ color: "red" }}>{this.state.responsavelPelaRequisicao}</span></Alert>
+            <Alert style={{ textAlign: "center" }} show={this.state.alerteDonoRequisicao} variant={"info"}>{this.state.responsavelPelaRequisicao === "FINALIZADO" ? "Processo da Solicitação do aluno  " : "Arquivo somente de leitura requisição está aguardando parecer do"} <span style={{ color: "red" }}>{this.state.responsavelPelaRequisicao}</span></Alert>
             <Form.Group className="col-md-6 container">
                 <TituloPagina titulo="Parecer da Requisição" />
                 <p > ID da requisição :<span style={{ color: "red" }}>&nbsp;{this.state.idRequisicao}</span> </p>
@@ -259,8 +292,6 @@ class Parecer extends Component {
 
                     {this.state.user && this.state.user.perfil.tipo === "SERVIDOR" ? "" : <label class="custom-control-label" for="DEFERIDO">Deferido</label>}
                 </div> : ""}
-                {console.log(this.state.alerteDonoRequisicao)}
-
                 {this.state.alerteDonoRequisicao ? "" :
                     <>
                         <div class="custom-control custom-radio custom-control-inline">
@@ -270,12 +301,15 @@ class Parecer extends Component {
                             <label class="custom-control-label" for="INDEFERIDO">Indeferido</label><br /><br />
                         </div>
 
+                        {this.state.user && this.state.user.perfil.tipo === "PROFESSOR" && this.state.user && this.state.user.perfil.coordenador === true ? "" : ""}
+
                         <div class="custom-control custom-radio custom-control-inline">
                             <input type="radio" id="EM ANÁLISE" name="customRadioInline1" class="custom-control-input"
                                 onChange={(e) => this.setState({ deferido: e.target.id })}
                                 defaultChecked={this.state.deferido === "EM ANÁLISE" ? true : false}
                             />
-                            {this.state.user && this.state.user.perfil.tipo === "PROFESSOR" && this.state.user && this.state.user.perfil.coordenador === false ? "" : <><label class="custom-control-label" for="EM ANÁLISE">Em análise</label><br /><br /></>}
+
+                            {this.state.user && this.state.user.perfil.tipo === "PROFESSOR" ? "" : <><label class="custom-control-label" for="EM ANÁLISE">Em análise</label><br /><br /></>}
                         </div>
                         <div class="custom-control custom-radio custom-control-inline">
                             <input type="radio" id="escolha" name="customRadioInline" class="custom-control-input"
@@ -283,7 +317,7 @@ class Parecer extends Component {
                             <label class="custom-control-label" for="escolha" style={{ display: "none" }}></label><br /><br />
                         </div>
                     </>}
-
+                <Form.Text className="text-danger">{this.state.msgStatus} </Form.Text>
                 <br />
                 <label>Documentos enviados pelo aluno :</label>
                 <ol>
@@ -308,21 +342,26 @@ class Parecer extends Component {
                         <Form.Text className="text-danger">{this.state.msgErrorParecer} </Form.Text>
                     </Form.Group>
                 }
-                {this.state.alerteDonoRequisicao ? "" :
+                {
+                    this.state.user && this.state.user.perfil.tipo === "PROFESSOR" && this.state.tipo === "certificacao"
 
-                    this.state.user && this.state.user.perfil.tipo === "PROFESSOR" && this.state.user.perfil.coordenador === false && this.state.tipo === "certificacao" ? <>
-                        <label>Adicionar prova  </label>
-                        <div class="input-group mb-3">
+                        ? <>
+                            <label>Adicionar documento  </label>
+                            <div class="input-group mb-3">
 
-                            <input type="file" onChange={(e) => {
-                                this.getProva(e);
-                                console.log(this.state.prova)
-                            }} />
-                        </div>
-                    </> : ""}
+                                <AnexarArquivosInput
+                                    anexos={this.state.prova}
+                                    setAnexos={this.setProva}
+                                />
+                            </div>
+                        </> : ""}
 
-                {this.state.alerteDonoRequisicao ? "" :
-                    <div className="row container" style={{ position: 'relative', left: '32%' }}>
+                <ol>
+                    {this.state.prova && <li><a href={this.state.prova.arquivo} download>{this.state.prova.nome}</a></li>}
+                </ol>
+                <br /> 
+                {
+                    <div className="row container" style={{textAlign:"right", position: 'relative', left: '0%' }}>
                         <Button onClick={(e) => this.verificarDados()} variant="primary" className="btn btn-primary m-1"  >Salvar</Button>
                         <Link to="/minhas-requisicoes"> <Button variant="danger" className="btn btn-primary m-1" >Voltar </Button></Link>
                     </div>
@@ -331,7 +370,7 @@ class Parecer extends Component {
 
             <Modal show={this.state.modal} onHide={() => this.setState({ modal: false })} animation={false}>
                 <Modal.Header closeButton>
-                    <Modal.Title > Confirmar {this.state.msgModal}</Modal.Title>
+                    <Modal.Title > Confirmar </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>Status : &nbsp;{this.state.deferido}</Modal.Body>
                 <Modal.Footer>

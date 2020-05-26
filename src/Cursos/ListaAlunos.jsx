@@ -5,6 +5,7 @@ import { putAluno } from '../services/AlunoService';
 import axios from 'axios';
 import SACEInput from '../components/inputs/SACEInput';
 import { format } from '../auxiliares/FormataData';
+import {validaEmail} from '../auxiliares/validacoes'
 
 class ListaAlunos extends Component {
     constructor(props) {
@@ -34,6 +35,7 @@ class ListaAlunos extends Component {
         })
     }
     async buscaPeloId(e) {
+        this.limpar()
         getId("usuarios/", e).then((retorno) => {
             this.setState({
                 id: retorno.id,
@@ -61,7 +63,7 @@ class ListaAlunos extends Component {
 
         if (this.state.nome.trim() === "" || this.state.nome === null ? this.setState({ nomeInvalido: true, msgNome: "Você não inseriu o seu nome corretamente!" }) : this.setState({ nomeInvalido: false })) { }
         if (this.state.matricula === "" || this.state.matricula === null || this.state.matricula <= 0 ? this.setState({ matriculaInvalida: true, msgMatricula: "Você não inseriu matrícula corretamente" }) : this.setState({ matriculaInvalida: false })) { }
-        if (this.state.email === "" || this.state.email === null || this.state.email.indexOf("@", 0) === -1 ? this.setState({ emailInvalido: true, msgEmail: "Você não inseriu email corretamente" }) : this.setState({ emailInvalido: false })) { }
+        if (this.state.email === "" || this.state.email === null || !validaEmail(this.state.email) ? this.setState({ emailInvalido: true, msgEmail: "Você não inseriu email corretamente" }) : this.setState({ emailInvalido: false })) { }
         if (this.state.nome.length > 40) {
             this.setState({ nomeInvalido: true, msgNome: "Limite máximo de cadastro de 40 caracteres" })
             return
@@ -73,7 +75,7 @@ class ListaAlunos extends Component {
             this.setState({ matriculaInvalida: true, msgMatricula: "Não pode ser cadastrado número superior a 99999999" })
             return
         }
-        if (this.state.nome === null || this.state.email.indexOf("@", 0) === -1 || this.state.nome.trim() === "" || this.state.email === "" || this.state.email === null || this.state.matricula === null || this.state.siape === null || this.state.matricula === "" || this.state.siape === "" || this.state.matricula <= 0) {
+        if (this.state.nome === null || !validaEmail(this.state.email) || this.state.nome.trim() === "" || this.state.email === "" || this.state.email === null || this.state.matricula === null || this.state.siape === null || this.state.matricula === "" || this.state.siape === "" || this.state.matricula <= 0) {
             return
         }
         putAluno("usuarios", e,
