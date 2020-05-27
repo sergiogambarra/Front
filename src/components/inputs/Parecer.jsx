@@ -158,10 +158,13 @@ class Parecer extends Component {
         }
     }
     verificarDados() {
+console.log(this.state.user.id);
+console.log(this.state.professor&&this.state.professor.id);
+console.log(this.state.professor);
 
         if (this.state.user && this.state.user.perfil.tipo === "PROFESSOR" && this.state.user && this.state.user.perfil.coordenador === true) {
             if (this.state.user && this.state.professor) {
-                if (this.state.user.perfil.id === this.state.professor.perfil.id) {
+                if (this.state.user.id === this.state.professor.id) {
                     if (this.state.deferido === "EM ANÁLISE") {
                         this.setState({ msgStatus: "Selecione status da requisição" })
                         return
@@ -207,7 +210,7 @@ class Parecer extends Component {
     }
     render() {
         return (<div><br />
-            <Alert style={{ textAlign: "center" }} show={this.state.alerteDonoRequisicao} variant={"info"}>{this.state.responsavelPelaRequisicao === "FINALIZADO" ? "Processo da Solicitação do aluno  " : "Arquivo somente de leitura requisição está aguardando parecer do"} <span style={{ color: "red" }}>{this.state.responsavelPelaRequisicao}</span></Alert>
+            <Alert style={{ textAlign: "center" }} show={this.state.alerteDonoRequisicao} variant={"info"}>{this.state.responsavelPelaRequisicao === "FINALIZADO" ? "Processo da Solicitação do aluno  " : "Você não pode alterar os dados desta solicitação neste momento porque ela está sendo tratada por outro usuário."} <span style={{ color: "red" }}>{"(responsável = "+this.state.responsavelPelaRequisicao+")"}</span></Alert>
             <Form.Group className="col-md-6 container">
                 <TituloPagina titulo="Parecer da Requisição" />
                 <p > ID da requisição :<span style={{ color: "red" }}>&nbsp;{this.state.idRequisicao}</span> </p>
