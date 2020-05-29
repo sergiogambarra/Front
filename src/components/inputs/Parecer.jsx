@@ -21,7 +21,7 @@ class Parecer extends Component {
             usuario: "",
             professor: {},
             anexos: [],
-            prova: [],
+            prova: [], modificaModal: false,
             formacaoAtividadeAnterior: "",
             criterioAvaliacao: "", tipo: "", atualizarParecer: "",
             listaProfessores: [],
@@ -67,7 +67,7 @@ class Parecer extends Component {
             formacaoAtividadeAnterior: c.disciplinasCursadasAnterior,
             criterioAvaliacao: c.criterioAvaliacao,
             tipo: c.tipo,
-            prova: c.prova ||"",
+            prova: c.prova || "",
             titulo: "",
             coordenador: c.professor && c.professor.perfil.coordenador, alert: false,
             responsavelPelaRequisicao: c.responsavelPelaRequisicao
@@ -103,7 +103,8 @@ class Parecer extends Component {
         if (this.state.responsavelPelaRequisicao === "FINALIZADO") {
             this.setState({ alerteDonoRequisicao: true })
         }
-        
+      
+
     }
 
 
@@ -158,10 +159,11 @@ class Parecer extends Component {
         }
     }
     verificarDados() {
-console.log(this.state.user.id);
-console.log(this.state.professor&&this.state.professor.id);
-console.log(this.state.professor);
 
+
+        if (this.state.parecerServidor && this.state.parecerServidor.trim() !== "" && this.state.prova && this.state.prova.length > 0 && this.state.parecerCoordenador && this.state.parecerCoordenador.trim() !== "") {
+            this.setState({ modal: true, modificaModal: true })
+        }
         if (this.state.user && this.state.user.perfil.tipo === "PROFESSOR" && this.state.user && this.state.user.perfil.coordenador === true) {
             if (this.state.user && this.state.professor) {
                 if (this.state.user.id === this.state.professor.id) {
@@ -210,7 +212,8 @@ console.log(this.state.professor);
     }
     render() {
         return (<div><br />
-            <Alert style={{ textAlign: "center" }} show={this.state.alerteDonoRequisicao} variant={"info"}>{this.state.responsavelPelaRequisicao === "FINALIZADO" ? "Processo da Solicitação do aluno  " : "Você não pode alterar os dados desta solicitação neste momento porque ela está sendo tratada por outro usuário."} <span style={{ color: "red" }}>{"(responsável = "+this.state.responsavelPelaRequisicao+")"}</span></Alert>
+            <Alert style={{ textAlign: "center" }} show={this.state.alerteDonoRequisicao} variant={"info"}>{this.state.responsavelPelaRequisicao === "FINALIZADO" ? "Processo da Solicitação do aluno finalizado responsável = " : "Você não pode alterar os dados desta solicitação neste momento porque ela está sendo tratada por outro usuário. Responsável ="} <span style={{ color: "red" }}>
+                {this.state.responsavelPelaRequisicao === "FINALIZADO" ? "SETOR DE ENSINO " : this.state.responsavelPelaRequisicao === "SERVIDOR" ? "SETOR DE ENSINO" : this.state.responsavelPelaRequisicao}</span></Alert>
             <Form.Group className="col-md-6 container">
                 <TituloPagina titulo="Parecer da Requisição" />
                 <p > ID da requisição :<span style={{ color: "red" }}>&nbsp;{this.state.idRequisicao}</span> </p>
@@ -256,7 +259,7 @@ console.log(this.state.professor);
                     />
                 </Form.Group>
                 <Form.Group controlId="exampleForm.ControlTextarea1">
-                    <Form.Label>Parecer do Servidor</Form.Label>
+                    <Form.Label>Parecer do Setor de Ensino</Form.Label>
                     <Form.Control as="textarea" rows="2"
                         value={this.state.parecerServidor}
                         disabled={true}
@@ -332,6 +335,7 @@ console.log(this.state.professor);
                         })
                     }
                 </ol>
+                {console.log(this.state.alerteDonoRequisicao)}
 
                 {this.state.alerteDonoRequisicao ? "" :
 
@@ -345,11 +349,24 @@ console.log(this.state.professor);
                         <Form.Text className="text-danger">{this.state.msgErrorParecer} </Form.Text>
                     </Form.Group>
                 }
+                {this.state.user && this.state.user.permissao === "SERVIDOR" && this.state.responsavelPelaRequisicao === "FINALIZADO"?
+                
+                <Form.Group controlId="exampleForm.ControlTextarea1">
+                <Form.Label>Atualizar p arecer do : &nbsp;{this.state.stringParecer}</Form.Label>
+                <Form.Control as="textarea" rows="2"
+                    id={this.state.atualizarParecer}
+                    value={this.state.atualizarParecer}
+                    onChange={(e) => this.setState({ atualizarParecer: e.target.value })}
+                />
+                <Form.Text className="text-danger">{this.state.msgErrorParecer} </Form.Text>
+            </Form.Group>:""
+            
+            }
                 {
                     this.state.user && this.state.user.perfil.tipo === "PROFESSOR" && this.state.tipo === "certificacao"
 
                         ? <>
-                            <label>Adicionar documento  </label>
+                            <label>Adicionar prova  </label>
                             <div class="input-group mb-3">
 
                                 <AnexarArquivosInput
@@ -357,14 +374,15 @@ console.log(this.state.professor);
                                     setAnexos={this.setProva}
                                 />
                             </div>
+                            <Form.Text className="text-danger">"Permitido somente um arquivo com tamanho de até 4 Mb"</Form.Text>
                         </> : ""}
 
                 <ol>
                     {this.state.prova && <li><a href={this.state.prova.arquivo} download>{this.state.prova.nome}</a></li>}
                 </ol>
-                <br /> 
+                <br />
                 {
-                    <div className="row container" style={{textAlign:"right", position: 'relative', left: '0%' }}>
+                    <div className="row container" style={{ textAlign: "right", position: 'relative', left: '0%' }}>
                         <Button onClick={(e) => this.verificarDados()} variant="primary" className="btn btn-primary m-1"  >Salvar</Button>
                         <Link to="/minhas-requisicoes"> <Button variant="danger" className="btn btn-primary m-1" >Voltar </Button></Link>
                     </div>
@@ -375,7 +393,8 @@ console.log(this.state.professor);
                 <Modal.Header closeButton>
                     <Modal.Title > Confirmar </Modal.Title>
                 </Modal.Header>
-                <Modal.Body>Status : &nbsp;{this.state.deferido}</Modal.Body>
+                {this.state.modificaModal || <Modal.Body>Status : &nbsp;{this.state.deferido}</Modal.Body>}
+                {this.state.modificaModal && <Modal.Body>Salvar documento</Modal.Body>}
                 <Modal.Footer>
                     <Link to="/minhas-requisicoes"> <Button onClick={(e) => this.atualizar()} variant="primary" className="btn btn-primary m-1" >Salvar</Button></Link>
                 </Modal.Footer>

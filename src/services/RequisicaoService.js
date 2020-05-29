@@ -13,8 +13,8 @@ const getCertificacoes = async (user,page) => {
         return await get(`requisicoes/certificacoes?page=${page}&size=6`);       
     }else
     if (user.permissao === "PROFESSOR") {
+        return await get(`requisicoes/professor/${user.id}?page=${page}&size=6&tipo=certificacao`);
         
-        return await get("requisicoes/professor/"+user.id+"?tipo=certificacao");
     } else  {
         return await get(`requisicoes/certificacoes?page=${page}&size=6`);
     }
@@ -29,10 +29,10 @@ const getAproveitamentos = async (user,page) => {
         return await get(`requisicoes/aproveitamentos?page=${page}&size=6`);       
     }else
     if (user.permissao === "PROFESSOR") {
-        return await get("requisicoes/professor/"+user.id+"?tipo=aproveitamento");
+        return await get(`requisicoes/professor/${user.id}?page=${page}&size=6&tipo=aproveitamento`);
+        
     } else  {
        return await get(`requisicoes/aproveitamentos?page=${page}&size=6`);
-       
     }
 }
 const getRequisicaoId = async (id) => {

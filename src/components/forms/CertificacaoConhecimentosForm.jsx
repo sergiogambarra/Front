@@ -90,7 +90,6 @@ export default function CertificacaoConhecimentosForm({ user }) {
 
     const enviarRequisicao = () => {
         setShowModal(false);
-
         console.log(requisicao);
         postRequisicao(requisicao)
         

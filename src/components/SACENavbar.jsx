@@ -46,6 +46,11 @@ function retornaLinks(user) {
                 <Dropdown.Item ><Link to="/listar-curso">Cursos</Link></Dropdown.Item>
                 <Dropdown.Item ><Link to="/lista-disciplina">Disciplinas</Link></Dropdown.Item>
             </DropdownButton>
+            <DropdownButton id="dropdown-basic-button" title="RELATÓRIOS" style={{}}>
+                <Dropdown.Item ><Link to="">Solicitações de Aproveitamento de Estudos </Link></Dropdown.Item>
+                <Dropdown.Item ><Link to="">Solicitações de Certificação de conhecimento </Link></Dropdown.Item>
+                <Dropdown.Item ><Link to="">Final de Processo</Link></Dropdown.Item>
+            </DropdownButton>
         </>
     } else {
         return <>
@@ -67,19 +72,20 @@ export default function SACENavbar({ setUserData, user }) {
                 </Nav>
             </Navbar.Collapse>
             Usuário :&nbsp;
-                <strong variant="outline-light" >{user.login}</strong>
-            <NavLink to={'/'}>
+            <strong variant="outline-light" >{user.login}</strong>
+
                 &nbsp;&nbsp;
-                <Button
-                    variant="danger" className="btn btn-primary m-1"
-                    onClick={() => {
-                        logout();
-                        setUserData(null);
-                    }}
-                >
-                    Logout
+            <Button
+                variant="danger" className="btn btn-primary m-1"
+                onClick={() => {
+                    logout();
+                    setUserData(null);
+                    window.location.href = ("/login")
+                }}
+            >
+                Logout
                 </Button>
-            </NavLink>
+
         </Navbar>
     );
 }

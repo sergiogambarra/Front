@@ -43,13 +43,13 @@ class MinhasRequisicoes extends Component {
 
   async pesquisaStatus() {
     if (!this.state.status) {
-      this.setState({ msgErrorStatus: "Selecione status da pesquisa",mostraBotao:false ,requisicoesStatus:""})
+      this.setState({ msgErrorStatus: "Selecione status da pesquisa", mostraBotao: false, requisicoesStatus: "" })
       return
     }
     await get(`requisicoes/status/${this.state.status}?page=${this.state.page}&size=6&sort=DESC`).then((retorno) => {
       this.setState({ requisicoesStatus: retorno.content, msgErrorStatus: "", mostraBotao: true, last: retorno.last, first: retorno.first, total: retorno.totalPages })
       if (this.state.requisicoesStatus && this.state.requisicoesStatus.length === 0) {
-        this.setState({ alert: true,mostraBotao:false })
+        this.setState({ alert: true, mostraBotao: false })
         setTimeout(() => {
           this.setState({ alert: false })
         }, 3000)
@@ -63,13 +63,13 @@ class MinhasRequisicoes extends Component {
   }
   async pesquisaRequisicaoCurso() {
     if (!this.state.idCurso) {
-      this.setState({ msgErrorCurso: "Selecione em curso" ,mostraBotao:false,requisicoesDisciplina:""})
+      this.setState({ msgErrorCurso: "Selecione em curso", mostraBotao: false, requisicoesDisciplina: "" })
       return
     }
     await get(`requisicoes/curso/${this.state.idCurso}?page=${this.state.page}&size=6`).then((retorno) => {
       this.setState({ requisicoesDisciplina: retorno && retorno.content, msgErrorCurso: "", mostraBotao: true, last: retorno.last, first: retorno.first, total: retorno.totalPages })
       if (this.state.requisicoesDisciplina && this.state.requisicoesDisciplina.length === 0) {
-        this.setState({ alert: true ,mostraBotao:false})
+        this.setState({ alert: true, mostraBotao: false })
         setTimeout(() => {
           this.setState({ alert: false })
         }, 3000)
@@ -86,7 +86,7 @@ class MinhasRequisicoes extends Component {
       await get(`requisicoes/data/${format2(this.state.dataInicio)}/${format2(this.state.dataFinal)}/?page=${this.state.page}&size=6`).then((retorno) => {
         this.setState({ requisicoesAluno: retorno && retorno.content, last: retorno.last, first: retorno.first, total: retorno.totalPages, pararPesquisaData: true, mostraBotao: true })
         if (this.state.requisicoesAluno && this.state.requisicoesAluno.length === 0) {
-          this.setState({ alert: true ,mostraBotao:false})
+          this.setState({ alert: true, mostraBotao: false })
           setTimeout(() => {
             this.setState({ alert: false })
           }, 3000)
@@ -98,14 +98,14 @@ class MinhasRequisicoes extends Component {
     console.log(this.state.page);
     this.setState({ dataInicioInvalida: "", dataFinalInvalida: "" })
     if (!this.state.user.id) {
-      this.setState({ msgErrorPesquisaNome: "Selecione nome do aluno", requisicoesAluno: "", user: "",mostraBotao:false })
+      this.setState({ msgErrorPesquisaNome: "Selecione nome do aluno", requisicoesAluno: "", user: "", mostraBotao: false })
       return
     }
 
     await get(`requisicoes/alunos/${this.state.user.id}?page=${this.state.page}&size=6`).then((retorno) => {
       this.setState({ requisicoesAluno: retorno && retorno.content, msgErrorPesquisaNome: "", last: retorno.last, first: retorno.first, total: retorno.totalPages, mostraBotao: true })
       if (this.state.requisicoesAluno && this.state.requisicoesAluno.length === 0) {
-        this.setState({ alert: true ,mostraBotao:false})
+        this.setState({ alert: true, mostraBotao: false })
         setTimeout(() => {
           this.setState({ alert: false })
         }, 3000)
@@ -120,29 +120,32 @@ class MinhasRequisicoes extends Component {
   }
 
   control(e) {
-    if (this.state.selecionaPesquisa === "Nome") {
-      if (e.target.id === "+") {
-        this.setState({ page: this.state.page + 1, mostraEditar: false }, () => this.todasRequisicoes())
-      } else {
-        this.setState({ page: this.state.page - 1, mostraEditar: false }, () => this.todasRequisicoes())
-      }
-    } else if (this.state.selecionaPesquisa === "Data") {
-      if (e.target.id === "+") {
-        this.setState({ page: this.state.page + 1, mostraEditar: false }, () => this.pesquisaData())
-      } else {
-        this.setState({ page: this.state.page - 1, mostraEditar: false }, () => this.pesquisaData())
-      }
-    } else if (this.state.selecionaPesquisa === "Curso") {
-      if (e.target.id === "+") {
-        this.setState({ page: this.state.page + 1, mostraEditar: false }, () => this.pesquisaRequisicaoCurso())
-      } else {
-        this.setState({ page: this.state.page - 1, mostraEditar: false }, () => this.pesquisaRequisicaoCurso())
-      }
-    } else if (this.state.selecionaPesquisa === "Status") {
-      if (e.target.id === "+") {
-        this.setState({ page: this.state.page + 1, mostraEditar: false }, () => this.pesquisaStatus())
-      } else {
-        this.setState({ page: this.state.page - 1, mostraEditar: false }, () => this.pesquisaStatus())
+   
+    if (this.state.selecionaPesquisa) {
+      if (this.state.selecionaPesquisa === "Nome") {
+        if (e.target.id === "+") {
+          this.setState({ page: this.state.page + 1, mostraEditar: false }, () => this.todasRequisicoes())
+        } else {
+          this.setState({ page: this.state.page - 1, mostraEditar: false }, () => this.todasRequisicoes())
+        }
+      } else if (this.state.selecionaPesquisa === "Data") {
+        if (e.target.id === "+") {
+          this.setState({ page: this.state.page + 1, mostraEditar: false }, () => this.pesquisaData())
+        } else {
+          this.setState({ page: this.state.page - 1, mostraEditar: false }, () => this.pesquisaData())
+        }
+      } else if (this.state.selecionaPesquisa === "Curso") {
+        if (e.target.id === "+") {
+          this.setState({ page: this.state.page + 1, mostraEditar: false }, () => this.pesquisaRequisicaoCurso())
+        } else {
+          this.setState({ page: this.state.page - 1, mostraEditar: false }, () => this.pesquisaRequisicaoCurso())
+        }
+      } else if (this.state.selecionaPesquisa === "Status") {
+        if (e.target.id === "+") {
+          this.setState({ page: this.state.page + 1, mostraEditar: false }, () => this.pesquisaStatus())
+        } else {
+          this.setState({ page: this.state.page - 1, mostraEditar: false }, () => this.pesquisaStatus())
+        }
       }
     }
   }
@@ -171,7 +174,7 @@ class MinhasRequisicoes extends Component {
                 <>
                   <div>
                     <input type="radio" id="Nome" name="drone" value="Nome" onClick={(e) => this.setState({
-                      selecionaPesquisa: e.target.value, requisicoesAluno: "", dataInicio: "", dataFinal: "",msgErrorStatus:""
+                      selecionaPesquisa: e.target.value, requisicoesAluno: "", dataInicio: "", dataFinal: "", msgErrorStatus: ""
                       , requisicoesStatus: "", msgErrorPesquisaNome: "", user: "", requisicoesDisciplina: "", status: "", msgErrorCurso: "", pararPesquisaData: false,
                       last: "", first: "", total: "", page: 0, mostraBotao: false
                     })}
@@ -181,7 +184,7 @@ class MinhasRequisicoes extends Component {
 
                   <div>
                     <input type="radio" id="Data" name="drone" value="Data" onClick={(e) => this.setState({
-                      selecionaPesquisa: e.target.value, dataInicio: "", dataFinal: "",msgErrorStatus:"",
+                      selecionaPesquisa: e.target.value, dataInicio: "", dataFinal: "", msgErrorStatus: "",
                       requisicoesStatus: "", requisicoesAluno: "", user: "", requisicoesDisciplina: "", status: "", idCurso: "", msgErrorCurso: "", pararPesquisaData: false,
                       last: "", first: "", total: "", page: 0, mostraBotao: false
                     })} />&nbsp;&nbsp;
@@ -190,7 +193,7 @@ class MinhasRequisicoes extends Component {
 
                   <div>
                     <input type="radio" id="Curso" name="drone" value="Curso" onClick={(e) => this.setState({
-                      selecionaPesquisa: e.target.value, dataInicio: "", dataFinal: "",msgErrorStatus:"",
+                      selecionaPesquisa: e.target.value, dataInicio: "", dataFinal: "", msgErrorStatus: "",
                       requisicoesStatus: "", requisicoesAluno: "", user: "", requisicoesDisciplina: "", status: "", idCurso: "", msgErrorCurso: "", pararPesquisaData: false,
                       last: "", first: "", total: "", page: 0, mostraBotao: false
                     })} />&nbsp;&nbsp;
@@ -198,7 +201,7 @@ class MinhasRequisicoes extends Component {
                   </div>
                   <div>
                     <input type="radio" id="Status" name="drone" value="Status" onClick={(e) => this.setState({
-                      selecionaPesquisa: e.target.value, dataInicio: "", dataFinal: "",msgErrorStatus:"",
+                      selecionaPesquisa: e.target.value, dataInicio: "", dataFinal: "", msgErrorStatus: "",
                       requisicoesStatus: "", requisicoesAluno: "", user: "", requisicoesDisciplina: "", status: "", idCurso: "", msgErrorCurso: "", pararPesquisaData: false,
                       last: "", first: "", total: "", page: 0, mostraBotao: false
                     })} />&nbsp;&nbsp;
@@ -312,7 +315,7 @@ class MinhasRequisicoes extends Component {
         {
           this.state.requisicoes === "aproveitamento" ? <TabelaAproveitamentos user={this.state.user} /> : this.state.requisicoes === "certificacao" ?
             <TabelaCertificacoes user={this.state.user} /> : ""} <br /><br />
-         { this.state.mostraBotao&& <h3> Requisições encontradas</h3>}<br />
+        {this.state.mostraBotao && <h3> Requisições encontradas</h3>}<br />
         {
           <Container>
             <Row>

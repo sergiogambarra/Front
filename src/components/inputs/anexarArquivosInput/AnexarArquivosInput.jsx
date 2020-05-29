@@ -73,7 +73,7 @@ export default function AnexarArquivosInput({ anexos, setAnexos, onError }) {
                                 {anexos.map((anexo) =>
                                     <li className='files-list-item' key={anexo.file.id}>
                                         <div className='files-list-item-preview'>{
-                                            anexo.tipo === 'image' ?
+                                            anexo.tipo === 'image' ? 
                                                 <img className='files-list-item-preview-image' src={anexo.file.preview.url} alt={'Preview do anexo'} />
                                                 :
                                                 <div className='files-list-item-preview-extension'>{anexo.tipo}</div>
