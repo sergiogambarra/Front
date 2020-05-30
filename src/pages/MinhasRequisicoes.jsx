@@ -95,7 +95,7 @@ class MinhasRequisicoes extends Component {
     }
   }
   async todasRequisicoes() {
-    console.log(this.state.page);
+
     this.setState({ dataInicioInvalida: "", dataFinalInvalida: "" })
     if (!this.state.user.id) {
       this.setState({ msgErrorPesquisaNome: "Selecione nome do aluno", requisicoesAluno: "", user: "", mostraBotao: false })
@@ -120,7 +120,7 @@ class MinhasRequisicoes extends Component {
   }
 
   control(e) {
-   
+
     if (this.state.selecionaPesquisa) {
       if (this.state.selecionaPesquisa === "Nome") {
         if (e.target.id === "+") {
@@ -330,10 +330,19 @@ class MinhasRequisicoes extends Component {
                   }
                 })}
               {this.state.requisicoesStatus && this.state.requisicoesStatus.map((r) => {
-                return <CardCertificacao requisicao={r} />
+                if (r.tipo === "aproveitamento") {
+                  return <CardAproveitamento requisicao={r} />
+                }else{
+                  return <CardCertificacao requisicao={r} />
+                }
               })}
               {this.state.requisicoesDisciplina && this.state.requisicoesDisciplina.map((r) => {
-                return <CardCertificacao requisicao={r} />
+                if (r.tipo === "aproveitamento") {
+                  return <CardAproveitamento requisicao={r} />
+                }else{
+                  return <CardCertificacao requisicao={r} />
+
+                }
               })}
 
 

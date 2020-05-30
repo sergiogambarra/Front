@@ -19,6 +19,8 @@ import ListaProfessor from './pages/Professor/ListaProfessor';
 import ListaServidor from './../src/pages/Servidor/ListaServidor';
 import CadastroCurso from './pages/cadastros/CadastroCurso';
 import EditarSenha from './pages/Professor/EditarSenha';
+import RelatorioAproveitamento from './Relatorios/RelatorioAproveitamentoEstudos';
+import RelatorioCertificacao from './Relatorios/RelatorioCertificacao';
 import './components/card.css';
 
 function App() {
@@ -50,6 +52,8 @@ function App() {
           <PrivateRoute exact path="/lista-professor" component={ListaProfessor} />
           <PrivateRoute exact path="/lista-servidor" component={ListaServidor} />
           <PrivateRoute exact path="/troca-senha" component={EditarSenha} />
+          <PrivateRoute exact path="/relatorio-aproveitamento" component={RelatorioAproveitamento} />
+          <PrivateRoute exact path="/relatorio-certificacao" component={RelatorioCertificacao} />
           <Route path="*" component={() => <h1>Page not found</h1>} />
         </Switch>
       </div>

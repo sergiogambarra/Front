@@ -8,7 +8,7 @@ export default function CardCertificacao({requisicao}) {
   let history = useHistory();
   
   const {
-    id, dataRequisicao, usuario, disciplinaSolicitada, deferido,
+    id, dataRequisicao, usuario, disciplinaSolicitada, deferido,tipo,
     professor
   } = requisicao;
 
@@ -17,6 +17,7 @@ export default function CardCertificacao({requisicao}) {
         <div className='requisicao' onClick={()=>history.push(`/parecer/${id}`)}>
         <p class={`badge badge-${mudaCor(deferido)}`}>{`Status do processo : ${deferido}`}</p>
         <p>{`ID: ${id}`}</p>
+        <p>{`Tipo: ${tipo === "certificacao"? "CERTIFICAÇÃO DE CONHECIMENTOS":""}`}</p>
         <p>{`Data: ${dataRequisicao}`}</p>
         <p>{`Aluno: ${usuario && usuario.perfil.nome}`}</p>
         <p>{`Disciplina : ${disciplinaSolicitada&&disciplinaSolicitada.nome}`}</p>
