@@ -352,7 +352,7 @@ class Parecer extends Component {
                 {this.state.user && this.state.user.permissao === "SERVIDOR" && this.state.responsavelPelaRequisicao === "FINALIZADO"?
                 
                 <Form.Group controlId="exampleForm.ControlTextarea1">
-                <Form.Label>Atualizar p arecer do : &nbsp;{this.state.stringParecer}</Form.Label>
+                <Form.Label>Atualizar parecer do : &nbsp;{this.state.stringParecer}</Form.Label>
                 <Form.Control as="textarea" rows="2"
                     id={this.state.atualizarParecer}
                     value={this.state.atualizarParecer}

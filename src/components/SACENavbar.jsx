@@ -49,7 +49,7 @@ function retornaLinks(user) {
             <DropdownButton id="dropdown-basic-button" title="RELATÓRIOS" style={{}}>
                 <Dropdown.Item ><Link to="/relatorio-aproveitamento">Solicitações de Aproveitamento de Estudos </Link></Dropdown.Item>
                 <Dropdown.Item ><Link to="/relatorio-certificacao">Solicitações de Certificação de conhecimento </Link></Dropdown.Item>
-                <Dropdown.Item ><Link to="">Final de Processo</Link></Dropdown.Item>
+                <Dropdown.Item ><Link to="/relatorio-final">Final de Processo</Link></Dropdown.Item>
             </DropdownButton>
         </>
     } else {

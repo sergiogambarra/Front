@@ -21,6 +21,7 @@ import CadastroCurso from './pages/cadastros/CadastroCurso';
 import EditarSenha from './pages/Professor/EditarSenha';
 import RelatorioAproveitamento from './Relatorios/RelatorioAproveitamentoEstudos';
 import RelatorioCertificacao from './Relatorios/RelatorioCertificacao';
+import RelatorioFinal from './Relatorios/RelatorioFinal';
 import './components/card.css';
 
 function App() {
@@ -54,6 +55,7 @@ function App() {
           <PrivateRoute exact path="/troca-senha" component={EditarSenha} />
           <PrivateRoute exact path="/relatorio-aproveitamento" component={RelatorioAproveitamento} />
           <PrivateRoute exact path="/relatorio-certificacao" component={RelatorioCertificacao} />
+          <PrivateRoute exact path="/relatorio-final" component={RelatorioFinal} />
           <Route path="*" component={() => <h1>Page not found</h1>} />
         </Switch>
       </div>
