@@ -46,6 +46,9 @@ function retornaLinks(user) {
                 <Dropdown.Item ><Link to="/listar-curso">Cursos</Link></Dropdown.Item>
                 <Dropdown.Item ><Link to="/lista-disciplina">Disciplinas</Link></Dropdown.Item>
             </DropdownButton>
+            <DropdownButton id="dropdown-basic-button" title="PESQUISAS" style={{}}>
+                <Dropdown.Item ><Link to="/pesquisa-usuario">Pesquisa Usuário </Link></Dropdown.Item>
+            </DropdownButton>
             <DropdownButton id="dropdown-basic-button" title="RELATÓRIOS" style={{}}>
                 <Dropdown.Item ><Link to="/relatorio-aproveitamento">Solicitações de Aproveitamento de Estudos </Link></Dropdown.Item>
                 <Dropdown.Item ><Link to="/relatorio-certificacao">Solicitações de Certificação de conhecimento </Link></Dropdown.Item>

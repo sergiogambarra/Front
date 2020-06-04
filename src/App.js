@@ -22,6 +22,7 @@ import EditarSenha from './pages/Professor/EditarSenha';
 import RelatorioAproveitamento from './Relatorios/RelatorioAproveitamentoEstudos';
 import RelatorioCertificacao from './Relatorios/RelatorioCertificacao';
 import RelatorioFinal from './Relatorios/RelatorioFinal';
+import PesquisaUsuario from '../src/pages/Pesquisas/PesquisaUsuario';
 import './components/card.css';
 
 function App() {
@@ -56,6 +57,7 @@ function App() {
           <PrivateRoute exact path="/relatorio-aproveitamento" component={RelatorioAproveitamento} />
           <PrivateRoute exact path="/relatorio-certificacao" component={RelatorioCertificacao} />
           <PrivateRoute exact path="/relatorio-final" component={RelatorioFinal} />
+          <PrivateRoute exact path="/pesquisa-usuario" component={PesquisaUsuario} />
           <Route path="*" component={() => <h1>Page not found</h1>} />
         </Switch>
       </div>

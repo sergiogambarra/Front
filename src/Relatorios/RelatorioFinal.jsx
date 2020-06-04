@@ -28,7 +28,7 @@ class RelatorioFinal extends Component {
     }
     if (this.state.dataInicio && this.state.dataFinal) {
       await get(`requisicoes/relatorio/data/${format2(this.state.dataInicio)}/${format2(this.state.dataFinal)}/`).then((retorno) => {
-        if (retorno.length > 0) {
+        if (retorno&&retorno.length > 0) {
           this.setState({ requisicoesAluno: retorno, mostraLista: true, dataFinalInvalida: false, dataInicioInvalida: false, mostraPesquisa: false })
         } else {
           this.setState({ alert: true })
@@ -80,10 +80,12 @@ class RelatorioFinal extends Component {
         {this.state.mostraLista &&
           <>
             <br /><br />
+              <h1 style={{textAlign:"center"}}>Resultado Final</h1><br />
             <Table id="imprimir"striped bordered hover >
               <thead>
                 <tr>
                   <th>Nome</th>
+                  <th>Matrícula</th>
                   <th>Solicitação</th>
                   <th>Data da Solicitação</th>
                   <th>Disciplina Solicitada</th>
@@ -94,6 +96,7 @@ class RelatorioFinal extends Component {
                 {this.state.requisicoesAluno && this.state.requisicoesAluno.map((r) =>
                   <tr>
                     <td>{r.usuario.perfil.nome}</td>
+                    <td>{r.usuario.perfil.matricula}</td>
                     <td>{r.tipo === "aproveitamento" ? "APROVEITAMENTO DE ESTUDOS" : "CERTIFICAÇÃO DE CONHECIMENTOS"}</td>
                     <td>{r.dataRequisicao}</td>
                     <td>{r.disciplinaSolicitada.nome}</td>
