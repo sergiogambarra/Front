@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Alert,Table } from 'react-bootstrap';
 import { get } from '../../services/ServicoCrud';
 import SACEInput from '../../../src//components/inputs/SACEInput';
 import { format } from '../../auxiliares/FormataData';
@@ -8,7 +8,7 @@ class PesquisaUsuario extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            usuarioMatricula: "", escolha: "", matricula: "", siape: "", usuarioSiape: "", msgMatricula: "",msgSiape:"",nome:""
+            usuarioMatricula: "", escolha: "", matricula: "", siape: "", usuarioSiape: "", msgMatricula: "",msgSiape:"",alert:false,nome:"",msgNome:"",nomePesquisa:[]
         }
     }
 
@@ -18,8 +18,14 @@ class PesquisaUsuario extends Component {
             return
         }
         get(`usuarios/matricula/${this.state.matricula}`).then((r) => {
+            if(r === ""){
+                this.setState({alert:true})
+            }
             this.setState({ usuarioMatricula: r,msgMatricula:"" })
         })
+        setTimeout(() => {
+            this.setState({alert:false})
+        }, 3000);
     }
     pesquisaProfessorSiape() {
         if (this.state.siape <= 0) {
@@ -27,23 +33,41 @@ class PesquisaUsuario extends Component {
             return
         }
         get(`usuarios/siape/${this.state.siape}`).then((r) => {
+            if(r === ""){
+                this.setState({alert:true})
+            }
             this.setState({ usuarioSiape: r ,msgSiape:""})
-            console.log(this.state.usuarioSiape);
-
         })
+        setTimeout(() => {
+            this.setState({alert:false})
+        }, 3000);
     }
     pesquisaNome(){
-
+        if (this.state.nome.trim() === "") {
+            this.setState({ msgNome: "Você não digitou nome correto" })
+            return
+        }
+        get(`usuarios/pesquisaNome/${this.state.nome}`).then((r) => {
+            console.log(r);
+            if(r.length === 0){
+                this.setState({alert:true})
+            }
+            this.setState({ nomePesquisa: r ,msgNome:""})
+        })
+        setTimeout(() => {
+            this.setState({alert:false})
+        }, 3000);
     }
 
     limpar() {
-        this.setState({ usuarioMatricula: "", usuarioSiape: "" ,msgMatricula:"",matricula:"",siape:"",msgSiape:"",nome:""})
+        this.setState({ usuarioMatricula: "", usuarioSiape: "" ,msgMatricula:"",matricula:"",siape:"",msgSiape:"",nome:"",msgNome:"",nomePesquisa:""})
     }
     render() {
         return (<diV>
             <br /><br />
             < Form >
                 <Form.Label><h3>Selecione tipo da pesquisa</h3></Form.Label>
+                <Alert show={this.state.alert} variant={"danger"}>Usuário não encontrado</Alert>
                 <Form.Control as="select" custom
                     id={this.state.escolha}
                     value={this.state.escolha}
@@ -52,7 +76,7 @@ class PesquisaUsuario extends Component {
                         (e) => {
                             this.setState({ escolha: e.target.value })
                         }} >
-                    <option key={0} value={""}></option>
+                    <option value={""}></option>
                     <option value={"matricula"}>Matrícula do aluno</option>
                     <option value={"siape"}>SIAPE do professor</option>
                     <option value={"nome"}>Nome do usuário</option>
@@ -132,7 +156,7 @@ class PesquisaUsuario extends Component {
             {this.state.escolha === "nome" && <>
                 <br /><br />
                 <label>Digite o nome do usuário : </label>&nbsp;&nbsp;&nbsp;
-                <input value={this.state.nome}onChange={(e) => {
+                <input style={{width:500}} value={this.state.nome}onChange={(e) => {
                     this.setState({ nome: e.target.value })
                 }}></input>
                 <Form.Text className="text-danger">{this.state.msgNome} </Form.Text>
@@ -140,6 +164,30 @@ class PesquisaUsuario extends Component {
                     <Button onClick={() => this.pesquisaNome()}>Pesquisar</Button></>&nbsp;
                 <Button variant={"danger"} onClick={() => this.limpar()}>Limpar</Button></>
             }
+            {this.state.nomePesquisa &&this.state.nomePesquisa.length >0 ? <>
+            <br /><br />
+            <h3 style={{textAlign:"center"}}>Lista de Usuários encontrados</h3><br />
+             <Table id="imprimir"striped bordered hover >
+             <thead>
+               <tr>
+                 <th>ID</th>
+                 <th>Nome</th>
+                 <th>Email</th>
+                 <th>Perfil</th>
+               </tr>
+             </thead>
+             <tbody>
+               {this.state.nomePesquisa && this.state.nomePesquisa.map((u) =>
+                 <tr>
+                   <td>{u.perfil.id}</td>
+                   <td>{u.perfil.nome}</td>
+                   <td>{u.email}</td>
+                   <td>{u.perfil.tipo}</td>
+                 </tr>
+               )}
+             </tbody>
+           </Table>
+            </>:""}
         </diV>);
     }
 }
