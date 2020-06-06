@@ -29,6 +29,7 @@ function retornaLinks(user) {
             <SACELink to={'/nova-requisicao'} label={'Criar requisição'} />
             <SACELink to={`/aluno-requisicoes/`} label={'Requisições'} />
             <SACELink to={'/troca-senha'} label={'Alterar senha'} />
+            <SACELink to={'/dados-aluno'} label={'Informações pessoais'} />
         </>
     } else if (user.permissao === "SERVIDOR") {
         return <>

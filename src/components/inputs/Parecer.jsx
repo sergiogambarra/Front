@@ -36,7 +36,6 @@ class Parecer extends Component {
 
     async listaAth() {
         const user = await get("usuarios/auth/")
-        console.log(user);
         this.setState({ user })
     }
     async buscaProfessores() {
@@ -50,7 +49,6 @@ class Parecer extends Component {
         this.listaAth()
         this.buscaProfessores()
         const c = await getRequisicaoId(this.props.match.params.id)
-        console.log(c);
         this.setState({ c })
         this.mudaNomeStringParecer()
         this.setState({
@@ -82,6 +80,9 @@ class Parecer extends Component {
             this.setState({ alerteDonoRequisicao: true })
         }
         if (this.state.user && this.state.user.permissao === "PROFESSOR" && this.state.responsavelPelaRequisicao === "SERVIDOR") {
+            this.setState({ alerteDonoRequisicao: true })
+        }
+        if (this.state.user && this.state.user.permissao === "PROFESSOR"&& this.state.user&& this.state.user.perfil.coordenador === false&& this.state.responsavelPelaRequisicao === "COORDENADOR") {
             this.setState({ alerteDonoRequisicao: true })
         }
 
@@ -212,6 +213,8 @@ class Parecer extends Component {
     }
     render() {
         return (<div><br />
+        {console.log(this.state.responsavelPelaRequisicao)}
+        
             <Alert style={{ textAlign: "center" }} show={this.state.alerteDonoRequisicao} variant={"info"}>{this.state.responsavelPelaRequisicao === "FINALIZADO" ? "Processo da Solicitação do aluno finalizado responsável = " : "Você não pode alterar os dados desta solicitação neste momento porque ela está sendo tratada por outro usuário. Responsável ="} <span style={{ color: "red" }}>
                 {this.state.responsavelPelaRequisicao === "FINALIZADO" ? "SETOR DE ENSINO " : this.state.responsavelPelaRequisicao === "SERVIDOR" ? "SETOR DE ENSINO" : this.state.responsavelPelaRequisicao}</span></Alert>
             <Form.Group className="col-md-6 container">

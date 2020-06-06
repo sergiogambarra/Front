@@ -14,6 +14,7 @@ import CadastroPerfilServidor from './pages/cadastros/CadastroPerfilServidor';
 import ListaAlunos from '../src/Cursos/ListaAlunos';
 import Parecer from '../src/components/inputs/Parecer';
 import RequisicaoAluno from './pages/Aluno/RequisicaoAluno';
+import DadosAluno from './pages/Aluno/DadosAluno';
 import TelaTransicao from './pages/TelaTransicao';
 import ListaProfessor from './pages/Professor/ListaProfessor';
 import ListaServidor from './../src/pages/Servidor/ListaServidor';
@@ -58,6 +59,7 @@ function App() {
           <PrivateRoute exact path="/relatorio-certificacao" component={RelatorioCertificacao} />
           <PrivateRoute exact path="/relatorio-final" component={RelatorioFinal} />
           <PrivateRoute exact path="/pesquisa-usuario" component={PesquisaUsuario} />
+          <PrivateRoute exact path="/dados-aluno" component={DadosAluno} />
           <Route path="*" component={() => <h1>Page not found</h1>} />
         </Switch>
       </div>
