@@ -17,7 +17,7 @@ export default function CardCertificacao({requisicao}) {
         <div className='requisicao' onClick={()=>history.push(`/parecer/${id}`)}>
         <p class={`badge badge-${mudaCor(deferido)}`}>{`Status do processo : ${deferido}`}</p>
         <p>{`ID: ${id}`}</p>
-        <p>{`Tipo: ${tipo === "certificacao"? "CERTIFICAÇÃO DE CONHECIMENTOS":""}`}</p>
+        <p>{`${tipo === "certificacao"? "CERTIFICAÇÃO DE CONHECIMENTOS":""}`}</p>
         <p>{`Data: ${dataRequisicao}`}</p>
         <p>{`Aluno: ${usuario && usuario.perfil.nome}`}</p>
         <p>{`Disciplina : ${disciplinaSolicitada&&disciplinaSolicitada.nome}`}</p>

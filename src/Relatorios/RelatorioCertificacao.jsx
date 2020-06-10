@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { get } from '../services/ServicoCrud';
-import { format2 } from '../auxiliares/FormataData';
-import { Form, Button } from 'react-bootstrap';
+import { get ,post} from '../services/ServicoCrud';
+import { format2,format } from '../auxiliares/FormataData';
+import { Form, Button , Table,Alert} from 'react-bootstrap';
 import SACEInput from '../components/inputs/SACEInput';
 
 
@@ -9,8 +9,8 @@ class RelatorioCertificacao extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      id: "", alunos: [], dataInicio: "", requisicoesStatus: [],
-      dataFinal: "", dataInicioInvalida: false, dataFinalInvalida: false, msgErrorPesquisaNome: "", status: "", msgErrorStatus: "", cursos: [], idCurso: "", msgErrorCurso: "",
+      id: "", alunos: [], dataInicio: null, listaFiltro:[],mostraPesquisa:false, tipoRequisicao: "requisicoes_certificacao",idDisciplina:null,alert:false,
+      dataFinal: null, dataInicioInvalida: false, dataFinalInvalida: false, msgErrorPesquisaNome: "", status: null, msgErrorStatus: "", cursos: [], idCurso: null, msgErrorCurso: "",
       requisicoesDisciplina: []
     }
   }
@@ -30,13 +30,7 @@ class RelatorioCertificacao extends Component {
       this.setState({ cursos: retorno })
     })
   }
-  async pesquisaStatus() {
-
-    await get(`requisicoes/status/${this.state.status}`).then((retorno) => {
-      this.setState({ requisicoesStatus: retorno })
-
-    })
-  }
+  
   async listarDisciplinas() {
     console.log(this.state.idCurso);
     await get(`cursos/${this.state.idCurso}/disciplinas/`).then((retorno) => {
@@ -44,16 +38,35 @@ class RelatorioCertificacao extends Component {
       if (retorno) this.setState({ disciplinas: retorno })
     });
   }
-  async pesquisaData() {
 
-    await get(`requisicoes/data/${format2(this.state.dataInicio)}/${format2(this.state.dataFinal)}/?page=${this.state.page}&size=6`).then((retorno) => {
-      this.setState({ requisicoesAluno: retorno })
+  async filtro() {
+
+    await post("requisicoes/filtro/", {
+      tipoRequisicao: this.state.tipoRequisicao,
+      dataInicio: this.state.dataInicio && format(this.state.dataInicio),
+      dataFinal: this.state.dataFinal && format(this.state.dataFinal),
+      idCurso: this.state.idCurso,
+      idDisciplina: this.state.idDisciplina,
+      statusRequisicao:this.state.status
+    }).then((r) => {
+      if (r && r.data.length === 0) {
+        this.setState({ alert:true,mostraPesquisa:false})
+        setTimeout(() => {
+          this.setState({alert:false})
+        }, 3000);
+      }else{
+        this.setState({ listaFiltro: r.data, mostraPesquisa: true })
+      }
     })
+  }
+  limpar() {
+    this.setState({ mostraPesquisa: false })
   }
   render() {
     return (
       <div>   <br /><br />
         <h3>Solicitações de Certificação de Conhecimentos</h3>
+        <Alert variant={"danger"} show={this.state.alert}>Não foram encontradas solicitações para pesquisa</Alert>
         < Form >
           <Form.Group controlId="exampleForm.SelectCustom">
             <br />
@@ -75,9 +88,11 @@ class RelatorioCertificacao extends Component {
           <Form.Group controlId="exampleForm.SelectCustom">
             <Form.Label>Selecione disciplina do curso</Form.Label>
             <Form.Control as="select" custom
+             id={this.state.idDisciplina}
+             value={this.state.idDisciplina}
               onChange={
                 (e) => {
-
+                  this.setState({idDisciplina:e.target.value})
                 }} >
               <option key={0} value={""}></option>
               {this.state.disciplinas && this.state.disciplinas.map((d) =>
@@ -128,7 +143,40 @@ class RelatorioCertificacao extends Component {
           onError={this.state.dataFinalInvalida}
           onErrorMessage={'Você não inseriu uma data válida!'}
         />
-        <Button onClick={() => this.pesquisaData()}>Pesquisar</Button>
+        <Button onClick={() => this.filtro()}>Pesquisar</Button>
+        {this.state.mostraPesquisa &&
+          <>
+            <br /><br />
+            <h1 style={{ textAlign: "center" }}>Resultado Final</h1><br />
+            <Table id="imprimir" striped bordered hover >
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>Matrícula</th>
+                  <th>Solicitação</th>
+                  <th>Data da Solicitação</th>
+                  <th>Disciplina Solicitada</th>
+                  <th>Resultado</th>
+                </tr>
+              </thead>
+              <tbody>
+                {this.state.listaFiltro && this.state.listaFiltro.map((r) =>
+                  <tr>
+                    <td>{r.nomeUsuario}</td>
+                    <td>{r.matriculaUsuario}</td>
+                    <td>{"Certificação de Conhecimentos"}</td>
+                    <td>{format2(r.data)}</td>
+                    <td>{r.nomeDisciplina}</td>
+                    <td>{r.status}</td>
+                  </tr>
+                )}
+              </tbody>
+            </Table><br />
+            <Button onClick={() => window.print() +
+              this.setState({ mostraPesquisa: true })
+            }>Imprimir</Button>&nbsp;&nbsp;
+            <Button variant={"danger"} onClick={() => this.limpar()}>Limpar</Button>
+          </>}
       </div>
     );
   }

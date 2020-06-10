@@ -9,14 +9,12 @@ class RelatorioFinal extends Component {
   constructor(props) {
     super(props);
     this.state = {alert:false,
-      dataInicio: "", dataFinal: "", dataInicioInvalida: false, dataFinalInvalida: false, requisicoesAluno: [], mostraLista: false, mostraPesquisa: true
+      dataInicio: "", dataFinal: "", dataInicioInvalida: false, dataFinalInvalida: false, requisicoesAluno: [], mostraLista: false, mostraPesquisa: true,
 
     }
   }
 
   async pesquisaData() {
-    console.log(this.state.dataInicio);
-    console.log(this.state.dataFinal);
 
     if (!this.state.dataInicio) {
       this.setState({ dataInicioInvalida: true })
@@ -46,12 +44,14 @@ class RelatorioFinal extends Component {
     
     return (
       <div>   <br /><br />
-        <h3 style={{ textDecoration: "underline" }}>Relatório Final das Solicitações  </h3>
+        
         <br /><br />
         <Alert variant={"danger"} show={this.state.alert}>Não foi encontrada requisição para esse período</Alert>
+        {this.state.mostraPesquisa &&<>
+          <h3 style={{ textDecoration: "underline" }}>Relatório Final das Solicitações  </h3>
         <SACEInput
           type={"date"}
-          label={'Apartir do dia '}
+          label={'A partir do dia '}
           value={this.state.dataInicio}
           disabled={this.state.pararPesquisaData}
           placeholder={'pesquisa por data. '}
@@ -71,11 +71,10 @@ class RelatorioFinal extends Component {
           onErrorMessage={'Você não inseriu uma data válida!'}
         />
         <br />
-        {this.state.mostraPesquisa &&
-          <>
+          
             <Button onClick={() => this.pesquisaData()}>Pesquisar</Button>&nbsp;&nbsp;
             <Button variant={"danger"} onClick={() => this.limpar()}>Limpar</Button>
-          </>
+        </>  
         }
         {this.state.mostraLista &&
           <>
@@ -105,10 +104,9 @@ class RelatorioFinal extends Component {
                 )}
               </tbody>
             </Table><br />
-            <Button onClick={() => window.print() +
-              this.setState({ mostraPesquisa: true })
-            }>Imprimir</Button>&nbsp;&nbsp;
-            <Button variant={"danger"} onClick={() => this.limpar()}>Limpar</Button>
+            
+            <Button onClick={() => window.print() }>Imprimir</Button>&nbsp;&nbsp;
+            <Button variant={"danger"} onClick={() => this.limpar()}>Voltar</Button>
           </>
 
         }

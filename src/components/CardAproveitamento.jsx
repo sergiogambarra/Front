@@ -14,7 +14,7 @@ export default function  CardAproveitamento ({requisicao}){
         <div className='requisicao' onClick={()=>history.push(`/parecer/${id}`)}>
         <p className={`badge badge-${mudaCor(deferido)}`}>{`Status do processo : ${deferido}`}</p>
         <p>{`ID: ${id}`}</p>
-        <p>{`Tipo: ${tipo === "aproveitamento"? "APROVEITAMENTO DE ESTUDOS":""}`}</p>
+        <p>{`${tipo === "aproveitamento"? "APROVEITAMENTO DE ESTUDOS":""}`}</p>
         <p>{`Data: ${dataRequisicao}`}</p>
         <p>{`Aluno: ${usuario && usuario.perfil.nome}`}</p>
          <p>{`Disciplina : ${disciplinaSolicitada&&disciplinaSolicitada.nome}`}</p>

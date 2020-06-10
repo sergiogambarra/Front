@@ -6,6 +6,7 @@ import TituloPagina from '../../components/TituloPagina';
 import { Form, Modal } from 'react-bootstrap';
 import { postCadastroUsuario } from '../../services/AlunoService';
 import { getPesquisaLogin } from '../../services/UsuarioService';
+import { get } from '../../services/ServicoCrud';
 import {validaEmail} from '../../auxiliares/validacoes'
 
 class CadastroPerfilAluno extends Component {
@@ -56,9 +57,16 @@ class CadastroPerfilAluno extends Component {
         })
 
     }
+    pesquisaMatricula() {
+        get(`usuarios/matricula/${this.state.matricula}`).then((r) => {
+            this.setState({ usuarioMatricula: r })
+        })
+      
+    }
 
 
     async verifica() {
+       
         await getPesquisaLogin(`usuarios/pesquisa/${this.state.userName}`).then((retorno) => {
             this.setState({ loginPesquisa: retorno && retorno.username })
         });
@@ -138,7 +146,6 @@ class CadastroPerfilAluno extends Component {
 
 
     comparaData() {
-        console.log(this.state.dataIngresso);
         let dataHoje = new Date();
         this.setState({ dataIngresso: new Date(this.state.dataIngresso) });
         return this.state.dataIngresso > dataHoje ? false : true;

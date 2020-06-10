@@ -35,6 +35,7 @@ function retornaLinks(user) {
         return <>
             <SACELink to={'/minhas-requisicoes'} label={'Listar Requisições'} />
             <SACELink to={'/troca-senha'} label={'Alterar senha'} />
+            <SACELink to={'/troca-senha'} label={'Configuração do sistema'} />
             <DropdownButton id="dropdown-basic-button" title="CADASTRAR" >
                 <Dropdown.Item><Link to="/cadastrar-curso">Curso</Link></Dropdown.Item>
                 <Dropdown.Item ><Link to="/cadastro-servidor">Servidor / Professor</Link></Dropdown.Item>
