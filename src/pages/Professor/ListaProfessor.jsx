@@ -3,7 +3,7 @@ import { get, getId, put } from '../../services/ServicoCrud';
 import SACEInput from '../../components/inputs/SACEInput';
 import { Button, Form, Modal, Alert } from 'react-bootstrap'
 import axios from 'axios';
-import {validaEmail} from '../../auxiliares/validacoes'
+import { validaEmail } from '../../auxiliares/validacoes'
 
 class ListaProfessor extends Component {
     constructor(props) {
@@ -22,12 +22,14 @@ class ListaProfessor extends Component {
 
     async listaProfessor() {
         await get(`usuarios/pages?tipo=PROFESSOR&page=${this.state.page}&size=6`).then((retorno) => {
+            console.log(retorno);
             if (retorno) this.setState({ professores: retorno, last: retorno.last, first: retorno.first, total: retorno.totalPages })
         })
 
     }
     async componentDidMount() {
         this.listaProfessor()
+        this.listarCursos()
     }
     async  buscaPeloId(e) {
         this.limpar()
@@ -46,6 +48,13 @@ class ListaProfessor extends Component {
     limpar() {
         this.setState({
             nomeInvalido: false, siapeInvalido: false, emailInvalido: false
+        })
+    }
+    async listarCursos() {
+        await get(`cursos/`).then((retorno) => {
+            console.log(retorno);
+            this.setState({ cursos: retorno && retorno.usuario })
+
         })
     }
     async editar(e) {
@@ -131,7 +140,9 @@ class ListaProfessor extends Component {
                                 <td>{p.perfil.nome}</td>
                                 <td>{p.perfil.siape}</td>
                                 <td>{p.email}</td>
-                                <td style={{ textAlign: "center" }}>{p.perfil.coordenador ? "SIM" : "Não"}</td>
+                                <td style={{ textAlign: "center" }}>{p.perfil.coordenador ? "SIM" :
+
+                                    "Não"}</td>
                                 <td> {p.perfil.nome === "" ? "" : <Button
                                     variant="primary"
                                     className="btn btn-danger m-1"
