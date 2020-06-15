@@ -36,6 +36,8 @@ class RelatorioAproveitamentoEstudos extends Component {
   }
 
   async filtro() {
+console.log(this.state.dataInicio&&format(this.state.dataInicio));
+console.log(this.state.dataFinal&&format(this.state.dataFinal));
 
     await post("requisicoes/filtro/", {
       tipoRequisicao: this.state.tipoRequisicao,

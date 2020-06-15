@@ -161,7 +161,9 @@ class Parecer extends Component {
     }
     verificarDados() {
 
-
+        if(   this.state.user&&this.state.user.id === parseInt(this.state.id) ){
+            this.setState({parecerProfessor:this.state.atualizarParecer,parecerCoordenador:this.state.atualizarParecer})
+        }
         if (this.state.parecerServidor && this.state.parecerServidor.trim() !== "" && this.state.prova && this.state.prova.length > 0 && this.state.parecerCoordenador && this.state.parecerCoordenador.trim() !== "") {
             this.setState({ modal: true, modificaModal: true })
         }
@@ -173,6 +175,12 @@ class Parecer extends Component {
                         return
                     }
                 }
+            }
+        }
+        if(this.state.user&&this.state.user.id === parseInt(this.state.id) ){
+            if (this.state.deferido === "EM ANÁLISE") {
+                this.setState({ msgStatus: "Selecione status da requisição" })
+                return
             }
         }
         if (this.state.user && this.state.user.perfil.tipo === "PROFESSOR" && this.state.user && this.state.user.perfil.coordenador === false) {
@@ -213,7 +221,6 @@ class Parecer extends Component {
     }
     render() {
         return (<div><br />
-        {console.log(this.state.responsavelPelaRequisicao)}
         
             <Alert style={{ textAlign: "center" }} show={this.state.alerteDonoRequisicao} variant={"info"}>{this.state.responsavelPelaRequisicao === "FINALIZADO" ? "Processo da Solicitação do aluno finalizado responsável = " : "Você não pode alterar os dados desta solicitação neste momento porque ela está sendo tratada por outro usuário. Responsável ="} <span style={{ color: "red" }}>
                 {this.state.responsavelPelaRequisicao === "FINALIZADO" ? "SETOR DE ENSINO " : this.state.responsavelPelaRequisicao === "SERVIDOR" ? "SETOR DE ENSINO" : this.state.responsavelPelaRequisicao}</span></Alert>
@@ -291,6 +298,7 @@ class Parecer extends Component {
                             <Form.Text className="text-danger">{this.state.msgErrorProfessor} </Form.Text>
                         </Form.Group>
                     </Form> : ""}
+                                       
                 <br />
                 {!this.state.alerteDonoRequisicao ? <div class="custom-control custom-radio custom-control-inline">
                     <input type="radio"
@@ -298,8 +306,13 @@ class Parecer extends Component {
                         onChange={(e) => this.setState({ deferido: e.target.id })}
                         defaultChecked={false}
                     />
+                    {this.state.user && this.state.user.perfil.tipo === "SERVIDOR" ? "" : 
+                     this.state.user&&this.state.user.id === parseInt(this.state.id) ? <label class="custom-control-label" for="DEFERIDO">Deferido</label>:
+                     this.state.user && this.state.user.perfil.tipo === "PROFESSOR" && this.state.user && this.state.user.perfil.coordenador === false ?
+                     <label class="custom-control-label" for="DEFERIDO">Deferido</label>:""               
+                     }
 
-                    {this.state.user && this.state.user.perfil.tipo === "SERVIDOR" ? "" : <label class="custom-control-label" for="DEFERIDO">Deferido</label>}
+
                 </div> : ""}
                 {this.state.alerteDonoRequisicao ? "" :
                     <>
@@ -338,7 +351,6 @@ class Parecer extends Component {
                         })
                     }
                 </ol>
-                {console.log(this.state.alerteDonoRequisicao)}
 
                 {this.state.alerteDonoRequisicao ? "" :
 

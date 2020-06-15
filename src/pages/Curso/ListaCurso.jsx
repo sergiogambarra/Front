@@ -69,7 +69,7 @@ export default class ListaCursos extends Component {
     delete() {
         axios.delete("http://localhost:8080/api/cursos/" + this.state.id).then((r) =>
             this.setState({ modalShow: false, showAlert: true, variantAlert: "danger", msgAlert: "Apagou com sucesso" })
-            , this.listarCursos()
+            + this.listarCursos()
         ).catch(() =>
             alert("Curso não pode ser apagado! Existe uma requisição associada no sistema"),
             this.setState({ modalShow: false })
