@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { get, getId, put } from '../../services/ServicoCrud';
+import { get, getId, put} from '../../services/ServicoCrud';
 import SACEInput from '../../components/inputs/SACEInput';
 import { Button, Form, Modal, Alert } from 'react-bootstrap'
 import axios from 'axios';
@@ -14,9 +14,9 @@ class ListaProfessor extends Component {
             coordenador: "", email: "", emailInvalido: false,
             mostrarEditar: false, id: "", alert: false,
             msgAlert: "", show: false, variant: "", page: 0,
-            last: false,
+            last: false,modalShow2:false,
             first: true,
-            total: 0, msgEmail: "", msgNome: "", msgSiape: ""
+            total: 0, msgEmail: "", msgNome: "", msgSiape: "", cursoCoordenador: []
         }
     }
 
@@ -29,7 +29,6 @@ class ListaProfessor extends Component {
     }
     async componentDidMount() {
         this.listaProfessor()
-        this.listarCursos()
     }
     async  buscaPeloId(e) {
         this.limpar()
@@ -50,13 +49,16 @@ class ListaProfessor extends Component {
             nomeInvalido: false, siapeInvalido: false, emailInvalido: false
         })
     }
-    async listarCursos() {
-        await get(`cursos/`).then((retorno) => {
-            console.log(retorno);
-            this.setState({ cursos: retorno && retorno.usuario })
+    async listarCoordenadorCurso(e) {
+        await get(`cursos/coordenador/${e}`).then((retorno) => {
+            this.setState({ cursoCoordenador: retorno,modalShow2:true ,mostrarEditar:false})
 
         })
     }
+    async deletarCoordenadorCurso(e) {
+        axios.delete("http://localhost:8080/api/usuarios/coordenador/"+e)
+    }
+
     async editar(e) {
 
         if (this.state.nome.trim() === "" || this.state.nome === null ? this.setState({ nomeInvalido: true, msgNome: "Você não inseriu nome corretamente" }) : this.setState({ nomeInvalido: false })) { }
@@ -76,6 +78,9 @@ class ListaProfessor extends Component {
         if (this.state.nome.trim() === "" || this.state.nome === null || !validaEmail(this.state.email) || this.state.siape === "" || this.state.siape <= 0 || this.state.siape === null || this.state.email === "" || this.state.email == null) {
             return
         }
+        if(!this.state.coordenador){
+            this.deletarCoordenadorCurso(e)
+        }
         put("usuarios", e,
             {
                 email: this.state.email,
@@ -91,6 +96,7 @@ class ListaProfessor extends Component {
                     variant: "success", msgAlert: "Atualizado com sucesso"
                 })
                 this.listaProfessor()
+       
                 setTimeout(() => { this.setState({ show: false }) }, 3000);
             })
     }
@@ -140,9 +146,8 @@ class ListaProfessor extends Component {
                                 <td>{p.perfil.nome}</td>
                                 <td>{p.perfil.siape}</td>
                                 <td>{p.email}</td>
-                                <td style={{ textAlign: "center" }}>{p.perfil.coordenador ? "SIM" :
-
-                                    "Não"}</td>
+                                <td >{p.perfil.coordenador ? <Button variant={"link"} onClick={() => this.listarCoordenadorCurso(p.id)}>Sim</Button> :
+                                    <Button variant={"link"}>Não</Button>}</td>
                                 <td> {p.perfil.nome === "" ? "" : <Button
                                     variant="primary"
                                     className="btn btn-danger m-1"
@@ -229,7 +234,16 @@ class ListaProfessor extends Component {
 
                 </Modal.Footer>
             </Modal>
-
+            <Modal show={this.state.modalShow2} onHide={() => this.setState({ modalShow2: false,cursoCoordenador:[] })}>
+                <Modal.Header closeButton>
+                    <Modal.Title > Coordenador(a) nos cursos abaixo: </Modal.Title>
+                </Modal.Header>
+                {this.state.cursoCoordenador&&this.state.cursoCoordenador.map((e)=>
+                   <Modal.Body> Curso : {e}</Modal.Body>
+                )}
+                <Modal.Footer>
+                </Modal.Footer>
+            </Modal>
         </div>);
     }
 }
