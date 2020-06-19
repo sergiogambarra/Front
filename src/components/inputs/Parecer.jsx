@@ -22,10 +22,10 @@ class Parecer extends Component {
             professor: {},
             anexos: [],
             prova: [], modificaModal: false,
-            formacaoAtividadeAnterior: "",
+            formacaoAtividadeAnterior: "",pesquisaNomeCurso:"",
             criterioAvaliacao: "", tipo: "", atualizarParecer: "",
-            listaProfessores: [],
-            idRequisicao: "", id: "", modal: false, coordenador: "", disciplinas: [],
+            listaProfessores: [],mostraRequisicaoCoordenador:false,
+            idRequisicao: "", id: "", modal: false, coordenador: "",
             idDisciplina: "", stringParecer: "", mudaParecer: "", listaProfessoresInvalido: false, msgStatus: "",
             msgErrorProfessor: "", responsavelPelaRequisicao: "", msgErrorParecer: "", msgModal: "", alerteDonoRequisicao: false
         }
@@ -36,7 +36,6 @@ class Parecer extends Component {
 
     async listaAth() {
         const user = await get("usuarios/auth/")
-        console.log(user);
         this.setState({ user })
     }
     async buscaProfessores() {
@@ -50,6 +49,7 @@ class Parecer extends Component {
         this.listaAth()
         this.buscaProfessores()
         const c = await getRequisicaoId(this.props.match.params.id)
+        this.listarNomeCurso()
         this.setState({ c })
         this.listarCoordenadorCurso()
         this.mudaNomeStringParecer()
@@ -109,21 +109,27 @@ class Parecer extends Component {
 
 
     }
-    async  listarDisciplinas() {
-        get(`cursos/${1}/disciplinas/`).then((retorno) => {
-            console.log(retorno);
-            
-          this.setState({ disciplinas: retorno })
+    async  listarNomeCurso() {
+      await get(`cursos/pesquisar/disciplina/${1}`).then((retorno) => {
+            this.setState({ pesquisaNomeCurso: retorno })
        });
    }
 
     async listarCoordenadorCurso() {
+        this.listarNomeCurso()
         await get(`cursos/coordenador/${this.state.user&&this.state.user.id}`).then((retorno) => {
                this.setState({ cursoCoordenador: retorno})
-               console.log(this.state.cursoCoordenador);
-               console.log(this.state.user&&this.state.user.id);
-               
-            
+               for (let index = 0; index < this.state.cursoCoordenador.length; index++) {
+                   const element = this.state.cursoCoordenador[index].nome;
+                   console.log(element);
+                   console.log(this.state.pesquisaNomeCurso);
+                   if(element === this.state.pesquisaNomeCurso){
+                    console.log("coordenador deu certo");
+                    this.setState({mostraRequisicaoCoordenador:true})
+                    console.log(this.state.mostraRequisicaoCoordenador);
+                }
+                
+            }
         })
     }
     mudaNomeStringParecer() {
@@ -316,47 +322,47 @@ class Parecer extends Component {
                     </Form> : ""}
 
                 <br />
-                {!this.state.alerteDonoRequisicao ? <div class="custom-control custom-radio custom-control-inline">
+                {!this.state.alerteDonoRequisicao ? <div className="custom-control custom-radio custom-control-inline">
                     <input type="radio"
                         id="DEFERIDO" name="customRadioInline1" class="custom-control-input"
                         onChange={(e) => this.setState({ deferido: e.target.id })}
                         defaultChecked={false}
                     />
                     {this.state.user && this.state.user.perfil.tipo === "SERVIDOR" ? "" :
-                        this.state.user && this.state.user.id === parseInt(this.state.id) ? <label class="custom-control-label" for="DEFERIDO">Deferido</label> :
+                        this.state.user && this.state.user.id === parseInt(this.state.id) ? <label className="custom-control-label" for="DEFERIDO">Deferido</label> :
                             this.state.user && this.state.user.perfil.tipo === "PROFESSOR" && this.state.user && this.state.user.perfil.coordenador === false ?
-                                <label class="custom-control-label" for="DEFERIDO">Deferido</label> : ""
+                                <label className="custom-control-label" for="DEFERIDO">Deferido</label> : ""
                     }
 
 
                 </div> : ""}
                 {this.state.alerteDonoRequisicao ? "" :
                     <>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" id="INDEFERIDO" name="customRadioInline1" class="custom-control-input"
+                        <div className="custom-control custom-radio custom-control-inline">
+                            <input type="radio" id="INDEFERIDO" name="customRadioInline1" className="custom-control-input"
                                 onChange={(e) => this.setState({ deferido: e.target.id })}
                                 defaultChecked={false} />
                             {
                                 this.state.user && this.state.user.perfil.tipo === "PROFESSOR" && this.state.user && this.state.user.id === parseInt(this.state.id) ?
                                     <label class="custom-control-label" for="INDEFERIDO">Indeferido</label> :
-                                    this.state.user && this.state.user.perfil.tipo === "SERVIDOR" ? <label class="custom-control-label" for="INDEFERIDO">Indeferido</label> : ""
+                                    this.state.user && this.state.user.perfil.tipo === "SERVIDOR" ? <label className="custom-control-label" for="INDEFERIDO">Indeferido</label> : ""
                                 }
                         </div>
 
                         {this.state.user && this.state.user.perfil.tipo === "PROFESSOR" && this.state.user && this.state.user.perfil.coordenador === true ? "" : ""}
 
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" id="EM ANÁLISE" name="customRadioInline1" class="custom-control-input"
+                        <div className="custom-control custom-radio custom-control-inline">
+                            <input type="radio" id="EM ANÁLISE" name="customRadioInline1" className="custom-control-input"
                                 onChange={(e) => this.setState({ deferido: e.target.id })}
                                 defaultChecked={this.state.deferido === "EM ANÁLISE" ? true : false}
                             />
 
-                            {this.state.user && this.state.user.perfil.tipo === "PROFESSOR" ? "" : <><label class="custom-control-label" for="EM ANÁLISE">Em análise</label><br /><br /></>}
+                            {this.state.user && this.state.user.perfil.tipo === "PROFESSOR" ? "" : <><label className="custom-control-label" for="EM ANÁLISE">Em análise</label><br /><br /></>}
                         </div>
                         <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" id="escolha" name="customRadioInline" class="custom-control-input"
+                            <input type="radio" id="escolha" name="customRadioInline" className="custom-control-input"
                                 checked />
-                            <label class="custom-control-label" for="escolha" style={{ display: "none" }}></label><br />
+                            <label className="custom-control-label" for="escolha" style={{ display: "none" }}></label><br />
                         </div>
                     </>}
                 <Form.Text className="text-danger">{this.state.msgStatus} </Form.Text>

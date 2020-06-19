@@ -98,7 +98,6 @@ class CadastroPerfilAluno extends Component {
             if (this.state.userName.length < 6 || this.state.userName.length > 10) { return }
         }
         if (this.state.nome.length > 40) {
-            console.log("fdefgf");
             this.setState({ nomeInvalido: true, msgNome: "Limite máximo de cadastro de 40 caracteres" })
             return
         } if (this.state.email.length > 40) {
