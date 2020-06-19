@@ -73,9 +73,6 @@ class ListaDiscipinas extends Component {
 
     async editarDisciplina() {
 
-console.log(this.state.cargaHoraria);
-
-
         if (this.state.nome === null || this.state.nome.trim() === "" ? this.setState({ nomeInvalido: true ,msgNome:"Você não inseriu nome válido"}) : this.setState({ nomeInvalido: false })) { 
         }
         if (this.state.cargaHoraria === null || this.state.cargaHoraria === "" || this.state.cargaHoraria < 15? this.setState({ cargaHorariaInvalida: true,msgCargaHoraria:"Carga Horária mínimo de 15h" }) : this.setState({ cargaHorariaInvalida: false })) { 

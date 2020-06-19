@@ -36,6 +36,7 @@ class Parecer extends Component {
 
     async listaAth() {
         const user = await get("usuarios/auth/")
+        console.log(user);
         this.setState({ user })
     }
     async buscaProfessores() {
@@ -50,6 +51,7 @@ class Parecer extends Component {
         this.buscaProfessores()
         const c = await getRequisicaoId(this.props.match.params.id)
         this.setState({ c })
+        this.listarCoordenadorCurso()
         this.mudaNomeStringParecer()
         this.setState({
             idRequisicao: c.id,
@@ -66,7 +68,7 @@ class Parecer extends Component {
             criterioAvaliacao: c.criterioAvaliacao,
             tipo: c.tipo,
             prova: c.prova || "",
-            titulo: "",
+            titulo: "",cursoCoordenador:[],
             coordenador: c.professor && c.professor.perfil.coordenador, alert: false,
             responsavelPelaRequisicao: c.responsavelPelaRequisicao
 
@@ -107,9 +109,23 @@ class Parecer extends Component {
 
 
     }
+    async  listarDisciplinas() {
+        get(`cursos/${1}/disciplinas/`).then((retorno) => {
+            console.log(retorno);
+            
+          this.setState({ disciplinas: retorno })
+       });
+   }
 
-
-
+    async listarCoordenadorCurso() {
+        await get(`cursos/coordenador/${this.state.user&&this.state.user.id}`).then((retorno) => {
+               this.setState({ cursoCoordenador: retorno})
+               console.log(this.state.cursoCoordenador);
+               console.log(this.state.user&&this.state.user.id);
+               
+            
+        })
+    }
     mudaNomeStringParecer() {
         if (this.state.user && this.state.user.perfil.tipo === "SERVIDOR") {
             this.setState({ stringParecer: "SERVIDOR" })

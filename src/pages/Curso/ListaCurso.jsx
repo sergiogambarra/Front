@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import SACEInput from '../../components/inputs/SACEInput';
 import { Button, } from 'react-bootstrap';
-import { Link } from "react-router-dom";
+import { Link} from "react-router-dom";
 import Alert from 'react-bootstrap/Alert'
 import { put, getId, get } from '../../services/ServicoCrud';
-import { Modal } from 'react-bootstrap';
+import { Modal ,Form } from 'react-bootstrap';
 import axios from 'axios';
 
 export default class ListaCursos extends Component {
@@ -15,12 +15,12 @@ export default class ListaCursos extends Component {
             nome: "",
             id: "",
             editar: false,
-            texto: false,
+            texto: false,msgErrorProfessor:"",
             showAlert: false, modalShow: false, nomeInvalido: false,
             msgAlert: "", variantAlert: "",   
-            page: 0,
+            page: 0,idProfessor:"",
             last: false,
-            first: true,
+            first: true, listaProfessores: [],
             total: 0,msgNome:""
         }
     }
@@ -40,12 +40,15 @@ export default class ListaCursos extends Component {
 
     async listarCursosId(id) {
         getId("cursos/", id).then((retorno)=>{
+            console.log(retorno);
             this.setState({ nome: retorno && retorno.nome, id: id, editar: true, nomeInvalido: false });
+            console.log(this.state.usuario);
         })
     }
 
    async componentDidMount() {
         this.listarCursos();
+        this.buscaProfessores()
     }
 
     atualizar() {
@@ -57,7 +60,15 @@ export default class ListaCursos extends Component {
             this.setState({ nomeInvalido: true, msgNome: "Limite máximo de cadastro de 40 caracteres" })
             return
         }
-        put("cursos", this.state.id, { nome: this.state.nome }).then(() => {
+        if(this.state.idProfessor === ""){
+            this.setState({msgErrorProfessor:"Campo professor coordenador é obrigatório"})
+            return
+        }
+        put("cursos", this.state.id, { nome: this.state.nome,
+            usuario:{
+                id:this.state.idProfessor
+            }
+        }).then(() => {
             this.setState({ showAlert: true, editar: false, nomeInvalido: false, msgAlert: "Atualizado com sucesso", variantAlert: "success" })
             setTimeout(() => {
                 this.setState({ showAlert: false })
@@ -66,6 +77,12 @@ export default class ListaCursos extends Component {
 
         })
     }
+    async buscaProfessores() {
+        await get("usuarios/professores/").then((r) => {
+             this.setState({ listaProfessores: r })
+        })
+    }
+ 
     delete() {
         axios.delete("http://localhost:8080/api/cursos/" + this.state.id).then((r) =>
             this.setState({ modalShow: false, showAlert: true, variantAlert: "danger", msgAlert: "Apagou com sucesso" })
@@ -128,6 +145,24 @@ export default class ListaCursos extends Component {
                         <p>ID : &nbsp;<span style={{ color: "red" }}>{this.state.id}</span></p>
                         <SACEInput label={"Curso"} value={this.state.nome} placeholder={'Preencha com o nome do curso que você deseja cadastrar'}
                             autoFocus onChange={(e) => this.setState({ nome: e.target.value })} onError={this.state.nomeInvalido} onErrorMessage={this.state.msgNome} />
+                              <Form>
+                    <Form.Group controlId="exampleForm.SelectCustom">
+                       
+                        <Form.Label>Selecionar coordenador do curso </Form.Label>
+                        <Form.Control as="select" custom
+                            id={this.state.idProfessor}
+                            value={this.state.idProfessor}
+                            isInvalid={this.state.listaProfessoresInvalido}
+                            onChange={(e) => this.setState({ idProfessor: e.target.value })} >
+                            <option ></option>
+                            {this.state.listaProfessores && this.state.listaProfessores.map((p) =>
+                                    p.perfil.coordenador === true ?  <option key={p.id} value={p.id}>{p.perfil.nome}</option>:""
+
+                                )}
+                        </Form.Control>
+                        <Form.Text className="text-danger">{this.state.msgErrorProfessor} </Form.Text> 
+                    </Form.Group>
+                </Form>
                         <Button className="btn btn-primary m-1" onClick={(e) => this.atualizar()} >Salvar</Button>
                     </> : ""}
 

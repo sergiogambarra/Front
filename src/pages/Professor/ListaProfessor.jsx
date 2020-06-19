@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { get, getId, put} from '../../services/ServicoCrud';
+import { get, getId, put } from '../../services/ServicoCrud';
 import SACEInput from '../../components/inputs/SACEInput';
 import { Button, Form, Modal, Alert } from 'react-bootstrap'
 import axios from 'axios';
@@ -14,7 +14,7 @@ class ListaProfessor extends Component {
             coordenador: "", email: "", emailInvalido: false,
             mostrarEditar: false, id: "", alert: false,
             msgAlert: "", show: false, variant: "", page: 0,
-            last: false,modalShow2:false,
+            last: false, modalShow2: false, msgModalCoordenador: "",
             first: true,
             total: 0, msgEmail: "", msgNome: "", msgSiape: "", cursoCoordenador: []
         }
@@ -51,12 +51,16 @@ class ListaProfessor extends Component {
     }
     async listarCoordenadorCurso(e) {
         await get(`cursos/coordenador/${e}`).then((retorno) => {
-            this.setState({ cursoCoordenador: retorno,modalShow2:true ,mostrarEditar:false})
-
+           if(retorno.length === 0){
+               this.setState({msgModalCoordenador:"Não foi designado nenhum curso no momento ao professor",cursoCoordenador:[],modalShow2:true , mostrarEditar: false})
+           }else{
+               this.setState({ cursoCoordenador: retorno, modalShow2: true, mostrarEditar: false })
+           }
+            
         })
     }
     async deletarCoordenadorCurso(e) {
-        axios.delete("http://localhost:8080/api/usuarios/coordenador/"+e)
+        axios.delete("http://localhost:8080/api/usuarios/coordenador/" + e)
     }
 
     async editar(e) {
@@ -78,7 +82,7 @@ class ListaProfessor extends Component {
         if (this.state.nome.trim() === "" || this.state.nome === null || !validaEmail(this.state.email) || this.state.siape === "" || this.state.siape <= 0 || this.state.siape === null || this.state.email === "" || this.state.email == null) {
             return
         }
-        if(!this.state.coordenador){
+        if (!this.state.coordenador) {
             this.deletarCoordenadorCurso(e)
         }
         put("usuarios", e,
@@ -96,7 +100,6 @@ class ListaProfessor extends Component {
                     variant: "success", msgAlert: "Atualizado com sucesso"
                 })
                 this.listaProfessor()
-       
                 setTimeout(() => { this.setState({ show: false }) }, 3000);
             })
     }
@@ -105,7 +108,7 @@ class ListaProfessor extends Component {
             this.setState({ modalShow: false, show: true, variant: "danger", msgAlert: "Apagou com sucesso" }),
             this.listaProfessor()
         ).catch(() =>
-            alert("Não pode apagar cadastro do professor ele possui requisição no sistema "),
+            alert("Não pode apagar cadastro do professor ele possui requisição no sistema ou está designado a coordenador de curso"),
             this.setState({ modalShow: false })
             , setTimeout(() => {
                 this.setState({ show: false })
@@ -234,16 +237,20 @@ class ListaProfessor extends Component {
 
                 </Modal.Footer>
             </Modal>
-            <Modal show={this.state.modalShow2} onHide={() => this.setState({ modalShow2: false,cursoCoordenador:[] })}>
+            <Modal show={this.state.modalShow2} onHide={() => this.setState({ modalShow2: false, cursoCoordenador: [], msgModalCoordenador: "" })}>
                 <Modal.Header closeButton>
                     <Modal.Title > Coordenador(a) nos cursos abaixo: </Modal.Title>
                 </Modal.Header>
-                {this.state.cursoCoordenador&&this.state.cursoCoordenador.map((e)=>
-                   <Modal.Body> Curso : {e}</Modal.Body>
+                {this.state.cursoCoordenador && this.state.cursoCoordenador.map((e) =>
+                    <Modal.Body> Curso : {e.nome} </Modal.Body>
                 )}
+                <Modal.Body> <span style={{color:"red"}}> {this.state.msgModalCoordenador}  </span></Modal.Body>
+                
+                
                 <Modal.Footer>
                 </Modal.Footer>
             </Modal>
+            
         </div>);
     }
 }
