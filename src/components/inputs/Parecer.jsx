@@ -45,13 +45,11 @@ class Parecer extends Component {
 
 
     async componentDidMount() {
-        this.listaDisciplinas()
+ 
         this.listaAth()
         this.buscaProfessores()
         const c = await getRequisicaoId(this.props.match.params.id)
-        this.listarNomeCurso()
         this.setState({ c })
-        this.listarCoordenadorCurso()
         this.mudaNomeStringParecer()
         this.setState({
             idRequisicao: c.id,
@@ -109,29 +107,8 @@ class Parecer extends Component {
 
 
     }
-    async  listarNomeCurso() {
-      await get(`cursos/pesquisar/disciplina/${1}`).then((retorno) => {
-            this.setState({ pesquisaNomeCurso: retorno })
-       });
-   }
-
-    async listarCoordenadorCurso() {
-        this.listarNomeCurso()
-        await get(`cursos/coordenador/${this.state.user&&this.state.user.id}`).then((retorno) => {
-               this.setState({ cursoCoordenador: retorno})
-               for (let index = 0; index < this.state.cursoCoordenador.length; index++) {
-                   const element = this.state.cursoCoordenador[index].nome;
-                   console.log(element);
-                   console.log(this.state.pesquisaNomeCurso);
-                   if(element === this.state.pesquisaNomeCurso){
-                    console.log("coordenador deu certo");
-                    this.setState({mostraRequisicaoCoordenador:true})
-                    console.log(this.state.mostraRequisicaoCoordenador);
-                }
-                
-            }
-        })
-    }
+  
+ 
     mudaNomeStringParecer() {
         if (this.state.user && this.state.user.perfil.tipo === "SERVIDOR") {
             this.setState({ stringParecer: "SERVIDOR" })
@@ -139,11 +116,7 @@ class Parecer extends Component {
             this.setState({ stringParecer: "Coordenador" })
         } else { this.setState({ stringParecer: "Professor" }) }
     }
-    async listaDisciplinas() {
-        await get("disciplinas/").then((r) => this.setState({
-            disciplinas: r
-        }))
-    }
+ 
 
     async atualizar() {
 

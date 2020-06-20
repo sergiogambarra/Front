@@ -9,7 +9,7 @@ class RelatorioCertificacao extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      id: "", alunos: [], dataInicio: null, listaFiltro:[],mostraPesquisa:false, tipoRequisicao: "requisicoes_certificacao",idDisciplina:null,alert:false,
+      id: "", alunos: [], dataInicio: null, listaFiltro:[],mostraPesquisa:false, tipoRequisicao: "requisicoes_certificacao",idDisciplina:null,alert:false,mostraSelecao:true,
       dataFinal: null, dataInicioInvalida: false, dataFinalInvalida: false, msgErrorPesquisaNome: "", status: null, msgErrorStatus: "", cursos: [], idCurso: null, msgErrorCurso: "",
       requisicoesDisciplina: []
     }
@@ -40,7 +40,7 @@ class RelatorioCertificacao extends Component {
   }
 
   async filtro() {
-
+this.setState({mostraSelecao:false})
     await post("requisicoes/filtro/", {
       tipoRequisicao: this.state.tipoRequisicao,
       dataInicio: this.state.dataInicio && format(this.state.dataInicio),
@@ -50,7 +50,7 @@ class RelatorioCertificacao extends Component {
       statusRequisicao:this.state.status
     }).then((r) => {
       if (r && r.data.length === 0) {
-        this.setState({ alert:true,mostraPesquisa:false})
+        this.setState({ alert:true,mostraPesquisa:false,mostraSelecao:true})
         setTimeout(() => {
           this.setState({alert:false})
         }, 3000);
@@ -60,12 +60,14 @@ class RelatorioCertificacao extends Component {
     })
   }
   limpar() {
-    this.setState({ mostraPesquisa: false })
+    this.setState({ mostraPesquisa: false ,mostraSelecao:true,dataInicio:"",dataFinal:"" })
   }
   render() {
     return (
       <div>   <br /><br />
-        <h3>Solicitações de Certificação de Conhecimentos</h3>
+      {this.state.mostraSelecao&& 
+      <>
+ <h3>Solicitações de Certificação de Conhecimentos</h3>
         <Alert variant={"danger"} show={this.state.alert}>Não foram encontradas solicitações para pesquisa</Alert>
         < Form >
           <Form.Group controlId="exampleForm.SelectCustom">
@@ -143,7 +145,9 @@ class RelatorioCertificacao extends Component {
           onError={this.state.dataFinalInvalida}
           onErrorMessage={'Você não inseriu uma data válida!'}
         />
-        <Button onClick={() => this.filtro()}>Pesquisar</Button>
+        <Button onClick={() => this.filtro()}>Pesquisar</Button></>
+      }
+       
         {this.state.mostraPesquisa &&
           <>
             <br /><br />

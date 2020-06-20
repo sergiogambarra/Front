@@ -19,8 +19,6 @@ export default function ({ user }) {
     setIsLoading(true);
     getCertificacoes(user, page)
       .then(result => {
-        console.log(result);
-
         setRequisicoes(result.content);
         setFirst(result.first);
         setLast(result.last);

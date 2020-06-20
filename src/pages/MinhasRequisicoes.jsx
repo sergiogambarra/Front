@@ -14,22 +14,26 @@ class MinhasRequisicoes extends Component {
   constructor(props) {
     super();
     this.state = {
-      requisicoes: "", escolha: "", id: "", user: {}, alunos: [], pesquisa: false, selecionaPesquisa: "", dataInicio: "", requisicoesStatus: [],
+      requisicoes: "", escolha: "", id: "", user: "", alunos: [], pesquisa: false, selecionaPesquisa: "", dataInicio: "", requisicoesStatus: [],
       dataFinal: "", dataInicioInvalida: false, dataFinalInvalida: false, msgErrorPesquisaNome: "", status: "", msgErrorStatus: "", cursos: [], idCurso: "", msgErrorCurso: "",
-      requisicoesDisciplina: [], alert: false, last: "", first: "", total: "", page: 0, pararPesquisaData: false, mostraBotao: false
+      requisicoesDisciplina: [], alert: false, last: "", first: "", total: "", page: 0, pararPesquisaData: false, mostraBotao: false,cursoCoordenador:[],reqAproveitamento:[]
     }
   }
-
-  componentDidMount() {
+  
+  async componentDidMount() {
     this.listaAth()
     this.carregaAlunos()
     this.carregaCursos()
-  }
-  async listaAth() {
-    const user = await get("usuarios/auth/")
-    this.setState({ user })
-  }
+   this.listarRequisicoesAproveitamento()
 
+  }
+  
+  async listaAth() {
+   await get("usuarios/auth/").then((retorno)=>{
+       this.setState({ user :retorno})
+     })
+    
+  }
   async carregaAlunos() {
     await get("usuarios/alunos/").then((retorno) => {
       this.setState({ alunos: retorno })
@@ -67,6 +71,7 @@ class MinhasRequisicoes extends Component {
       return
     }
     await get(`requisicoes/curso/${this.state.idCurso}?page=${this.state.page}&size=6`).then((retorno) => {
+      
       this.setState({ requisicoesDisciplina: retorno && retorno.content, msgErrorCurso: "", mostraBotao: true, last: retorno.last, first: retorno.first, total: retorno.totalPages })
       if (this.state.requisicoesDisciplina && this.state.requisicoesDisciplina.length === 0) {
         this.setState({ alert: true, mostraBotao: false })
@@ -119,6 +124,19 @@ class MinhasRequisicoes extends Component {
     })
   }
 
+ async listarRequisicoesAproveitamento(){
+    await get(`requisicoes/aproveitamentos/`).then((r)=>{
+    this.setState({reqAproveitamento:r&&r.content})
+   for (let index = 0; index < this.state.reqAproveitamento.length; index++) {
+     const element = this.state.reqAproveitamento[index].disciplinaSolicitada.nome;
+     console.log(element);
+     
+   }
+     
+      
+    }) 
+  }
+
   control(e) {
 
     if (this.state.selecionaPesquisa) {
@@ -149,6 +167,31 @@ class MinhasRequisicoes extends Component {
       }
     }
   }
+  async  listarNomeCurso() {
+    await get(`cursos/pesquisar/disciplina/${1}`).then((retorno) => {
+          this.setState({ pesquisaNomeCurso: retorno })
+          console.log(this.state.pesquisaNomeCurso);
+          
+     });
+ }
+ async listarCoordenadorCurso() {
+  
+  await get(`cursos/coordenador/${this.state.user&&this.state.user.id}`).then((retorno) => {
+    this.setState({ cursoCoordenador: retorno})
+    console.log(this.state.cursoCoordenador.length);
+         for (let index = 0; index < this.state.cursoCoordenador&&this.state.cursoCoordenador.length; index++) {
+             const element = this.state.cursoCoordenador[index].nome;
+             console.log(element);
+             console.log(this.state.pesquisaNomeCurso);
+             if(element === this.state.pesquisaNomeCurso){
+              console.log("coordenador deu certo");
+              this.setState({mostraRequisicaoCoordenador:true})
+              console.log(this.state.mostraRequisicaoCoordenador);
+          }
+          
+      }
+  })
+}
 
   render() {
     return (
@@ -156,12 +199,13 @@ class MinhasRequisicoes extends Component {
         <TituloPagina titulo={'Visualizar Requisições'} />
         {this.state.pesquisa === true ? "" : <div className="custom-control custom-radio custom-control-inline">
           <input type="radio" id="aproveitamento" name="customRadioInline1" className="custom-control-input"
-            onChange={(e) => this.setState({ requisicoes: e.target.id, pesquisa: false })} />
+            onChange={(e) => this.setState({ requisicoes: e.target.id, pesquisa: false })+ this.listarCoordenadorCurso() +this.listarNomeCurso()} />
           <label id="mudarCor" className="custom-control-label" htmlFor="aproveitamento">Aproveitamento de estudos</label>
         </div>}
         {this.state.pesquisa === true ? "" : <div className="custom-control custom-radio custom-control-inline">
           <input type="radio" id="certificacao" name="customRadioInline1" className="custom-control-input"
-            onChange={(e) => this.setState({ requisicoes: e.target.id, pesquisa: false })} />
+            onChange={(e) => this.setState({ requisicoes: e.target.id, pesquisa: false })+
+             this.listarCoordenadorCurso()+this.listarNomeCurso()} />
           <label id="mudarCor" className="custom-control-label" htmlFor="certificacao">Certificação de conhecimentos</label>
         </div>}
         <div className="custom-control custom-radio custom-control-inline">

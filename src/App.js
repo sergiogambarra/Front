@@ -11,6 +11,7 @@ import LoginForm from './components/forms/LoginForm'
 import ListaDiscipinas from './Cursos/ListaDisciplina';
 import CadastrarDisciplinas from './Cursos/CadastrarDisciplinas';
 import CadastroPerfilServidor from './pages/cadastros/CadastroPerfilServidor';
+import ConfiguraDataSolicitacoes from './pages/ConfiguracaoSistema/ConfifiguraDataSolicitacoes';
 import ListaAlunos from '../src/Cursos/ListaAlunos';
 import Parecer from '../src/components/inputs/Parecer';
 import RequisicaoAluno from './pages/Aluno/RequisicaoAluno';
@@ -60,6 +61,7 @@ function App() {
           <PrivateRoute exact path="/relatorio-final" component={RelatorioFinal} />
           <PrivateRoute exact path="/pesquisa-usuario" component={PesquisaUsuario} />
           <PrivateRoute exact path="/dados-aluno" component={DadosAluno} />
+          <PrivateRoute exact path="/configuracao-data" component={ConfiguraDataSolicitacoes} />
           <Route path="*" component={() => <h1>Page not found</h1>} />
         </Switch>
       </div>

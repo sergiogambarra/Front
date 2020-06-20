@@ -9,7 +9,7 @@ class RelatorioAproveitamentoEstudos extends Component {
     super(props);
     this.state = {
       id: "", dataInicio: null, idDisciplina: null, tipoRequisicao: "requisicoes_aproveitamento", listaFiltro: [], mostraPesquisa: false, alert: false,
-      dataFinal: null, dataInicioInvalida: false, dataFinalInvalida: false, status: null, msgErrorStatus: "", cursos: [], idCurso: null, msgErrorCurso: ""
+      dataFinal: null, dataInicioInvalida: false, dataFinalInvalida: false, status: null, msgErrorStatus: "", cursos: [], idCurso: null, msgErrorCurso: "",mostraSelecao:true
     }
   }
 
@@ -38,7 +38,7 @@ class RelatorioAproveitamentoEstudos extends Component {
   async filtro() {
 console.log(this.state.dataInicio&&format(this.state.dataInicio));
 console.log(this.state.dataFinal&&format(this.state.dataFinal));
-
+this.setState({mostraSelecao:false})
     await post("requisicoes/filtro/", {
       tipoRequisicao: this.state.tipoRequisicao,
       dataInicio: this.state.dataInicio && format(this.state.dataInicio),
@@ -48,7 +48,7 @@ console.log(this.state.dataFinal&&format(this.state.dataFinal));
       statusRequisicao: this.state.status
     }).then((r) => {
       if (r && r.data.length === 0) {
-        this.setState({ alert:true,mostraPesquisa:false})
+        this.setState({ alert:true,mostraPesquisa:false,mostraSelecao:true})
         setTimeout(() => {
           this.setState({alert:false})
         }, 3000);
@@ -60,11 +60,12 @@ console.log(this.state.dataFinal&&format(this.state.dataFinal));
   }
 
   limpar() {
-    this.setState({ mostraPesquisa: false })
+    this.setState({ mostraPesquisa: false,mostraSelecao:true,dataInicio:"",dataFinal:"" })
   }
   render() {
     return (
       <div>   <br /><br />
+      {this.state.mostraSelecao &&<>
         <h3 style={{ textDecoration: "underline" }}>Solicitações de Aproveitamento de Estudos</h3>
         <Alert variant={"danger"} show={this.state.alert}>Não foram encontradas solicitações para pesquisa</Alert>
         < Form >
@@ -143,6 +144,9 @@ console.log(this.state.dataFinal&&format(this.state.dataFinal));
           onErrorMessage={'Você não inseriu uma data válida!'}
         />
         <Button onClick={() => this.filtro()}>Pesquisar</Button>
+      </>
+      }
+      
 
         {this.state.mostraPesquisa && 
           <>
