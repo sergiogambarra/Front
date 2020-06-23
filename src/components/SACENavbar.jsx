@@ -34,8 +34,7 @@ function retornaLinks(user) {
     } else if (user.permissao === "SERVIDOR") {
         return <>
             <SACELink to={'/minhas-requisicoes'} label={'Listar Requisições'} />
-            <SACELink to={'/troca-senha'} label={'Alterar senha'} />
-            <SACELink to={'/configuracao-data'} label={'Configuração do sistema'} />
+           
             <DropdownButton id="dropdown-basic-button" title="CADASTRAR" >
                 <Dropdown.Item><Link to="/cadastrar-curso">Curso</Link></Dropdown.Item>
                 <Dropdown.Item ><Link to="/cadastro-servidor">Servidor / Professor</Link></Dropdown.Item>
@@ -55,6 +54,10 @@ function retornaLinks(user) {
                 <Dropdown.Item ><Link to="/relatorio-aproveitamento">Solicitações de Aproveitamento de Estudos </Link></Dropdown.Item>
                 <Dropdown.Item ><Link to="/relatorio-certificacao">Solicitações de Certificação de conhecimento </Link></Dropdown.Item>
                 <Dropdown.Item ><Link to="/relatorio-final">Final de Processo</Link></Dropdown.Item>
+            </DropdownButton>
+            <DropdownButton id="dropdown-basic-button" title="CONFIGURAÇÕES DO SISTEMA" >
+                <Dropdown.Item ><Link to="/configuracao-data">Configurar abertura Edital</Link></Dropdown.Item>
+                <Dropdown.Item ><Link to="/troca-senha">Alterar senha</Link></Dropdown.Item>
             </DropdownButton>
         </>
     } else {

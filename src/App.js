@@ -11,7 +11,7 @@ import LoginForm from './components/forms/LoginForm'
 import ListaDiscipinas from './Cursos/ListaDisciplina';
 import CadastrarDisciplinas from './Cursos/CadastrarDisciplinas';
 import CadastroPerfilServidor from './pages/cadastros/CadastroPerfilServidor';
-import ConfiguraDataSolicitacoes from './pages/ConfiguracaoSistema/ConfifiguraDataSolicitacoes';
+import ConfiguraDataSolicitacoes from './pages/ConfiguracaoSistema/ConfiguraDataSolicitacoes';
 import ListaAlunos from '../src/Cursos/ListaAlunos';
 import Parecer from '../src/components/inputs/Parecer';
 import RequisicaoAluno from './pages/Aluno/RequisicaoAluno';

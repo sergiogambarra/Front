@@ -15,8 +15,7 @@ class ListaProfessor extends Component {
             mostrarEditar: false, id: "", alert: false,
             msgAlert: "", show: false, variant: "", page: 0,
             last: false, modalShow2: false, msgModalCoordenador: "",
-            first: true,
-            total: 0, msgEmail: "", msgNome: "", msgSiape: "", cursoCoordenador: []
+            first: true, total: 0, msgEmail: "", msgNome: "", msgSiape: "", cursoCoordenador: []
         }
     }
 

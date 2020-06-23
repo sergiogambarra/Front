@@ -60,7 +60,7 @@ this.setState({mostraSelecao:false})
     })
   }
   limpar() {
-    this.setState({ mostraPesquisa: false ,mostraSelecao:true,dataInicio:"",dataFinal:"" })
+    this.setState({ mostraPesquisa: false ,mostraSelecao:true,dataInicio:"",dataFinal:""  })
   }
   render() {
     return (

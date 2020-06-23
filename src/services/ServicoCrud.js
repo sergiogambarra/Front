@@ -10,7 +10,7 @@ const get = async (end) => {
     }
 }
 const getEmail = async (end) => {
-        return await axios.get(`${baseURL}/${end}`).then((response) => response).catch((error)=> error.response);
+    return await axios.get(`${baseURL}/${end}`).then((response) => response).catch((error) => error.response);
 }
 
 
@@ -26,6 +26,7 @@ const getId = async (end, id) => {
 const post = async (end, data) => {
     try {
         const entidade = await axios.post(`${baseURL}/${end}`, data);
+        console.log(entidade);
         return entidade;
     } catch (error) {
         return error.response;
@@ -33,18 +34,19 @@ const post = async (end, data) => {
 }
 
 const put = async (end, id, data) => {
-      try {
+    try {
         const entidade = await axios.put(`${baseURL}/${end}/${id}`, data);
+        console.log(entidade);
         return (entidade);
     } catch (error) {
         console.log(`${end.toUpperCase()}Service/put${baseURL}/${end}/${id}:`, error);
     }
 }
 
-const del = async (end, id) => {    
-        await axios.delete(`${baseURL}/${end}/${id}`).then((resp) => {
-            return resp;
-        }).catch((e) => {return e});
+const del = async (end, id) => {
+    await axios.delete(`${baseURL}/${end}/${id}`).then((resp) => {
+        return resp;
+    }).catch((e) => { return e });
 }
 const delCurso = async (end, id) => {
     try {
@@ -94,12 +96,12 @@ const getIdDisciplina = async (end, id) => {
 }
 const putDisciplinas = async (end, data) => {
     try {
-      const entidade = await axios.put(`${baseURL}/${end}/`,data);
-      
-      return (entidade);
-  } catch (error) {
-      console.log(`${end.toUpperCase()}Service/put${baseURL}/${end}/${data}/:`, error);
-  }
+        const entidade = await axios.put(`${baseURL}/${end}/`, data);
+
+        return (entidade);
+    } catch (error) {
+        console.log(`${end.toUpperCase()}Service/put${baseURL}/${end}/${data}/:`, error);
+    }
 }
 
 
@@ -114,6 +116,6 @@ export {
     delDisciplinaCurso,
     getNomeCurso,
     getIdDisciplina,
-    putDisciplinas  ,
-    deleteProfessor,delCurso
+    putDisciplinas,
+    deleteProfessor, delCurso
 };
