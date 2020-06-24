@@ -7,7 +7,7 @@ import Row from 'react-bootstrap/Row'
 import './tabelarequisicoes.css';
 
 
-export default function ({ user }) {
+export default function ({ user,verifica }) {
   const [requisicoes, setRequisicoes] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(0);
@@ -17,7 +17,7 @@ export default function ({ user }) {
 
   useEffect(() => {
     setIsLoading(true);
-    getCertificacoes(user, page)
+    getCertificacoes(user, page,verifica)
       .then(result => {
         setRequisicoes(result.content);
         setFirst(result.first);
@@ -28,7 +28,7 @@ export default function ({ user }) {
       .catch(error => {
         setIsLoading(false);
       });
-  }, [user, page]);
+  }, [user, page,verifica]);
   const control = (e) => {
     if (e.target.id === "+") {
       setPage(page + 1)

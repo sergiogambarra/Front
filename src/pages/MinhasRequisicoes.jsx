@@ -10,14 +10,14 @@ import { format } from '../auxiliares/FormataData';
 import CardAproveitamento from '../components/CardAproveitamento';
 import CardCertificacao from '../components/CardCertificacao';
 
-class MinhasRequisicoes extends Component {
+class ClassTest extends Component {
   constructor(props) {
     super();
     this.state = {
-      requisicoes: "", escolha: "", id: "", user: "", alunos: [], pesquisa: false, selecionaPesquisa: "", dataInicio: "", requisicoesStatus: [],
+      requisicoes: "", escolha: "", id: "", user: "", alunos: [], pesquisa: false, selecionaPesquisa: "", dataInicio: "",
       dataFinal: "", dataInicioInvalida: false, dataFinalInvalida: false, msgErrorPesquisaNome: "", status: "", msgErrorStatus: "", cursos: [], idCurso: "", msgErrorCurso: "",
-      requisicoesDisciplina: [], alert: false, last: "", first: "", total: "", page: 0, pararPesquisaData: false, mostraBotao: false, cursoCoordenador: [], reqAproveitamento: [],
-      posicao: "row", tipoRequisicao: ""
+      alert: false, last: "", first: "", total: "", page: 0, pararPesquisaData: false, mostraBotao: false, cursoCoordenador: [], reqAproveitamento: [],
+      posicao: "row", tipoRequisicao: "",requisicoesPesquisa:[],reqCetificacoes:[]
     }
   }
 
@@ -27,6 +27,7 @@ class MinhasRequisicoes extends Component {
     this.carregaCursos()
     this.listarRequisicoesAproveitamento()
     this.listarDisciplinas()
+    this.listarRequisicoesCertificacao()
 
   }
 
@@ -47,7 +48,6 @@ class MinhasRequisicoes extends Component {
     })
   }
 
-
   async alunoPeloId(e) {
     await get(`usuarios/${e}`).then((retorno) => {
       this.setState({ user: retorno })
@@ -61,9 +61,7 @@ class MinhasRequisicoes extends Component {
     });
   }
 
-
   async todasRequisicoes() {
-
     this.setState({ dataInicioInvalida: "", dataFinalInvalida: "" })
     if (!this.state.user.id) {
       this.setState({ msgErrorPesquisaNome: "Selecione nome do aluno", requisicoesAluno: "", user: "", mostraBotao: false })
@@ -91,16 +89,21 @@ class MinhasRequisicoes extends Component {
     await get(`requisicoes/aproveitamentos/`).then((r) => {
       this.setState({ reqAproveitamento: r && r.content })
       for (let index = 0; index < this.state.reqAproveitamento.length; index++) {
-        const element = this.state.reqAproveitamento[index].disciplinaSolicitada.nome;
-        console.log(element);
-        
+        const element = this.state.reqAproveitamento[index].disciplinaSolicitada.id;
+        this.setState({idPesquisa:element})
 
       }
-
-
     })
   }
-
+  async listarRequisicoesCertificacao() {
+    await get(`requisicoes/certificacoes/`).then((r) => {
+      this.setState({ reqCetificacoes: r && r.content })
+      for (let index = 0; index < this.state.reqAproveitamento.length; index++) {
+        const element = this.state.reqAproveitamento[index].disciplinaSolicitada.id;
+        this.setState({idPesquisa:element})
+      }
+    })
+  }
   control(e) {
 
     if (this.state.selecionaPesquisa) {
@@ -110,46 +113,26 @@ class MinhasRequisicoes extends Component {
         } else {
           this.setState({ page: this.state.page - 1, mostraEditar: false }, () => this.todasRequisicoes())
         }
-      } else if (this.state.selecionaPesquisa === "Data") {
-        if (e.target.id === "+") {
-          this.setState({ page: this.state.page + 1, mostraEditar: false }, () => this.pesquisaData())
-        } else {
-          this.setState({ page: this.state.page - 1, mostraEditar: false }, () => this.pesquisaData())
-        }
-      } else if (this.state.selecionaPesquisa === "Curso") {
-        if (e.target.id === "+") {
-          this.setState({ page: this.state.page + 1, mostraEditar: false }, () => this.pesquisaRequisicaoCurso())
-        } else {
-          this.setState({ page: this.state.page - 1, mostraEditar: false }, () => this.pesquisaRequisicaoCurso())
-        }
-      } else if (this.state.selecionaPesquisa === "Status") {
-        if (e.target.id === "+") {
-          this.setState({ page: this.state.page + 1, mostraEditar: false }, () => this.pesquisaStatus())
-        } else {
-          this.setState({ page: this.state.page - 1, mostraEditar: false }, () => this.pesquisaStatus())
-        }
       }
     }
   }
   async  listarNomeCurso() {
-    await get(`cursos/pesquisar/disciplina/${1}`).then((retorno) => {
+    await get(`cursos/pesquisar/disciplina/${this.state.idPesquisa}`).then((retorno) => {
       this.setState({ pesquisaNomeCurso: retorno })
       console.log(this.state.pesquisaNomeCurso);
-
     });
   }
   async listarCoordenadorCurso() {
-
+this.listarNomeCurso()
     await get(`cursos/coordenador/${this.state.user && this.state.user.id}`).then((retorno) => {
       this.setState({ cursoCoordenador: retorno })
-      console.log(this.state.cursoCoordenador.length);
-      for (let index = 0; index < this.state.cursoCoordenador && this.state.cursoCoordenador.length; index++) {
+      for (let index = 0; index <  this.state.cursoCoordenador.length; index++) {
         const element = this.state.cursoCoordenador[index].nome;
-        console.log(element);
-        console.log(this.state.pesquisaNomeCurso);
         if (element === this.state.pesquisaNomeCurso) {
-          console.log("coordenador deu certo");
           this.setState({ mostraRequisicaoCoordenador: true })
+          console.log(this.state.mostraRequisicaoCoordenador);
+        }else{
+          this.setState({ mostraRequisicaoCoordenador: false })
           console.log(this.state.mostraRequisicaoCoordenador);
         }
       }
@@ -172,8 +155,7 @@ class MinhasRequisicoes extends Component {
       idDisciplina: this.state.idDisciplina,
       statusRequisicao: this.state.status
     }).then((r) => {
-      console.log(r);
-
+     this.setState({requisicoesPesquisa:r&&r.data})
     })
 
   }
@@ -185,13 +167,13 @@ class MinhasRequisicoes extends Component {
         <div style={{ display: "flex", flexDirection: this.state.posicao }}>
           {this.state.pesquisa === true ? "" : <div className="custom-control custom-radio custom-control-inline">
             <input type="radio" id="aproveitamento" name="customRadioInline1" className="custom-control-input"
-              onChange={(e) => this.setState({ requisicoes: e.target.id, pesquisa: false }) + this.listarCoordenadorCurso() + this.listarNomeCurso()} />
+              onChange={(e) => this.setState({ requisicoes: e.target.id, pesquisa: false }) + this.listarCoordenadorCurso() + this.listarNomeCurso()+ this.listarRequisicoesAproveitamento()} />
             <label id="mudarCor" className="custom-control-label" htmlFor="aproveitamento">Aproveitamento de estudos</label>
           </div>}
           {this.state.pesquisa === true ? "" : <> <div className="custom-control custom-radio custom-control-inline">
             <input type="radio" id="certificacao" name="customRadioInline1" className="custom-control-input"
               onChange={(e) => this.setState({ requisicoes: e.target.id, pesquisa: false }) +
-                this.listarCoordenadorCurso() + this.listarNomeCurso()} />
+                this.listarCoordenadorCurso() + this.listarNomeCurso()+this.listarRequisicoesCertificacao()} />
             <label id="mudarCor" className="custom-control-label" htmlFor="certificacao">Certificação de conhecimentos</label>
           </div>
             <div className="custom-control custom-radio ">
@@ -314,38 +296,41 @@ class MinhasRequisicoes extends Component {
 
         <br />
         {
-          this.state.requisicoes === "aproveitamento" ? <TabelaAproveitamentos user={this.state.user} /> : this.state.requisicoes === "certificacao" ?
-            <TabelaCertificacoes user={this.state.user} /> : ""} <br /><br />
+          this.state.requisicoes === "aproveitamento" ? <TabelaAproveitamentos user={this.state.user} verifica={this.state.mostraRequisicaoCoordenador} /> : this.state.requisicoes === "certificacao" ?
+            <TabelaCertificacoes user={this.state.user} verifica={this.state.mostraRequisicaoCoordenador} /> : ""} <br /><br />
         {this.state.mostraBotao && <h3> Requisições encontradas</h3>}<br />
         {
           <Container>
             <Row>
               {
-
-                this.state.requisicoesAluno && this.state.requisicoesAluno.map((requisicao) => {
-
-                  if (requisicao.tipo === "aproveitamento") {
-                    return <CardAproveitamento requisicao={requisicao} />
-                  } else {
-                    return <CardCertificacao requisicao={requisicao} />
+               
+                this.state.requisicoesPesquisa && this.state.requisicoesPesquisa.map((requisicao) => {
+                  const requisicaoEnviar = {
+                    id:requisicao.id,
+                    dataRequisicao:requisicao.data,
+                    usuario:{
+                      perfil:{
+                          nome:requisicao.nomeUsuario
+                      } 
+                    },
+                    disciplinaSolicitada:{
+                      nome:requisicao.nomeDisciplina
+                    },
+                    deferido:requisicao.status,
+                    professor:{
+                      perfil:{
+                        nome:requisicao.professor
+                      }
+                    }
                   }
+                  if( this.state.requisicoes === "aproveitamento"){
+                    return <CardAproveitamento requisicao={requisicaoEnviar}/>
+                  }else{
+                    return <CardCertificacao requisicao={requisicaoEnviar}/>
+                  }
+                    
+
                 })}
-              {this.state.requisicoesStatus && this.state.requisicoesStatus.map((r) => {
-                if (r.tipo === "aproveitamento") {
-                  return <CardAproveitamento requisicao={r} />
-                } else {
-                  return <CardCertificacao requisicao={r} />
-                }
-              })}
-              {this.state.requisicoesDisciplina && this.state.requisicoesDisciplina.map((r) => {
-                if (r.tipo === "aproveitamento") {
-                  return <CardAproveitamento requisicao={r} />
-                } else {
-                  return <CardCertificacao requisicao={r} />
-
-                }
-              })}
-
 
             </Row>
 
@@ -365,6 +350,6 @@ class MinhasRequisicoes extends Component {
 
   }
 }
-export default MinhasRequisicoes;
+export default ClassTest;
 
 

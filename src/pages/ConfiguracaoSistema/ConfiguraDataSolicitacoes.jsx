@@ -89,10 +89,10 @@ class ConfiguraDataSolicitacoes extends Component {
 
       <Modal show={this.state.modalShow} onHide={() => this.setState({ modalShow: false })} >
         <Modal.Header closeButton>
-          <Modal.Title > Período que está cadastrada para abertura e fechamento do edital.</Modal.Title>
+          <Modal.Title > Sistema configurado para aceitar requisições novas no período informado abaixo.</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Abertura do edital : &nbsp;&nbsp;{format(this.state.dataInicioSalva)} </Modal.Body>
-        <Modal.Body>Fechamento do edital : &nbsp;&nbsp;{format(this.state.dataFechamentoSalva)} </Modal.Body>
+        <Modal.Body>Abertura no edital : &nbsp;&nbsp;{format(this.state.dataInicioSalva)} </Modal.Body>
+        <Modal.Body>Fechamento no edital : &nbsp;&nbsp;{format(this.state.dataFechamentoSalva)} </Modal.Body>
         <Modal.Footer>
         </Modal.Footer>
       </Modal>

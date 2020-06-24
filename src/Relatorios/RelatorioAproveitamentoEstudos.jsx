@@ -49,6 +49,7 @@ this.setState({mostraSelecao:false})
     }).then((r) => {
       if (r && r.data.length === 0) {
         this.setState({ alert:true,mostraPesquisa:false,mostraSelecao:true})
+        this.limpar()
         setTimeout(() => {
           this.setState({alert:false})
         }, 3000);
@@ -60,7 +61,7 @@ this.setState({mostraSelecao:false})
   }
 
   limpar() {
-    this.setState({ mostraPesquisa: false,mostraSelecao:true,dataInicio:"",dataFinal:"" })
+    this.setState({ mostraPesquisa: false,mostraSelecao:true,dataInicio:"",dataFinal:"", idDisciplina:""})
   }
   render() {
     return (
@@ -151,7 +152,7 @@ this.setState({mostraSelecao:false})
         {this.state.mostraPesquisa && 
           <>
             <br /><br />
-            <h1 style={{ textAlign: "center" }}>Resultado Final</h1><br />
+            <h1 style={{ textAlign: "center" }}>Relatório de Requisições de Aproveitamento de Estudos</h1><br />
             <Table id="imprimir" striped bordered hover >
               <thead>
                 <tr>
@@ -179,7 +180,7 @@ this.setState({mostraSelecao:false})
             <Button onClick={() => window.print() +
               this.setState({ mostraPesquisa: true })
             }>Imprimir</Button>&nbsp;&nbsp;
-            <Button variant={"danger"} onClick={() => this.limpar()}>Limpar</Button>
+            <Button variant={"danger"} onClick={() => this.limpar()}>Voltar</Button>
           </>}
       </div>
     );

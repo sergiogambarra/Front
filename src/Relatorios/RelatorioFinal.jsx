@@ -79,7 +79,7 @@ class RelatorioFinal extends Component {
         {this.state.mostraLista &&
           <>
             <br /><br />
-              <h1 style={{textAlign:"center"}}>Resultado Final</h1><br />
+              <h1 style={{textAlign:"center"}}>Resultado Final do Edital de Aproveitamento de Estudos e Certificação de Conhecimentos</h1><br />
             <Table id="imprimir"striped bordered hover >
               <thead>
                 <tr>

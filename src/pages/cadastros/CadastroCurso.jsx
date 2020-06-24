@@ -85,7 +85,7 @@ export default class CadastroCurso extends Component {
                 <Form>
                     <Form.Group controlId="exampleForm.SelectCustom">
                        
-                        <Form.Label>Selecionar coordenador do curso </Form.Label>
+                        <Form.Label>Selecionar coordenador do curso <span style={{color:"red"}}>(o professor deve ter marcado em seu cadastro que é coordenador)</span></Form.Label>
                         <Form.Control as="select" custom
                             id={this.state.idProfessor}
                             value={this.state.idProfessor}

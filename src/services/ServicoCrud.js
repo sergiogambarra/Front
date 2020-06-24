@@ -26,7 +26,6 @@ const getId = async (end, id) => {
 const post = async (end, data) => {
     try {
         const entidade = await axios.post(`${baseURL}/${end}`, data);
-        console.log(entidade);
         return entidade;
     } catch (error) {
         return error.response;
