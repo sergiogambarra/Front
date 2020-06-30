@@ -354,7 +354,7 @@ class Parecer extends Component {
                 {this.state.alerteDonoRequisicao ? "" :
 
                     <Form.Group controlId="exampleForm.ControlTextarea1">
-                        <Form.Label>Novo Parecer do : &nbsp;{this.state.stringParecer  === "Coordenador"? <span style={{color:"red"}}> ( se o coordenador é professor da disciplina seu parecer é gravado nos campos de parecer de professor de coordenador )</span> :""}</Form.Label>
+                        <Form.Label>Novo Parecer do :&nbsp;{this.state.stringParecer  === "Coordenador"?  <> <b>{this.state.stringParecer}</b> <span style={{color:"red"}}>  ( se o coordenador é professor da disciplina seu parecer é gravado nos campos de parecer de professor de coordenador )</span></> :this.state.stringParecer}</Form.Label>
                         <Form.Control as="textarea" rows="2"
                             id={this.state.atualizarParecer}
                             value={this.state.atualizarParecer}

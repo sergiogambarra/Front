@@ -15,9 +15,9 @@ class ClassTest extends Component {
     super();
     this.state = {
       requisicoes: "", escolha: "", id: "", user: "", alunos: [], pesquisa: false, selecionaPesquisa: "", dataInicio: "",
-      dataFinal: "", dataInicioInvalida: false, dataFinalInvalida: false, msgErrorPesquisaNome: "", status: "", msgErrorStatus: "", cursos: [], idCurso: "", msgErrorCurso: "",
+      dataFinal: "", dataInicioInvalida: false, dataFinalInvalida: false, msgErrorPesquisaNome: "", status: null, msgErrorStatus: "", cursos: [], idCurso: "", msgErrorCurso: "",
       alert: false, last: "", first: "", total: "", page: 0, pararPesquisaData: false, mostraBotao: false, cursoCoordenador: [], reqAproveitamento: [],
-      posicao: "row", tipoRequisicao: "",requisicoesPesquisa:[],reqCetificacoes:[]
+      posicao: "row", tipoRequisicao: "", requisicoesPesquisa: [], reqCetificacoes: [], tipoRequisicaoEscolha: "", mostraPesquisa: true, mostraBotaoVoltar: false, alertPesquisa: false
     }
   }
 
@@ -90,7 +90,7 @@ class ClassTest extends Component {
       this.setState({ reqAproveitamento: r && r.content })
       for (let index = 0; index < this.state.reqAproveitamento.length; index++) {
         const element = this.state.reqAproveitamento[index].disciplinaSolicitada.id;
-        this.setState({idPesquisa:element})
+        this.setState({ idPesquisa: element })
 
       }
     })
@@ -100,80 +100,78 @@ class ClassTest extends Component {
       this.setState({ reqCetificacoes: r && r.content })
       for (let index = 0; index < this.state.reqAproveitamento.length; index++) {
         const element = this.state.reqAproveitamento[index].disciplinaSolicitada.id;
-        this.setState({idPesquisa:element})
+        this.setState({ idPesquisa: element })
       }
     })
   }
-  control(e) {
 
-    if (this.state.selecionaPesquisa) {
-      if (this.state.selecionaPesquisa === "Nome") {
-        if (e.target.id === "+") {
-          this.setState({ page: this.state.page + 1, mostraEditar: false }, () => this.todasRequisicoes())
-        } else {
-          this.setState({ page: this.state.page - 1, mostraEditar: false }, () => this.todasRequisicoes())
-        }
-      }
-    }
-  }
   async  listarNomeCurso() {
     await get(`cursos/pesquisar/disciplina/${this.state.idPesquisa}`).then((retorno) => {
       this.setState({ pesquisaNomeCurso: retorno })
-      console.log(this.state.pesquisaNomeCurso);
     });
   }
   async listarCoordenadorCurso() {
-this.listarNomeCurso()
+    this.listarNomeCurso()
     await get(`cursos/coordenador/${this.state.user && this.state.user.id}`).then((retorno) => {
       this.setState({ cursoCoordenador: retorno })
-      for (let index = 0; index <  this.state.cursoCoordenador.length; index++) {
+      for (let index = 0; index < this.state.cursoCoordenador.length; index++) {
         const element = this.state.cursoCoordenador[index].nome;
         if (element === this.state.pesquisaNomeCurso) {
           this.setState({ mostraRequisicaoCoordenador: true })
           console.log(this.state.mostraRequisicaoCoordenador);
-        }else{
+        } else {
           this.setState({ mostraRequisicaoCoordenador: false })
-          console.log(this.state.mostraRequisicaoCoordenador);
         }
       }
     })
   }
 
   async filtro() {
-    console.log(this.state.tipoRequisicao);
-    console.log(this.state.dataInicio);
-    console.log(this.state.dataFinal);
-    console.log(this.state.idCurso);
-    console.log(this.state.idDisciplina);
-    console.log(this.state.status);
+    console.log(this.state.id);
 
+    if (!this.state.tipoRequisicao) {
+      this.setState({ tipoRequisicaoEscolha: "Campo tipo de requisição é obrigatório" })
+      return
+    }
+    this.setState({ mostraPesquisa: false, mostraBotaoVoltar: true })
     await post("requisicoes/filtro/", {
       tipoRequisicao: this.state.tipoRequisicao,
       dataInicio: this.state.dataInicio && format(this.state.dataInicio),
       dataFinal: this.state.dataFinal && format(this.state.dataFinal),
       idCurso: this.state.idCurso,
       idDisciplina: this.state.idDisciplina,
-      statusRequisicao: this.state.status
+      statusRequisicao: this.state.status,
+      idAluno: this.state.id
     }).then((r) => {
-     this.setState({requisicoesPesquisa:r&&r.data})
+      console.log(r.data.length);
+
+      if (r && r.data.length === 0) {
+        this.setState({ alertPesquisa: true, mostraPesquisa: true, mostraBotaoVoltar: false })
+        setTimeout(() => {
+          this.setState({ alertPesquisa: false })
+        }, 4000);
+      } else {
+        this.setState({ requisicoesPesquisa: r && r.data, tipoRequisicaoEscolha: "" })
+      }
     })
 
   }
 
   render() {
     return (
-      <>
+      <><br />
+        <Alert show={this.state.alertPesquisa} variant={"danger"}>Não foram encontradas requisições</Alert>
         <TituloPagina titulo={'Visualizar Requisições'} />
         <div style={{ display: "flex", flexDirection: this.state.posicao }}>
           {this.state.pesquisa === true ? "" : <div className="custom-control custom-radio custom-control-inline">
             <input type="radio" id="aproveitamento" name="customRadioInline1" className="custom-control-input"
-              onChange={(e) => this.setState({ requisicoes: e.target.id, pesquisa: false }) + this.listarCoordenadorCurso() + this.listarNomeCurso()+ this.listarRequisicoesAproveitamento()} />
+              onChange={(e) => this.setState({ requisicoes: e.target.id, pesquisa: false }) + this.listarCoordenadorCurso() + this.listarNomeCurso() + this.listarRequisicoesAproveitamento()} />
             <label id="mudarCor" className="custom-control-label" htmlFor="aproveitamento">Aproveitamento de estudos</label>
           </div>}
           {this.state.pesquisa === true ? "" : <> <div className="custom-control custom-radio custom-control-inline">
             <input type="radio" id="certificacao" name="customRadioInline1" className="custom-control-input"
               onChange={(e) => this.setState({ requisicoes: e.target.id, pesquisa: false }) +
-                this.listarCoordenadorCurso() + this.listarNomeCurso()+this.listarRequisicoesCertificacao()} />
+                this.listarCoordenadorCurso() + this.listarNomeCurso() + this.listarRequisicoesCertificacao()} />
             <label id="mudarCor" className="custom-control-label" htmlFor="certificacao">Certificação de conhecimentos</label>
           </div>
             <div className="custom-control custom-radio ">
@@ -184,113 +182,115 @@ this.listarNomeCurso()
           {this.state.pesquisa === false ? "" : <><div style={{ display: "flex" }}>
             <div className="custom-control custom-radio ">
               <input type="radio" id="certificaoPesquisa" name="customRadioInline1" className="custom-control-input"
-                onChange={(e) => this.setState({ tipoRequisicao: "requisicoes_certificacao" })} />
+                onChange={(e) => this.setState({ tipoRequisicao: "requisicoes_certificacao", requisicoesPesquisa: "", mostraPesquisa: true, mostraBotaoVoltar: false })} />
               <label id="mudarCor" className="custom-control-label" htmlFor="certificaoPesquisa">Certificação de Conhecimento</label>&nbsp;&nbsp;&nbsp;&nbsp;
         </div>
             <div className="custom-control custom-radio ">
               <input type="radio" id="aproveitamentoPesquisa" name="customRadioInline1" className="custom-control-input"
-                onChange={(e) => this.setState({ tipoRequisicao: "requisicoes_aproveitamento" })} />
+                onChange={(e) => this.setState({ tipoRequisicao: "requisicoes_aproveitamento", requisicoesPesquisa: "", mostraPesquisa: true, mostraBotaoVoltar: false })} />
               <label id="mudarCor" className="custom-control-label" htmlFor="aproveitamentoPesquisa">Aproveitamento de Estudos</label>&nbsp;&nbsp;&nbsp;&nbsp;
         </div></div>
+            {this.state.mostraPesquisa && <>
+              <Form.Text className="text-danger">{this.state.tipoRequisicaoEscolha} </Form.Text>
+              <Form.Group controlId="exampleForm.SelectCustom">
+                <br />
+                <Form.Label>Selecione curso para sua pesquisa</Form.Label>
+                <Form.Control as="select" custom
+                  onClick={() => this.listarDisciplinas()}
+                  onChange={
+                    (e) => {
+                      this.setState({ idCurso: e.target.value })
+                    }} >
+                  <option key={0} value={""}></option>
+                  {this.state.cursos && this.state.cursos.map((c) =>
+                    <option key={c.id} value={c.id}>{c.nome}</option>)}
+                </Form.Control>
+                <Form.Text className="text-danger">{this.state.msgErrorCurso} </Form.Text>
+              </Form.Group>
+              <Form.Group controlId="exampleForm.SelectCustom">
+                <Form.Label>Selecione disciplina do curso</Form.Label>
+                <Form.Control as="select" custom
+                  id={this.state.idDisciplina}
+                  value={this.state.idDisciplina}
+                  onChange={
+                    (e) => {
+                      this.setState({ idDisciplina: e.target.value })
+                    }} >
+                  <option key={0} value={""}></option>
+                  {this.state.disciplinas && this.state.disciplinas.map((d) =>
 
-            <Form.Group controlId="exampleForm.SelectCustom">
-              <br />
-              <Form.Label>Selecione curso para sua pesquisa</Form.Label>
-              <Form.Control as="select" custom
-                onClick={() => this.listarDisciplinas()}
-                onChange={
-                  (e) => {
-                    this.setState({ idCurso: e.target.value })
-                  }} >
-                <option key={0} value={""}></option>
-                {this.state.cursos && this.state.cursos.map((c) =>
-                  <option key={c.id} value={c.id}>{c.nome}</option>)}
-              </Form.Control>
-              <Form.Text className="text-danger">{this.state.msgErrorCurso} </Form.Text>
-            </Form.Group>
+                    <option key={d.id} value={d.id}>{d.nome}</option>)}
+                </Form.Control>
+                <Form.Text className="text-danger">{this.state.msgErrorCurso} </Form.Text>
+              </Form.Group>
 
+              <Form.Group controlId="exampleForm.SelectCustom">
+                <Form.Label>Selecione nome do aluno </Form.Label>
+                <Form.Control as="select" custom
+                  id={this.state.id}
+                  value={this.state.id}
+                  onChange={
+                    (e) => {
+                      this.alunoPeloId(e.target.value);
+                      this.setState({ id: e.target.value })
+                    }}
+                >
+                  <option key={0} value={""}></option>
+                  {this.state.alunos.map((a) =>
+                    <option key={a.id} value={a.id} >{a.perfil.nome}</option>
+                  )}
+                </Form.Control>
+                <Form.Text className="text-danger">{this.state.msgErrorPesquisaNome} </Form.Text>
+              </Form.Group>
 
-            <Form.Group controlId="exampleForm.SelectCustom">
-              <Form.Label>Selecione disciplina do curso</Form.Label>
-              <Form.Control as="select" custom
-                id={this.state.idDisciplina}
-                value={this.state.idDisciplina}
+              <Form.Group controlId="exampleForm.SelectCustom">
+                <Form.Label>Selecione status da requisição</Form.Label>
+                <Form.Control as="select" custom
+                  onChange={
+                    (e) => {
+                      this.setState({ status: e.target.value })
+                    }} >
+                  <option key={0} value={""}></option>
+                  <option >DEFERIDO</option>
+                  <option >EM ANÁLISE</option>
+                  <option >INDEFERIDO</option>
 
-                onChange={
-                  (e) => {
-                    this.setState({ idDisciplina: e.target.value })
-                  }} >
-                <option key={0} value={""}></option>
-                {this.state.disciplinas && this.state.disciplinas.map((d) =>
+                </Form.Control>
+                <Form.Text className="text-danger">{this.state.msgErrorStatus} </Form.Text>
+              </Form.Group>
 
-                  <option key={d.id} value={d.id}>{d.nome}</option>)}
-              </Form.Control>
-              <Form.Text className="text-danger">{this.state.msgErrorCurso} </Form.Text>
-            </Form.Group>
+              < Form >
+                <SACEInput
+                  type={"date"}
+                  label={'Apartir do dia '}
+                  value={this.state.dataInicio}
+                  disabled={this.state.pararPesquisaData}
+                  placeholder={'pesquisa por data. '}
+                  onChange={(e) => this.setState({ dataInicio: e.target.value })}
+                  onError={this.state.dataInicioInvalida}
+                  onErrorMessage={'Você não inseriu uma data válida!'}
+                />
 
-            <Form.Group controlId="exampleForm.SelectCustom">
-              <Form.Label>Selecione nome do aluno </Form.Label>
-              <Form.Control as="select" custom
-                onChange={
-                  (e) => {
-                    this.alunoPeloId(e.target.value);
-                    this.setState({ id: e.target.value })
-                  }}
-              >
-                <option key={0} value={""}></option>
-                {this.state.alunos.map((a) =>
-                  <option key={a.id} value={a.id} >{a.perfil.nome}</option>
-                )}
-              </Form.Control>
-              <Form.Text className="text-danger">{this.state.msgErrorPesquisaNome} </Form.Text>
-            </Form.Group>
+                <SACEInput
+                  type={"date"}
+                  label={'Até o dia '}
+                  value={this.state.dataFinal}
+                  disabled={this.state.pararPesquisaData}
+                  placeholder={'pesquisa por data. '}
+                  onChange={(e) => this.setState({ dataFinal: e.target.value })}
+                  onError={this.state.dataFinalInvalida}
+                  onErrorMessage={'Você não inseriu uma data válida!'}
+                />
+                <Button onClick={() => this.filtro()}>Pesquisar</Button>&nbsp;&nbsp;&nbsp;
+          <Link to="/tela-transicao" onClick={() => this.setState({ pesquisa: false, id: "" })}><Button variant={"danger"}>Voltar</Button></Link>
+              </Form></>
 
-            <Form.Group controlId="exampleForm.SelectCustom">
-              <Form.Label>Selecione status da requisição</Form.Label>
-              <Form.Control as="select" custom
-                onChange={
-                  (e) => {
-                    this.setState({ status: e.target.value })
-                  }} >
-                <option key={0} value={""}></option>
-                <option >DEFERIDO</option>
-                <option >EM ANÁLISE</option>
-                <option >INDEFERIDO</option>
-
-              </Form.Control>
-              <Form.Text className="text-danger">{this.state.msgErrorStatus} </Form.Text>
-            </Form.Group>
-
-            < Form >
-              <SACEInput
-                type={"date"}
-                label={'Apartir do dia '}
-                value={this.state.dataInicio}
-                disabled={this.state.pararPesquisaData}
-                placeholder={'pesquisa por data. '}
-                onChange={(e) => this.setState({ dataInicio: e.target.value })}
-                onError={this.state.dataInicioInvalida}
-                onErrorMessage={'Você não inseriu uma data válida!'}
-              />
-
-              <SACEInput
-                type={"date"}
-                label={'Até o dia '}
-                value={this.state.dataFinal}
-                disabled={this.state.pararPesquisaData}
-                placeholder={'pesquisa por data. '}
-                onChange={(e) => this.setState({ dataFinal: e.target.value })}
-                onError={this.state.dataFinalInvalida}
-                onErrorMessage={'Você não inseriu uma data válida!'}
-              /> <br />
-              <Button onClick={() => this.filtro()}>Pesquisar</Button>&nbsp;&nbsp;&nbsp;
-              <Link to="/tela-transicao" onClick={() => this.setState({ pesquisa: false, id: "" })}><Button variant={"danger"}>Voltar</Button></Link>
-            </Form>
+            }
 
           </>
           }
         </div>
-        <br /> <br />
+
         <Alert variant={"danger"} show={this.state.alert}>Não existem requisições para essa pesquisa </Alert>
 
 
@@ -303,38 +303,42 @@ this.listarNomeCurso()
           <Container>
             <Row>
               {
-               
+
                 this.state.requisicoesPesquisa && this.state.requisicoesPesquisa.map((requisicao) => {
                   const requisicaoEnviar = {
-                    id:requisicao.id,
-                    dataRequisicao:requisicao.data,
-                    usuario:{
-                      perfil:{
-                          nome:requisicao.nomeUsuario
-                      } 
+                    id: requisicao.id,
+                    dataRequisicao: format(requisicao.data),
+                    usuario: {
+                      perfil: {
+                        nome: requisicao.nomeUsuario
+                      }
                     },
-                    disciplinaSolicitada:{
-                      nome:requisicao.nomeDisciplina
+                    disciplinaSolicitada: {
+                      nome: requisicao.nomeDisciplina
                     },
-                    deferido:requisicao.status,
-                    professor:{
-                      perfil:{
-                        nome:requisicao.professor
+                    deferido: requisicao.status,
+                    professor: {
+                      perfil: {
+                        nome: requisicao.professor
                       }
                     }
                   }
-                  if( this.state.requisicoes === "aproveitamento"){
-                    return <CardAproveitamento requisicao={requisicaoEnviar}/>
-                  }else{
-                    return <CardCertificacao requisicao={requisicaoEnviar}/>
+                  console.log(this.state);
+                  if (this.state.tipoRequisicao === "requisicoes_aproveitamento") {
+                    return <CardAproveitamento requisicao={requisicaoEnviar} />
+                  } else {
+                    return <CardCertificacao requisicao={requisicaoEnviar} />
                   }
-                    
+
 
                 })}
 
             </Row>
-
+            {this.state.mostraBotaoVoltar && <Button variant={"danger"} onClick={() =>
+              this.setState({ mostraPesquisa: true, mostraBotaoVoltar: false, dataInicio: null, dataFinal: null, idCurso: null, idDisciplina: null, status: null, requisicoesPesquisa: "" })}>Voltar para pesquisa</Button>
+            }
           </Container>
+
         }
         {this.state.mostraBotao &&
           <>

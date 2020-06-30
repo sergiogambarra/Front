@@ -21,7 +21,7 @@ export default function CardCertificacao({requisicao}) {
         <p>{`Data: ${dataRequisicao}`}</p>
         <p>{`Aluno: ${usuario && usuario.perfil.nome}`}</p>
         <p>{`Disciplina : ${disciplinaSolicitada&&disciplinaSolicitada.nome}`}</p>
-        <p>{`Professor : ${professor === null ?"":professor&&professor.perfil.nome}`}</p>
+        {professor && professor.perfil.nome ? <p>Professor : {professor.perfil.nome}</p> :<p>    &nbsp;</p>}
         </div>
       </Col>
   );

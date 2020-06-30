@@ -9,6 +9,9 @@ export default function  CardAproveitamento ({requisicao}){
   const {
     id, dataRequisicao, usuario, disciplinaSolicitada, deferido,tipo,
     professor  } = requisicao;
+    console.log(requisicao);
+    
+
      return (
       <Col className="box-card" sm={4}>
         <div className='requisicao' onClick={()=>history.push(`/parecer/${id}`)}>
@@ -18,7 +21,7 @@ export default function  CardAproveitamento ({requisicao}){
         <p>{`Data: ${dataRequisicao}`}</p>
         <p>{`Aluno: ${usuario && usuario.perfil.nome}`}</p>
          <p>{`Disciplina : ${disciplinaSolicitada&&disciplinaSolicitada.nome}`}</p>
-        <p>{`Professor : ${professor===null?"":professor&&professor.perfil.nome}`}</p>
+        {professor && professor.perfil.nome ? <p>Professor : {professor.perfil.nome}</p> :<p>    &nbsp;</p>}
         </div>
       </Col>
     );
