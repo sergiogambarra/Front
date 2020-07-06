@@ -88,7 +88,7 @@ export default function SACENavbar({ setUserData, user }) {
                 onClick={() => {
                     logout();
                     setUserData(null);
-                    window.location.href = ("/login")
+                    window.location.href = ("/")
                 }}
             >
                 Logout
