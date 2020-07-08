@@ -9,8 +9,6 @@ export default function  CardAproveitamento ({requisicao}){
   const {
     id, dataRequisicao, usuario, disciplinaSolicitada, deferido,tipo,
     professor  } = requisicao;
-    console.log(requisicao);
-    
 
      return (
       <Col className="box-card" sm={4}>

@@ -5,7 +5,7 @@ import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import './tabelarequisicoes.css';
 
-export default function ({ user,verifica }) {
+export default function ({ user, verifica, isCoordenador }) {
   const [requisicoes, setRequisicoes] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(0);
@@ -16,7 +16,7 @@ export default function ({ user,verifica }) {
 
   useEffect(() => {
     setIsLoading(true);
-    getAproveitamentos(user, page,verifica)
+    getAproveitamentos(user, page, verifica)
       .then(result => {
         setRequisicoes(result.content);
         setFirst(result.first);
@@ -27,7 +27,7 @@ export default function ({ user,verifica }) {
       .catch(error => {
         setIsLoading(false);
       });
-  }, [user, page,verifica]);
+  }, [user, page, verifica]);
 
   const control = (e) => {
     if (e.target.id === "+") {
@@ -39,8 +39,8 @@ export default function ({ user,verifica }) {
   return (
     <Container >
       <Row style={{ textAlign: "center" }}>
-        {requisicoes.length>0 &&
-          <h5  style={{ margin: "2% auto" }}>Aproveitamento de estudos</h5>}
+        {requisicoes.length > 0 &&
+          <h5 style={{ margin: "2% auto" }}>Aproveitamento de estudos</h5>}
       </Row>
       <Row >
         {
@@ -57,16 +57,16 @@ export default function ({ user,verifica }) {
 
       </Row>
       <Row>
-        {requisicoes.length>0 &&
+        {requisicoes.length > 0 &&
           <>
-          
-        {last || <button id="+" onClick={(e) => control(e)}>Próximo</button>}
+
+            {last || <button id="+" onClick={(e) => control(e)}>Próximo</button>}
                                 &nbsp;&nbsp;
             {first || <button id="-" onClick={(e) => control(e)}>Anterior</button>}
           </>
 
         }
-        {requisicoes.length>0 &&<span style={{ position: 'relative', left: '70%' }} >Página  {page + 1} / {total}</span>}
+        {requisicoes.length > 0 && <span style={{ position: 'relative', left: '70%' }} >Página  {page + 1} / {total}</span>}
       </Row>
     </Container>
   );

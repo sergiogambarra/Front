@@ -1,7 +1,11 @@
-import React from 'react';
 import { Navbar, Nav, Button, Dropdown, DropdownButton } from 'react-bootstrap';
 import { NavLink, Link } from "react-router-dom";
 import { logout } from '../services/TokenService';
+import React, { useState, useEffect } from 'react';
+import { get } from '../services/ServicoCrud'
+
+
+
 function SACELink({ to, label }) {
     return (
         <NavLink
@@ -34,7 +38,7 @@ function retornaLinks(user) {
     } else if (user.permissao === "SERVIDOR") {
         return <>
             <SACELink to={'/minhas-requisicoes'} label={'Listar Requisições'} />
-           
+
             <DropdownButton id="dropdown-basic-button" title="CADASTRAR" >
                 <Dropdown.Item><Link to="/cadastrar-curso">Curso</Link></Dropdown.Item>
                 <Dropdown.Item ><Link to="/cadastro-servidor">Servidor / Professor</Link></Dropdown.Item>
@@ -62,14 +66,27 @@ function retornaLinks(user) {
         </>
     } else {
         return <>
+       
             <SACELink to={'/minhas-requisicoes'} label={'Listar Requisições'} />
             <SACELink to={'/troca-senha'} label={'Alterar senha'} />
         </>
     }
 }
 
+
 export default function SACENavbar({ setUserData, user }) {
+    const [coordenador, setCoordenador] = useState([]);
+
+
+    useEffect(() => {
+        get("usuarios/auth/").then((r) => {
+            setCoordenador(r&&r.perfil.coordenador)
+        })
+
+    }, [])
     return (
+
+        
         <Navbar bg="primary" variant="dark">
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
@@ -79,10 +96,16 @@ export default function SACENavbar({ setUserData, user }) {
                     }
                 </Nav>
             </Navbar.Collapse>
+           
             Usuário :&nbsp;
-            <strong variant="outline-light" >{user.login}</strong>
-
+            <strong variant="outline-light" >{user.login}</strong>&nbsp;&nbsp;
+            {coordenador === true ? <select >
+                <option >Professor</option>
+                <option >Coordenador</option>
+                </select>:""}
                 &nbsp;&nbsp;
+
+                
             <Button
                 variant="danger" className="btn btn-primary m-1"
                 onClick={() => {
