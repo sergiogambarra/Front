@@ -6,6 +6,8 @@ import { get } from '../services/ServicoCrud'
 
 
 
+
+
 function SACELink({ to, label }) {
     return (
         <NavLink
@@ -28,6 +30,8 @@ function SACELink({ to, label }) {
 
 }
 function retornaLinks(user) {
+
+
     if (user.permissao === "ALUNO") {
         return <>
             <SACELink to={'/nova-requisicao'} label={'Criar requisição'} />
@@ -66,7 +70,7 @@ function retornaLinks(user) {
         </>
     } else {
         return <>
-       
+
             <SACELink to={'/minhas-requisicoes'} label={'Listar Requisições'} />
             <SACELink to={'/troca-senha'} label={'Alterar senha'} />
         </>
@@ -75,48 +79,57 @@ function retornaLinks(user) {
 
 
 export default function SACENavbar({ setUserData, user }) {
+
     const [coordenador, setCoordenador] = useState([]);
+    const [escolha, setEscolha] = useState([]);
 
 
     useEffect(() => {
         get("usuarios/auth/").then((r) => {
-            setCoordenador(r&&r.perfil.coordenador)
+            setCoordenador(r && r.perfil.coordenador)
         })
 
     }, [])
     return (
+        <>
+            <Navbar bg="primary" variant="dark">
+                <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                <Navbar.Collapse id="basic-navbar-nav">
+                    <Nav className="mr-auto">
+                        {
+                            retornaLinks(user)
+                        }
+                        {escolha === "coordenador" ?
+                            <Link style={{ color: "black",fontSize:"115%" }} to={'/requisicoes-coordenador'}>Requisições coordenador curso</Link> : ""
+                        }
+                    </Nav>
+                </Navbar.Collapse>
 
-        
-        <Navbar bg="primary" variant="dark">
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="basic-navbar-nav">
-                <Nav className="mr-auto">
-                    {
-                        retornaLinks(user)
-                    }
-                </Nav>
-            </Navbar.Collapse>
-           
             Usuário :&nbsp;
             <strong variant="outline-light" >{user.login}</strong>&nbsp;&nbsp;
-            {coordenador === true ? <select >
-                <option >Professor</option>
-                <option >Coordenador</option>
-                </select>:""}
+            {coordenador === true ? <select
+                    id={escolha}
+                    value={escolha}
+                    onChange={(e) => {
+                        setEscolha(e.target.value)
+                    }}
+                >
+                    <option value="professor">Professor</option>
+                    <option value="coordenador">Coordenador</option>
+                </select> : ""}
                 &nbsp;&nbsp;
 
-                
-            <Button
-                variant="danger" className="btn btn-primary m-1"
-                onClick={() => {
-                    logout();
-                    setUserData(null);
-                    window.location.href = ("/")
-                }}
-            >
-                Logout
+                <Button
+                    variant="danger" className="btn btn-primary m-1"
+                    onClick={() => {
+                        logout();
+                        setUserData(null);
+                        window.location.href = ("/")
+                    }}
+                >
+                    Logout
                 </Button>
 
-        </Navbar>
+            </Navbar></>
     );
 }

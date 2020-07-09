@@ -43,6 +43,7 @@ class ConfiguraDataSolicitacoes extends Component {
   }
   mostraDataEdital() {
     get("configuracao/").then((r) => {
+      console.log(r);
       this.setState({ dataInicioSalva: r && r[0].dataAbertura, dataFechamentoSalva: r && r[0].dataFechamento, modalShow: true })
     })
 

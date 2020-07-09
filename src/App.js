@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import Inicio from './pages/Inicio';
 import NovaRequisicao from './pages/NovaRequisicao';
 import MinhasRequisicoes from './pages/MinhasRequisicoes';
+import RequisicoesCoordenadorCurso from './pages/Servidor/RequisicoesCoordenadorCurso';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import SACENavbar from './components/SACENavbar';
 import CadastroPerfilAluno from './pages/cadastros/CadastroPerfilAluno';
@@ -62,6 +63,7 @@ function App() {
           <PrivateRoute exact path="/pesquisa-usuario" component={PesquisaUsuario} />
           <PrivateRoute exact path="/dados-aluno" component={DadosAluno} />
           <PrivateRoute exact path="/configuracao-data" component={ConfiguraDataSolicitacoes} />
+          <PrivateRoute exact path="/requisicoes-coordenador" component={RequisicoesCoordenadorCurso} />
           <Route path="*" component={() => <h1>Page not found</h1>} />
         </Switch>
       </div>
