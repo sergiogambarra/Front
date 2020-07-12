@@ -9,7 +9,7 @@ class RequisicioesCoordenadorCurso extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            requisicoes: "",last:"",first:"",page:0,total:"",
+            requisicoes: "",last:false,first:true,page:0,total:0,
             user: "", listaRequisicaoCoordenadorCerfificacao: [], listaRequisicaoCoordenadorAproveitamento: []
         }
 
@@ -25,14 +25,14 @@ class RequisicioesCoordenadorCurso extends Component {
 
     }
     async listaRequisicoesCoordenadorCertificacao() {
-        await get(`requisicoes/coordenador/cert/${this.state.user.id}`).then((retorno) => {
-            this.setState({ listaRequisicaoCoordenadorCerfificacao: retorno && retorno.content })
-            console.log(this.state.listaRequisicaoCoordenadorCerfificacao);
+        await get(`requisicoes/coordenador/cert/${this.state.user.id}?page=0&size=0`).then((retorno) => {
+            console.log(retorno);
+            this.setState({ listaRequisicaoCoordenadorCerfificacao: retorno && retorno.content,last: retorno&&retorno.last, first: retorno&&retorno.first, total: retorno&&retorno.totalPages  })
         })
     }
     async listaRequisicoesCoordenadorAproveitamento() {
-        await get(`requisicoes/coordenador/apro/${this.state.user.id}`).then((retorno) => {
-            this.setState({ listaRequisicaoCoordenadorAproveitamento: retorno && retorno.content })
+        await get(`requisicoes/coordenador/apro/${this.state.user.id}?page=0&size=0`).then((retorno) => {
+            this.setState({ listaRequisicaoCoordenadorAproveitamento: retorno && retorno.content ,last: retorno&&retorno.last, first: retorno&&retorno.first, total: retorno&&retorno.totalPages })
             console.log(this.state.listaRequisicaoCoordenadorAproveitamento);
         })
     }

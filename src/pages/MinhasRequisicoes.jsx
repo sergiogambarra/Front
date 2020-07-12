@@ -57,19 +57,7 @@ class MinhasRequisicoes extends Component {
     });
   }
 
-  async listaRequisicoesCoordenadorCertificacao() {
-    await get(`requisicoes/coordenador/cert/${this.state.user.id}`).then((retorno) => {
-      this.setState({ listaRequisicaoCoordenadorCerfificacao: retorno&&retorno.content })
-      console.log(this.state.listaRequisicaoCoordenadorCerfificacao);
-    })
-  }
-  async listaRequisicoesCoordenadorAproveitamento() {
-    await get(`requisicoes/coordenador/apro/${this.state.user.id}`).then((retorno) => {
-      this.setState({ listaRequisicaoCoordenadorAproveitamento: retorno&&retorno.content })
-      console.log(this.state.listaRequisicaoCoordenadorAproveitamento);
-    })
-  }
-
+  
   async todasRequisicoes() {
     this.setState({ dataInicioInvalida: "", dataFinalInvalida: "" })
     if (!this.state.user.id) {
@@ -134,12 +122,12 @@ class MinhasRequisicoes extends Component {
         <div style={{ display: "flex", flexDirection: this.state.posicao }}>
           {this.state.pesquisa === true ? "" : <div className="custom-control custom-radio custom-control-inline">
             <input type="radio" id="aproveitamento" name="customRadioInline1" className="custom-control-input"
-              onChange={(e) => this.setState({ requisicoes: e.target.id, pesquisa: false }) + this.listaRequisicoesCoordenadorAproveitamento()} />
+              onChange={(e) => this.setState({ requisicoes: e.target.id, pesquisa: false })} />
             <label id="mudarCor" className="custom-control-label" htmlFor="aproveitamento">Aproveitamento de estudos</label>
           </div>}
           {this.state.pesquisa === true ? "" : <> <div className="custom-control custom-radio custom-control-inline">
             <input type="radio" id="certificacao" name="customRadioInline1" className="custom-control-input"
-              onChange={(e) => this.setState({ requisicoes: e.target.id, pesquisa: false })  + this.listaRequisicoesCoordenadorCertificacao()} />
+              onChange={(e) => this.setState({ requisicoes: e.target.id, pesquisa: false }) } />
             <label id="mudarCor" className="custom-control-label" htmlFor="certificacao">Certificação de conhecimentos</label>
           </div>
             <div className="custom-control custom-radio ">
@@ -270,8 +258,6 @@ class MinhasRequisicoes extends Component {
         {
           <Container>
             <Row>
-              {console.log(this.state.requisicoesPesquisa)}
-              
               {
 
                 this.state.requisicoesPesquisa && this.state.requisicoesPesquisa.map((requisicao) => {
