@@ -100,7 +100,7 @@ export default function SACENavbar({ setUserData, user }) {
                             retornaLinks(user)
                         }
                         {escolha === "coordenador" ?
-                            <Link style={{ color: "black",fontSize:"115%" }} to={'/requisicoes-coordenador'}>Requisições coordenador curso</Link> : ""
+                            <Link style={{ color: "black",fontSize:"115%" }} to={'/requisicoes-coordenador'}>Requisições do Coordenador </Link> : ""
                         }
                     </Nav>
                 </Navbar.Collapse>

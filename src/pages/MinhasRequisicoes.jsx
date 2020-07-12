@@ -10,7 +10,7 @@ import { format } from '../auxiliares/FormataData';
 import CardAproveitamento from '../components/CardAproveitamento';
 import CardCertificacao from '../components/CardCertificacao';
 
-class ClassTest extends Component {
+class MinhasRequisicoes extends Component {
   constructor(props) {
     super();
     this.state = {
@@ -270,6 +270,8 @@ class ClassTest extends Component {
         {
           <Container>
             <Row>
+              {console.log(this.state.requisicoesPesquisa)}
+              
               {
 
                 this.state.requisicoesPesquisa && this.state.requisicoesPesquisa.map((requisicao) => {
@@ -307,20 +309,11 @@ class ClassTest extends Component {
           </Container>
 
         }
-        {this.state.mostraBotao &&
-          <>
-            {this.state.last || <button id="+" onClick={(e) => this.control(e)}>Próximo</button>}
-                        &nbsp;&nbsp;
-            {this.state.first || <button id="-" onClick={(e) => this.control(e)}>Anterior</button>}
-
-            <span style={{ float: "right" }}>Página  {this.state.page + 1} / {this.state.total}</span>
-          </>
-
-        }
+    
       </>);
 
   }
 }
-export default ClassTest;
+export default MinhasRequisicoes;
 
 
