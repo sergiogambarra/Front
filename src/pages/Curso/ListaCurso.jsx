@@ -40,9 +40,7 @@ export default class ListaCursos extends Component {
 
     async listarCursosId(id) {
         getId("cursos/", id).then((retorno)=>{
-            console.log(retorno);
-            this.setState({ nome: retorno && retorno.nome, id: id, editar: true, nomeInvalido: false });
-            console.log(this.state.usuario);
+            this.setState({ nome: retorno && retorno.nome, id: id, editar: true, nomeInvalido: false ,msgErrorProfessor:false});
         })
     }
 

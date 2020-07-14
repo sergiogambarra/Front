@@ -9,7 +9,7 @@ class RequisicioesCoordenadorCurso extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            requisicoes: "",last:false,first:true,page:0,total:0,
+            requisicoes: "", last: false, first: true, page: 0, total: 0,
             user: "", listaRequisicaoCoordenadorCerfificacao: [], listaRequisicaoCoordenadorAproveitamento: []
         }
 
@@ -24,25 +24,20 @@ class RequisicioesCoordenadorCurso extends Component {
         })
 
     }
-    async listaRequisicoesCoordenadorCertificacao() {
-        await get(`requisicoes/coordenador/cert/${this.state.user.id}?page=0&size=0`).then((retorno) => {
-            console.log(retorno);
-            this.setState({ listaRequisicaoCoordenadorCerfificacao: retorno && retorno.content,last: retorno&&retorno.last, first: retorno&&retorno.first, total: retorno&&retorno.totalPages  })
+    listaRequisicoesCoordenadorCertificacao() {
+        get(`requisicoes/coordenador/cert/${this.state.user.id}?page=0&size=0`).then((retorno) => {
+
+            this.setState({ listaRequisicaoCoordenadorCerfificacao: retorno && retorno.content, last: retorno && retorno.last, first: retorno && retorno.first, total: retorno && retorno.totalPages})
+            console.log(this.state)
         })
     }
-    async listaRequisicoesCoordenadorAproveitamento() {
-        await get(`requisicoes/coordenador/apro/${this.state.user.id}?page=0&size=0`).then((retorno) => {
-            this.setState({ listaRequisicaoCoordenadorAproveitamento: retorno && retorno.content ,last: retorno&&retorno.last, first: retorno&&retorno.first, total: retorno&&retorno.totalPages })
+    listaRequisicoesCoordenadorAproveitamento() {
+        get(`requisicoes/coordenador/apro/${this.state.user.id}?page=0&size=0`).then((retorno) => {
+            this.setState({ listaRequisicaoCoordenadorAproveitamento: retorno && retorno.content })
             console.log(this.state.listaRequisicaoCoordenadorAproveitamento);
         })
     }
-    control(e) {
-        if (e.target.id === "+") {
-            this.setState({ page: this.state.page + 1,  })
-        } else {
-            this.setState({ page: this.state.page - 1, })
-        }
-    }
+  
     render() {
         return (<div>
             <br />
@@ -57,10 +52,9 @@ class RequisicioesCoordenadorCurso extends Component {
                     onChange={(e) => this.setState({ requisicoes: e.target.id, pesquisa: false }) + this.listaRequisicoesCoordenadorCertificacao()} />
                 <label id="mudarCor" className="custom-control-label" htmlFor="certificacao">Certificação de conhecimentos</label>
             </div>
-            {console.log(this.state.requisicoes)}
             <br /><br />
-            {this.state.requisicoes === "certificacao"? <h5 style={{textAlign:"center"}}>Certificação de Conhecimentos</h5>:
-            this.state.requisicoes === "aproveitamento"? <h5 style={{textAlign:"center"}}>Aproveitamento de Estudos</h5>:""}
+            {this.state.requisicoes === "certificacao" ? <h5 style={{ textAlign: "center" }}>Certificação de Conhecimentos</h5> :
+                this.state.requisicoes === "aproveitamento" ? <h5 style={{ textAlign: "center" }}>Aproveitamento de Estudos</h5> : ""}
             <br />
             <Container>
                 <Row>
@@ -69,13 +63,12 @@ class RequisicioesCoordenadorCurso extends Component {
                             const requisicaoEnviar = {
                                 id: requisicao.id,
                                 dataRequisicao: requisicao.dataRequisicao,
-                                usuario:requisicao.usuario,
+                                usuario: requisicao.usuario,
                                 disciplinaSolicitada: requisicao.disciplinaSolicitada,
                                 deferido: requisicao.deferido,
                                 professor: requisicao.professor,
-                                tipo:requisicao.tipo                                
+                                tipo: requisicao.tipo
                             }
-                            console.log(this.state.requisicoes);
 
                             return (
                                 <CardCertificacao requisicao={requisicaoEnviar} />
@@ -86,29 +79,18 @@ class RequisicioesCoordenadorCurso extends Component {
                             const requisicaoEnviar = {
                                 id: requisicao.id,
                                 dataRequisicao: requisicao.dataRequisicao,
-                                usuario:requisicao.usuario,
+                                usuario: requisicao.usuario,
                                 disciplinaSolicitada: requisicao.disciplinaSolicitada,
                                 deferido: requisicao.deferido,
                                 professor: requisicao.professor,
-                                tipo:requisicao.tipo       
+                                tipo: requisicao.tipo
                             }
-                            console.log(this.state.requisicoes);
 
                             return <CardAproveitamento requisicao={requisicaoEnviar} />
 
                         })}
                 </Row></Container>
 
-                {
-                    <>
-                        {this.state.last || <button id="+" onClick={(e) => this.control(e)}>Próximo</button>}
-                        &nbsp;&nbsp;
-                        {this.state.first || <button id="-" onClick={(e) => this.control(e)}>Anterior</button>}
-
-                        <span style={{ float: "right" }}>Página  {this.state.page + 1} / {this.state.total}</span>
-                    </>
-
-                }
         </div>);
 
     }

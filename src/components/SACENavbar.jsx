@@ -71,7 +71,7 @@ function retornaLinks(user) {
     } else {
         return <>
 
-            <SACELink to={'/minhas-requisicoes'} label={'Listar Requisições'} />
+            <SACELink to={'/minhas-requisicoes'} label={'Requisições do Professor'} />
             <SACELink to={'/troca-senha'} label={'Alterar senha'} />
         </>
     }
