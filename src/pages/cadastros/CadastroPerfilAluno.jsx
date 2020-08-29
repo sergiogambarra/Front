@@ -134,7 +134,7 @@ class CadastroPerfilAluno extends Component {
                 setTimeout(() => {
                     this.setState({ alert: false })
                 }, 5000,
-                    window.location.href = ("/login")
+                    window.location.href = ("/")
                 )
                 this.limpar()
 
