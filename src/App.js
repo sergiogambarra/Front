@@ -27,6 +27,7 @@ import RelatorioCertificacao from './Relatorios/RelatorioCertificacao';
 import RelatorioFinal from './Relatorios/RelatorioFinal';
 import PesquisaUsuario from '../src/pages/Pesquisas/PesquisaUsuario';
 import './components/card.css';
+import ImportadorCurso from './components/Importador/ImportadorCurso';
 
 function App() {
   const [userData, setUserData] = useState(null);
@@ -64,6 +65,7 @@ function App() {
           <PrivateRoute exact path="/dados-aluno" component={DadosAluno} />
           <PrivateRoute exact path="/configuracao-data" component={ConfiguraDataSolicitacoes} />
           <PrivateRoute exact path="/requisicoes-coordenador" component={RequisicoesCoordenadorCurso} />
+          <PrivateRoute exact path="/importador-cursos" component={ImportadorCurso} />
           <Route path="*" component={() => <h1>Page not found</h1>} />
         </Switch>
       </div>
