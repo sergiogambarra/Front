@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 
 
-class ImportarCurso extends Component {
+class ImportarDisciplinas extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -20,7 +20,7 @@ class ImportarCurso extends Component {
         return (
             <div>
 
-                <form action={("http://localhost:8080/api/anexos/cursos")} method="post" enctype="multipart/form-data" >
+                <form action={("http://localhost:8080/api/anexos/disciplinas")} method="post" enctype="multipart/form-data" >
                     <input type="file" name="umArquivo" />
                     <input type="submit" value="enviar" />
                 </form>
@@ -32,4 +32,4 @@ class ImportarCurso extends Component {
     }
 }
 
-export default ImportarCurso;
+export default ImportarDisciplinas;

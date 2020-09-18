@@ -69,7 +69,7 @@ function retornaLinks(user) {
             </DropdownButton>
             <DropdownButton id="dropdown-basic-button" title="IMPORTAR DADOS" >
                 <Dropdown.Item ><Link to="/importador-cursos">Importar CURSOS</Link></Dropdown.Item>
-                <Dropdown.Item ><Link to="/troca-senha">Importar DISCIPLINAS</Link></Dropdown.Item>
+                <Dropdown.Item ><Link to="/importador-disciplinas">Importar DISCIPLINAS</Link></Dropdown.Item>
                 <Dropdown.Item ><Link to="/troca-senha">Importar PROFESSORES</Link></Dropdown.Item>
                 <Dropdown.Item ><Link to="/troca-senha">Importar SERVIDORES</Link></Dropdown.Item>
             </DropdownButton>
