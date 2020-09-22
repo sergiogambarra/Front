@@ -70,8 +70,8 @@ function retornaLinks(user) {
             <DropdownButton id="dropdown-basic-button" title="IMPORTAR DADOS" >
                 <Dropdown.Item ><Link to="/importador-cursos">Importar CURSOS</Link></Dropdown.Item>
                 <Dropdown.Item ><Link to="/importador-disciplinas">Importar DISCIPLINAS</Link></Dropdown.Item>
-                <Dropdown.Item ><Link to="/troca-senha">Importar PROFESSORES</Link></Dropdown.Item>
-                <Dropdown.Item ><Link to="/troca-senha">Importar SERVIDORES</Link></Dropdown.Item>
+                <Dropdown.Item ><Link to="/importador-professores">Importar PROFESSORES</Link></Dropdown.Item>
+                <Dropdown.Item ><Link to="/importador-servidores">Importar SERVIDORES</Link></Dropdown.Item>
             </DropdownButton>
         </>
     } else {
@@ -92,6 +92,8 @@ export default function SACENavbar({ setUserData, user }) {
 
     useEffect(() => {
         get("usuarios/auth/").then((r) => {
+            console.log(r);
+            
             setCoordenador(r && r.perfil.coordenador)
         })
 

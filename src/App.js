@@ -28,7 +28,9 @@ import RelatorioFinal from './Relatorios/RelatorioFinal';
 import PesquisaUsuario from '../src/pages/Pesquisas/PesquisaUsuario';
 import './components/card.css';
 import ImportadorCurso from './components/Importador/ImportadorCurso';
-import ImportarDisciplinas from './components/Importador/ImportadorDisciplinas';
+import ImportadorDisciplinas from './components/Importador/ImportadorDisciplinas';
+import ImportadorProfessores from './components/Importador/ImportadorProfessores';
+import ImportadorServidores from './components/Importador/ImportadorServidores';
 
 function App() {
   const [userData, setUserData] = useState(null);
@@ -67,7 +69,9 @@ function App() {
           <PrivateRoute exact path="/configuracao-data" component={ConfiguraDataSolicitacoes} />
           <PrivateRoute exact path="/requisicoes-coordenador" component={RequisicoesCoordenadorCurso} />
           <PrivateRoute exact path="/importador-cursos" component={ImportadorCurso} />
-          <PrivateRoute exact path="/importador-disciplinas" component={ImportarDisciplinas} />
+          <PrivateRoute exact path="/importador-disciplinas" component={ImportadorDisciplinas} />
+          <PrivateRoute exact path="/importador-professores" component={ImportadorProfessores} />
+          <PrivateRoute exact path="/importador-servidores" component={ImportadorServidores} />
           <Route path="*" component={() => <h1>Page not found</h1>} />
         </Switch>
       </div>
