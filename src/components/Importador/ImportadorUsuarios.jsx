@@ -21,16 +21,16 @@ class ImportadorProfessores extends Component {
         return (
             <div>
               <br />  <br />  <br />
-                <h3>Importador para cadastro de Professores</h3>
+                <h3>Importador para cadastro de Usuários</h3>
                 <br />
                 <Alert variant={"danger"}>Para importação correta do arquivo com extensão .csv deve estar organizado de modo que:<br />
-                 a primeira coluna inclua o nome do professor;<br />
+                 a primeira coluna inclua o nome do usuário;<br />
                  a segunda coluna inclua o número do SIAPE;<br />
                  terceira coluna endereço do email;<br />
-                 quarta coluna se o professor é coordenador;<br />
+                 quarta coluna se digitar SIM ou NÂO para coordenador de curso;<br />
                  quinta coluna o cargo do usuário (PROFESSOR ou SERVIDOR)</Alert>
                 <br /> <br />
-                <form action={("http://localhost:8080/api/anexos/professor")} method="post" enctype="multipart/form-data" >
+                <form action={("http://localhost:8080/api/anexos/usuarios")} method="post" enctype="multipart/form-data" >
                     <input type="file" name="umArquivo" />
                     <input type="submit" value="enviar" />
                 </form>

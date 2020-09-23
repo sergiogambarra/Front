@@ -27,7 +27,7 @@ class ImportarCurso extends Component {
                 <br /> <br />
                 <form action={("http://localhost:8080/api/anexos/cursos")} method="post" enctype="multipart/form-data"  >
                     <input type="file" name="umArquivo" />&nbsp;&nbsp;&nbsp;
-                    <input type="submit" value="enviar" />
+                    <input type="submit" value="enviar"/>
                 </form>
 
             </div>
