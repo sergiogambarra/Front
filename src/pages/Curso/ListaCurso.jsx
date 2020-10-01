@@ -33,7 +33,7 @@ export default class ListaCursos extends Component {
     }
     async listarCursos() {
       await get(`cursos/paginacao?page=${this.state.page}&size=6&sort=nome`).then((retorno)=>{
-            this.setState({ cursos:retorno.content, last: retorno.last, first: retorno.first, total: retorno.totalPages })
+            this.setState({ cursos:retorno&&retorno.content, last:retorno&&retorno.last, first: retorno&&retorno.first, total: retorno&&retorno.totalPages })
 
         })
     }
