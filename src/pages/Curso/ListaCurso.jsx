@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import SACEInput from '../../components/inputs/SACEInput';
 import { Button, } from 'react-bootstrap';
-import { Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import Alert from 'react-bootstrap/Alert'
 import { put, getId, get } from '../../services/ServicoCrud';
-import { Modal ,Form } from 'react-bootstrap';
+import { Modal, Form } from 'react-bootstrap';
 import axios from 'axios';
 
 export default class ListaCursos extends Component {
@@ -15,56 +15,63 @@ export default class ListaCursos extends Component {
             nome: "",
             id: "",
             editar: false,
-            texto: false,msgErrorProfessor:"",
+            texto: false, msgErrorProfessor: "",
             showAlert: false, modalShow: false, nomeInvalido: false,
-            msgAlert: "", variantAlert: "",   
-            page: 0,idProfessor:"",
+            msgAlert: "", variantAlert: "",
+            page: 0, idProfessor: "",
             last: false,
             first: true, listaProfessores: [],
-            total: 0,msgNome:""
+            total: 0, msgNome: ""
         }
     }
     control(e) {
         if (e.target.id === "+") {
-            this.setState({ page: this.state.page + 1 ,editar:false,nome:""}, () => this.listarCursos())
+            this.setState({ page: this.state.page + 1, editar: false, nome: "" }, () => this.listarCursos())
         } else {
-            this.setState({ page: this.state.page - 1 ,editar:false,nome:""}, () => this.listarCursos())
+            this.setState({ page: this.state.page - 1, editar: false, nome: "" }, () => this.listarCursos())
         }
     }
     async listarCursos() {
-      await get(`cursos/paginacao?page=${this.state.page}&size=6&sort=nome`).then((retorno)=>{
-            this.setState({ cursos:retorno&&retorno.content, last:retorno&&retorno.last, first: retorno&&retorno.first, total: retorno&&retorno.totalPages })
+        await get(`cursos/paginacao?page=${this.state.page}&size=6&sort=nome`).then((retorno) => {
+            this.setState({ cursos: retorno && retorno.content, last: retorno && retorno.last, first: retorno && retorno.first, total: retorno && retorno.totalPages })
 
         })
     }
 
     async listarCursosId(id) {
-        getId("cursos/", id).then((retorno)=>{
-            this.setState({ nome: retorno && retorno.nome, id: id, editar: true, nomeInvalido: false ,msgErrorProfessor:false});
+        console.log(this.state.id);
+        console.log(this.state.nome);
+
+        getId("cursos/", id).then((retorno) => {
+            this.setState({ nome: retorno && retorno.nome, id: id, editar: true, nomeInvalido: false, msgErrorProfessor: false });
         })
     }
 
-   async componentDidMount() {
+    async componentDidMount() {
         this.listarCursos();
         this.buscaProfessores()
+    }
+    limpar() {
+        this.setState({ nomeInvalido: false, matriculaInvalida: false, emailInvalido: false ,idProfessor:""})
     }
 
     atualizar() {
         if (this.state.nome.trim() === "" || this.state.nome === null) {
-            this.setState({ nomeInvalido: true ,msgNome:"Você não inseriu nome corretamente"})
+            this.setState({ nomeInvalido: true, msgNome: "Você não inseriu nome corretamente" })
             return
         }
         if (this.state.nome.length > 40) {
             this.setState({ nomeInvalido: true, msgNome: "Limite máximo de cadastro de 40 caracteres" })
             return
         }
-        if(this.state.idProfessor === ""){
-            this.setState({msgErrorProfessor:"Campo professor coordenador é obrigatório"})
+        if (this.state.idProfessor === "") {
+            this.setState({ msgErrorProfessor: "Campo professor coordenador é obrigatório" })
             return
         }
-        put("cursos", this.state.id, { nome: this.state.nome,
-            usuario:{
-                id:this.state.idProfessor
+        put("cursos", this.state.id, {
+            nome: this.state.nome,
+            usuario: {
+                id: this.state.idProfessor
             }
         }).then(() => {
             this.setState({ showAlert: true, editar: false, nomeInvalido: false, msgAlert: "Atualizado com sucesso", variantAlert: "success" })
@@ -72,15 +79,15 @@ export default class ListaCursos extends Component {
                 this.setState({ showAlert: false })
             }, 4000)
             this.listarCursos()
-
+            this.limpar()
         })
     }
     async buscaProfessores() {
         await get("usuarios/professores/").then((r) => {
-             this.setState({ listaProfessores: r })
+            this.setState({ listaProfessores: r })
         })
     }
- 
+
     delete() {
         axios.delete("http://localhost:8080/api/cursos/" + this.state.id).then((r) =>
             this.setState({ modalShow: false, showAlert: true, variantAlert: "danger", msgAlert: "Apagou com sucesso" })
@@ -129,7 +136,7 @@ export default class ListaCursos extends Component {
                 <hr />
                 {
                     <>
-                            {this.state.last || <button id="+" onClick={(e) => this.control(e)}>Próximo</button>}
+                        {this.state.last || <button id="+" onClick={(e) => this.control(e)}>Próximo</button>}
                         &nbsp;&nbsp;
                         {this.state.first || <button id="-" onClick={(e) => this.control(e)}>Anterior</button>}
 
@@ -143,24 +150,24 @@ export default class ListaCursos extends Component {
                         <p>ID : &nbsp;<span style={{ color: "red" }}>{this.state.id}</span></p>
                         <SACEInput label={"Curso"} value={this.state.nome} placeholder={'Preencha com o nome do curso que você deseja cadastrar'}
                             autoFocus onChange={(e) => this.setState({ nome: e.target.value })} onError={this.state.nomeInvalido} onErrorMessage={this.state.msgNome} />
-                              <Form>
-                    <Form.Group controlId="exampleForm.SelectCustom">
-                       
-                        <Form.Label>Selecionar coordenador do curso </Form.Label>
-                        <Form.Control as="select" custom
-                            id={this.state.idProfessor}
-                            value={this.state.idProfessor}
-                            isInvalid={this.state.listaProfessoresInvalido}
-                            onChange={(e) => this.setState({ idProfessor: e.target.value })} >
-                            <option ></option>
-                            {this.state.listaProfessores && this.state.listaProfessores.map((p) =>
-                                    p.perfil.coordenador === true ?  <option key={p.id} value={p.id}>{p.perfil.nome}</option>:""
+                        <Form>
+                            <Form.Group controlId="exampleForm.SelectCustom">
 
-                                )}
-                        </Form.Control>
-                        <Form.Text className="text-danger">{this.state.msgErrorProfessor} </Form.Text> 
-                    </Form.Group>
-                </Form>
+                                <Form.Label>Selecionar coordenador do curso </Form.Label>
+                                <Form.Control as="select" custom
+                                    id={this.state.idProfessor}
+                                    value={this.state.idProfessor}
+                                    isInvalid={this.state.listaProfessoresInvalido}
+                                    onChange={(e) => this.setState({ idProfessor: e.target.value })} >
+                                    <option ></option>
+                                    {this.state.listaProfessores && this.state.listaProfessores.map((p) =>
+                                        p.perfil.coordenador === true ? <option key={p.id} value={p.id}>{p.perfil.nome}</option> : ""
+
+                                    )}
+                                </Form.Control>
+                                <Form.Text className="text-danger">{this.state.msgErrorProfessor} </Form.Text>
+                            </Form.Group>
+                        </Form>
                         <Button className="btn btn-primary m-1" onClick={(e) => this.atualizar()} >Salvar</Button>
                     </> : ""}
 
@@ -179,7 +186,7 @@ export default class ListaCursos extends Component {
                         > Apagar </Button>
                     </Modal.Footer>
                 </Modal>
-               
+
             </div>
         );
     }
