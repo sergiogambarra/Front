@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { get } from '../../services/ServicoCrud';
+import { Button,Modal } from 'react-bootstrap';
 
 class RequisicaoAluno extends Component {
     constructor(props) {
@@ -11,7 +12,10 @@ class RequisicaoAluno extends Component {
             page: 0,
             last: false,
             first: true,
-            total: 0
+            total: 0,
+            modalShow:false,
+            id:"",
+            requisiçãoId:""
         }
     }
 
@@ -23,8 +27,17 @@ class RequisicaoAluno extends Component {
         })
     }
 
+    async pesquisarRequisicoesId(e) {
+      await get(`requisicoes/${e}`).then((retorno) => {
+          this.setState({requisiçãoId:retorno,modalShow:true})
+          console.log(retorno);
+          console.log(this.state.requisiçãoId);
+          
+        })
+    }
     componentDidMount() {
         this.pesquisarNomeSolicitante()
+       
     }
     control(e) {
         if (e.target.id === "+") {
@@ -59,9 +72,8 @@ class RequisicaoAluno extends Component {
                                         <td style={{
                                             backgroundColor:
                                                 u.deferido === "DEFERIDO" ? 'green' : u.deferido === "INDEFERIDO" ? 'red' : 'orange'
-                                            , textAlign: "center"
-                                        }}>
-                                            {u.deferido}
+                                            , textAlign: "center" }}>
+                                            {u.deferido==="INDEFERIDO"?<Button style={{background:'red',borderColor:'black'}} onClick={(e)=>this.pesquisarRequisicoesId(u.id)}>INDEFERIDO</Button>:u.deferido}
                                         </td>
                                     </tr>
                                 )}
@@ -78,6 +90,25 @@ class RequisicaoAluno extends Component {
                     </>
 
                 }
+                
+                
+                 <Modal show={this.state.modalShow} onHide={() => this.setState({ modalShow: false})}>
+                <Modal.Header closeButton>
+                    <Modal.Title > Vizualizar parecer: </Modal.Title>
+                </Modal.Header>
+                
+                    <Modal.Body> <b>Parecer Coodenador :</b> {this.state.requisiçãoId.parecerCoodenador}< br />< br />
+                    <b>Parecer Professor : </b>{this.state.requisiçãoId.parecerProfessor}< br />< br />
+                    <b>  Parecer Servidor : </b>{this.state.requisiçãoId.parecerServidor}
+                     </Modal.Body>
+               
+                <Modal.Body> <span style={{color:"red"}}> {this.state.msgModalCoordenador}  </span></Modal.Body>
+                
+                
+                <Modal.Footer>
+                </Modal.Footer>
+            </Modal>
+            
             </div>
 
         );
