@@ -22,12 +22,13 @@ class Parecer extends Component {
             professor: {},
             anexos: [],
             prova: [], modificaModal: false,
-            formacaoAtividadeAnterior: "",pesquisaNomeCurso:"",
+            formacaoAtividadeAnterior: "", pesquisaNomeCurso: "",
             criterioAvaliacao: "", tipo: "", atualizarParecer: "",
-            listaProfessores: [],mostraRequisicaoCoordenador:false,
+            listaProfessores: [], mostraRequisicaoCoordenador: false,
             idRequisicao: "", id: "", modal: false, coordenador: "",
             idDisciplina: "", stringParecer: "", mudaParecer: "", listaProfessoresInvalido: false, msgStatus: "",
-            msgErrorProfessor: "", responsavelPelaRequisicao: "", msgErrorParecer: "", msgModal: "", alerteDonoRequisicao: false
+            msgErrorProfessor: "", responsavelPelaRequisicao: "", msgErrorParecer: "", msgModal: "", alerteDonoRequisicao: false,
+            divIndeferido: false
         }
         this.setProva = this.setProva.bind(this)
 
@@ -45,7 +46,7 @@ class Parecer extends Component {
 
 
     async componentDidMount() {
- 
+
         this.listaAth()
         this.buscaProfessores()
         const c = await getRequisicaoId(this.props.match.params.id)
@@ -66,7 +67,7 @@ class Parecer extends Component {
             criterioAvaliacao: c.criterioAvaliacao,
             tipo: c.tipo,
             prova: c.prova || "",
-            titulo: "",cursoCoordenador:[],
+            titulo: "", cursoCoordenador: [],
             coordenador: c.professor && c.professor.perfil.coordenador, alert: false,
             responsavelPelaRequisicao: c.responsavelPelaRequisicao
 
@@ -89,6 +90,7 @@ class Parecer extends Component {
         if (this.state.user && this.state.user.id && this.state.professor && this.state.professor.id) {
             if (this.state.user && this.state.user.permissao === "PROFESSOR" && this.state.user && this.state.user.perfil.coordenador === true) {
                 if (this.state.user.id !== this.state.professor.id) {
+                    console.log("oiopioioi");
                     this.setState({ alerteDonoRequisicao: true })
 
                 } else if (this.state.user.id === this.state.professor.id) {
@@ -102,13 +104,14 @@ class Parecer extends Component {
             this.setState({ responsavelPelaRequisicao: "FINALIZADO" })
         }
         if (this.state.responsavelPelaRequisicao === "FINALIZADO") {
+            console.log("finalizadoooooooooo");
+
             this.setState({ alerteDonoRequisicao: true })
         }
 
-
     }
-  
- 
+
+
     mudaNomeStringParecer() {
         if (this.state.user && this.state.user.perfil.tipo === "SERVIDOR") {
             this.setState({ stringParecer: "SERVIDOR" })
@@ -116,7 +119,7 @@ class Parecer extends Component {
             this.setState({ stringParecer: "Coordenador" })
         } else { this.setState({ stringParecer: "Professor" }) }
     }
- 
+
 
     async atualizar() {
 
@@ -150,12 +153,11 @@ class Parecer extends Component {
                 parecerCoordenador: this.state.parecerCoordenador,
                 parecerProfessor: this.state.atualizarParecer ? this.state.atualizarParecer : this.state.parecerProfessor,
                 prova: this.state.prova[0],
-                responsavelPelaRequisicao: "FINALIZADO"
+                responsavelPelaRequisicao: "COORDENADOR"
             }).then(() => { this.setState({ modal: false }) })
         }
     }
     verificarDados() {
-
         if (this.state.user && this.state.user.id === parseInt(this.state.id) && this.state.user && this.state.user.perfil.coordenador === true) {
             this.setState({ parecerProfessor: this.state.atualizarParecer, parecerCoordenador: this.state.atualizarParecer })
         }
@@ -164,28 +166,27 @@ class Parecer extends Component {
         }
         if (this.state.user && this.state.user.perfil.tipo === "PROFESSOR" && this.state.user && this.state.user.perfil.coordenador === true) {
             if (this.state.user && this.state.professor) {
-                if (this.state.user.id === this.state.professor.id) {
-                    if (this.state.deferido === "EM ANÁLISE") {
-                        this.setState({ msgStatus: "Selecione status da requisição" })
-                        return
-                    }
+
+                if (this.state.deferido === "EM ANÁLISE" && this.state.parecerProfessor.length > 0) {
+                    this.setState({ msgStatus: "Selecione status da requisição" })
+
+                    return
+
                 }
             }
+
         }
-        if (this.state.user && this.state.user.id === parseInt(this.state.id)) {
-            if (this.state.deferido === "EM ANÁLISE") {
+       
+        if (this.state.user && this.state.user.perfil.coordenador === true) {
+            if (this.state.user && this.state.user.id === parseInt(this.state.id) &&this.state.deferido === "EM ANÁLISE"  ) {
                 this.setState({ msgStatus: "Selecione status da requisição" })
                 return
             }
         }
-        if (this.state.user && this.state.user.perfil.tipo === "PROFESSOR" && this.state.user && this.state.user.perfil.coordenador === false) {
-            if (this.state.deferido === "EM ANÁLISE") {
-                this.setState({ msgStatus: "Selecione status da requisição" })
-                return
-            }
-        }
+
         if (this.state.atualizarParecer.length > 150) {
             this.setState({ msgErrorParecer: "Limite máximo para cadastro do parecer é de 150 caracteres." })
+
             return
         }
         if (this.state.atualizarParecer.trim() === "") {
@@ -198,6 +199,7 @@ class Parecer extends Component {
         if (this.state.user && this.state.user.perfil.coordenador === true) {
             if (this.state.id === null || this.state.id === "") {
                 this.setState({ listaProfessoresInvalido: true, msgErrorProfessor: "Campo professor é obrigatório" })
+
                 return
             }
             this.setState({ modal: true })
@@ -214,6 +216,8 @@ class Parecer extends Component {
     setProva(prova) {
         this.setState({ prova: prova })
     }
+
+
     render() {
         return (<div><br />
 
@@ -283,7 +287,7 @@ class Parecer extends Component {
                                 id={this.state.listaProfessores.id}
                                 value={this.state.listaProfessores.id}
                                 isInvalid={this.state.listaProfessoresInvalido}
-                                onChange={(e) => this.setState({ id: e.target.value, msgErrorProfessor: "", listaProfessoresInvalido: false, parecerProfessor: "", parecerCoordenador: "",msgStatus:"" })} >
+                                onChange={(e) => this.setState({ id: e.target.value, msgErrorProfessor: "", listaProfessoresInvalido: false, parecerProfessor: "", parecerCoordenador: "", msgStatus: "" })} >
                                 <option onClick={() => this.limpar()} ></option>
                                 {this.state.listaProfessores.content && this.state.listaProfessores.content.map((p) =>
                                     <option key={p.id} value={p.id}>{p.perfil.nome}</option>
@@ -295,49 +299,46 @@ class Parecer extends Component {
                     </Form> : ""}
 
                 <br />
-                {!this.state.alerteDonoRequisicao ? <div className="custom-control custom-radio custom-control-inline">
+                {console.log(this.state.responsavelPelaRequisicao)}
+                {this.state.user && this.state.user.perfil.coordenador === true && this.state.responsavelPelaRequisicao === "COORDENADOR" ? <div className="custom-control custom-radio custom-control-inline">
+
                     <input type="radio"
                         id="DEFERIDO" name="customRadioInline1" class="custom-control-input"
                         onChange={(e) => this.setState({ deferido: e.target.id })}
                         defaultChecked={false}
                     />
-                    {this.state.user && this.state.user.perfil.tipo === "SERVIDOR" ? "" :
-                        this.state.user && this.state.user.id === parseInt(this.state.id) ? <label className="custom-control-label" for="DEFERIDO">Deferido</label> :
-                            this.state.user && this.state.user.perfil.tipo === "PROFESSOR" && this.state.user && this.state.user.perfil.coordenador === false ?
-                                <label className="custom-control-label" for="DEFERIDO">Deferido</label> : ""
-                    }
+                    <label className="custom-control-label" for="DEFERIDO">Deferido</label>&nbsp;&nbsp;&nbsp;
 
-
+                    <div className="custom-control custom-radio custom-control-inline">
+                        <input type="radio" id="INDEFERIDO" name="customRadioInline1" className="custom-control-input"
+                            onChange={(e) => this.setState({ deferido: e.target.id })}
+                            defaultChecke d={false} />
+                        <label class="custom-control-label" for="INDEFERIDO">Indeferido</label>
+                    </div>
                 </div> : ""}
-                {this.state.alerteDonoRequisicao ? "" :
-                    <>
+                {!this.state.alerteDonoRequisicao && this.state.user && this.state.user.perfil.tipo === "SERVIDOR"
+                    ?
+                    <> <div className="custom-control custom-radio custom-control-inline">
+                        <input type="radio" id="EM ANÁLISE" name="customRadioInline1" className="custom-control-input"
+                            onChange={(e) => this.setState({ deferido: e.target.id })}
+                            defaultChecked={this.state.deferido === "EM ANÁLISE" ? true : false}
+                        />
+                        <label className="custom-control-label" for="EM ANÁLISE">Em análise</label>
+
+                    </div>
                         <div className="custom-control custom-radio custom-control-inline">
                             <input type="radio" id="INDEFERIDO" name="customRadioInline1" className="custom-control-input"
                                 onChange={(e) => this.setState({ deferido: e.target.id })}
-                                defaultChecked={false} />
-                            {
-                                this.state.user && this.state.user.perfil.tipo === "PROFESSOR" && this.state.user && this.state.user.id === parseInt(this.state.id) ?
-                                    <label class="custom-control-label" for="INDEFERIDO">Indeferido</label> :
-                                    this.state.user && this.state.user.perfil.tipo === "SERVIDOR" ? <label className="custom-control-label" for="INDEFERIDO">Indeferido</label> : ""
-                                }
+                                defaultChecke d={false} />
+                            <label class="custom-control-label" for="INDEFERIDO">Indeferido</label>
                         </div>
 
-                        {this.state.user && this.state.user.perfil.tipo === "PROFESSOR" && this.state.user && this.state.user.perfil.coordenador === true ? "" : ""}
-
-                        <div className="custom-control custom-radio custom-control-inline">
-                            <input type="radio" id="EM ANÁLISE" name="customRadioInline1" className="custom-control-input"
-                                onChange={(e) => this.setState({ deferido: e.target.id })}
-                                defaultChecked={this.state.deferido === "EM ANÁLISE" ? true : false}
-                            />
-
-                            {this.state.user && this.state.user.perfil.tipo === "PROFESSOR" ? "" : <><label className="custom-control-label" for="EM ANÁLISE">Em análise</label><br /><br /></>}
-                        </div>
                         <div class="custom-control custom-radio custom-control-inline">
                             <input type="radio" id="escolha" name="customRadioInline" className="custom-control-input"
                                 checked />
                             <label className="custom-control-label" for="escolha" style={{ display: "none" }}></label><br />
-                        </div>
-                    </>}
+                        </div> </> : ""}
+
                 <Form.Text className="text-danger">{this.state.msgStatus} </Form.Text>
                 <br />
                 <label>Documentos enviados pelo aluno :</label>
@@ -354,7 +355,7 @@ class Parecer extends Component {
                 {this.state.alerteDonoRequisicao ? "" :
 
                     <Form.Group controlId="exampleForm.ControlTextarea1">
-                        <Form.Label>Novo Parecer do :&nbsp;{this.state.stringParecer  === "Coordenador"?  <> <b>{this.state.stringParecer}</b> <span style={{color:"red"}}>  ( se o coordenador é professor da disciplina seu parecer é gravado nos campos de parecer de professor de coordenador )</span></> :this.state.stringParecer}</Form.Label>
+                        <Form.Label>Novo Parecer do :&nbsp;{this.state.stringParecer === "Coordenador" ? <> <b>{this.state.stringParecer}</b> <span style={{ color: "red" }}>  ( se o coordenador é professor da disciplina seu parecer é gravado nos campos de parecer de professor de coordenador )</span></> : this.state.stringParecer}</Form.Label>
                         <Form.Control as="textarea" rows="2"
                             id={this.state.atualizarParecer}
                             value={this.state.atualizarParecer}
@@ -363,8 +364,18 @@ class Parecer extends Component {
                         <Form.Text className="text-danger">{this.state.msgErrorParecer} </Form.Text>
                     </Form.Group>
                 }
-                {console.log(this.state.stringParecer)}
-                
+                {console.log(this.state.responsavelPelaRequisicao)}
+
+                {this.state.alerteDonoRequisicao && this.state.responsavelPelaRequisicao === "COORDENADOR" && this.state.user && this.state.user.perfil.coordenador === true ? <Form.Group controlId="exampleForm.ControlTextarea1">
+                    <Form.Label>Novo Parecer do :&nbsp;{this.state.stringParecer === "Coordenador" ? <> <b>{this.state.stringParecer}</b> <span style={{ color: "red" }}>  ( se o coordenador é professor da disciplina seu parecer é gravado nos campos de parecer de professor de coordenador )</span></> : this.state.stringParecer}</Form.Label>
+                    <Form.Control as="textarea" rows="2"
+                        id={this.state.atualizarParecer}
+                        value={this.state.atualizarParecer}
+                        onChange={(e) => this.setState({ atualizarParecer: e.target.value })}
+                    />
+                    <Form.Text className="text-danger">{this.state.msgErrorParecer} </Form.Text>
+                </Form.Group> : ""}
+
                 {this.state.user && this.state.user.permissao === "SERVIDOR" && this.state.responsavelPelaRequisicao === "FINALIZADO" ?
 
                     <Form.Group controlId="exampleForm.ControlTextarea1">
