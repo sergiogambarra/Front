@@ -73,7 +73,7 @@ class RequisicaoAluno extends Component {
                                             backgroundColor:
                                                 u.deferido === "DEFERIDO" ? 'green' : u.deferido === "INDEFERIDO" ? 'red' : 'orange'
                                             , textAlign: "center" }}>
-                                            {u.deferido==="INDEFERIDO"?<Button style={{background:'red',borderColor:'black'}} onClick={(e)=>this.pesquisarRequisicoesId(u.id)}>INDEFERIDO</Button>:u.deferido}
+                                            {u.deferido==="INDEFERIDO"?<Button style={{background:'#AA1414',borderColor:'black'}} onClick={(e)=>this.pesquisarRequisicoesId(u.id)}>INDEFERIDO</Button>:u.deferido}
                                         </td>
                                     </tr>
                                 )}
