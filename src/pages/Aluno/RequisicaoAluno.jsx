@@ -90,14 +90,14 @@ class RequisicaoAluno extends Component {
                     </>
 
                 }
-                
+                {console.log(this.state.requisiçãoId)  }
                 
                  <Modal show={this.state.modalShow} onHide={() => this.setState({ modalShow: false})}>
                 <Modal.Header closeButton>
                     <Modal.Title > Vizualizar parecer: </Modal.Title>
                 </Modal.Header>
                 
-                    <Modal.Body> <b>Parecer Coodenador :</b> {this.state.requisiçãoId.parecerCoodenador}< br />< br />
+                    <Modal.Body> <b>Parecer Coodenador :</b> {this.state.requisiçãoId.parecerCoordenador}< br />< br />
                     <b>Parecer Professor : </b>{this.state.requisiçãoId.parecerProfessor}< br />< br />
                     <b>  Parecer Servidor : </b>{this.state.requisiçãoId.parecerServidor}
                      </Modal.Body>
