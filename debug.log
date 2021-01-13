@@ -22,3 +22,4 @@
 [0504/122755.709:ERROR:exception_snapshot_win.cc(98)] thread ID 20436 not found in process
 [0504/122755.709:ERROR:process_reader_win.cc(123)] NtOpenThread: {Acesso Negado} Um processo solicitou acesso a um objeto, mas o direito de acesso não lhe foi concedido. (0xc0000022)
 [0504/122755.709:ERROR:exception_snapshot_win.cc(98)] thread ID 3588 not found in process
+[1215/165109.117:ERROR:directory_reader_win.cc(43)] FindFirstFile: O sistema não pode encontrar o caminho especificado. (0x3)

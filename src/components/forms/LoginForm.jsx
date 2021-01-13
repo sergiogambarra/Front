@@ -127,7 +127,7 @@ export default function LoginForm({ history, setUserData }) {
                 />:isLoading}
             </Modal.Body>
             <Modal.Footer>
-                <Button onClick={() => enviarEmail()} className="btn btn-primary m-1" >Salvar</Button>
+                <Button onClick={() => enviarEmail()} className="btn btn-primary m-1" >Recuperar</Button>
             </Modal.Footer>
         </Modal>
     </>

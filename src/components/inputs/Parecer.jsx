@@ -276,7 +276,7 @@ class Parecer extends Component {
                 </Form.Group>
                 <Alert variant={"danger"} show={this.state.alert}>Selecione um professor tratar requisição</Alert>
 
-                {this.state.alerteDonoRequisicao ? "" : <div style={{ fontSize: "200%" }}> Modificar Status </div>}
+               
                 {!this.state.alerteDonoRequisicao &&
                     this.state.user && this.state.user.perfil.coordenador === true ?
                     <Form>
