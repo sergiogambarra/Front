@@ -34,8 +34,7 @@ jobs:
       run: CI=false yarn build
       
     - name: Copy files
-      run: sudo rm -R /var/www/html
-      run: sudo cp -R build/* /var/www/html
+      run: sudo rm -R /var/www/html && sudo cp -R build/* /var/www/html
     
     - name: Start PM2
       run: pm2 start src/index.js --name react-deploy 
