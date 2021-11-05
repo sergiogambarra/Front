@@ -31,7 +31,7 @@ jobs:
       run: yarn
     
     - name: Build project
-      run: yarn build
+      run: CI=false yarn build
       
     - name: Copy files
       run: sudo cp -R build/* /var/www/html
