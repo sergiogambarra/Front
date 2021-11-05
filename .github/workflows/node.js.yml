@@ -28,11 +28,11 @@ jobs:
         cache: 'npm'
         
     - name: Install dependences
-    - run: yarn
+      run: yarn
     
     - name: Build project
-    - run: yarn build
+      run: yarn build
     
     - name: Start PM2
-    - run: pm2 start src/index.js --name react-deploy 
+      run: pm2 start src/index.js --name react-deploy 
     
