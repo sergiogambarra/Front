@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Button, Alert, Table } from 'react-bootstrap';
+import { Form, Button, Table } from 'react-bootstrap';
 import { get } from '../../services/ServicoCrud';
 import SACEInput from '../../../src/components/inputs/SACEInput';
 import { postCadastroUsuarioServidor, getPesquisaLogin } from '../../services/UsuarioService';
