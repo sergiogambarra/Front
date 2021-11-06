@@ -132,7 +132,7 @@ class ListaAlunos extends Component {
                                 <tr key={aluno.id}>
                                     <td>{aluno.id}</td>
                                     <td>{aluno.perfil.nome}</td>
-                                    <td>{format(aluno.perfil.dataIngresso)}</td>
+                                    {/* <td>{format(aluno.perfil.dataIngresso)}</td> */}
                                     <td>{aluno.perfil.matricula}</td>
                                     <td>{aluno.email}</td>
                                     <td> {aluno.perfil.nome === "" ? "" : <Button
