@@ -66,14 +66,14 @@ class ListaAlunos extends Component {
         if (this.state.nome.trim() === "" || this.state.nome === null ? this.setState({ nomeInvalido: true, msgNome: "Você não inseriu o seu nome corretamente!" }) : this.setState({ nomeInvalido: false })) { }
         if (this.state.matricula === "" || this.state.matricula === null || this.state.matricula <= 0 ? this.setState({ matriculaInvalida: true, msgMatricula: "Você não inseriu matrícula corretamente" }) : this.setState({ matriculaInvalida: false })) { }
         if (this.state.email === "" || this.state.email === null || !validaEmail(this.state.email) ? this.setState({ emailInvalido: true, msgEmail: "Você não inseriu email corretamente" }) : this.setState({ emailInvalido: false })) { }
-        if (this.state.nome.length > 40) {
+        if (this.state.nome.length > 60) {
             this.setState({ nomeInvalido: true, msgNome: "Limite máximo de cadastro de 40 caracteres" })
             return
-        } if (this.state.email.length > 40) {
+        } if (this.state.email.length > 60) {
             this.setState({ emailInvalido: true, msgEmail: "Limite máximo de cadastro de 40 caracteres" })
             return
         }
-        if (this.state.matricula > 99999999) {
+        if (this.state.matricula.length > 60) {
             this.setState({ matriculaInvalida: true, msgMatricula: "Não pode ser cadastrado número superior a 99999999" })
             return
         }

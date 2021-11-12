@@ -60,7 +60,7 @@ class ListaServidor extends Component {
             this.setState({ emailInvalido: true, msgEmail: "Limite máximo de cadastro de 40 caracteres" })
             return
         }
-        if (this.state.siape > 99999999) {
+        if (this.state.siape.length > 40) {
             this.setState({ siapeInvalido: true, msgSiape: "Não pode ser cadastrado número superior a 99999999" })
             return
         }
