@@ -27,7 +27,7 @@ class ListaDiscipinas extends Component {
 
     async apagar() {
         
-        await axios.delete(`${baseURL}/cursos/${this.state.idcurso}disciplinas/${this.state.idDisciplina}`).then((retorno) => {
+        await axios.delete(`${baseURL}/cursos/${this.state.idcurso}/disciplinas/${this.state.idDisciplina}`).then((retorno) => {
             this.listarDisciplinas()
             this.setState({ modalShow: false, mostraEditar: false, alert: true, variant: "danger", msgAlert: "Apagou com sucesso" })
             setTimeout(() => {
@@ -45,7 +45,7 @@ class ListaDiscipinas extends Component {
         })
     }
     async  listarDisciplinas() {
-         get(`cursos/${this.state.idcurso}disciplinas/paginacao?page=${this.state.page}&size=6`).then((retorno) => {
+         get(`cursos/${this.state.idcurso}/disciplinas/paginacao?page=${this.state.page}&size=6`).then((retorno) => {
             if (retorno) this.setState({ disciplinas: retorno.content, last: retorno.last, first: retorno.first, total: retorno.totalPages })
         });
     }
@@ -55,7 +55,7 @@ class ListaDiscipinas extends Component {
     }
 
     async busca(e) {
-         getIdDisciplina(`cursos/${this.state.idcurso}disciplinas/${e}`).then((retorno) => {
+         getIdDisciplina(`cursos/${this.state.idcurso}/disciplinas/${e}`).then((retorno) => {
             this.setState({
                 idDisciplina: retorno.id,
                 nome: retorno.nome,
