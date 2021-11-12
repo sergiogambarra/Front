@@ -97,19 +97,19 @@ class CadastroPerfilAluno extends Component {
         if (this.state.userName && this.state.userName) {
             if (this.state.userName.length < 6 || this.state.userName.length > 10) { return }
         }
-        if (this.state.nome.length > 80) {
-            this.setState({ nomeInvalido: true, msgNome: "Limite máximo de cadastro de 40 caracteres" })
+        if (this.state.nome.length > 90) {
+            this.setState({ nomeInvalido: true, msgNome: "Limite máximo de cadastro de 90 caracteres" })
             return
-        } if (this.state.email.length > 80) {
-            this.setState({ emailInvalido: true, msgEmail: "Limite máximo de cadastro de 40 caracteres" })
+        } if (this.state.email.length > 90) {
+            this.setState({ emailInvalido: true, msgEmail: "Limite máximo de cadastro de 90 caracteres" })
             return
         }
-        if (this.state.matricula.length > 80) {
+        if (this.state.matricula.length > 90) {
             this.setState({ matriculaInvalida: true, msgMatricula: "Não pode ser cadastrado número superior a 99999999" })
             return
         }
-        if (this.state.password.length > 80) {
-            this.setState({ passwordInvalido: true, msgPassword: "Limite máximo de cadastro de 15 caracteres" })
+        if (this.state.password.length > 90) {
+            this.setState({ passwordInvalido: true, msgPassword: "Limite máximo de cadastro de 90 caracteres" })
             return
         }
         if (this.state.nome !== "" && this.state.email !== "" && validaEmail(this.state.email)  && this.state.dataIngresso !== "" && this.state.userName !== "" &&

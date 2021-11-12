@@ -47,9 +47,9 @@ export default function CertificacaoConhecimentosForm({ user }) {
        if(anexos.length===0){setAnexosInvalidos(true)}
         if (!discSolicitada) setdiscSolicitadaInvalida(true);
         if (!anexos && !anexos.length) setAnexosInvalidos(true);
-        if(formacaoAtividadeAnterior.length>45){
+        if(formacaoAtividadeAnterior.length>100){
             setFormacaoAtividadeAnteriorInvalida(true)
-            setAtividadeAnterior("Limite máximo de 45 caracteres para cadastro ")
+            setAtividadeAnterior("Limite máximo de 100 caracteres para cadastro ")
         }
         if(formacaoAtividadeAnterior.trim()===""){
             setFormacaoAtividadeAnteriorInvalida(true)

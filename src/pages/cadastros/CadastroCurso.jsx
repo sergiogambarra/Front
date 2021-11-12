@@ -39,8 +39,8 @@ export default class CadastroCurso extends Component {
             this.setState({ texto: true, mgsErro: "Campo nome é obrigatório" })
             return
         }
-        if (this.state.nome.length > 45) {
-            this.setState({ texto: true, mgsErro: "Limite máximo de 45 caracteres para cadastro" })
+        if (this.state.nome.length > 100) {
+            this.setState({ texto: true, mgsErro: "Limite máximo de 100 caracteres para cadastro" })
             return
         }
         if(this.state.idProfessor === ""){

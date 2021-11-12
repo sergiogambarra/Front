@@ -26,8 +26,8 @@ class EditarSenha extends Component {
     }
     async editar() {
         if(this.state.password.trim() ===""?this.setState({ senhaInvalida:true,msgPassword:"Campo senha é obrigatório"}):this.setState({ senhaInvalida:false})){}
-        if (this.state.password.length > 30) {
-            this.setState({ senhaInvalida: true, msgPassword: "Limite máximo de cadastro de 30 caracteres" })
+        if (this.state.password.length > 90) {
+            this.setState({ senhaInvalida: true, msgPassword: "Limite máximo de cadastro de 90 caracteres" })
             return
         }
         if(this.state.password !== this.state.novaSenha || this.state.novaSenha.trim() ===""){

@@ -53,14 +53,14 @@ class ListaServidor extends Component {
         if (this.nome === null || this.state.nome.trim() === "" ? this.setState({ nomeInvalido: true, msgNome: "Você não inseriu nome corretamente" }) : this.setState({ nomeInvalido: false })) { }
         if (this.siape === null || this.state.siape === "" || this.state.siape <= 0 ? this.setState({ siapeInvalido: true, msgSiape: "Você não inseriu SIAPE corretamente" }) : this.setState({ siapeInvalido: false })) { }
         if (this.email === null || this.state.email === "" || !validaEmail(this.state.email)? this.setState({ emailInvalido: true, msgEmail: "Você não inseriu email válido" }) : this.setState({ emailInvalido: false })) { }
-        if (this.state.nome.length > 40) {
-            this.setState({ nomeInvalido: true, msgNome: "Limite máximo de cadastro de 40 caracteres" })
+        if (this.state.nome.length > 90) {
+            this.setState({ nomeInvalido: true, msgNome: "Limite máximo de cadastro de 90 caracteres" })
             return
-        } if (this.state.email.length > 40) {
-            this.setState({ emailInvalido: true, msgEmail: "Limite máximo de cadastro de 40 caracteres" })
+        } if (this.state.email.length > 90) {
+            this.setState({ emailInvalido: true, msgEmail: "Limite máximo de cadastro de 90 caracteres" })
             return
         }
-        if (this.state.siape.length > 40) {
+        if (this.state.siape.length > 90) {
             this.setState({ siapeInvalido: true, msgSiape: "Não pode ser cadastrado número superior a 99999999" })
             return
         }

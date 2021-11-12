@@ -61,19 +61,19 @@ class CadastroPerfilServidor extends Component {
         if (this.state.password.trim() === "" ? this.setState({ senhaInvalida: true, msgPassword: "Você não inseriu senha corretamente" }) : this.setState({ senhaInvalida: false })) { }
         if (this.state.novaSenha.trim() === "" ? this.setState({ confirmaSenhaInvalida: true }) : this.setState({ confirmaSenhaInvalida: false })) { }
         if (this.state.password !== this.state.novaSenha) { this.setState({ confirmaSenhaInvalida: true }) }
-        if (this.state.nome.length > 40) {
-            this.setState({ nomeInvalido: true, msgNome: "Limite máximo para cadastro de 40 caracteres" })
+        if (this.state.nome.length > 90) {
+            this.setState({ nomeInvalido: true, msgNome: "Limite máximo para cadastro de 90 caracteres" })
             return
         }
-        if (this.state.email.length > 40) {
-            this.setState({ emailInvalido: true, msgEmail: "Limite máximo para cadastro de 40 caracteres" })
+        if (this.state.email.length > 90) {
+            this.setState({ emailInvalido: true, msgEmail: "Limite máximo para cadastro de 90 caracteres" })
             return
         }
-        if (this.state.siape > 99999999) {
+        if (this.state.siape.length > 90) {
             this.setState({ siapeInvalido: true, msgSiape: "SIAPE não pode ter número superior a 999999999" })
             return
         }
-        if (this.state.password.length > 30) {
+        if (this.state.password.length > 90) {
             this.setState({ senhaInvalida: true, msgPassword: "Limite máximo de cadastro de 30 caracteres" })
             return
         }

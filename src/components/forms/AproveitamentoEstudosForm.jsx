@@ -47,9 +47,9 @@ export default function CertificacaoConhecimentosForm() {
         if (!curso) setCursoInvalido(true);
         if (!discSolicitada) setDiscSolicitadaInvalida(true);
         if (!anexos && !anexos.length) setAnexosInvalidos(true);
-        if (disciplinasCursadasAnterior.length > 45) {
+        if (disciplinasCursadasAnterior.length > 100) {
             setDisciplinasCursadasAnteriorInvalida(true)
-            setMsgDisciplinaAnterior("Limite máximo de 45 caracteres para cadastro ")
+            setMsgDisciplinaAnterior("Limite máximo de 100 caracteres para cadastro ")
             
         }
         if(disciplinasCursadasAnterior.trim()===""){

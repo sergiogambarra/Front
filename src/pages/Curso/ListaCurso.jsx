@@ -61,8 +61,8 @@ export default class ListaCursos extends Component {
             this.setState({ nomeInvalido: true, msgNome: "Você não inseriu nome corretamente" })
             return
         }
-        if (this.state.nome.length > 40) {
-            this.setState({ nomeInvalido: true, msgNome: "Limite máximo de cadastro de 40 caracteres" })
+        if (this.state.nome.length > 90) {
+            this.setState({ nomeInvalido: true, msgNome: "Limite máximo de cadastro de 90 caracteres" })
             return
         }
         if (this.state.idProfessor === "") {
