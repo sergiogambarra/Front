@@ -40,7 +40,8 @@ class Parecer extends Component {
         this.setState({ user })
     }
     async buscaProfessores() {
-        const listaProfessores = await get("usuarios/pages?tipo=PROFESSOR");
+        const listaProfessores = await get("usuarios/professores/");
+        console.log(listaProfessores)
         this.setState({ listaProfessores })
     }
 
@@ -289,7 +290,7 @@ class Parecer extends Component {
                                 isInvalid={this.state.listaProfessoresInvalido}
                                 onChange={(e) => this.setState({ id: e.target.value, msgErrorProfessor: "", listaProfessoresInvalido: false, parecerProfessor: "", parecerCoordenador: "", msgStatus: "" })} >
                                 <option onClick={() => this.limpar()} ></option>
-                                {this.state.listaProfessores.content && this.state.listaProfessores.content.map((p) =>
+                                {this.state.listaProfessores && this.state.listaProfessores.map((p) =>
                                     <option key={p.id} value={p.id}>{p.perfil.nome}</option>
 
                                 )}
