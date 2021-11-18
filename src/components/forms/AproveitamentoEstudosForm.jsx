@@ -42,7 +42,7 @@ export default function CertificacaoConhecimentosForm() {
     })
 
     const camposInvalidos = () => {
-       console.log(anexos.length);
+    //    console.log(anexos.length);
        if(anexos.length === 0){setAnexosInvalidos(true)}
         if (!curso) setCursoInvalido(true);
         if (!discSolicitada) setDiscSolicitadaInvalida(true);

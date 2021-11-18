@@ -45,11 +45,11 @@ class CadastroPerfilServidor extends Component {
             return
         } else if (this.state.loginPesquisa === this.state.userName) {
             this.setState({ loginInvalido: true, msgLogin: "Login inválido, login já cadastrado" })
-            console.log("b");
+            // console.log("b");
             return
         } else if (this.state.userName.length < 6 || this.state.userName.length > 10) {
             this.setState({ loginInvalido: true, msgLogin: "Escolha login entre 6 e 10 caracteres" })
-            console.log("c");
+            // console.log("c");
             return
         }
         if (this.state.loginInvalido !== "") { this.setState({ msgLogin: "", loginInvalido: false }) }

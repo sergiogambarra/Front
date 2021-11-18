@@ -18,7 +18,6 @@ const postCadastroUsuario = async (usuario) => {
 
 const postCadastroUsuarioServidor = async (usuario) => {
     if (!usuario) return;
-    console.log(usuario);
     
     return  post("usuarios/servidor/",{
         password: usuario.password,

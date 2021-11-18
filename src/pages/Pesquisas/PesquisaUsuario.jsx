@@ -48,7 +48,7 @@ class PesquisaUsuario extends Component {
             return
         }
         get(`usuarios/pesquisaNome/${this.state.nome}`).then((r) => {
-            console.log(r);
+            // console.log(r);
             if(r.length === 0){
                 this.setState({alert:true})
             }

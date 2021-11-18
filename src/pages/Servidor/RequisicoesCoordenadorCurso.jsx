@@ -28,7 +28,7 @@ class RequisicioesCoordenadorCurso extends Component {
         get(`requisicoes/coordenador/cert/${this.state.user.id}?page=0&size=0`).then((retorno) => {
 
             this.setState({ listaRequisicaoCoordenadorCerfificacao: retorno && retorno.content, last: retorno && retorno.last, first: retorno && retorno.first, total: retorno && retorno.totalPages})
-            console.log(this.state)
+            // console.log(this.state)
         })
     }
     listaRequisicoesCoordenadorAproveitamento() {

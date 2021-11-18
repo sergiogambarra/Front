@@ -41,7 +41,6 @@ class Parecer extends Component {
     }
     async buscaProfessores() {
         const listaProfessores = await get("usuarios/professores/");
-        console.log(listaProfessores)
         this.setState({ listaProfessores })
     }
 
@@ -105,7 +104,6 @@ class Parecer extends Component {
             this.setState({ responsavelPelaRequisicao: "FINALIZADO" })
         }
         if (this.state.responsavelPelaRequisicao === "FINALIZADO") {
-            console.log("finalizadoooooooooo");
 
             this.setState({ alerteDonoRequisicao: true })
         }
@@ -365,7 +363,7 @@ class Parecer extends Component {
                         <Form.Text className="text-danger">{this.state.msgErrorParecer} </Form.Text>
                     </Form.Group>
                 }
-                {console.log(this.state.responsavelPelaRequisicao)}
+                {/* {console.log(this.state.responsavelPelaRequisicao)} */}
 
                 {this.state.alerteDonoRequisicao && this.state.responsavelPelaRequisicao === "COORDENADOR" && this.state.user && this.state.user.perfil.coordenador === true ? <Form.Group controlId="exampleForm.ControlTextarea1">
                     <Form.Label>Novo Parecer do :&nbsp;{this.state.stringParecer === "Coordenador" ? <> <b>{this.state.stringParecer}</b> <span style={{ color: "red" }}>  ( se o coordenador é professor da disciplina seu parecer é gravado nos campos de parecer de professor de coordenador )</span></> : this.state.stringParecer}</Form.Label>

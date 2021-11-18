@@ -32,7 +32,7 @@ class CadastroPerfilProfessor extends Component {
         });
         if (teste) {
             this.setState({ loginInvalido: true, msgLogin: "Login inválido, login já cadastrado" })
-            console.log("b");
+            // console.log("b");
             return
         } 
 
@@ -88,7 +88,7 @@ class CadastroPerfilProfessor extends Component {
         }
 
         await get(`usuarios/siapeLdap/${this.state.siape}`).then((r) => {
-            console.log(r)
+            // console.log(r)
             if(!r){
                 this.setState({alert:true})
             }

@@ -97,7 +97,7 @@ class MinhasRequisicoes extends Component {
       statusRequisicao: this.state.status,
       idAluno: this.state.id
     }).then((r) => {
-      console.log(r.data.length);
+      // console.log(r.data.length);
 
       if (r && r.data.length === 0) {
         this.setState({ alertPesquisa: true, mostraPesquisa: true, mostraBotaoVoltar: false })

@@ -87,7 +87,7 @@ export default function SACENavbar({ setUserData, user }) {
 
     useEffect(() => {
         get("usuarios/auth/").then((r) => {
-            console.log(r);
+            // console.log(r);
             
             setCoordenador(r && r.perfil.coordenador)
         })

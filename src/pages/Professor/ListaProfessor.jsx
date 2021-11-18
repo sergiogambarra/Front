@@ -22,7 +22,7 @@ class ListaProfessor extends Component {
 
     async listaProfessor() {
         await get(`usuarios/pages?tipo=PROFESSOR&page=${this.state.page}&size=6`).then((retorno) => {
-            console.log(retorno);
+            // console.log(retorno);
             if (retorno) this.setState({ professores: retorno, last: retorno.last, first: retorno.first, total: retorno.totalPages })
         })
 

@@ -22,7 +22,7 @@ class RequisicaoAluno extends Component {
     async pesquisarNomeSolicitante() {
         const aluno = await get(`usuarios/auth/`);
         get(`requisicoes/alunos/${aluno.id}?page=${this.state.page}&size=6`).then((retorno) => {
-            console.log(retorno);
+            // console.log(retorno);
             this.setState({ requisicoes: retorno.content, last: retorno.last, first: retorno.first, total: retorno.totalPages, aluno, mostraTable: true });
         })
     }
@@ -30,8 +30,6 @@ class RequisicaoAluno extends Component {
     async pesquisarRequisicoesId(e) {
       await get(`requisicoes/${e}`).then((retorno) => {
           this.setState({requisiçãoId:retorno,modalShow:true})
-          console.log(retorno);
-          console.log(this.state.requisiçãoId);
           
         })
     }
