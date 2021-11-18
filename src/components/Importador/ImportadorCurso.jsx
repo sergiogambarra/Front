@@ -33,7 +33,7 @@ class ImportarCurso extends Component {
                 <br />  <br />  <Alert variant={"success"} show={this.state.showAlert}>{this.state.alert}</Alert> <br />
                 <h3>Importador para cadastro de Cursos</h3>
                 <br />
-                <Alert variant={"danger"}>Para importação correta do arquivo com extensão .csv deve estar organizado de modo que, a primeira coluna inclua o nome do curso e a segunda coluna inclua o nome coordenador.</Alert>
+                <Alert variant={"danger"}>Para importação correta do arquivo com extensão .csv deve estar organizado de modo que, a primeira coluna inclua o nome do curso e a segunda coluna inclua o nome coordenador e na terceira o nome do curso</Alert>
                 <br /> <br />
                 <input type="file" name="umArquivo" onChange={(e)=> this.setState({umArquivo:e.target.files[0]})}/>
                     <input type="button" value="enviar"  onClick={()=>this.enviar()}/>
