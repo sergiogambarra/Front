@@ -57,7 +57,8 @@ export default function CertificacaoConhecimentosForm() {
             setMsgDisciplinaAnterior("Campo disciplina cursada é obrigatório")
             
         }
-        return (!curso || !disciplinasCursadasAnterior || !discSolicitada || !anexos.length||disciplinasCursadasAnterior.length>500||disciplinasCursadasAnterior.trim()==="");
+        return (!curso || !disciplinasCursadasAnterior || !discSolicitada ||
+             !anexos.length||disciplinasCursadasAnterior.length>500||disciplinasCursadasAnterior.trim()==="");
     }
 
     const limparCampos = () => {
@@ -81,7 +82,7 @@ export default function CertificacaoConhecimentosForm() {
             disciplinaSolicitada: {
                 id: discSolicitada.value,
                 nome: discSolicitada.label,
-                cargaHoraria: discSolicitada.carga,
+                // cargaHoraria: discSolicitada.carga,
             },
             usuario: {
                 id
@@ -101,7 +102,10 @@ export default function CertificacaoConhecimentosForm() {
                         tipo: 'success'
                     })
                 } else {
-                    setAlert({
+                    console.log(requisicao);
+                    setAlert(
+                        
+                        {
                         mensagem: 'console.log(requisicao); ' + e.data.message,
                         tipo: 'danger'
                     })
