@@ -47,8 +47,8 @@ class CadastroPerfilServidor extends Component {
             this.setState({ loginInvalido: true, msgLogin: "Login inválido, login já cadastrado" })
             // console.log("b");
             return
-        } else if (this.state.userName.length < 6 || this.state.userName.length > 10) {
-            this.setState({ loginInvalido: true, msgLogin: "Escolha login entre 6 e 10 caracteres" })
+        } else if (this.state.userName.length < 6 || this.state.userName.length > 50) {
+            this.setState({ loginInvalido: true, msgLogin: "Escolha login entre 6 e 50 caracteres" })
             // console.log("c");
             return
         }

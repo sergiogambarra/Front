@@ -56,7 +56,7 @@ export default function CertificacaoConhecimentosForm({ user }) {
             setAtividadeAnterior("Campo formação ou atividade é obrigatório ")
         }
 
-        return (!curso || !formacaoAtividadeAnterior || !discSolicitada || !anexos.length||formacaoAtividadeAnterior.trim()===""||formacaoAtividadeAnterior.length>45);
+        return (!curso || !formacaoAtividadeAnterior || !discSolicitada || !anexos.length||formacaoAtividadeAnterior.trim()===""||formacaoAtividadeAnterior.length>500);
     }
 
     const limparCampos = () => {
@@ -70,13 +70,16 @@ export default function CertificacaoConhecimentosForm({ user }) {
     const fazerRequisicao = async () => {
         if (camposInvalidos()) return;
 
-        setRequisicao({
+        setRequisicao(
+            console.log(discSolicitada),
+            {
             formacaoAtividadeAnterior,
             tipo: "certificacao",
             anexos,
             disciplinaSolicitada: {
                 id: discSolicitada.value,
                 nome: discSolicitada.label,
+                
                 cargaHoraria: discSolicitada.carga,
             },
             usuario: {
@@ -90,7 +93,7 @@ export default function CertificacaoConhecimentosForm({ user }) {
 
     const enviarRequisicao = () => {
         setShowModal(false);
-        // console.log(requisicao);
+        console.log(requisicao);
         postRequisicao(requisicao)
         
         .then((e)=>{

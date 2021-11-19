@@ -77,8 +77,8 @@ class CadastroPerfilAluno extends Component {
         } else if (this.state.loginPesquisa === this.state.userName) {
             this.setState({ userNameInvalido: true, msgLogin: "Login inválido, login já cadastrado" })
             return
-        } else if (this.state.userName.length < 6 || this.state.userName.length > 10) {
-            this.setState({ userNameInvalido: true, msgLogin: "Escolha login entre 6 e 10 caracteres" })
+        } else if (this.state.userName.length < 6 || this.state.userName.length > 50) {
+            this.setState({ userNameInvalido: true, msgLogin: "Escolha login entre 6 e 50 caracteres" })
             return
         }
         
@@ -95,7 +95,7 @@ class CadastroPerfilAluno extends Component {
             this.setState({ verificaSenhaInvalido: true })
         } else { this.setState({ verificaSenhaInvalido: false }) }
         if (this.state.userName && this.state.userName) {
-            if (this.state.userName.length < 6 || this.state.userName.length > 10) { return }
+            if (this.state.userName.length < 6 || this.state.userName.length > 50) { return }
         }
         if (this.state.nome.length > 90) {
             this.setState({ nomeInvalido: true, msgNome: "Limite máximo de cadastro de 90 caracteres" })

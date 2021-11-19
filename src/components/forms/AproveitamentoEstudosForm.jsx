@@ -42,14 +42,14 @@ export default function CertificacaoConhecimentosForm() {
     })
 
     const camposInvalidos = () => {
-    //    console.log(anexos.length);
+       console.log(anexos.length);
        if(anexos.length === 0){setAnexosInvalidos(true)}
         if (!curso) setCursoInvalido(true);
         if (!discSolicitada) setDiscSolicitadaInvalida(true);
         if (!anexos && !anexos.length) setAnexosInvalidos(true);
-        if (disciplinasCursadasAnterior.length > 100) {
+        if (disciplinasCursadasAnterior.length > 500) {
             setDisciplinasCursadasAnteriorInvalida(true)
-            setMsgDisciplinaAnterior("Limite máximo de 100 caracteres para cadastro ")
+            setMsgDisciplinaAnterior("Limite máximo de 500 caracteres para cadastro ")
             
         }
         if(disciplinasCursadasAnterior.trim()===""){
@@ -57,7 +57,7 @@ export default function CertificacaoConhecimentosForm() {
             setMsgDisciplinaAnterior("Campo disciplina cursada é obrigatório")
             
         }
-        return (!curso || !disciplinasCursadasAnterior || !discSolicitada || !anexos.length||disciplinasCursadasAnterior.length>45||disciplinasCursadasAnterior.trim()==="");
+        return (!curso || !disciplinasCursadasAnterior || !discSolicitada || !anexos.length||disciplinasCursadasAnterior.length>500||disciplinasCursadasAnterior.trim()==="");
     }
 
     const limparCampos = () => {
@@ -92,6 +92,7 @@ export default function CertificacaoConhecimentosForm() {
 
     const enviarRequisicao = () => {
         setShowModal(false);
+        console.log(requisicao);
         postRequisicao(requisicao)
             .then((e) => {
                 if (e.status === 201) {
@@ -101,7 +102,7 @@ export default function CertificacaoConhecimentosForm() {
                     })
                 } else {
                     setAlert({
-                        mensagem: 'ATENÇÃO requisição não cadastrada! ' + e.data.message,
+                        mensagem: 'console.log(requisicao); ' + e.data.message,
                         tipo: 'danger'
                     })
                 }

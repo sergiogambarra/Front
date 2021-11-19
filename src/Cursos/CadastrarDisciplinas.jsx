@@ -34,7 +34,7 @@ class CadastrarDisciplinas extends Component {
         if (this.state.idcurso === null || this.state.idcurso === "" ? this.setState({ msgError: "Campo select obrigatório" }) : this.setState({ msgError: "" })) { }
         if (this.state.nome.trim() === "" ? this.setState({ textodisciplina: true, msgNomeDisciplina: "Campo nome é obrigatório" }) : this.setState({ textodisciplina: false })) { return }
         if (typeof this.state.cargaHoraria === "undefined" || this.state.cargaHoraria === "" || this.state.cargaHoraria < 15 ? this.setState({ textocargahoraria: true ,msgCargaHoraria:"Carga horária não pode ser inferior a 15h"}) : this.setState({ textocargahoraria: false })) { return }
-            if (this.state.nome.length > 40) {
+            if (this.state.nome.length > 400) {
                 this.setState({ textodisciplina: true, msgNomeDisciplina: "Limite máximo para cadastro de 40 caracteres" })
                 return
             }

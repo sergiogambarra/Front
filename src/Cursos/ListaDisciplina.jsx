@@ -79,8 +79,8 @@ class ListaDiscipinas extends Component {
         }
         if (this.state.cargaHoraria === null || this.state.cargaHoraria === "" || this.state.cargaHoraria < 15? this.setState({ cargaHorariaInvalida: true,msgCargaHoraria:"Carga Horária mínimo de 15h" }) : this.setState({ cargaHorariaInvalida: false })) { 
         }
-        if (this.state.nome.length > 40) {
-            this.setState({ nomeInvalido: true, msgNome: "Limite máximo para cadastro de 40 caracteres" })
+        if (this.state.nome.length > 200) {
+            this.setState({ nomeInvalido: true, msgNome: "Limite máximo para cadastro de 200 caracteres" })
             return
         }
         if (this.state.cargaHoraria > 300) {

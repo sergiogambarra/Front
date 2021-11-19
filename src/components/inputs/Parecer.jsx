@@ -183,7 +183,7 @@ class Parecer extends Component {
             }
         }
 
-        if (this.state.atualizarParecer.length > 150) {
+        if (this.state.atualizarParecer.length > 500) {
             this.setState({ msgErrorParecer: "Limite máximo para cadastro do parecer é de 150 caracteres." })
 
             return
