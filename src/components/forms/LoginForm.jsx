@@ -67,7 +67,7 @@
                 <SACEInput
                     autoFocus
                     label={'Login'}
-                    placeholder={'Informe a sua Matricula ou (0 + SIAPE) para servidores. '}
+                    placeholder={'Informe a sua Matricula (apenas os números) ou (0 + SIAPE) para servidores. '}
                     onChange={({ target }) => setUserName(target.value)}
                     value={userName}
                     onError={usuarioInvalido}

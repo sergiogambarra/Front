@@ -70,16 +70,13 @@ export default function CertificacaoConhecimentosForm({ user }) {
     const fazerRequisicao = async () => {
         if (camposInvalidos()) return;
 
-        setRequisicao(
-            console.log(discSolicitada),
-            {
+        setRequisicao({
             formacaoAtividadeAnterior,
             tipo: "certificacao",
             anexos,
             disciplinaSolicitada: {
                 id: discSolicitada.value,
                 nome: discSolicitada.label,
-                
                 cargaHoraria: discSolicitada.carga,
             },
             usuario: {
@@ -93,7 +90,7 @@ export default function CertificacaoConhecimentosForm({ user }) {
 
     const enviarRequisicao = () => {
         setShowModal(false);
-        console.log(requisicao);
+        // console.log(requisicao);
         postRequisicao(requisicao)
         
         .then((e)=>{
