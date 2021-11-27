@@ -9,7 +9,7 @@ class RelatorioAproveitamentoEstudos extends Component {
     super(props);
     this.state = {
       id: "", dataInicio: null, idDisciplina: null, tipoRequisicao: "requisicoes_aproveitamento", listaFiltro: [], mostraPesquisa: false, alert: false,
-      dataFinal: null, dataInicioInvalida: false, dataFinalInvalida: false, status: null, msgErrorStatus: "", cursos: [], idCurso: null, msgErrorCurso: "",mostraSelecao:true
+      dataFinal: null, dataInicioInvalida: false, dataFinalInvalida: false, status: null, responsavelRequisicao: null, msgErrorStatus: "", cursos: [], idCurso: null, msgErrorCurso: "",mostraSelecao:true
     }
   }
 
@@ -43,7 +43,8 @@ class RelatorioAproveitamentoEstudos extends Component {
       dataFinal: this.state.dataFinal && format(this.state.dataFinal),
       idCurso: this.state.idCurso,
       idDisciplina: this.state.idDisciplina,
-      statusRequisicao: this.state.status
+      statusRequisicao: this.state.status,
+      responsavelRequisicao: this.state.responsavel
     }).then((r) => {
       if (r && r.data.length === 0) {
         this.setState({ alert:true,mostraPesquisa:false,mostraSelecao:true})
@@ -59,7 +60,7 @@ class RelatorioAproveitamentoEstudos extends Component {
   }
 
   limpar() {
-    this.setState({ mostraPesquisa: false,mostraSelecao:true,dataInicio:"",dataFinal:"", idDisciplina:""})
+    this.setState({ mostraPesquisa: false,mostraSelecao:true,dataInicio:"",dataFinal:"", idDisciplina:"", responsavelRequisicao:""})
   }
   render() {
     return (
@@ -119,6 +120,22 @@ class RelatorioAproveitamentoEstudos extends Component {
               </Form.Control>
               <Form.Text className="text-danger">{this.state.msgErrorStatus} </Form.Text>
             </Form.Group>
+            <Form.Group controlId="exampleForm.SelectCustom">
+
+              <Form.Label>Selecione o responsável pela requisição</Form.Label>
+              <Form.Control as="select" custom
+                onChange={
+                  (e) => {
+                    this.setState({ responsavel: e.target.value })
+                  }} >
+                <option key={0} value={""}></option>
+                <option >SERVIDOR</option>
+                <option >PROFESSOR</option>
+                <option >COORDENADOR</option>
+
+              </Form.Control>
+              <Form.Text className="text-danger">{this.state.msgErrorStatus} </Form.Text>
+            </Form.Group>
           </Form>
         </Form>
         <SACEInput
@@ -160,6 +177,7 @@ class RelatorioAproveitamentoEstudos extends Component {
                   <th>Data da Solicitação</th>
                   <th>Disciplina Solicitada</th>
                   <th>Resultado</th>
+                  <th>Responsavel</th>
                 </tr>
               </thead>
               <tbody>
@@ -171,6 +189,7 @@ class RelatorioAproveitamentoEstudos extends Component {
                     <td>{format2(r.data)}</td>
                     <td>{r.nomeDisciplina}</td>
                     <td>{r.status}</td>
+                    <td>{r.responsavel}</td>
                   </tr>
                 )}
               </tbody>

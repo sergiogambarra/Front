@@ -10,7 +10,7 @@ class RelatorioCertificacao extends Component {
     super(props);
     this.state = {
       id: "", alunos: [], dataInicio: null, listaFiltro:[],mostraPesquisa:false, tipoRequisicao: "requisicoes_certificacao",idDisciplina:null,alert:false,mostraSelecao:true,
-      dataFinal: null, dataInicioInvalida: false, dataFinalInvalida: false, msgErrorPesquisaNome: "", status: null, msgErrorStatus: "", cursos: [], idCurso: null, msgErrorCurso: "",
+      dataFinal: null, dataInicioInvalida: false, dataFinalInvalida: false, msgErrorPesquisaNome: "", status: null, responsavelRequisicao: null, msgErrorStatus: "", cursos: [], idCurso: null, msgErrorCurso: "",
       requisicoesDisciplina: []
     }
   }
@@ -47,7 +47,8 @@ this.setState({mostraSelecao:false})
       dataFinal: this.state.dataFinal && format(this.state.dataFinal),
       idCurso: this.state.idCurso,
       idDisciplina: this.state.idDisciplina,
-      statusRequisicao:this.state.status
+      statusRequisicao: this.state.status,
+      responsavelRequisicao: this.state.responsavel
     }).then((r) => {
       if (r && r.data.length === 0) {
         this.setState({ alert:true,mostraPesquisa:false,mostraSelecao:true})
@@ -122,7 +123,22 @@ this.setState({mostraSelecao:false})
               </Form.Control>
               <Form.Text className="text-danger">{this.state.msgErrorStatus} </Form.Text>
             </Form.Group>
+            <Form.Group controlId="exampleForm.SelectCustom">
 
+              <Form.Label>Selecione o responsável pela requisição</Form.Label>
+              <Form.Control as="select" custom
+                onChange={
+                  (e) => {
+                    this.setState({ responsavel: e.target.value })
+                  }} >
+                <option key={0} value={""}></option>
+                <option >SERVIDOR</option>
+                <option >PROFESSOR</option>
+                <option >COORDENADOR</option>
+
+              </Form.Control>
+              <Form.Text className="text-danger">{this.state.msgErrorStatus} </Form.Text>
+            </Form.Group>
           </Form>
         </Form>
         <SACEInput
@@ -162,6 +178,7 @@ this.setState({mostraSelecao:false})
                   <th>Data da Solicitação</th>
                   <th>Disciplina Solicitada</th>
                   <th>Resultado</th>
+                  <th>Responsavel</th>
                 </tr>
               </thead>
               <tbody>
@@ -173,6 +190,7 @@ this.setState({mostraSelecao:false})
                     <td>{format2(r.data)}</td>
                     <td>{r.nomeDisciplina}</td>
                     <td>{r.status}</td>
+                    <td>{r.responsavel}</td>
                   </tr>
                 )}
               </tbody>

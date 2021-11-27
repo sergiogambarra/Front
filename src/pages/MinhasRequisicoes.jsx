@@ -15,7 +15,7 @@ class MinhasRequisicoes extends Component {
     super();
     this.state = {
       requisicoes: "", escolha: "", id: "", user: "", alunos: [], pesquisa: false, selecionaPesquisa: "", dataInicio: "",
-      dataFinal: "", dataInicioInvalida: false, dataFinalInvalida: false, msgErrorPesquisaNome: "", status: null, msgErrorStatus: "", cursos: [], idCurso: "", msgErrorCurso: "",
+      dataFinal: "", dataInicioInvalida: false, dataFinalInvalida: false, msgErrorPesquisaNome: "", status: null, responsavelRequisicao: null, msgErrorStatus: "", cursos: [], idCurso: "", msgErrorCurso: "",
       alert: false, last: "", first: "", total: "", page: 0, pararPesquisaData: false, mostraBotao: false, listaRequisicaoCoordenador:[],listaRequisicaoCoordenadorAproveitamento:[],
        posicao: "row", tipoRequisicao: "", requisicoesPesquisa: [], tipoRequisicaoEscolha: "", mostraPesquisa: true, mostraBotaoVoltar: false, alertPesquisa: false
     }
@@ -95,6 +95,7 @@ class MinhasRequisicoes extends Component {
       idCurso: this.state.idCurso,
       idDisciplina: this.state.idDisciplina,
       statusRequisicao: this.state.status,
+      responsavelRequisicao: this.state.responsavel,
       idAluno: this.state.id
     }).then((r) => {
       // console.log(r.data.length);
@@ -212,8 +213,28 @@ class MinhasRequisicoes extends Component {
                   <option >INDEFERIDO</option>
 
                 </Form.Control>
+                
                 <Form.Text className="text-danger">{this.state.msgErrorStatus} </Form.Text>
+                
               </Form.Group>
+
+              <Form.Group controlId="exampleForm.SelectCustom">
+
+              <Form.Label>Selecione o responsável pela requisição</Form.Label>
+              <Form.Control as="select" custom
+                onChange={
+                  (e) => {
+                    this.setState({ responsavel: e.target.value })
+                  }} >
+                <option key={0} value={""}></option>
+                <option >SERVIDOR</option>
+                <option >PROFESSOR</option>
+                <option >COORDENADOR</option>
+
+              </Form.Control>
+              <Form.Text className="text-danger">{this.state.msgErrorStatus} </Form.Text>
+            </Form.Group>
+              
 
               < Form >
                 <SACEInput
