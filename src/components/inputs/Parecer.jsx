@@ -65,12 +65,13 @@ class Parecer extends Component {
             anexos: c.anexos,
             formacaoAtividadeAnterior: c.disciplinasCursadasAnterior,
             criterioAvaliacao: c.criterioAvaliacao,
+            idDisciplina: c.disciplinaSolicitada.id,
+            idCoordenador: c.coordenador.id,
             tipo: c.tipo,
             prova: c.prova || "",
             titulo: "", cursoCoordenador: [],
-            coordenador: c.professor && c.professor.perfil.coordenador, alert: false,
+            coordenador: c.professor && c.professor.perfil.coordenador && c.coordenador.id === c.professor.id, alert: false,
             responsavelPelaRequisicao: c.responsavelPelaRequisicao
-
         }
         );
         if (this.state.id === "" || this.state.id === null) {
@@ -83,16 +84,17 @@ class Parecer extends Component {
         if (this.state.user && this.state.user.permissao === "PROFESSOR" && this.state.responsavelPelaRequisicao === "SERVIDOR") {
             this.setState({ alerteDonoRequisicao: true })
         }
-        if (this.state.user && this.state.user.permissao === "PROFESSOR" && this.state.user && this.state.user.perfil.coordenador === false && this.state.responsavelPelaRequisicao === "COORDENADOR") {
+        if (this.state.user && this.state.user.permissao === "PROFESSOR" && this.state.user && !this.state.user.perfil.coordenador
+         && this.state.responsavelPelaRequisicao === "COORDENADOR") {
             this.setState({ alerteDonoRequisicao: true })
         }
+        console.log(this.state);
 
         if (this.state.user && this.state.user.id && this.state.professor && this.state.professor.id) {
-            if (this.state.user && this.state.user.permissao === "PROFESSOR" && this.state.user && this.state.user.perfil.coordenador === true) {
+            if (this.state.user && this.state.user.permissao === "PROFESSOR" &&
+             this.state.user && this.state.user.perfil.coordenador && this.state.c.coordenador.id !== this.state.user.id) {
                 if (this.state.user.id !== this.state.professor.id) {
-                    console.log("oiopioioi");
                     this.setState({ alerteDonoRequisicao: true })
-
                 } else if (this.state.user.id === this.state.professor.id) {
                     if (this.state.deferido !== "EM ANÁLISE") {
                         this.setState({ responsavelPelaRequisicao: "FINALIZADO" })
@@ -112,9 +114,12 @@ class Parecer extends Component {
 
 
     mudaNomeStringParecer() {
+        console.log('perfil.coordenador true',this.state.user.perfil.coordenador);
+        console.log('this.state.c.coordenador.id ',this.state.c.coordenador.id);
+        console.log('this.state.user.id',this.state.user.id);
         if (this.state.user && this.state.user.perfil.tipo === "SERVIDOR") {
             this.setState({ stringParecer: "SERVIDOR" })
-        } else if (this.state.user && this.state.user.perfil.coordenador === true) {
+        } else if (this.state.user && this.state.user.perfil.coordenador && this.state.c.coordenador.id === this.state.user.id) {
             this.setState({ stringParecer: "Coordenador" })
         } else { this.setState({ stringParecer: "Professor" }) }
     }
@@ -131,7 +136,7 @@ class Parecer extends Component {
                 parecerProfessor: this.state.parecerProfessor,
                 responsavelPelaRequisicao: "COORDENADOR"
             }).then(() => { this.setState({ modal: false }) })
-        } else if (this.state.user && this.state.user.perfil.coordenador === true) {
+        } else if (this.state.user && this.state.user.perfil.coordenador && (this.state.responsavelPelaRequisicao !== "PROFESSOR" || this.state.c.coordenador.id === this.state.user.id )) {
             put("requisicoes", this.props.match.params.id, {
                 tipo: this.state.tipo,
                 deferido: this.state.deferido,
@@ -157,16 +162,16 @@ class Parecer extends Component {
         }
     }
     verificarDados() {
-        if (this.state.user && this.state.user.id === parseInt(this.state.id) && this.state.user && this.state.user.perfil.coordenador === true) {
+        if (this.state.user && this.state.user.id === parseInt(this.state.id) && this.state.user && this.state.user.perfil.coordenador && this.state.c.coordenador.id === this.state.user.id) {
             this.setState({ parecerProfessor: this.state.atualizarParecer, parecerCoordenador: this.state.atualizarParecer })
         }
         if (this.state.parecerServidor && this.state.parecerServidor.trim() !== "" && this.state.prova && this.state.prova.length > 0 && this.state.parecerCoordenador && this.state.parecerCoordenador.trim() !== "") {
             this.setState({ modal: true, modificaModal: true })
         }
-        if (this.state.user && this.state.user.perfil.tipo === "PROFESSOR" && this.state.user && this.state.user.perfil.coordenador === true) {
-            if (this.state.user && this.state.professor) {
+        if (this.state.user && this.state.user.perfil.tipo === "PROFESSOR" && this.state.user.perfil.coordenador) {
+            if (this.state.user && this.state.professor && this.state.c.coordenador.id === this.state.user.id) {
 
-                if (this.state.deferido === "EM ANÁLISE" && this.state.parecerProfessor.length > 0) {
+                if (this.state.deferido === "EM ANÁLISE" && !this.state.parecerProfessor) {
                     this.setState({ msgStatus: "Selecione status da requisição" })
 
                     return
@@ -176,7 +181,7 @@ class Parecer extends Component {
 
         }
        
-        if (this.state.user && this.state.user.perfil.coordenador === true) {
+        if (this.state.user && this.state.user.perfil.coordenador === true && this.state.responsavelPelaRequisicao !== "PROFESSOR") {
             if (this.state.user && this.state.user.id === parseInt(this.state.id) &&this.state.deferido === "EM ANÁLISE"  ) {
                 this.setState({ msgStatus: "Selecione status da requisição entre Deferido ou Indeferido" })
                 return
@@ -220,7 +225,8 @@ class Parecer extends Component {
     render() {
         return (<div><br />
 
-            <Alert style={{ textAlign: "center" }} show={this.state.alerteDonoRequisicao} variant={"info"}>{this.state.responsavelPelaRequisicao === "FINALIZADO" ? "Processo da Solicitação do aluno finalizado responsável = " : "Você não pode alterar os dados desta solicitação neste momento porque ela está sendo tratada por outro usuário. Responsável ="} <span style={{ color: "red" }}>
+            <Alert style={{ textAlign: "center" }} show={this.state.alerteDonoRequisicao} variant={"info"}>{this.state.responsavelPelaRequisicao === "FINALIZADO" ? "Processo da Solicitação do aluno finalizado responsável = " : 
+            "Você não pode alterar os dados desta solicitação neste momento porque ela está sendo tratada por outro usuário. Responsável ="} <span style={{ color: "red" }}>
                 {this.state.responsavelPelaRequisicao === "FINALIZADO" ? "SETOR DE ENSINO " : this.state.responsavelPelaRequisicao === "SERVIDOR" ? "SETOR DE ENSINO" : this.state.responsavelPelaRequisicao}</span></Alert>
             <Form.Group className="col-md-6 container">
                 <TituloPagina titulo="Parecer da Requisição" />
@@ -276,8 +282,8 @@ class Parecer extends Component {
                 <Alert variant={"danger"} show={this.state.alert}>Selecione um professor tratar requisição</Alert>
 
                
-                {!this.state.alerteDonoRequisicao &&
-                    this.state.user && this.state.user.perfil.coordenador === true ?
+                {this.state.alerteDonoRequisicao &&
+                    this.state.user && this.state.user.perfil.coordenador && this.state.responsavelPelaRequisicao === "COORDENADOR" && this.state.parecerProfessor ?
                     <Form>
                         <Form.Group controlId="exampleForm.SelectCustom">
                             <br />
@@ -299,7 +305,7 @@ class Parecer extends Component {
 
                 <br />
                 {console.log(this.state.responsavelPelaRequisicao)}
-                {this.state.user && this.state.user.perfil.coordenador === true && this.state.responsavelPelaRequisicao === "COORDENADOR" 
+                {this.state.user && this.state.user.perfil.coordenador === true && this.state.responsavelPelaRequisicao === "COORDENADOR" && this.state.alerteDonoRequisicao
                 ? 
 
                 <> <div className="custom-control custom-radio custom-control-inline">
@@ -324,6 +330,22 @@ class Parecer extends Component {
                             defaultChecke d={false} />
                         <label class="custom-control-label" for="INDEFERIDO">Indeferido</label>
                     </div>
+                </> : ""}
+                {this.state.user && this.state.user.perfil.coordenador && this.state.responsavelPelaRequisicao === "PROFESSOR" 
+                ? 
+                <> <div className="custom-control custom-radio custom-control-inline">
+                    <input type="radio" id="EM ANALISE" name="customRadioInline1" className="custom-control-input"
+                            onChange={(e) => this.setState({ deferido: e.target.id })}
+                            defaultChecked={true}
+                    />
+                    <label className="custom-control-label" for="EM ANALISE">Em análise</label>
+                    </div>
+                     {/* <div className="custom-control custom-radio custom-control-inline">
+                            <input type="radio" id="INDEFERIDO" name="customRadioInline1" className="custom-control-input"
+                                onChange={(e) => this.setState({ deferido: e.target.id })}
+                                defaultChecked={false} />
+                            <label class="custom-control-label" for="INDEFERIDO">Indeferido</label>
+                        </div> */}
                 </> : ""}
                 {!this.state.alerteDonoRequisicao && this.state.user && this.state.user.perfil.tipo === "SERVIDOR"
                     ?
@@ -359,11 +381,14 @@ class Parecer extends Component {
                         })
                     }
                 </ol>
+                {console.log(this.state.alerteDonoRequisicao)}
 
-                {this.state.alerteDonoRequisicao ? "" :
+                {!this.state.alerteDonoRequisicao ? "" :
 
                     <Form.Group controlId="exampleForm.ControlTextarea1">
-                        <Form.Label>Novo Parecer do :&nbsp;{this.state.stringParecer === "Coordenador" ? <> <b>{this.state.stringParecer}</b> <span style={{ color: "red" }}>  ( se o coordenador é professor da disciplina seu parecer é gravado nos campos de parecer de professor de coordenador )</span></> : this.state.stringParecer}</Form.Label>
+                        <Form.Label>Novo Parecer do XXX :&nbsp;{this.state.stringParecer === "Coordenador" &&
+                         this.state.c.coordenador.id === this.state.user.id ? <> <b>{this.state.stringParecer}</b> 
+                         <span style={{ color: "red" }}>  ( se o coordenador é professor da disciplina seu parecer é gravado nos campos de parecer de professor de coordenador )</span></> : this.state.stringParecer}</Form.Label>
                         <Form.Control as="textarea" rows="2"
                             id={this.state.atualizarParecer}
                             value={this.state.atualizarParecer}
@@ -372,9 +397,10 @@ class Parecer extends Component {
                         <Form.Text className="text-danger">{this.state.msgErrorParecer} </Form.Text>
                     </Form.Group>
                 }
-                {/* {console.log(this.state.responsavelPelaRequisicao)} */}
 
-                {this.state.alerteDonoRequisicao && this.state.responsavelPelaRequisicao === "COORDENADOR" && this.state.user && this.state.user.perfil.coordenador === true ? <Form.Group controlId="exampleForm.ControlTextarea1">
+                {this.state.alerteDonoRequisicao && this.state.responsavelPelaRequisicao === "COORDENADOR" 
+                && this.state.user && this.state.user.perfil.coordenador ? 
+                <Form.Group controlId="exampleForm.ControlTextarea1">
                     <Form.Label>Novo Parecer do :&nbsp;{this.state.stringParecer === "Coordenador" ? <> <b>{this.state.stringParecer}</b> <span style={{ color: "red" }}>  ( se o coordenador é professor da disciplina seu parecer é gravado nos campos de parecer de professor de coordenador )</span></> : this.state.stringParecer}</Form.Label>
                     <Form.Control as="textarea" rows="2"
                         id={this.state.atualizarParecer}

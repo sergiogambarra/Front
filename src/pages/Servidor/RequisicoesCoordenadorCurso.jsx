@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import TituloPagina from '../../components/TituloPagina';
 import { get } from '../../services/ServicoCrud'
+// import { Loading } from '../auxiliares/Load';
 import CardAproveitamento from '../../components/CardAproveitamento';
 import CardCertificacao from '../../components/CardCertificacao';
 import { Container, Row } from 'react-bootstrap';
@@ -32,7 +33,7 @@ class RequisicioesCoordenadorCurso extends Component {
         })
     }
     listaRequisicoesCoordenadorAproveitamento() {
-        get(`requisicoes/coordenador/apro/${this.state.user.id}?page=0&size=0`).then((retorno) => {
+        get(`requisicoes/coordenador/apro/${this.state.user.id}`).then((retorno) => {
             this.setState({ listaRequisicaoCoordenadorAproveitamento: retorno && retorno.content })
             console.log(this.state.listaRequisicaoCoordenadorAproveitamento);
         })

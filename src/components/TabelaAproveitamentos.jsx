@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getAproveitamentos } from '../services/RequisicaoService';
 import CardAproveitamento from '../components/CardAproveitamento';
+import { Loading } from '../auxiliares/Load';
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import './tabelarequisicoes.css';
@@ -46,11 +47,7 @@ export default function ({ user, verifica, isCoordenador }) {
         {
           isLoading
             ?
-            <div style={{ minHeight: '300px' }} className="d-flex justify-content-center align-items-center text-primary">
-              <div className="spinner-border" role="status">
-                <span className="sr-only">Loading...</span>
-              </div>
-            </div>
+            <Loading />
             :
             requisicoes && requisicoes.map((requisicao) => <CardAproveitamento requisicao={requisicao} />)
         }
