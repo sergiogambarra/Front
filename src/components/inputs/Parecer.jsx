@@ -88,6 +88,10 @@ class Parecer extends Component {
          && this.state.responsavelPelaRequisicao === "COORDENADOR") {
             this.setState({ alerteDonoRequisicao: true })
         }
+        if (this.state.user && this.state.user.permissao === "PROFESSOR" && this.state.user && this.state.user.perfil.coordenador
+         && this.state.responsavelPelaRequisicao === "COORDENADOR") {
+            this.setState({ alerteDonoRequisicao: true })
+        }
         console.log(this.state);
 
         if (this.state.user && this.state.user.id && this.state.professor && this.state.professor.id) {
@@ -283,7 +287,7 @@ class Parecer extends Component {
 
                
                 {this.state.alerteDonoRequisicao &&
-                    this.state.user && this.state.user.perfil.coordenador && this.state.responsavelPelaRequisicao === "COORDENADOR" && this.state.parecerProfessor ?
+                    this.state.user && this.state.user.perfil.coordenador && this.state.responsavelPelaRequisicao === "COORDENADOR" && !this.state.parecerProfessor ?
                     <Form>
                         <Form.Group controlId="exampleForm.SelectCustom">
                             <br />
